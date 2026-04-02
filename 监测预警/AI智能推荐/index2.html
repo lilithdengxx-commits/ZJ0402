@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>监测预警 - AI智能推荐</title>
+    <title>监测预警 - AI智能推荐（对比版）</title>
     <style>
         :root {
             --bg: #f0f2f7;
@@ -68,6 +68,7 @@
         .app-shell {
             display: grid;
             grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: 44px 1fr;
             column-gap: 0;
             min-height: 100vh;
         }
@@ -76,6 +77,7 @@
             position: sticky;
             top: 0;
             height: 100vh;
+            grid-row: 1 / -1;
             margin: 0;
             padding: 0;
             background: var(--sidebar-bg);
@@ -278,7 +280,8 @@
             display: flex;
             flex-direction: column;
             background: #eef1f8;
-            min-height: 100vh;
+            min-height: calc(100vh - 44px);
+            grid-row: 2;
         }
 
         .topbar {
@@ -882,7 +885,7 @@
 
         .insight-sidebar {
             position: sticky;
-            top: 14px;
+            top: 58px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -901,6 +904,93 @@
         .insight-card::before {
             display: none;
         }
+
+        /* ===== 顶部导航栏 ===== */
+        .global-topbar {
+            grid-column: 2;
+            grid-row: 1;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px 0 14px;
+            background: #ffffff;
+            border-bottom: 1px solid rgba(122, 145, 184, 0.14);
+            box-shadow: 0 1px 4px rgba(26, 44, 82, 0.06);
+            gap: 10px;
+        }
+
+        .global-topbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0;
+            border-bottom: none;
+            flex: 0 0 auto;
+        }
+
+        .global-topbar .brand-mark {
+            width: 22px;
+            height: 22px;
+        }
+
+        .global-topbar .brand-title strong {
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .topbar-sep {
+            color: rgba(122, 145, 184, 0.4);
+            font-size: 16px;
+            font-weight: 300;
+            flex: 0 0 auto;
+        }
+
+        .topbar-module-label {
+            font-size: 12px;
+            color: var(--text-soft);
+            font-weight: 600;
+            flex: 0 0 auto;
+        }
+
+        .topbar-module-label.topbar-parent {
+            color: var(--text-faint);
+            font-weight: 500;
+        }
+
+        .topbar-spacer {
+            flex: 1 1 auto;
+        }
+
+        .global-topbar .icon-button {
+            color: #7a8ea8;
+        }
+
+        .global-topbar .icon-button:hover {
+            background: rgba(43, 97, 240, 0.08);
+            color: var(--primary);
+        }
+
+        .global-topbar .avatar {
+            background: rgba(43, 97, 240, 0.07);
+            border: 1px solid rgba(43, 97, 240, 0.13);
+            color: var(--text);
+        }
+
+        .global-topbar .avatar strong {
+            color: var(--text);
+        }
+
+        /* 左侧栏去除footer盘渡的底边饱色 */
+        .sidebar-no-footer {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        /* ===== end topbar ===== */
+
 
         .insight-card-header {
             position: relative;
@@ -1701,6 +1791,26 @@
 <body>
     <div class="mobile-mask" id="mobileMask"></div>
     <div class="app-shell" id="appShell">
+        <header class="global-topbar">
+            <span class="topbar-module-label topbar-parent">监测预警</span>
+            <span class="topbar-sep">/</span>
+            <span class="topbar-module-label">AI智能推荐</span>
+            <div class="topbar-spacer"></div>
+            <button class="icon-button" aria-label="收藏">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-button" aria-label="任务中心">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+            <button class="icon-button" aria-label="通知">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <div class="avatar">
+                <div class="avatar-badge">管</div>
+                <strong>管理员</strong>
+            </div>
+        </header>
+
         <aside class="sidebar">
             <div class="brand">
                 <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1738,7 +1848,7 @@
                     <small>⌃</small>
                 </div>
                 <div class="nav-items">
-                    <a class="nav-item active" href="./index.html"><span>AI智能推荐</span><small>当前</small></a>
+                    <a class="nav-item active" href="./index2.html"><span>AI智能推荐</span><small>当前</small></a>
                     <a class="nav-item" href="../热点榜单/index.html"><span>热点榜单</span><small>02</small></a>
                     <a class="nav-item" href="../关键对象监测/index.html"><span>关键对象监测</span><small>03</small></a>
                     <div class="nav-item"><span>信息监测</span><small>04</small></div>
@@ -1796,21 +1906,6 @@
             </section>
             </div>
 
-            <div class="sidebar-footer">
-                <div class="avatar">
-                    <div class="avatar-badge">管</div>
-                    <strong>管理员</strong>
-                </div>
-                <button class="icon-button" aria-label="收藏">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-                </button>
-                <button class="icon-button" aria-label="任务中心">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
-                </button>
-                <button class="icon-button" aria-label="通知">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                </button>
-            </div>
         </aside>
 
         <main class="main-area">

@@ -1,0 +1,2749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监测预警 - 智能检索</title>
+    <style>
+        :root {
+            --bg: #f6f8fc;
+            --bg-deep: #edf2fa;
+            --card: rgba(255, 255, 255, 0.88);
+            --card-strong: #ffffff;
+            --line: rgba(122, 145, 184, 0.14);
+            --line-strong: rgba(122, 145, 184, 0.22);
+            --text: #2a3448;
+            --text-soft: #68778f;
+            --text-faint: #9aa8bc;
+            --primary: #2f6bff;
+            --primary-deep: #1f54dd;
+            --secondary: #9ec7ff;
+            --secondary-soft: rgba(47, 107, 255, 0.08);
+            --success: #19a581;
+            --danger: #d96863;
+            --warning: #ca9434;
+            --teal: #13c3d0;
+            --accent-gradient: linear-gradient(135deg, #2b61ea 0%, #4e88ff 56%, #77b6ff 100%);
+            --shadow-lg: 0 28px 56px rgba(26, 44, 82, 0.1);
+            --shadow-md: 0 16px 30px rgba(26, 44, 82, 0.08);
+            --radius-xl: 36px;
+            --radius-lg: 28px;
+            --radius-md: 20px;
+            --radius-sm: 16px;
+            --sidebar-width: 248px;
+            font-family: "Alibaba PuHuiTi 3.0", "HarmonyOS Sans SC", "Microsoft YaHei UI", sans-serif;
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% -6%, rgba(47, 107, 255, 0.12), transparent 28%),
+                radial-gradient(circle at 100% 0%, rgba(158, 199, 255, 0.18), transparent 24%),
+                linear-gradient(180deg, #fbfcff 0%, #f5f7fb 46%, #eef2f8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            top: -60px;
+            right: -40px;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(47, 107, 255, 0.16) 0%, rgba(47, 107, 255, 0) 72%);
+            filter: blur(18px);
+        }
+
+        body::after {
+            left: -120px;
+            bottom: 100px;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(158, 199, 255, 0.2) 0%, rgba(158, 199, 255, 0) 72%);
+            filter: blur(16px);
+        }
+
+        a,
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            column-gap: 24px;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            margin: 20px 0 20px 20px;
+            padding: 18px 16px 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 249, 253, 0.92));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.14);
+            border-radius: 28px;
+            overflow-y: auto;
+            box-shadow: 0 14px 28px rgba(26, 44, 82, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        }
+
+        .sidebar::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 82px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(47, 107, 255, 0.18), rgba(158, 199, 255, 0.14) 54%, transparent 80%);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(131, 151, 194, 0.24);
+            border-radius: 999px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 4px 6px 14px;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
+        }
+
+        .brand-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .brand-title strong {
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            color: #2b62ce;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .brand-title span {
+            display: none;
+        }
+
+        .nav-group {
+            margin-bottom: 14px;
+        }
+
+        .nav-group-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 10px 5px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #8793a6;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .nav-group-title .title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-group-title svg {
+            width: 14px;
+            height: 14px;
+            color: var(--primary);
+        }
+
+        .nav-group-title small {
+            display: none;
+        }
+
+        .nav-group.active .nav-group-title {
+            color: #3569d8;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            min-height: 46px;
+            padding: 11px 14px;
+            border: 1px solid rgba(122, 145, 184, 0.06);
+            border-radius: 14px;
+            background: transparent;
+            color: #4f5f7c;
+            font-size: 12px;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateX(2px);
+            border-color: rgba(47, 107, 255, 0.14);
+            background: rgba(255, 255, 255, 0.84);
+            color: #375a8f;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .nav-item.active {
+            background: #ffffff;
+            color: var(--primary);
+            border-color: rgba(47, 107, 255, 0.08);
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+            transform: none;
+        }
+
+        .nav-item small {
+            display: none;
+        }
+
+        .main-area {
+            min-width: 0;
+            padding: 20px 20px 20px 0;
+        }
+
+        .page {
+            padding: 18px 0 36px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 20px;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 68px;
+            padding: 10px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            box-shadow: 0 16px 30px rgba(26, 44, 82, 0.08);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .icon-button,
+        .mini-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #3f5479;
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .icon-button:hover,
+        .mini-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(26, 44, 82, 0.08);
+            border-color: rgba(47, 107, 255, 0.18);
+            color: #3a73dd;
+        }
+
+        .topbar-title {
+            display: flex;
+            flex: 0 0 auto;
+            cursor: default;
+        }
+
+        .topbar-title:focus-visible {
+            outline: 2px solid rgba(47, 107, 255, 0.28);
+            outline-offset: 4px;
+        }
+
+        .topbar-title span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 36px;
+            padding: 0 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(47, 107, 255, 0.1);
+            background: linear-gradient(180deg, rgba(47, 107, 255, 0.07), rgba(158, 199, 255, 0.12));
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px 5px 5px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 14px 24px rgba(47, 107, 255, 0.18);
+        }
+
+        .avatar strong {
+            color: #ffffff;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+        }
+
+        .avatar-badge {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .search-layout {
+            display: grid;
+            grid-template-columns: 208px minmax(0, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+            align-items: start;
+        }
+
+        .theme-panel,
+        .search-panel,
+        .results-panel {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.98));
+            box-shadow: 0 18px 30px rgba(26, 44, 82, 0.06);
+        }
+
+        .theme-panel {
+            border-radius: 24px;
+            padding: 16px;
+            min-height: 100%;
+        }
+
+        .theme-panel-header,
+        .search-panel-header,
+        .results-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .theme-panel-header strong,
+        .search-panel-header strong,
+        .results-toolbar strong {
+            font-size: 17px;
+            color: #1b263b;
+        }
+
+        .theme-panel-actions,
+        .header-actions,
+        .results-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-panel-actions .mini-icon,
+        .header-actions .mini-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+        }
+
+        .save-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #566b87;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .header-actions .save-text {
+            min-height: 32px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .theme-subtitle {
+            margin-top: 12px;
+            color: #7c8ba0;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .theme-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .theme-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 12px;
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.88);
+            color: #50617d;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+        }
+
+        .theme-item:hover {
+            transform: translateX(2px);
+            border-color: rgba(47, 107, 255, 0.14);
+            box-shadow: 0 10px 18px rgba(26, 44, 82, 0.05);
+        }
+
+        .theme-item.active {
+            color: var(--primary);
+            border-color: rgba(47, 107, 255, 0.14);
+            background: linear-gradient(135deg, rgba(47, 107, 255, 0.08), rgba(158, 199, 255, 0.12));
+        }
+
+        .theme-item svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+            color: currentColor;
+        }
+
+        .search-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .search-panel,
+        .results-panel {
+            border-radius: 24px;
+            padding: 18px;
+        }
+
+        .search-box-card {
+            margin-top: 16px;
+            padding: 16px;
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        }
+
+        .search-input-row {
+            display: grid;
+            grid-template-columns: 124px minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-label {
+            justify-self: end;
+            color: #4b5ef0;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 52px;
+            padding: 0 8px 0 14px;
+            border-radius: 14px;
+            border: 2px solid rgba(98, 76, 255, 0.64);
+            background: linear-gradient(180deg, #ffffff, #fbfcff);
+            box-shadow: 0 14px 24px rgba(98, 76, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        }
+
+        .search-input-wrap input {
+            flex: 1 1 auto;
+            min-width: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #182033;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .search-input-wrap input::placeholder {
+            color: #95a2b6;
+        }
+
+        .search-config {
+            color: #6b6ef2;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .smart-split-button {
+            position: relative;
+            display: inline-grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            overflow: hidden;
+            background: radial-gradient(circle at 30% 30%, #8df5ff 0%, #4d9dff 34%, #5e62ff 68%, #28306f 100%);
+            box-shadow: 0 12px 22px rgba(72, 109, 255, 0.26);
+            isolation: isolate;
+        }
+
+        .smart-split-button::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.02) 66%, transparent 74%);
+            animation: splitPulse 1.9s ease-out infinite;
+            z-index: 0;
+        }
+
+        .smart-split-button::after {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 0;
+        }
+
+        .smart-split-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .smart-split-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 24px rgba(72, 109, 255, 0.28);
+        }
+
+        .smart-split-button:disabled {
+            cursor: wait;
+        }
+
+        .smart-split-button.thinking .split-orbit {
+            animation-duration: 1.2s;
+        }
+
+        .split-orbit {
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.48);
+            animation: splitRotate 2.8s linear infinite;
+        }
+
+        .split-core {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffffff 0%, #c9f2ff 40%, #7fd5ff 72%, rgba(127, 213, 255, 0.4) 100%);
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.7);
+        }
+
+        .split-thinking-popover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: min(760px, calc(100vw - 24px));
+            padding: 14px 16px 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(83, 119, 255, 0.24);
+            background: linear-gradient(135deg, rgba(20, 31, 72, 0.96), rgba(27, 52, 118, 0.94));
+            box-shadow: 0 18px 34px rgba(24, 36, 79, 0.22);
+            overflow: hidden;
+            z-index: 95;
+            pointer-events: none;
+        }
+
+        .split-thinking-popover.hidden {
+            display: none;
+        }
+
+        .split-thinking-popover::before {
+            content: "";
+            position: absolute;
+            inset: -20% auto auto -18%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(74, 193, 255, 0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .split-thinking-header {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .split-thinking-header strong {
+            color: #f6f9ff;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+
+        .split-thinking-header span {
+            color: rgba(211, 225, 255, 0.78);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .split-thinking-lines {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .split-thinking-line {
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 8px;
+            align-items: start;
+            min-height: 22px;
+            color: #dbe6ff;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .split-thinking-index {
+            display: inline-grid;
+            place-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #9ed9ff;
+            font-size: 10px;
+            font-weight: 900;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .split-thinking-text {
+            min-width: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .split-thinking-line.done .split-thinking-index {
+            background: linear-gradient(135deg, rgba(111, 245, 255, 0.24), rgba(114, 138, 255, 0.24));
+            color: #ffffff;
+        }
+
+        .expression-box {
+            margin-top: 16px;
+            padding: 12px 14px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: linear-gradient(180deg, rgba(248, 250, 255, 0.98), rgba(255, 255, 255, 0.98));
+        }
+
+        .expression-box.hidden {
+            display: none;
+        }
+
+        .expression-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: #8794a9;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .expression-body {
+            margin-top: 8px;
+            min-height: 64px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.08);
+            background: #ffffff;
+        }
+
+        .expression-tokens {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .expression-token {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 0 8px;
+            border-radius: 999px;
+            background: rgba(47, 107, 255, 0.08);
+            color: #4d71ae;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .expression-hint {
+            margin-top: 10px;
+            color: #9aa8bc;
+            font-size: 12px;
+        }
+
+        .filter-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px 12px;
+            margin-top: 14px;
+            padding: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.08);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.74);
+        }
+
+        .advanced-filters {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px 12px;
+            margin-top: 8px;
+            padding: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.08);
+            border-radius: 20px;
+            background: rgba(247, 250, 255, 0.82);
+        }
+
+        .advanced-filters.open {
+            display: flex;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: 70px minmax(0, 1fr);
+            align-items: start;
+            gap: 8px;
+            min-width: 0;
+            flex: 1 1 280px;
+        }
+
+        .filter-grid .filter-group {
+            width: 100%;
+            flex: none;
+        }
+
+        .filter-group.full {
+            flex-basis: 100%;
+        }
+
+        .filter-label {
+            color: #5c6e89;
+            font-size: 12px;
+            font-weight: 800;
+            padding-top: 5px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-grid .filter-options {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(82, 118, 255, 0.28) transparent;
+        }
+
+        .filter-grid .filter-options::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .filter-grid .filter-options::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(82, 118, 255, 0.24);
+        }
+
+        .option-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 28px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            color: #60708a;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            flex: 0 0 auto;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, background 0.2s ease;
+        }
+
+        .option-pill:hover {
+            transform: translateY(-1px);
+            border-color: rgba(47, 107, 255, 0.14);
+            box-shadow: 0 10px 16px rgba(26, 44, 82, 0.05);
+        }
+
+        .option-pill.active {
+            color: #ffffff;
+            border-color: transparent;
+            background: linear-gradient(135deg, #2f6bff 0%, #508eff 100%);
+            box-shadow: 0 12px 18px rgba(47, 107, 255, 0.16);
+        }
+
+        .filter-select-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .select-box {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            min-width: 160px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: #ffffff;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .select-box select {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+            color: #53667f;
+            font-weight: 700;
+        }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #6b7a91;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .check-row label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .check-row input {
+            accent-color: var(--primary);
+        }
+
+        .filter-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ghost-button,
+        .primary-button,
+        .toolbar-button,
+        .result-action,
+        .sort-select {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 38px;
+            padding: 0 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            color: #60708a;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .primary-button {
+            border-color: transparent;
+            background: var(--accent-gradient);
+            color: #ffffff;
+        }
+
+        .results-toolbar {
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(122, 145, 184, 0.08);
+        }
+
+        .results-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: #708096;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .results-meta strong {
+            font-size: 14px;
+            color: #23427a;
+        }
+
+        .sort-select select {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: inherit;
+            font-weight: 800;
+        }
+
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .result-card {
+            padding: 16px 16px 14px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 10px 18px rgba(26, 44, 82, 0.04);
+        }
+
+        .result-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .result-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .result-main input {
+            margin-top: 4px;
+            accent-color: var(--primary);
+        }
+
+        .result-body {
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .result-title {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.36;
+            color: #1f3360;
+        }
+
+        .result-title mark,
+        .result-snippet mark {
+            padding: 0;
+            background: transparent;
+            color: #ef613c;
+            font-weight: 900;
+        }
+
+        .result-snippet {
+            margin: 10px 0 0;
+            color: #5d6f8c;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 0 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .tag.sentiment-negative {
+            color: #d96863;
+            background: rgba(217, 104, 99, 0.08);
+        }
+
+        .tag.sentiment-neutral {
+            color: #c48a1d;
+            background: rgba(202, 148, 52, 0.1);
+        }
+
+        .tag.sentiment-positive {
+            color: #19a581;
+            background: rgba(25, 165, 129, 0.08);
+        }
+
+        .tag.channel,
+        .tag.position,
+        .tag.label {
+            color: #617390;
+            background: rgba(122, 145, 184, 0.08);
+        }
+
+        .result-side {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            margin-top: 12px;
+            color: #7f8da3;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .result-empty {
+            padding: 60px 24px;
+            border-radius: 18px;
+            border: 1px dashed rgba(122, 145, 184, 0.18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 249, 255, 0.98));
+            text-align: center;
+            color: #728299;
+        }
+
+        .result-empty strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #1d2a42;
+            font-size: 20px;
+        }
+
+        .mobile-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 31, 63, 0.24);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.24s ease;
+            z-index: 20;
+        }
+
+        .is-sidebar-open .mobile-mask {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast-stack {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 80;
+        }
+
+        .toast {
+            min-width: 240px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(22, 35, 65, 0.92);
+            color: #ffffff;
+            box-shadow: 0 20px 30px rgba(8, 15, 31, 0.18);
+            animation: toastIn 0.24s ease;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes splitShine {
+            from {
+                transform: translateX(-120%);
+            }
+            to {
+                transform: translateX(140%);
+            }
+        }
+
+        @keyframes splitPulse {
+            0% {
+                transform: scale(0.92);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.12);
+                opacity: 0.12;
+            }
+            100% {
+                transform: scale(1.24);
+                opacity: 0;
+            }
+        }
+
+        @keyframes splitRotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 1320px) {
+            .search-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-panel {
+                min-height: auto;
+            }
+
+            .theme-list {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+                column-gap: 0;
+            }
+
+            .topbar-title {
+                cursor: pointer;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 18px;
+                top: 18px;
+                bottom: 18px;
+                height: auto;
+                width: min(84vw, 300px);
+                margin: 0;
+                transform: translateX(calc(-100% - 24px));
+                transition: transform 0.24s ease;
+                z-index: 30;
+                box-shadow: 20px 0 40px rgba(17, 24, 39, 0.22);
+            }
+
+            .is-sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .main-area {
+                padding: 18px;
+            }
+
+            .filter-grid,
+            .advanced-filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .search-input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-label {
+                justify-self: start;
+            }
+
+            .theme-list {
+                grid-template-columns: 1fr;
+            }
+
+            .results-toolbar,
+            .result-card-top,
+            .result-main,
+            .filter-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .result-side,
+            .topbar-right,
+            .header-actions {
+                justify-content: flex-start;
+            }
+
+            .search-config {
+                width: 100%;
+            }
+
+            .smart-split-button {
+                width: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-mask" id="mobileMask"></div>
+    <div class="app-shell" id="appShell">
+        <aside class="sidebar">
+            <div class="brand">
+                <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M5 8H25L15 25H5V8Z" fill="url(#brand-a)"/>
+                    <path d="M23 8H43L31 31H17L23 8Z" fill="url(#brand-b)"/>
+                    <path d="M14 28H29L22 40H14V28Z" fill="url(#brand-c)"/>
+                    <defs>
+                        <linearGradient id="brand-a" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2A72FF"/>
+                            <stop offset="1" stop-color="#11C3C4"/>
+                        </linearGradient>
+                        <linearGradient id="brand-b" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4C8FFF"/>
+                            <stop offset="1" stop-color="#2757FF"/>
+                        </linearGradient>
+                        <linearGradient id="brand-c" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#14C9B3"/>
+                            <stop offset="1" stop-color="#3D8BFF"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="brand-title">
+                    <strong>网络舆情系统</strong>
+                    <span></span>
+                </div>
+            </div>
+
+            <section class="nav-group active">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>监测预警</span>
+                    </div>
+                    <small>⌃</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../AI智能推荐/index.html"><span>AI智能推荐</span><small>当前</small></a>
+                    <a class="nav-item" href="../热点榜单/index.html"><span>热点榜单</span><small>02</small></a>
+                    <a class="nav-item" href="../关键对象监测/index.html"><span>关键对象监测</span><small>03</small></a>
+                    <div class="nav-item"><span>信息监测</span><small>04</small></div>
+                    <div class="nav-item"><span>预警查询</span><small>05</small></div>
+                    <a class="nav-item active" href="./index.html"><span>智能检索</span><small>06</small></a>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>事件分析</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span><small>01</small></a>
+                    <div class="nav-item"><span>智能体编报</span><small>02</small></div>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>处置引导</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../处置引导/传播引导策略/index.html"><span>传播引导策略</span><small>01</small></a>
+                    <a class="nav-item" href="../../处置引导/选题线索池/index.html"><span>选题线索池</span><small>02</small></a>
+                    <div class="nav-item"><span>选题看板</span><small>03</small></div>
+                    <a class="nav-item" href="../../处置引导/多稿合并工具/index.html"><span>多稿合并工具</span><small>04</small></a>
+                    <a class="nav-item" href="../../处置引导/舆情复盘分析/index.html"><span>舆情复盘分析</span><small>05</small></a>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>知识库子系统</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span><small>01</small></a>
+                    <div class="nav-item"><span>宣传引导策略库</span><small>02</small></div>
+                    <div class="nav-item"><span>决策报告知识库</span><small>03</small></div>
+                    <div class="nav-item"><span>重点关注对象库</span><small>04</small></div>
+                    <div class="nav-item"><span>行业术语与本体知识库</span><small>05</small></div>
+                </div>
+            </section>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-title" id="menuButton" role="button" tabindex="0" aria-label="切换导航">
+                        <span>智能检索</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-button" aria-label="收藏">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="任务中心">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="通知">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                    <div class="avatar">
+                        <div class="avatar-badge">管</div>
+                        <strong>管理员</strong>
+                    </div>
+                </div>
+            </header>
+
+            <section class="page">
+                <div class="search-layout">
+                    <aside class="theme-panel">
+                        <div class="theme-panel-header">
+                            <strong>搜索主题</strong>
+                            <div class="theme-panel-actions">
+                                <button class="mini-icon" type="button" id="searchThemeButton" aria-label="搜索主题">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 18C14.866 18 18 14.866 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18Z" stroke="currentColor" stroke-width="1.8"/><path d="M20 20L17 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                </button>
+                                <button class="mini-icon" type="button" id="addThemeButton" aria-label="新增主题">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="theme-subtitle">主题</div>
+                        <div class="theme-list" id="themeList"></div>
+                    </aside>
+
+                    <div class="search-column">
+                        <section class="search-panel">
+                            <div class="search-panel-header">
+                                <strong>智能检索工作台</strong>
+                                <div class="header-actions">
+                                    <button class="save-text" id="saveThemeButton" type="button">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5C5 5.67157 5.67157 5 6.5 5H15L19 9V17.5C19 18.3284 18.3284 19 17.5 19H6.5C5.67157 19 5 18.3284 5 17.5V6.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 5V10H15V7" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                                        保存
+                                    </button>
+                                    <button class="ghost-button" id="modeToggle" type="button">切换关键词模式</button>
+                                    <button class="ghost-button" id="eventAnalysisButton" type="button">事件分析</button>
+                                    <button class="ghost-button" id="addMonitorButton" type="button">添加监测</button>
+                                </div>
+                            </div>
+
+                            <div class="search-box-card" id="searchBoxCard">
+                                <div class="search-input-row" id="searchInputRow">
+                                    <div class="search-label" id="searchModeLabel">智能搜索</div>
+                                    <label class="search-input-wrap" id="searchInputWrap">
+                                        <input id="searchInput" type="search" placeholder="请输入检索主题、关键词或事件要素" onclick="if(!this.value)this.value='大埔宏福苑大火'">
+                                        <button class="smart-split-button" id="splitQueryButton" type="button" aria-label="智能拆分">
+                                            <span class="split-orbit"></span>
+                                            <span class="split-core"></span>
+                                        </button>
+                                    </label>
+                                    <button class="search-config" id="highConfigButton" type="button">高级配置</button>
+                                </div>
+
+                                <div class="split-thinking-popover hidden" id="splitThinkingPopover" aria-live="polite">
+                                    <div class="split-thinking-header">
+                                        <strong>大模型智能拆分中</strong>
+                                        <span>正在生成检索表达式</span>
+                                    </div>
+                                    <div class="split-thinking-lines" id="splitThinkingLines"></div>
+                                </div>
+
+                                <div class="expression-box hidden" id="expressionBox">
+                                    <div class="expression-box-header">
+                                        <span>表达式</span>
+                                        <span id="expressionCount">0 / 280</span>
+                                    </div>
+                                    <div class="expression-body">
+                                        <div class="expression-tokens" id="expressionTokens"></div>
+                                        <div class="expression-hint">请输入关键词，可单击主题或筛选项快速生成表达式。</div>
+                                    </div>
+                                </div>
+
+                                <div class="filter-grid">
+                                    <div class="filter-group">
+                                        <div class="filter-label">时间范围</div>
+                                        <div class="filter-options" id="periodOptions"></div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">媒体渠道</div>
+                                        <div class="filter-options" id="channelOptions"></div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">媒体标签</div>
+                                        <div class="filter-options" id="labelOptions"></div>
+                                    </div>
+                                </div>
+
+                                <div class="advanced-filters" id="advancedFilters">
+                                    <div class="filter-group">
+                                        <div class="filter-label">语言类型</div>
+                                        <div class="filter-select-row">
+                                            <label class="select-box">
+                                                <select id="languageSelect">
+                                                    <option value="all">请选择</option>
+                                                    <option value="zh">中文</option>
+                                                    <option value="en">英文</option>
+                                                    <option value="multi">多语种</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">情感倾向</div>
+                                        <div class="filter-options" id="sentimentOptions"></div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">数据类型</div>
+                                        <div class="filter-options" id="dataTypeOptions"></div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">地域</div>
+                                        <div class="filter-select-row">
+                                            <label class="select-box">
+                                                <select id="regionSelect">
+                                                    <option value="all">请选择</option>
+                                                    <option value="香港">香港</option>
+                                                    <option value="澳门">澳门</option>
+                                                    <option value="深圳">深圳</option>
+                                                    <option value="珠海">珠海</option>
+                                                </select>
+                                            </label>
+                                            <div class="check-row">
+                                                <label><input id="tailAddress" type="checkbox" checked>尾地址</label>
+                                                <label><input id="mediaAddress" type="checkbox" checked>媒体属地</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <div class="filter-label">命中位置</div>
+                                        <div class="filter-options" id="positionOptions"></div>
+                                    </div>
+                                </div>
+
+                                <div class="filter-actions">
+                                    <button class="ghost-button" id="moreFilterButton" type="button">更多筛选</button>
+                                    <button class="ghost-button" id="resetButton" type="button">重置</button>
+                                    <button class="primary-button" id="searchButton" type="button">查询</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="results-panel">
+                            <div class="results-toolbar">
+                                <div class="results-meta">
+                                    <label><input type="checkbox" id="selectAllResults"></label>
+                                    <span>共有 <strong id="resultCount">0</strong> 条数据</span>
+                                    <button class="toolbar-button" id="exportButton" type="button">数据导出</button>
+                                    <button class="toolbar-button" id="translateButton" type="button">翻译</button>
+                                </div>
+                                <div class="results-actions">
+                                    <label class="sort-select">
+                                        <span>排序方式：</span>
+                                        <select id="sortSelect">
+                                            <option value="relevance">综合排序</option>
+                                            <option value="latest">最新发布时间</option>
+                                            <option value="interaction">互动量优先</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="result-list" id="resultList"></div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <script>
+        const themePresets = [
+            {
+                id: "topic-1",
+                title: "北都发展与楼市",
+                query: "北部都会区 楼市 供地",
+                expression: ["北部都会区 北都", "楼市 住宅 供地", "基建 配套 发展规划"],
+                period: "7d",
+                channels: ["all"],
+                labels: ["all"],
+                sentiments: ["all"],
+                dataTypes: ["all"],
+                positions: ["all"],
+                language: "zh",
+                region: "香港"
+            },
+            {
+                id: "topic-2",
+                title: "港人北上消费",
+                query: "港人北上消费 零售 餐饮",
+                expression: ["港人 北上消费", "零售 餐饮 商场", "周末 消费 人流"],
+                period: "30d",
+                channels: ["website", "forum", "facebook"],
+                labels: ["local", "social"],
+                sentiments: ["all"],
+                dataTypes: ["original", "repost", "comment"],
+                positions: ["title", "body"],
+                language: "zh",
+                region: "香港"
+            },
+            {
+                id: "topic-3",
+                title: "财政预算案民生",
+                query: "财政预算案 民生 反应",
+                expression: ["财政预算案", "民生 住房 交通", "反应 评论 舆情"],
+                period: "7d",
+                channels: ["website", "app", "facebook"],
+                labels: ["mainland", "local", "social"],
+                sentiments: ["neutral", "negative"],
+                dataTypes: ["original", "comment"],
+                positions: ["title", "body", "ocr"],
+                language: "zh",
+                region: "香港"
+            },
+            {
+                id: "topic-4",
+                title: "启德体育园测试赛",
+                query: "启德体育园 测试赛 人流",
+                expression: ["启德体育园", "测试赛 演练 入场", "人流 交通 配套"],
+                period: "24h",
+                channels: ["broadcast", "website", "facebook"],
+                labels: ["local", "social"],
+                sentiments: ["all"],
+                dataTypes: ["comment", "repost"],
+                positions: ["body", "ocr"],
+                language: "zh",
+                region: "香港"
+            },
+            {
+                id: "topic-5",
+                title: "公屋轮候与简约公屋",
+                query: "公屋轮候 简约公屋",
+                expression: ["公屋 轮候 上楼", "简约公屋", "基层 家庭 安置"],
+                period: "30d",
+                channels: ["website", "app", "forum"],
+                labels: ["mainland", "local"],
+                sentiments: ["all"],
+                dataTypes: ["original", "repost", "comment"],
+                positions: ["title", "body"],
+                language: "zh",
+                region: "香港"
+            }
+        ];
+
+        const DEFAULT_TOTAL_COUNT = 1368;
+        const SEARCH_TOTAL_COUNT = 1247;
+
+        const latestMockData = [
+            {
+                id: 101,
+                title: "北部都会区新一轮供地计划引发市场预期升温，多家港媒追踪后续定价节奏...",
+                snippet: "最新入库信息显示，围绕北部都会区供地节奏、住宅库存和跨境通勤配套的讨论持续升温，地产、财经与时政栏目同步跟进。",
+                channel: "website",
+                source: "香港经济日报",
+                sourceLabel: "网站",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "境内主流媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "title",
+                positionLabel: "标题",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T17:46:00",
+                capturedTime: "2026-03-31T17:52:16",
+                interactions: 148,
+                comments: 19,
+                likes: 226
+            },
+            {
+                id: 102,
+                title: "港人北上消费热度再升，复活节前零售及餐饮流量预测成为媒体关注重点...",
+                snippet: "最新入库信息显示，香港本地媒体对北上消费、口岸客流与本地零售承压问题连续发稿，社交平台讨论集中在周末人流与价格差。",
+                channel: "facebook",
+                source: "商业电台互动页",
+                sourceLabel: "Facebook",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "社交媒体平台",
+                dataType: "repost",
+                dataTypeLabel: "转发",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T17:39:00",
+                capturedTime: "2026-03-31T17:48:33",
+                interactions: 201,
+                comments: 34,
+                likes: 318
+            },
+            {
+                id: 103,
+                title: "启德体育园测试赛场外疏导安排受关注，最新模拟演练视频已入库...",
+                snippet: "最新入库信息显示，多家港媒持续追踪启德体育园测试赛现场人流组织、入场安检、周边交通与直播信号表现，热度快速上升。",
+                channel: "broadcast",
+                source: "无线新闻",
+                sourceLabel: "广播电视",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "地方重点媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T17:24:00",
+                capturedTime: "2026-03-31T17:31:55",
+                interactions: 132,
+                comments: 11,
+                likes: 177
+            },
+            {
+                id: 104,
+                title: "财政预算案后续民生措施再引讨论，基层交通补贴与住房支持成传播焦点...",
+                snippet: "最新入库信息显示，预算案相关讨论重新升温，重点聚焦交通补贴、公共房屋、长者支援与青年就业，评论区情绪分化明显。",
+                channel: "forum",
+                source: "时政论坛群组",
+                sourceLabel: "论坛",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "社交媒体平台",
+                dataType: "comment",
+                dataTypeLabel: "评论",
+                position: "ocr",
+                positionLabel: "OCR",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T17:12:00",
+                capturedTime: "2026-03-31T17:20:27",
+                interactions: 176,
+                comments: 29,
+                likes: 204
+            },
+            {
+                id: 105,
+                title: "公屋轮候与简约公屋配套再成晚间时段热点，关注点转向选址与交付周期...",
+                snippet: "最新入库信息显示，围绕简约公屋选址、配套和轮候家庭体验的报道增多，新闻客户端与社交平台同步扩散。",
+                channel: "app",
+                source: "香港01 App",
+                sourceLabel: "APP",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "境内主流媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "title",
+                positionLabel: "标题",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:58:00",
+                capturedTime: "2026-03-31T17:05:44",
+                interactions: 119,
+                comments: 13,
+                likes: 165
+            },
+            {
+                id: 106,
+                title: "医疗收费检讨消息触发舆论波动，晚间最新入库内容集中在公营服务承受力...",
+                snippet: "最新入库信息显示，医疗收费、专科轮候与长者负担成为晚间传播焦点，讨论以时政评论和新闻摘要为主。",
+                channel: "website",
+                source: "星岛头条",
+                sourceLabel: "网站",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "地方重点媒体",
+                dataType: "repost",
+                dataTypeLabel: "转发",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:47:00",
+                capturedTime: "2026-03-31T16:54:08",
+                interactions: 163,
+                comments: 18,
+                likes: 212
+            }
+        ];
+
+        const resultData = [
+            {
+                id: 1,
+                title: "大埔宏福苑宏志阁三级火 至少一名男子严重烧伤 大埔宏福苑宏志阁发生大火...",
+                snippet: "大埔宏福苑宏志阁三级火，至少一名男子严重烧伤，大埔宏福苑宏志阁发生大火，火警升为三级，现场火势非常猛烈，大量浓烟涌上半空，不断有杂物掉下。",
+                channel: "facebook",
+                source: "香港电台 RTHK VNEWS",
+                sourceLabel: "Facebook",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "境内主流媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "title",
+                positionLabel: "标题",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T15:40:41",
+                capturedTime: "2026-03-31T16:02:08",
+                interactions: 90,
+                comments: 18,
+                likes: 137
+            },
+            {
+                id: 2,
+                title: "【紧急通知：宏福火警】宏福苑目前发生四级火警，现场浓烟密布，火势持续蔓延...",
+                snippet: "【紧急通知：宏福火警】宏福苑目前发生四级火警，现场浓烟密布，火势猛烈，附近居民即时回报高温警觉，民政现场开放大埔社区中心及东昌街社区会堂作为紧急隐患庇护点。",
+                channel: "forum",
+                source: "论坛快讯",
+                sourceLabel: "论坛",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "地方重点媒体",
+                dataType: "repost",
+                dataTypeLabel: "转发",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T15:30:00",
+                capturedTime: "2026-03-31T15:53:31",
+                interactions: 28,
+                comments: 6,
+                likes: 43
+            },
+            {
+                id: 3,
+                title: "隔离仲有几座未烧 宏福苑最新现场片段继续扩散...",
+                snippet: "大埔宏福苑宏志阁三级火，火警升为三级，消防员持续喷射水柱，火势受到控制，但周边住户仍持续拍摄现场烟雾与疏散过程。",
+                channel: "short-video",
+                source: "短视频聚合",
+                sourceLabel: "短视频",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "社交媒体平台",
+                dataType: "comment",
+                dataTypeLabel: "评论",
+                position: "ocr",
+                positionLabel: "OCR",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T15:55:46",
+                capturedTime: "2026-03-31T16:12:44",
+                interactions: 54,
+                comments: 12,
+                likes: 89
+            },
+            {
+                id: 4,
+                title: "【突发】大埔宏福苑外墙棚架四级火 多名居民称被困 大埔宏福苑宏志阁发生...",
+                snippet: "【突发】大埔宏福苑外墙棚架四级火，多名居民称被困。警员表示，下午近3时接获途人报案，指大厦外墙棚架起火，随后陆续接获多住客报警，指在单位内未能离开。",
+                channel: "facebook",
+                source: "Gary Mak",
+                sourceLabel: "Facebook",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "社交媒体平台",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "title",
+                positionLabel: "标题",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:03:21",
+                capturedTime: "2026-03-31T16:05:41",
+                interactions: 112,
+                comments: 24,
+                likes: 196
+            },
+            {
+                id: 5,
+                title: "大埔发生大火，今日(26日)下午2时51分，宏福苑宏志阁外墙棚架起火...",
+                snippet: "消防到场动用一队搜救队灌救，火警于下午3时02分升为三级，之后再升为四级，指大厦外墙棚架起火，之后陆续收到多住客报警指住单位内被困。",
+                channel: "website",
+                source: "香港 01",
+                sourceLabel: "网站",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "境内主流媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:04:51",
+                capturedTime: "2026-03-31T17:02:26",
+                interactions: 86,
+                comments: 17,
+                likes: 145
+            },
+            {
+                id: 6,
+                title: "因大埔宏福苑有棚架火灾，现时广福一带大埔公路封闭，大埔区巴士服务严重受...",
+                snippet: "因大埔宏福苑有棚架火灾，现时广福一带大埔公路封闭，大埔区巴士服务需要临时调整，现场消防继续向外围棚架射水降温。",
+                channel: "website",
+                source: "交通服务公告",
+                sourceLabel: "网站",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "境内主流媒体",
+                dataType: "original",
+                dataTypeLabel: "原文",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:12:00",
+                capturedTime: "2026-03-31T16:18:00",
+                interactions: 61,
+                comments: 8,
+                likes: 74
+            },
+            {
+                id: 7,
+                title: "大埔宏福苑火警仍有数名居民疏散，现场消防继续射水降温...",
+                snippet: "大埔宏福苑火警发生后，多名居民在现场疏散，消防继续向起火棚架射水降温，周边人群围观视频持续在社交平台扩散。",
+                channel: "forum",
+                source: "现场资讯群组",
+                sourceLabel: "论坛",
+                sentiment: "neutral",
+                sentimentLabel: "中立",
+                mediaLabel: "社交媒体平台",
+                dataType: "repost",
+                dataTypeLabel: "转发",
+                position: "body",
+                positionLabel: "正文",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:20:00",
+                capturedTime: "2026-03-31T16:25:00",
+                interactions: 48,
+                comments: 6,
+                likes: 57
+            },
+            {
+                id: 8,
+                title: "现场片段显示火势沿棚架向上蔓延，住户高空呼救画面引发转发...",
+                snippet: "现场片段显示火势沿棚架向上蔓延，住户高空呼救画面引发大量转发，不少网民继续关注搜救进展与疏散安排。",
+                channel: "short-video",
+                source: "现场短视频",
+                sourceLabel: "短视频",
+                sentiment: "negative",
+                sentimentLabel: "负面",
+                mediaLabel: "社交媒体平台",
+                dataType: "comment",
+                dataTypeLabel: "评论",
+                position: "ocr",
+                positionLabel: "OCR",
+                language: "zh",
+                region: "香港",
+                publishTime: "2026-03-31T16:33:00",
+                capturedTime: "2026-03-31T16:39:00",
+                interactions: 96,
+                comments: 19,
+                likes: 173
+            }
+        ];
+
+        const optionConfig = {
+            period: [
+                { key: "1h", label: "最近1小时" },
+                { key: "24h", label: "最近24小时" },
+                { key: "7d", label: "最近7天" },
+                { key: "30d", label: "最近30天" },
+                { key: "custom", label: "自定义" }
+            ],
+            channel: [
+                { key: "all", label: "全部" },
+                { key: "website", label: "网站" },
+                { key: "epaper", label: "电子报刊" },
+                { key: "app", label: "APP" },
+                { key: "broadcast", label: "广播电视" },
+                { key: "short-video", label: "短视频" },
+                { key: "weibo", label: "微博" },
+                { key: "wechat", label: "微信" },
+                { key: "facebook", label: "Facebook" },
+                { key: "twitter", label: "Twitter" },
+                { key: "forum", label: "论坛" },
+                { key: "xiaohongshu", label: "小红书" }
+            ],
+            sentiment: [
+                { key: "all", label: "全部" },
+                { key: "positive", label: "正面" },
+                { key: "neutral", label: "中立" },
+                { key: "negative", label: "负面" }
+            ],
+            label: [
+                { key: "all", label: "全部" },
+                { key: "mainland", label: "境内主流媒体" },
+                { key: "local", label: "地方重点媒体" },
+                { key: "social", label: "社交媒体平台" },
+                { key: "overseas", label: "其他" },
+                { key: "focus", label: "重点跟踪源" }
+            ],
+            dataType: [
+                { key: "all", label: "全部" },
+                { key: "original", label: "原文" },
+                { key: "repost", label: "转发" },
+                { key: "comment", label: "评论" }
+            ],
+            position: [
+                { key: "all", label: "全部" },
+                { key: "title", label: "标题" },
+                { key: "body", label: "正文" },
+                { key: "ocr", label: "OCR" }
+            ]
+        };
+
+        const state = {
+            themeId: "",
+            query: "",
+            expression: [],
+            seedExpression: [],
+            expressionVisible: false,
+            period: "7d",
+            channels: ["all"],
+            sentiments: ["all"],
+            labels: ["all"],
+            dataTypes: ["all"],
+            positions: ["all"],
+            language: "all",
+            region: "all",
+            mode: "semantic",
+            sort: "relevance",
+            showAdvancedFilters: false,
+            tailAddress: true,
+            mediaAddress: true,
+            hasCommittedSearch: false,
+            isSplitThinking: false,
+            submittedAt: Date.now()
+        };
+
+        const themeList = document.getElementById("themeList");
+        const splitThinkingPopover = document.getElementById("splitThinkingPopover");
+        const splitThinkingLines = document.getElementById("splitThinkingLines");
+        const searchBoxCard = document.getElementById("searchBoxCard");
+        const searchInputRow = document.getElementById("searchInputRow");
+        const searchInputWrap = document.getElementById("searchInputWrap");
+        const expressionBox = document.getElementById("expressionBox");
+        const expressionTokens = document.getElementById("expressionTokens");
+        const expressionCount = document.getElementById("expressionCount");
+        const searchInput = document.getElementById("searchInput");
+        const searchModeLabel = document.getElementById("searchModeLabel");
+        const splitQueryButton = document.getElementById("splitQueryButton");
+        const periodOptions = document.getElementById("periodOptions");
+        const channelOptions = document.getElementById("channelOptions");
+        const sentimentOptions = document.getElementById("sentimentOptions");
+        const labelOptions = document.getElementById("labelOptions");
+        const dataTypeOptions = document.getElementById("dataTypeOptions");
+        const positionOptions = document.getElementById("positionOptions");
+        const advancedFilters = document.getElementById("advancedFilters");
+        const languageSelect = document.getElementById("languageSelect");
+        const regionSelect = document.getElementById("regionSelect");
+        const tailAddress = document.getElementById("tailAddress");
+        const mediaAddress = document.getElementById("mediaAddress");
+        const resultList = document.getElementById("resultList");
+        const resultCount = document.getElementById("resultCount");
+        const sortSelect = document.getElementById("sortSelect");
+        const modeToggle = document.getElementById("modeToggle");
+        const searchButton = document.getElementById("searchButton");
+        const resetButton = document.getElementById("resetButton");
+        const moreFilterButton = document.getElementById("moreFilterButton");
+        const highConfigButton = document.getElementById("highConfigButton");
+        const exportButton = document.getElementById("exportButton");
+        const translateButton = document.getElementById("translateButton");
+        const selectAllResults = document.getElementById("selectAllResults");
+        const searchThemeButton = document.getElementById("searchThemeButton");
+        const addThemeButton = document.getElementById("addThemeButton");
+        const saveThemeButton = document.getElementById("saveThemeButton");
+        const eventAnalysisButton = document.getElementById("eventAnalysisButton");
+        const addMonitorButton = document.getElementById("addMonitorButton");
+        const toastStack = document.getElementById("toastStack");
+        const appShell = document.getElementById("appShell");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMask = document.getElementById("mobileMask");
+        let splitRunToken = 0;
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+            toastStack.appendChild(toast);
+            window.setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(8px)";
+                toast.style.transition = "opacity 0.2s ease, transform 0.2s ease";
+            }, 2200);
+            window.setTimeout(() => toast.remove(), 2500);
+        }
+
+        function formatDateTime(value) {
+            const date = new Date(value);
+            const pad = (number) => String(number).padStart(2, "0");
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        }
+
+        function unique(items) {
+            return [...new Set(items.filter(Boolean))];
+        }
+
+        function tokenizeQuery(query) {
+            const text = String(query || "").trim();
+            if (!text) {
+                return [];
+            }
+
+            const dictionary = ["大埔", "宏福苑", "宏志阁", "大火", "火警", "火灾", "棚架", "被困", "居民", "消防", "高才通", "续签", "门槛"];
+            const matched = dictionary.filter((token) => text.includes(token));
+            if (matched.length) {
+                return unique(matched);
+            }
+
+            return unique(text.split(/[\s，,、；;]+/).filter(Boolean));
+        }
+
+        function buildSmartExpressions(query) {
+            const trimmed = String(query || "").trim();
+            if (!trimmed) {
+                return [];
+            }
+
+            const activeTheme = themePresets.find((item) => item.id === state.themeId);
+            if (activeTheme && activeTheme.query === trimmed && state.seedExpression.length) {
+                return [...state.seedExpression];
+            }
+
+            const expressions = [];
+            if (trimmed.includes("大埔")) {
+                expressions.push("大埔 香港大埔 大埔区");
+            }
+            if (trimmed.includes("宏福苑") || trimmed.includes("宏志阁")) {
+                expressions.push("宏福苑 宏福苑宏志阁 宏福苑火情");
+            }
+            if (trimmed.includes("火") || trimmed.includes("火警") || trimmed.includes("火灾")) {
+                expressions.push("大火 火警 火灾 棚架起火 四级火 三级火");
+            }
+            if (trimmed.includes("居民") || trimmed.includes("被困")) {
+                expressions.push("居民 被困 疏散 搜救");
+            }
+
+            if (expressions.length) {
+                return expressions;
+            }
+
+            return tokenizeQuery(trimmed).map((token) => `${token} ${token}`.trim());
+        }
+
+        function collectSearchTokens() {
+            if (!state.hasCommittedSearch) {
+                return [];
+            }
+
+            const base = tokenizeQuery(state.query);
+            if (!state.expressionVisible) {
+                return base;
+            }
+
+            const expressionTokensList = state.expression.flatMap((item) => tokenizeQuery(item));
+            return unique([...base, ...expressionTokensList]);
+        }
+
+        function matchesPeriod(item) {
+            if (state.period === "custom") {
+                return true;
+            }
+            const diffHours = (new Date("2026-03-31T18:00:00") - new Date(item.publishTime)) / 36e5;
+            if (state.period === "1h") {
+                return diffHours <= 1;
+            }
+            if (state.period === "24h") {
+                return diffHours <= 24;
+            }
+            if (state.period === "7d") {
+                return diffHours <= 168;
+            }
+            return diffHours <= 720;
+        }
+
+        function includesFilter(activeValues, currentValue) {
+            return activeValues.includes("all") || activeValues.includes(currentValue);
+        }
+
+        function getActiveResultSource() {
+            return state.hasCommittedSearch ? resultData : latestMockData;
+        }
+
+        function filteredResults() {
+            const sourceData = getActiveResultSource();
+
+            if (!state.hasCommittedSearch) {
+                return [...sourceData].sort((left, right) => new Date(right.capturedTime) - new Date(left.capturedTime));
+            }
+
+            const tokens = collectSearchTokens();
+            let items = sourceData.filter((item) => {
+                const source = [item.title, item.snippet, item.source, item.sourceLabel, item.mediaLabel].join(" ").toLowerCase();
+                if (tokens.length && !tokens.some((keyword) => source.includes(keyword.toLowerCase()))) {
+                    return false;
+                }
+
+                if (!matchesPeriod(item)) {
+                    return false;
+                }
+                if (!includesFilter(state.channels, item.channel)) {
+                    return false;
+                }
+                if (!includesFilter(state.sentiments, item.sentiment)) {
+                    return false;
+                }
+                if (!includesFilter(state.labels, item.mediaLabel === "境内主流媒体" ? "mainland" : item.mediaLabel === "地方重点媒体" ? "local" : item.mediaLabel === "社交媒体平台" ? "social" : "overseas")) {
+                    return false;
+                }
+                if (!includesFilter(state.dataTypes, item.dataType)) {
+                    return false;
+                }
+                if (!includesFilter(state.positions, item.position)) {
+                    return false;
+                }
+                if (state.language !== "all" && item.language !== state.language) {
+                    return false;
+                }
+                if (state.region !== "all" && item.region !== state.region) {
+                    return false;
+                }
+                return true;
+            });
+
+            if (state.sort === "latest") {
+                items = items.sort((left, right) => new Date(right.publishTime) - new Date(left.publishTime));
+            } else if (state.sort === "interaction") {
+                items = items.sort((left, right) => right.interactions - left.interactions);
+            } else {
+                items = items.sort((left, right) => left.id - right.id);
+            }
+
+            return items;
+        }
+
+        function highlight(text) {
+            const tokens = collectSearchTokens().sort((a, b) => b.length - a.length);
+
+            let result = text;
+            const used = new Set();
+            tokens.forEach((token) => {
+                if (used.has(token)) {
+                    return;
+                }
+                used.add(token);
+                const safe = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                result = result.replace(new RegExp(safe, "gi"), (matched) => `<mark>${matched}</mark>`);
+            });
+            return result;
+        }
+
+        function renderOptionPills(container, options, current, group, multi = false) {
+            container.innerHTML = options.map((item) => {
+                const active = multi ? current.includes(item.key) : current === item.key;
+                return `<button class="option-pill ${active ? "active" : ""}" type="button" data-group="${group}" data-value="${item.key}">${item.label}</button>`;
+            }).join("");
+        }
+
+        function renderThemes() {
+            themeList.innerHTML = themePresets.map((theme) => `
+                <button class="theme-item ${state.themeId && state.themeId === theme.id ? "active" : ""}" type="button" data-theme-id="${theme.id}">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 5H17V9H7V5ZM7 11H17V19H7V11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                    <span>${theme.title}</span>
+                </button>
+            `).join("");
+        }
+
+        function delay(milliseconds) {
+            return new Promise((resolve) => {
+                window.setTimeout(resolve, milliseconds);
+            });
+        }
+
+        function stopSplitThinking(invalidateToken = true) {
+            if (invalidateToken) {
+                splitRunToken += 1;
+            }
+            state.isSplitThinking = false;
+            splitThinkingLines.innerHTML = "";
+            splitThinkingPopover.classList.add("hidden");
+            splitQueryButton.classList.remove("thinking");
+            splitQueryButton.disabled = false;
+        }
+
+        function syncSplitPopoverPosition() {
+            if (splitThinkingPopover.classList.contains("hidden")) {
+                return;
+            }
+
+            const anchor = searchInputWrap || searchInputRow || searchBoxCard;
+            if (!anchor) {
+                return;
+            }
+
+            const rect = anchor.getBoundingClientRect();
+            const maxWidth = Math.min(760, window.innerWidth - 24);
+            const width = Math.min(rect.width, maxWidth);
+            const left = Math.min(Math.max(12, rect.left), window.innerWidth - width - 12);
+            const top = Math.max(12, rect.bottom + 12);
+
+            splitThinkingPopover.style.width = `${width}px`;
+            splitThinkingPopover.style.left = `${left}px`;
+            splitThinkingPopover.style.top = `${top}px`;
+        }
+
+        async function typeThinkingText(textNode, text, runToken) {
+            for (const character of text) {
+                if (runToken !== splitRunToken) {
+                    return false;
+                }
+                textNode.textContent += character;
+                await delay(/[，、：…]/.test(character) ? 110 : 68);
+            }
+            return true;
+        }
+
+        async function runSmartSplitSequence() {
+            if (state.isSplitThinking) {
+                return;
+            }
+
+            if (!state.query.trim()) {
+                showToast("请先输入检索关键词");
+                return;
+            }
+
+            const runToken = splitRunToken + 1;
+            splitRunToken = runToken;
+            state.isSplitThinking = true;
+            state.expression = [];
+            state.expressionVisible = false;
+            renderExpression();
+
+            splitThinkingLines.innerHTML = "";
+            splitThinkingPopover.classList.remove("hidden");
+            syncSplitPopoverPosition();
+            splitQueryButton.disabled = true;
+            splitQueryButton.classList.add("thinking");
+
+            const steps = [
+                "正在分析搜索主题……",
+                "已理解搜索任务，正在进行主题建模……",
+                "优化结果生成中，正在构建检索表达式……",
+                "检索表达式已完成，准备刷新结果列表……"
+            ];
+
+            await delay(120);
+
+            for (const [index, step] of steps.entries()) {
+                if (runToken !== splitRunToken) {
+                    return;
+                }
+
+                const line = document.createElement("div");
+                line.className = "split-thinking-line";
+
+                const indexNode = document.createElement("span");
+                indexNode.className = "split-thinking-index";
+                indexNode.textContent = String(index + 1).padStart(2, "0");
+
+                const textNode = document.createElement("span");
+                textNode.className = "split-thinking-text";
+
+                line.append(indexNode, textNode);
+                splitThinkingLines.appendChild(line);
+
+                const completed = await typeThinkingText(textNode, step, runToken);
+                if (!completed) {
+                    return;
+                }
+
+                line.classList.add("done");
+                await delay(320);
+            }
+
+            if (runToken !== splitRunToken) {
+                return;
+            }
+
+            await delay(2000);
+            stopSplitThinking(false);
+            state.hasCommittedSearch = true;
+            state.expression = buildSmartExpressions(state.query);
+            state.expressionVisible = true;
+            renderExpression();
+            renderResults();
+            showToast("已完成大模型智能拆分");
+        }
+
+        function renderExpression() {
+            expressionBox.classList.toggle("hidden", !state.expressionVisible);
+            if (!state.expressionVisible) {
+                expressionTokens.innerHTML = "";
+                expressionCount.textContent = "0 / 280";
+                return;
+            }
+            expressionTokens.innerHTML = state.expression.map((item) => `<span class="expression-token">${item}</span>`).join("");
+            const count = [state.query, ...state.expression].join("").length;
+            expressionCount.textContent = `${count} / 280`;
+        }
+
+        function renderFilters() {
+            renderOptionPills(periodOptions, optionConfig.period, state.period, "period", false);
+            renderOptionPills(channelOptions, optionConfig.channel, state.channels, "channels", true);
+            renderOptionPills(labelOptions, optionConfig.label, state.labels, "labels", true);
+            renderOptionPills(sentimentOptions, optionConfig.sentiment, state.sentiments, "sentiments", true);
+            renderOptionPills(dataTypeOptions, optionConfig.dataType, state.dataTypes, "dataTypes", true);
+            renderOptionPills(positionOptions, optionConfig.position, state.positions, "positions", true);
+            languageSelect.value = state.language;
+            regionSelect.value = state.region;
+            tailAddress.checked = state.tailAddress;
+            mediaAddress.checked = state.mediaAddress;
+            advancedFilters.classList.toggle("open", state.showAdvancedFilters);
+            moreFilterButton.textContent = state.showAdvancedFilters ? "收起筛选" : "更多筛选";
+        }
+
+        function renderResults() {
+            const items = filteredResults();
+            const totalCount = state.hasCommittedSearch ? SEARCH_TOTAL_COUNT : DEFAULT_TOTAL_COUNT;
+            resultCount.textContent = (items.length ? totalCount : 0).toLocaleString("zh-CN");
+
+            if (!items.length) {
+                resultList.innerHTML = `
+                    <div class="result-empty">
+                        <strong>暂无匹配结果</strong>
+                        <span>可以放宽媒体渠道、时间范围或表达式条件后重新查询。</span>
+                    </div>
+                `;
+                return;
+            }
+
+            resultList.innerHTML = items.map((item) => `
+                <article class="result-card">
+                    <div class="result-card-top">
+                        <div class="result-main">
+                            <input type="checkbox" data-select-id="${item.id}">
+                            <div class="result-body">
+                                <h3 class="result-title">${highlight(item.title)}</h3>
+                                <p class="result-snippet">${highlight(item.snippet)}</p>
+                                <div class="result-tags">
+                                    <span class="tag sentiment-${item.sentiment}">${item.sentimentLabel}</span>
+                                    <span class="tag channel">${item.sourceLabel}</span>
+                                    <span class="tag label">${item.mediaLabel}</span>
+                                    <span class="tag position">${item.positionLabel}</span>
+                                    <span class="tag channel">${item.dataTypeLabel}</span>
+                                </div>
+                                <div class="result-meta">
+                                    <span>发布时间：${formatDateTime(item.publishTime)}</span>
+                                    <span>入库时间：${formatDateTime(item.capturedTime)}</span>
+                                    <span>互动量：${item.interactions}</span>
+                                    <span>评论：${item.comments}</span>
+                                    <span>点赞：${item.likes}</span>
+                                    <span>${item.source}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-side">
+                            <button class="result-action" type="button" data-action="view-original" data-id="${item.id}">查看原文</button>
+                            <button class="result-action" type="button" data-action="copy-link" data-id="${item.id}">复制</button>
+                            <button class="result-action" type="button" data-action="alert" data-id="${item.id}">预警</button>
+                            <button class="result-action" type="button" data-action="collect" data-id="${item.id}">收藏</button>
+                            <button class="result-action" type="button" data-action="queue" data-id="${item.id}">加入线索池</button>
+                        </div>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        function render() {
+            renderThemes();
+            renderExpression();
+            renderFilters();
+            renderResults();
+            searchInput.value = state.query;
+            searchModeLabel.textContent = state.mode === "semantic" ? "智能搜索" : "关键词搜索";
+            modeToggle.textContent = state.mode === "semantic" ? "切换关键词模式" : "切换智能模式";
+            sortSelect.value = state.sort;
+        }
+
+        function applyTheme(themeId) {
+            const theme = themePresets.find((item) => item.id === themeId);
+            if (!theme) {
+                return;
+            }
+            stopSplitThinking();
+            state.hasCommittedSearch = false;
+            state.themeId = theme.id;
+            state.query = theme.query;
+            state.expression = [];
+            state.seedExpression = [...theme.expression];
+            state.expressionVisible = false;
+            state.period = theme.period;
+            state.channels = [...theme.channels];
+            state.sentiments = [...theme.sentiments];
+            state.labels = [...theme.labels];
+            state.dataTypes = [...theme.dataTypes];
+            state.positions = [...theme.positions];
+            state.language = theme.language;
+            state.region = theme.region;
+            state.submittedAt = Date.now();
+            render();
+        }
+
+        function updateMultiState(key, value) {
+            const current = [...state[key]];
+            if (value === "all") {
+                state[key] = ["all"];
+                return;
+            }
+
+            const withoutAll = current.filter((item) => item !== "all");
+            const hasValue = withoutAll.includes(value);
+            const nextValues = hasValue ? withoutAll.filter((item) => item !== value) : [...withoutAll, value];
+            state[key] = nextValues.length ? nextValues : ["all"];
+        }
+
+        document.addEventListener("click", (event) => {
+            const themeButton = event.target.closest("[data-theme-id]");
+            if (themeButton) {
+                applyTheme(themeButton.dataset.themeId);
+                return;
+            }
+
+            const optionButton = event.target.closest("[data-group][data-value]");
+            if (optionButton) {
+                const { group, value } = optionButton.dataset;
+                if (group === "period") {
+                    state.period = value;
+                } else if (["channels", "sentiments", "labels", "dataTypes", "positions"].includes(group)) {
+                    updateMultiState(group, value);
+                }
+                render();
+                return;
+            }
+
+            const resultAction = event.target.closest("[data-action]");
+            if (resultAction) {
+                const item = getActiveResultSource().find((entry) => entry.id === Number(resultAction.dataset.id));
+                if (!item) {
+                    return;
+                }
+                const actionMap = {
+                    "view-original": `已打开原文线索：${item.title.slice(0, 18)}...`,
+                    "copy-link": "已复制信息链接",
+                    "alert": "已创建预警任务",
+                    "collect": "已加入收藏",
+                    "queue": "已加入线索池"
+                };
+                showToast(actionMap[resultAction.dataset.action] || "操作已执行");
+            }
+        });
+
+        searchInput.addEventListener("input", (event) => {
+            stopSplitThinking();
+            state.hasCommittedSearch = false;
+            state.themeId = "";
+            state.query = event.target.value;
+            state.seedExpression = [];
+            state.expressionVisible = false;
+            state.expression = [];
+            renderResults();
+            renderExpression();
+        });
+
+        languageSelect.addEventListener("change", (event) => {
+            state.language = event.target.value;
+            renderResults();
+        });
+
+        regionSelect.addEventListener("change", (event) => {
+            state.region = event.target.value;
+            renderResults();
+        });
+
+        tailAddress.addEventListener("change", (event) => {
+            state.tailAddress = event.target.checked;
+        });
+
+        mediaAddress.addEventListener("change", (event) => {
+            state.mediaAddress = event.target.checked;
+        });
+
+        sortSelect.addEventListener("change", (event) => {
+            state.sort = event.target.value;
+            renderResults();
+        });
+
+        modeToggle.addEventListener("click", () => {
+            state.mode = state.mode === "semantic" ? "keyword" : "semantic";
+            render();
+        });
+
+        splitQueryButton.addEventListener("click", runSmartSplitSequence);
+
+        searchButton.addEventListener("click", () => {
+            state.hasCommittedSearch = Boolean(state.query.trim() || state.themeId);
+            state.submittedAt = Date.now();
+            renderResults();
+            showToast(state.hasCommittedSearch ? `已完成${state.mode === "semantic" ? "智能" : "关键词"}检索` : "当前展示最新入库模拟数据");
+        });
+
+        resetButton.addEventListener("click", () => {
+            stopSplitThinking();
+            state.hasCommittedSearch = false;
+            state.themeId = "";
+            state.query = "";
+            state.expression = [];
+            state.seedExpression = [];
+            state.expressionVisible = false;
+            state.period = "7d";
+            state.channels = ["all"];
+            state.sentiments = ["all"];
+            state.labels = ["all"];
+            state.dataTypes = ["all"];
+            state.positions = ["all"];
+            state.language = "all";
+            state.region = "all";
+            state.mode = "semantic";
+            state.sort = "relevance";
+            state.showAdvancedFilters = false;
+            state.tailAddress = true;
+            state.mediaAddress = true;
+            render();
+            showToast("检索条件已重置");
+        });
+
+        moreFilterButton.addEventListener("click", () => {
+            state.showAdvancedFilters = !state.showAdvancedFilters;
+            renderFilters();
+        });
+
+        highConfigButton.addEventListener("click", () => {
+            showToast("高级配置面板可按同一风格继续补充");
+        });
+
+        exportButton.addEventListener("click", () => {
+            showToast("已导出当前检索结果");
+        });
+
+        translateButton.addEventListener("click", () => {
+            showToast("已开始翻译所选结果");
+        });
+
+        selectAllResults.addEventListener("change", (event) => {
+            resultList.querySelectorAll('input[type="checkbox"][data-select-id]').forEach((checkbox) => {
+                checkbox.checked = event.target.checked;
+            });
+        });
+
+        searchThemeButton.addEventListener("click", () => {
+            showToast("主题检索入口已预留");
+        });
+
+        addThemeButton.addEventListener("click", () => {
+            showToast("新增主题功能可按后续需求接入");
+        });
+
+        saveThemeButton.addEventListener("click", () => {
+            showToast("当前检索主题已保存");
+        });
+
+        eventAnalysisButton.addEventListener("click", () => {
+            window.location.href = "../../事件分析/事件管理/创建分析/index.html";
+        });
+
+        addMonitorButton.addEventListener("click", () => {
+            showToast("已加入监测任务列表");
+        });
+
+        function toggleSidebar() {
+            if (window.innerWidth <= 1080) {
+                document.body.classList.toggle("is-sidebar-open");
+            }
+        }
+
+        menuButton.addEventListener("click", toggleSidebar);
+
+        menuButton.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                toggleSidebar();
+            }
+        });
+
+        window.addEventListener("resize", syncSplitPopoverPosition);
+        window.addEventListener("scroll", syncSplitPopoverPosition, { passive: true });
+
+        mobileMask.addEventListener("click", () => {
+            document.body.classList.remove("is-sidebar-open");
+        });
+
+        appShell.addEventListener("click", (event) => {
+            if (event.target.closest("a.nav-item[href]")) {
+                if (window.innerWidth <= 1080) {
+                    document.body.classList.remove("is-sidebar-open");
+                }
+                return;
+            }
+
+            if (event.target.closest(".nav-item")) {
+                showToast("当前阶段已补齐智能检索主页面，其余模块可继续按同风格扩展");
+                if (window.innerWidth <= 1080) {
+                    document.body.classList.remove("is-sidebar-open");
+                }
+            }
+        });
+
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库 - 热点话题案例库</title>
+<style>
+:root{--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh}
+a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select,textarea{font:inherit}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:24px;min-height:100vh}
+.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
+.brand-mark{width:36px;height:36px;flex:0 0 36px}
+.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
+.nav-group{margin-bottom:14px}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#8793a6;font-size:11px;font-weight:800}
+.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
+.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
+.nav-items{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s}
+.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f}
+.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
+.main-area{min-width:0;padding:20px 20px 40px 0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md)}
+.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
+.topbar-title span{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:12px;border:1px solid rgba(47,107,255,0.1);background:linear-gradient(180deg,rgba(47,107,255,0.07),rgba(158,199,255,0.12));color:var(--primary);font-size:15px;font-weight:800}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;cursor:pointer;transition:transform 0.2s}
+.icon-button:hover{transform:translateY(-2px);color:#3a73dd}
+.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
+.avatar strong{color:#fff;font-size:14px}
+.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
+.page{padding:20px 0}
+
+/* 热点话题案例库 专用 */
+.page-h1{font-size:24px;font-weight:800;color:#0a1428;margin:0 0 20px}
+
+/* 统计卡片行 */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);padding:20px 22px;display:flex;flex-direction:column;gap:4px}
+.stat-card-main{background:#fff}
+.stat-card-accent{background:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);color:#fff}
+.stat-card-label{font-size:12px;font-weight:600}
+.stat-card-label.dark{color:#68778f}
+.stat-card-label.light{color:rgba(255,255,255,0.7)}
+.stat-card-value{font-size:30px;font-weight:800;line-height:1.1}
+.stat-card-value.dark{color:var(--primary)}
+.stat-card-value.light{color:#fff}
+.stat-card-sub{font-size:11px;font-weight:600}
+.stat-card-sub.dark{color:#9aa8bc}
+.stat-card-sub.light{color:rgba(255,255,255,0.7)}
+.stat-card-sub.up{color:var(--success)}
+
+/* AI搜索框 */
+.ai-search-card{background:#fff;border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);padding:22px 24px;margin-bottom:20px}
+.ai-search-label{font-size:13px;font-weight:800;color:#1a2234;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ai-search-label svg{color:var(--primary)}
+.ai-search-row{display:flex;gap:10px;align-items:center}
+.ai-search-input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid rgba(47,107,255,0.18);background:#f5f8ff;font-size:14px;color:#2a3448;outline:none;transition:border-color 0.2s}
+.ai-search-input:focus{border-color:rgba(47,107,255,0.4)}
+.btn-ai-search{padding:12px 22px;border-radius:12px;border:none;background:var(--accent-gradient);color:#fff;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(47,107,255,0.24);white-space:nowrap;display:flex;align-items:center;gap:6px}
+
+/* 知识列表 */
+.knowledge-list-card{background:#fff;border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);overflow:hidden}
+.kl-filter-bar{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid rgba(122,145,184,0.1);flex-wrap:wrap}
+.kl-search{display:flex;align-items:center;flex:1;min-width:140px;border-radius:10px;border:1px solid rgba(122,145,184,0.15);background:#f8fbff;overflow:hidden}
+.kl-search input{flex:1;padding:8px 12px;border:none;background:transparent;font-size:12px;color:#2a3448;outline:none}
+.kl-sel{padding:8px 28px 8px 10px;border-radius:10px;border:1px solid rgba(122,145,184,0.15);background:#f8fbff;color:#4f5f7c;font-size:12px;appearance:none;cursor:pointer;outline:none;background-image:url("data:image/svg+xml,%3Csvg width='9' height='5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L4.5 4.5L8 1' stroke='%239aa8bc' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.kl-date-range{display:flex;align-items:center;gap:4px;font-size:12px;color:#9aa8bc}
+.kl-date-range input{padding:7px 8px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#f8fbff;font-size:12px;color:#2a3448;outline:none;width:110px}
+.btn-del-all{display:flex;align-items:center;gap:4px;padding:7px 12px;border-radius:8px;border:1px solid rgba(206,93,87,0.2);background:rgba(206,93,87,0.05);color:var(--danger);font-size:12px;font-weight:700;cursor:pointer}
+.kl-table{width:100%;border-collapse:collapse}
+.kl-table th{padding:12px 18px;text-align:left;font-size:11px;font-weight:800;color:#68778f;border-bottom:1px solid rgba(122,145,184,0.1);background:#fafcff;white-space:nowrap}
+.kl-table td{padding:14px 18px;font-size:12px;vertical-align:middle;border-bottom:1px solid rgba(122,145,184,0.07);color:#2a3448}
+.kl-table tr:last-child td{border-bottom:none}
+.kl-table tr:hover td{background:rgba(47,107,255,0.02)}
+.kl-num{font-size:12px;color:#9aa8bc;font-weight:700}
+.kl-name{font-weight:700;color:#1a2234}
+.kl-op{display:flex;align-items:center;gap:10px}
+.op-view{font-size:12px;font-weight:700;color:var(--primary);cursor:pointer;white-space:nowrap}
+.op-view:hover{text-decoration:underline}
+.op-rem{font-size:12px;font-weight:700;color:var(--danger);cursor:pointer;background:none;border:none;padding:0}
+.op-rem:hover{text-decoration:underline}
+.kl-pagination{display:flex;align-items:center;gap:8px;padding:14px 20px;border-top:1px solid rgba(122,145,184,0.08);background:#fafcff}
+.page-total{font-size:12px;color:#68778f;margin-right:4px}
+.page-btn{width:30px;height:30px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;font-size:12px;font-weight:700;color:#4f5f7c;cursor:pointer;display:grid;place-items:center;transition:all 0.15s}
+.page-btn:hover{border-color:rgba(47,107,255,0.25);color:var(--primary)}
+.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.page-goto{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:12px;color:#68778f}
+.page-goto input{width:44px;padding:5px 8px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);text-align:center;font-size:12px;outline:none}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
+        <path d="M5 8H25L15 25H5V8Z" fill="url(#k1)"/><path d="M23 8H43L31 31H17L23 8Z" fill="url(#k2)"/><path d="M14 28H29L22 40H14V28Z" fill="url(#k3)"/>
+        <defs><linearGradient id="k1" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="k2" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="k3" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
+      </svg>
+      <div class="brand-title"><strong>网络舆情系统</strong></div>
+    </div>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../监测预警/AI智能推荐/index.html"><span>AI智能推荐</span></a>
+        <a class="nav-item" href="../../监测预警/热点榜单/index.html"><span>热点榜单</span></a>
+        <a class="nav-item" href="../../监测预警/关键对象监测/index.html"><span>关键对象监测</span></a>
+        <div class="nav-item"><span>信息监测</span></div>
+        <div class="nav-item"><span>预警查询</span></div>
+        <a class="nav-item" href="../../监测预警/智能检索/index.html"><span>智能检索</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+        <div class="nav-item"><span>智能体编报</span></div>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../处置引导/传播引导策略/index.html"><span>传播引导策略</span></a>
+        <a class="nav-item" href="../../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
+        <div class="nav-item"><span>选题看板</span></div>
+        <a class="nav-item" href="../../处置引导/多稿合并工具/index.html"><span>多稿合并工具</span></a>
+        <a class="nav-item" href="../../处置引导/舆情复盘分析/index.html"><span>舆情复盘分析</span></a>
+      </div>
+    </section>
+    <section class="nav-group active">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item active" href="./index.html"><span>热点话题案例库</span></a>
+        <div class="nav-item"><span>宣传引导策略库</span></div>
+        <div class="nav-item"><span>决策报告知识库</span></div>
+        <div class="nav-item"><span>重点关注对象库</span></div>
+        <div class="nav-item"><span>行业术语与本体知识库</span></div>
+      </div>
+    </section>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div class="topbar-left"><div class="topbar-title"><span>热点话题案例库</span></div></div>
+      <div class="topbar-right">
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+      </div>
+    </header>
+    <section class="page">
+      <div class="page-h1">历史舆情事件库</div>
+
+      <!-- 4-stat row -->
+      <div class="stat-grid">
+        <div class="stat-card stat-card-accent">
+          <div class="stat-card-label light">知识总量</div>
+          <div class="stat-card-value light">1,248</div>
+          <div class="stat-card-sub light">累计收录</div>
+        </div>
+        <div class="stat-card stat-card-main">
+          <div class="stat-card-label dark">本月新增</div>
+          <div class="stat-card-value dark">86</div>
+          <div class="stat-card-sub up">↑ 12.5%</div>
+        </div>
+        <div class="stat-card stat-card-main">
+          <div class="stat-card-label dark">本周新增</div>
+          <div class="stat-card-value dark">23</div>
+          <div class="stat-card-sub up">↑ 8.3%</div>
+        </div>
+        <div class="stat-card stat-card-main">
+          <div class="stat-card-label dark">今日新增</div>
+          <div class="stat-card-value dark">5</div>
+          <div class="stat-card-sub up">↑ 2条</div>
+        </div>
+      </div>
+
+      <!-- AI搜索 -->
+      <div class="ai-search-card">
+        <div class="ai-search-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.4 8.4H21.2L15.7 12.6L17.9 19L12 15L6.1 19L8.3 12.6L2.8 8.4H9.6L12 2Z" fill="currentColor"/></svg>
+          知识智能检索问答
+        </div>
+        <div class="ai-search-row">
+          <input type="text" class="ai-search-input" placeholder="请输入您的问题，例如：近年香港公共安全事件有哪些处置成功案例？">
+          <button class="btn-ai-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            智能检索
+          </button>
+        </div>
+      </div>
+
+      <!-- 知识列表 -->
+      <div class="knowledge-list-card">
+        <div class="kl-filter-bar">
+          <div class="kl-search">
+            <svg style="margin-left:10px;flex:0 0 14px" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.8"/><path d="M16.5 16.5L21 21" stroke="#9aa8bc" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="事件名称搜索">
+          </div>
+          <select class="kl-sel">
+            <option>全部来源</option>
+            <option>香港电台</option>
+            <option>文汇报</option>
+            <option>明报</option>
+          </select>
+          <div class="kl-date-range">
+            <span>复盘周期</span>
+            <input type="date">
+            <span>—</span>
+            <input type="date">
+          </div>
+          <div class="kl-date-range">
+            <span>存档时间</span>
+            <input type="date">
+            <span>—</span>
+            <input type="date">
+          </div>
+          <button class="btn-del-all">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 7H20M10 11V17M14 11V17M5 7l1 12h12L19 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            删除
+          </button>
+        </div>
+        <table class="kl-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></th>
+              <th>序号</th>
+              <th>事件名称</th>
+              <th>来源</th>
+              <th>复盘周期</th>
+              <th>存档时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">001</td><td class="kl-name">大埔宏福苑大火</td><td>香港电台 / 文汇报</td><td>2023-10-24 ~ 2023-10-31</td><td>2023-11-01</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">002</td><td class="kl-name">特区政府新政舆情</td><td>星岛日报 / 明报</td><td>2023-11-05 ~ 2023-11-12</td><td>2023-11-14</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">003</td><td class="kl-name">深水埗旧楼火警安置争议</td><td>香港电台</td><td>2023-12-01 ~ 2023-12-08</td><td>2023-12-10</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">004</td><td class="kl-name">港股市场异动舆情</td><td>香港商报 / 信报</td><td>2024-01-15 ~ 2024-01-20</td><td>2024-01-22</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">005</td><td class="kl-name">两会报道舆情汇总</td><td>各大媒体综合</td><td>2024-03-05 ~ 2024-03-15</td><td>2024-03-17</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">006</td><td class="kl-name">本地居屋供应政策讨论</td><td>明报</td><td>2024-02-10 ~ 2024-02-18</td><td>2024-02-20</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">007</td><td class="kl-name">香港劳动节示威舆情</td><td>苹果日报 / 东方日报</td><td>2023-05-01 ~ 2023-05-07</td><td>2023-05-09</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">008</td><td class="kl-name">新界东单车径争议</td><td>东网</td><td>2023-07-12 ~ 2023-07-19</td><td>2023-07-21</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">009</td><td class="kl-name">跨境通关政策舆情监测</td><td>南华早报</td><td>2023-09-01 ~ 2023-09-14</td><td>2023-09-16</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--primary);width:13px;height:13px"></td><td class="kl-num">010</td><td class="kl-name">食安中心事件舆情</td><td>香港01 / 东方日报</td><td>2023-08-05 ~ 2023-08-12</td><td>2023-08-14</td><td><div class="kl-op"><a class="op-view" href="#">查看</a><button class="op-rem">删除</button></div></td></tr>
+          </tbody>
+        </table>
+        <div class="kl-pagination">
+          <span class="page-total">共 90 条</span>
+          <button class="page-btn">‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn">5</button>
+          <span style="padding:0 4px;color:#9aa8bc;font-size:12px">···</span>
+          <button class="page-btn">9</button>
+          <button class="page-btn">›</button>
+          <div class="page-goto">
+            前往
+            <input type="number" min="1" max="9" value="">
+            页
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

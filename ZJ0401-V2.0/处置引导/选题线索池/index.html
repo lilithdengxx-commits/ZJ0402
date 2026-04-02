@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>处置引导 - 选题线索池</title>
+    <style>
+        :root {
+            --bg: #f6f8fc;
+            --bg-deep: #edf2fa;
+            --card: rgba(255, 255, 255, 0.86);
+            --card-strong: #ffffff;
+            --line: rgba(122, 145, 184, 0.14);
+            --line-strong: rgba(122, 145, 184, 0.22);
+            --text: #2a3448;
+            --text-soft: #68778f;
+            --text-faint: #9aa8bc;
+            --primary: #2f6bff;
+            --primary-deep: #1f54dd;
+            --secondary: #9ec7ff;
+            --secondary-soft: rgba(47, 107, 255, 0.08);
+            --success: #19a581;
+            --danger: #d96863;
+            --warning: #ca9434;
+            --teal: #13c3d0;
+            --accent-gradient: linear-gradient(135deg, #2b61ea 0%, #4e88ff 56%, #77b6ff 100%);
+            --shadow-lg: 0 28px 56px rgba(26, 44, 82, 0.1);
+            --shadow-md: 0 16px 30px rgba(26, 44, 82, 0.08);
+            --radius-xl: 36px;
+            --radius-lg: 28px;
+            --radius-md: 20px;
+            --radius-sm: 16px;
+            --sidebar-width: 248px;
+            font-family: "Alibaba PuHuiTi 3.0", "HarmonyOS Sans SC", "Microsoft YaHei UI", sans-serif;
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% -6%, rgba(47, 107, 255, 0.12), transparent 28%),
+                radial-gradient(circle at 100% 0%, rgba(158, 199, 255, 0.18), transparent 24%),
+                linear-gradient(180deg, #fbfcff 0%, #f5f7fb 46%, #eef2f8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            top: -60px;
+            right: -40px;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(47, 107, 255, 0.16) 0%, rgba(47, 107, 255, 0) 72%);
+            filter: blur(18px);
+        }
+
+        body::after {
+            left: -120px;
+            bottom: 100px;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(158, 199, 255, 0.2) 0%, rgba(158, 199, 255, 0) 72%);
+            filter: blur(16px);
+        }
+
+        a,
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            column-gap: 24px;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            margin: 20px 0 20px 20px;
+            padding: 18px 16px 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 249, 253, 0.92));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.14);
+            border-radius: 28px;
+            overflow-y: auto;
+            box-shadow: 0 14px 28px rgba(26, 44, 82, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        }
+
+        .sidebar::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 82px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(47, 107, 255, 0.18), rgba(158, 199, 255, 0.14) 54%, transparent 80%);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(131, 151, 194, 0.24);
+            border-radius: 999px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 4px 6px 14px;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
+        }
+
+        .brand-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .brand-title strong {
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            color: #2b62ce;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .brand-title span {
+            display: none;
+        }
+
+        .nav-group {
+            margin-bottom: 14px;
+        }
+
+        .nav-group-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 10px 5px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #8793a6;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .nav-group-title .title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-group-title svg {
+            width: 14px;
+            height: 14px;
+            color: var(--primary);
+        }
+
+        .nav-group-title small {
+            display: none;
+        }
+
+        .nav-group.active .nav-group-title {
+            color: #3569d8;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            min-height: 46px;
+            padding: 11px 14px;
+            border: 1px solid rgba(122, 145, 184, 0.06);
+            border-radius: 14px;
+            background: transparent;
+            color: #4f5f7c;
+            font-size: 12px;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateX(2px);
+            border-color: rgba(47, 107, 255, 0.14);
+            background: rgba(255, 255, 255, 0.84);
+            color: #375a8f;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .nav-item.active {
+            background: #ffffff;
+            color: var(--primary);
+            border-color: rgba(47, 107, 255, 0.08);
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+            transform: none;
+        }
+
+        .nav-item small {
+            display: none;
+        }
+
+        .main-area {
+            min-width: 0;
+            padding: 20px 20px 20px 0;
+        }
+
+        .page {
+            padding: 18px 0 36px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 20px;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 68px;
+            padding: 10px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            box-shadow: var(--shadow-md);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .icon-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #3f5479;
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .icon-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(26, 44, 82, 0.08);
+            border-color: rgba(47, 107, 255, 0.18);
+            color: #3a73dd;
+        }
+
+        .topbar-title {
+            display: flex;
+            flex: 0 0 auto;
+            cursor: default;
+        }
+
+        .topbar-title:focus-visible {
+            outline: 2px solid rgba(47, 107, 255, 0.28);
+            outline-offset: 4px;
+        }
+
+        .topbar-title span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 36px;
+            padding: 0 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(47, 107, 255, 0.1);
+            background: linear-gradient(180deg, rgba(47, 107, 255, 0.07), rgba(158, 199, 255, 0.12));
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px 5px 5px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 14px 24px rgba(47, 107, 255, 0.18);
+        }
+
+        .avatar strong {
+            color: #ffffff;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+        }
+
+        .avatar-badge {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 96px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            color: #ffffff;
+            box-shadow: 0 14px 28px rgba(26, 44, 82, 0.08);
+        }
+
+        .metric-card::after {
+            content: "";
+            position: absolute;
+            top: -18px;
+            right: -12px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .metric-card strong {
+            position: relative;
+            z-index: 1;
+            display: block;
+            font-size: 28px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        .metric-card span {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0.96;
+        }
+
+        .metric-card small {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.82;
+        }
+
+        .metric-total {
+            background: linear-gradient(135deg, #4d63ea 0%, #7b74f7 100%);
+        }
+
+        .metric-ai {
+            background: linear-gradient(135deg, #17b5d4 0%, #2f84ff 100%);
+        }
+
+        .metric-tracking {
+            background: linear-gradient(135deg, #21b875 0%, #67ce8f 100%);
+        }
+
+        .metric-adopted {
+            background: linear-gradient(135deg, #ff8f8f 0%, #eb6673 100%);
+        }
+
+        .metric-rejected {
+            background: linear-gradient(135deg, #7f8798 0%, #a3aab8 100%);
+        }
+
+        .workspace-card {
+            position: relative;
+            overflow: hidden;
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 24px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 251, 255, 0.98));
+            box-shadow: var(--shadow-lg);
+        }
+
+        .workspace-card::before {
+            content: "";
+            position: absolute;
+            top: -90px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(158, 199, 255, 0.18) 0%, rgba(158, 199, 255, 0) 72%);
+            pointer-events: none;
+        }
+
+        .workspace-toolbar {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .toolbar-title strong {
+            display: block;
+            font-size: 18px;
+            color: #1b263b;
+        }
+
+        .toolbar-title span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #7d8aa1;
+        }
+
+        .toolbar-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .source-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .source-tab,
+        .status-select,
+        .search-box,
+        .primary-button,
+        .ghost-button,
+        .mini-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 40px;
+            padding: 0 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            color: #5e6f8d;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, background 0.2s ease;
+        }
+
+        .source-tab:hover,
+        .status-select:hover,
+        .search-box:hover,
+        .primary-button:hover,
+        .ghost-button:hover,
+        .mini-button:hover {
+            transform: translateY(-1px);
+            border-color: rgba(47, 107, 255, 0.16);
+            box-shadow: 0 12px 18px rgba(26, 44, 82, 0.06);
+        }
+
+        .source-tab.active {
+            background: linear-gradient(135deg, rgba(47, 107, 255, 0.08), rgba(158, 199, 255, 0.16));
+            color: var(--primary);
+            border-color: rgba(47, 107, 255, 0.12);
+        }
+
+        .status-select select {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: inherit;
+            font-weight: 800;
+        }
+
+        .search-box {
+            min-width: 260px;
+            justify-content: flex-start;
+            padding: 0 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: #9aa8bc;
+        }
+
+        .primary-button {
+            border-color: transparent;
+            background: var(--accent-gradient);
+            color: #ffffff;
+        }
+
+        .ghost-button {
+            color: var(--primary);
+        }
+
+        .clue-list {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .clue-card {
+            position: relative;
+            overflow: hidden;
+            padding: 18px 18px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 12px 22px rgba(26, 44, 82, 0.045);
+        }
+
+        .clue-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, #7cb2ff 0%, #2f6bff 100%);
+        }
+
+        .clue-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .badge,
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 22px;
+            padding: 0 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .badge::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .badge.source-ai {
+            color: #2f6bff;
+            background: rgba(47, 107, 255, 0.08);
+            border-color: rgba(47, 107, 255, 0.12);
+        }
+
+        .badge.source-manual {
+            color: #17a37d;
+            background: rgba(25, 165, 129, 0.08);
+            border-color: rgba(25, 165, 129, 0.14);
+        }
+
+        .badge.source-system {
+            color: #7d61d6;
+            background: rgba(125, 97, 214, 0.08);
+            border-color: rgba(125, 97, 214, 0.14);
+        }
+
+        .badge.domain {
+            color: #5877a8;
+            background: rgba(90, 149, 227, 0.08);
+            border-color: rgba(90, 149, 227, 0.12);
+        }
+
+        .badge.platform {
+            color: #7b879a;
+            background: rgba(122, 145, 184, 0.08);
+        }
+
+        .status-pending {
+            color: #b97a18;
+            background: rgba(245, 179, 74, 0.12);
+            border-color: rgba(245, 179, 74, 0.2);
+        }
+
+        .status-tracking {
+            color: #1fa26f;
+            background: rgba(25, 165, 129, 0.12);
+            border-color: rgba(25, 165, 129, 0.18);
+        }
+
+        .status-adopted {
+            color: #d25c67;
+            background: rgba(234, 107, 118, 0.12);
+            border-color: rgba(234, 107, 118, 0.18);
+        }
+
+        .status-rejected {
+            color: #7c8494;
+            background: rgba(124, 132, 148, 0.12);
+            border-color: rgba(124, 132, 148, 0.18);
+        }
+
+        .clue-title {
+            margin: 12px 0 0;
+            font-size: 18px;
+            line-height: 1.38;
+            color: #193050;
+        }
+
+        .clue-summary {
+            margin: 10px 0 0;
+            font-size: 12px;
+            line-height: 1.7;
+            color: #556882;
+        }
+
+        .clue-analysis {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(122, 145, 184, 0.08);
+            background: rgba(246, 249, 255, 0.86);
+        }
+
+        .clue-analysis strong {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #51729f;
+        }
+
+        .clue-analysis strong::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .clue-analysis p {
+            margin: 8px 0 0;
+            font-size: 12px;
+            line-height: 1.66;
+            color: #5b6f8b;
+        }
+
+        .clue-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 18px;
+            margin-top: 14px;
+            color: #7a889d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .clue-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(122, 145, 184, 0.12);
+        }
+
+        .priority-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 24px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: rgba(47, 107, 255, 0.08);
+            color: #4a72b1;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .clue-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .mini-button {
+            min-height: 34px;
+            padding: 0 12px;
+            font-size: 11px;
+            box-shadow: none;
+        }
+
+        .mini-button.primary {
+            background: rgba(47, 107, 255, 0.08);
+            border-color: rgba(47, 107, 255, 0.12);
+            color: var(--primary);
+        }
+
+        .mini-button.success {
+            background: rgba(25, 165, 129, 0.08);
+            border-color: rgba(25, 165, 129, 0.14);
+            color: var(--success);
+        }
+
+        .mini-button.danger {
+            background: rgba(217, 104, 99, 0.08);
+            border-color: rgba(217, 104, 99, 0.14);
+            color: var(--danger);
+        }
+
+        .empty-state {
+            padding: 60px 28px;
+            border-radius: 24px;
+            border: 1px dashed rgba(98, 146, 216, 0.22);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 249, 255, 0.98));
+            color: #667695;
+            text-align: center;
+        }
+
+        .empty-state strong {
+            display: block;
+            font-size: 22px;
+            color: #182033;
+            margin-bottom: 10px;
+        }
+
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 31, 63, 0.28);
+            backdrop-filter: blur(4px);
+            z-index: 70;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 80;
+            width: min(520px, calc(100vw - 32px));
+            padding: 22px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(122, 145, 184, 0.14);
+            box-shadow: 0 28px 56px rgba(26, 44, 82, 0.18);
+            transform: translate(-50%, -50%);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .modal-header strong {
+            display: block;
+            font-size: 18px;
+            color: #1b263b;
+        }
+
+        .modal-header span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #7c899e;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #53667f;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(122, 145, 184, 0.14);
+            outline: none;
+            background: #ffffff;
+            color: var(--text);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .field textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .toast-stack {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 90;
+        }
+
+        .toast {
+            min-width: 240px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(22, 35, 65, 0.92);
+            color: #ffffff;
+            box-shadow: 0 20px 30px rgba(8, 15, 31, 0.18);
+            animation: toastIn 0.24s ease;
+        }
+
+        .mobile-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 31, 63, 0.24);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.24s ease;
+            z-index: 20;
+        }
+
+        .is-sidebar-open .mobile-mask {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1440px) {
+            .overview-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+                column-gap: 0;
+            }
+
+            .topbar-title {
+                cursor: pointer;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 18px;
+                top: 18px;
+                bottom: 18px;
+                height: auto;
+                width: min(84vw, 300px);
+                margin: 0;
+                transform: translateX(calc(-100% - 24px));
+                transition: transform 0.24s ease;
+                z-index: 30;
+                box-shadow: 20px 0 40px rgba(17, 24, 39, 0.22);
+            }
+
+            .is-sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .main-area {
+                padding: 18px;
+            }
+
+            .topbar {
+                top: 18px;
+            }
+
+            .overview-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .overview-grid,
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar-title span {
+                min-height: 32px;
+                padding: 0 10px;
+                font-size: 13px;
+            }
+
+            .search-box,
+            .status-select,
+            .primary-button,
+            .ghost-button {
+                width: 100%;
+            }
+
+            .clue-footer,
+            .clue-card-top,
+            .workspace-toolbar,
+            .info-banner {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-controls {
+                width: 100%;
+                justify-content: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-mask" id="mobileMask"></div>
+    <div class="app-shell" id="appShell">
+        <aside class="sidebar">
+            <div class="brand">
+                <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M5 8H25L15 25H5V8Z" fill="url(#brand-a)"/>
+                    <path d="M23 8H43L31 31H17L23 8Z" fill="url(#brand-b)"/>
+                    <path d="M14 28H29L22 40H14V28Z" fill="url(#brand-c)"/>
+                    <defs>
+                        <linearGradient id="brand-a" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2A72FF"/>
+                            <stop offset="1" stop-color="#11C3C4"/>
+                        </linearGradient>
+                        <linearGradient id="brand-b" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4C8FFF"/>
+                            <stop offset="1" stop-color="#2757FF"/>
+                        </linearGradient>
+                        <linearGradient id="brand-c" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#14C9B3"/>
+                            <stop offset="1" stop-color="#3D8BFF"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="brand-title">
+                    <strong>网络舆情系统</strong>
+                    <span></span>
+                </div>
+            </div>
+
+            <section class="nav-group active">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>监测预警</span>
+                    </div>
+                    <small>⌃</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../监测预警/AI智能推荐/index.html"><span>AI智能推荐</span><small>当前</small></a>
+                    <a class="nav-item" href="../../监测预警/热点榜单/index.html"><span>热点榜单</span><small>02</small></a>
+                    <a class="nav-item" href="../../监测预警/关键对象监测/index.html"><span>关键对象监测</span><small>03</small></a>
+                    <div class="nav-item"><span>信息监测</span><small>04</small></div>
+                    <div class="nav-item"><span>预警查询</span><small>05</small></div>
+                    <a class="nav-item" href="../../监测预警/智能检索/index.html"><span>智能检索</span><small>06</small></a>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>事件分析</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span><small>01</small></a>
+                    <div class="nav-item"><span>智能体编报</span><small>02</small></div>
+                </div>
+            </section>
+
+            <section class="nav-group active">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>处置引导</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../传播引导策略/index.html"><span>传播引导策略</span><small>01</small></a>
+                    <a class="nav-item active" href="./index.html"><span>选题线索池</span><small>02</small></a>
+                    <div class="nav-item"><span>选题看板</span><small>03</small></div>
+                    <a class="nav-item" href="../多稿合并工具/index.html"><span>多稿合并工具</span><small>04</small></a>
+                    <a class="nav-item" href="../舆情复盘分析/index.html"><span>舆情复盘分析</span><small>05</small></a>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>知识库子系统</span>
+                    </div>
+                    <small>⌄</small>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span><small>01</small></a>
+                    <div class="nav-item"><span>宣传引导策略库</span><small>02</small></div>
+                    <div class="nav-item"><span>决策报告知识库</span><small>03</small></div>
+                    <div class="nav-item"><span>重点关注对象库</span><small>04</small></div>
+                    <div class="nav-item"><span>行业术语与本体知识库</span><small>05</small></div>
+                </div>
+            </section>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-title" id="menuButton" role="button" tabindex="0" aria-label="切换导航">
+                        <span>选题线索池</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-button" aria-label="收藏">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="任务中心">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="通知">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                    <div class="avatar">
+                        <div class="avatar-badge">管</div>
+                        <strong>管理员</strong>
+                    </div>
+                </div>
+            </header>
+
+            <section class="page">
+                <section class="overview-grid" id="overviewGrid"></section>
+
+                <section class="workspace-card">
+                    <div class="workspace-toolbar">
+                        <div class="toolbar-title">
+                            <strong>线索列表</strong>
+                            <span>支持系统线索、AI推荐导入线索与手动添加线索统一管理</span>
+                        </div>
+                        <div class="toolbar-controls">
+                            <div class="source-tabs" id="sourceTabs"></div>
+                            <label class="status-select">
+                                <span>状态</span>
+                                <select id="statusFilter">
+                                    <option value="all">全部状态</option>
+                                    <option value="pending">待收录</option>
+                                    <option value="tracking">跟进中</option>
+                                    <option value="adopted">已采用</option>
+                                    <option value="rejected">已退回</option>
+                                </select>
+                            </label>
+                            <label class="search-box">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 18C14.866 18 18 14.866 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18Z" stroke="#8FA0BC" stroke-width="1.8"/><path d="M20 20L17 17" stroke="#8FA0BC" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                <input id="searchInput" type="search" placeholder="搜索标题、摘要、来源、领域">
+                            </label>
+                            <button class="primary-button" id="openModalButton" type="button">手动添加线索</button>
+                        </div>
+                    </div>
+
+                    <div class="clue-list" id="clueList"></div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-mask" id="modalMask" hidden></div>
+    <div class="modal" id="manualModal" hidden>
+        <div class="modal-header">
+            <div>
+                <strong>手动添加线索</strong>
+                <span>补充未经过 AI 推荐流程但需要纳入跟进的选题线索。</span>
+            </div>
+            <button class="ghost-button" id="closeModalButton" type="button">关闭</button>
+        </div>
+
+        <form id="manualForm">
+            <div class="modal-grid">
+                <div class="field full">
+                    <label for="manualTitle">线索标题</label>
+                    <input id="manualTitle" name="title" type="text" required placeholder="请输入线索标题">
+                </div>
+                <div class="field">
+                    <label for="manualDomain">线索领域</label>
+                    <select id="manualDomain" name="domain">
+                        <option value="机构舆情">机构舆情</option>
+                        <option value="热点问题">热点问题</option>
+                        <option value="关键部门">关键部门</option>
+                        <option value="关键事件">关键事件</option>
+                        <option value="社会热点">社会热点</option>
+                        <option value="涉港澳突发事件">涉港澳突发事件</option>
+                        <option value="行业舆情">行业舆情</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="manualSource">线索来源</label>
+                    <input id="manualSource" name="sourceName" type="text" placeholder="例如：值班记录、线下报送、电话反馈">
+                </div>
+                <div class="field">
+                    <label for="manualPriority">关注级别</label>
+                    <select id="manualPriority" name="priority">
+                        <option value="高关注">高关注</option>
+                        <option value="持续跟进">持续跟进</option>
+                        <option value="观察中">观察中</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="manualPlatform">触达渠道</label>
+                    <input id="manualPlatform" name="platform" type="text" placeholder="例如：电话、群组、微博、论坛">
+                </div>
+                <div class="field full">
+                    <label for="manualSummary">线索摘要</label>
+                    <textarea id="manualSummary" name="summary" required placeholder="请填写线索摘要、当前情况和跟进建议"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="ghost-button" id="cancelModalButton" type="button">取消</button>
+                <button class="primary-button" type="submit">保存线索</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <script>
+        const AI_STORAGE_KEY = "zj0330-topic-clue-pool-ai-v1";
+        const MANUAL_STORAGE_KEY = "zj0330-topic-clue-pool-manual-v1";
+        const PATCH_STORAGE_KEY = "zj0330-topic-clue-pool-patches-v1";
+        const sourceTabs = [
+            { key: "all", label: "全部线索" },
+            { key: "ai", label: "来自AI推荐" },
+            { key: "manual", label: "手动添加" },
+            { key: "system", label: "系统收录" }
+        ];
+
+        const statusMap = {
+            pending: { label: "待收录", tone: "pending" },
+            tracking: { label: "跟进中", tone: "tracking" },
+            adopted: { label: "已采用", tone: "adopted" },
+            rejected: { label: "已退回", tone: "rejected" }
+        };
+
+        const seedClues = [
+            {
+                id: "seed-1",
+                sourceType: "system",
+                sourceLabel: "系统收录",
+                sourceName: "值班巡查",
+                title: "大埔宏福苑棚架火情后续舆情升温，市民对善后安排持续追问",
+                summary: "火情视频二次传播后，围绕消防响应、住户安置与物业管理责任的讨论持续升温，建议结合权威通报与现场善后信息形成统一口径。",
+                analysis: "该线索已具备持续跟进价值，适合作为突发事件后续影响与回应节奏的选题来源。",
+                domain: "涉港澳突发事件",
+                platform: "值班巡查",
+                priority: "高关注",
+                status: "tracking",
+                statusLabel: "跟进中",
+                createdAt: "2026-03-31T09:15:00",
+                addedAt: "2026-03-31T09:20:00"
+            },
+            {
+                id: "seed-2",
+                sourceType: "system",
+                sourceLabel: "系统收录",
+                sourceName: "行业观察",
+                title: "深港跨境巴士故障引发排队焦虑，公共服务效率议题可延展",
+                summary: "晚高峰现场短视频传播速度较快，评论区集中讨论跨境出行组织能力与信息提示是否充分，适合做民生服务视角的持续观察。",
+                analysis: "建议联动交通管理部门公开信息，补充跨境交通高峰期应急机制和乘客服务指引。",
+                domain: "社会热点",
+                platform: "短视频",
+                priority: "持续跟进",
+                status: "pending",
+                statusLabel: "待收录",
+                createdAt: "2026-03-31T08:42:00",
+                addedAt: "2026-03-31T08:56:00"
+            },
+            {
+                id: "seed-3",
+                sourceType: "system",
+                sourceLabel: "系统收录",
+                sourceName: "专题策划例会",
+                title: "旧刊珍藏分享带动品牌口碑回流，可转化为读者共创选题",
+                summary: "读者自发上传旧刊封面、编辑手记和收藏故事，形成一波正向互动，适合进一步策划专题征集和人物回访内容。",
+                analysis: "该类线索风险较低、情感浓度高，适合沉淀为品牌温度类内容产品。",
+                domain: "机构舆情",
+                platform: "读者投稿",
+                priority: "观察中",
+                status: "adopted",
+                statusLabel: "已采用",
+                createdAt: "2026-03-30T18:20:00",
+                addedAt: "2026-03-30T18:40:00"
+            },
+            {
+                id: "seed-4",
+                sourceType: "system",
+                sourceLabel: "系统收录",
+                sourceName: "本地新闻",
+                title: "文旅部门回应老街夜市改造，商户对补偿预期分化",
+                summary: "商户与游客从工期安排、历史风貌保护和消费便利化展开讨论，若现场回应不足，可能转化为部门执行力讨论。",
+                analysis: "建议保持观察，如有后续通报或商户代表发声，可及时转入重点跟进。",
+                domain: "关键部门",
+                platform: "本地新闻",
+                priority: "持续跟进",
+                status: "tracking",
+                statusLabel: "跟进中",
+                createdAt: "2026-03-30T14:05:00",
+                addedAt: "2026-03-30T14:18:00"
+            },
+            {
+                id: "seed-5",
+                sourceType: "system",
+                sourceLabel: "系统收录",
+                sourceName: "编前会记录",
+                title: "纸媒刊例调整传闻阶段性降温，线索暂缓推进",
+                summary: "相关讨论热度回落，行业账号未再跟进核心信息，当前缺乏新增事实支撑，暂不建议继续投入版面资源。",
+                analysis: "保留观察，但短期内不宜列为重点选题来源。",
+                domain: "行业舆情",
+                platform: "行业社群",
+                priority: "观察中",
+                status: "rejected",
+                statusLabel: "已退回",
+                createdAt: "2026-03-29T19:40:00",
+                addedAt: "2026-03-29T20:10:00"
+            }
+        ];
+
+        const state = {
+            source: "all",
+            status: "all",
+            query: ""
+        };
+
+        const overviewGrid = document.getElementById("overviewGrid");
+        const sourceTabsNode = document.getElementById("sourceTabs");
+        const statusFilter = document.getElementById("statusFilter");
+        const searchInput = document.getElementById("searchInput");
+        const clueListNode = document.getElementById("clueList");
+        const openModalButton = document.getElementById("openModalButton");
+        const closeModalButton = document.getElementById("closeModalButton");
+        const cancelModalButton = document.getElementById("cancelModalButton");
+        const modalMask = document.getElementById("modalMask");
+        const manualModal = document.getElementById("manualModal");
+        const manualForm = document.getElementById("manualForm");
+        const toastStack = document.getElementById("toastStack");
+        const appShell = document.getElementById("appShell");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMask = document.getElementById("mobileMask");
+
+        function readStorage(key, fallback = []) {
+            try {
+                const raw = window.localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function writeStorage(key, value) {
+            try {
+                window.localStorage.setItem(key, JSON.stringify(value));
+            } catch (error) {
+                return false;
+            }
+            return true;
+        }
+
+        function parseDate(value) {
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? new Date() : date;
+        }
+
+        function formatDateTime(value) {
+            const date = parseDate(value);
+            const pad = (number) => String(number).padStart(2, "0");
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+        }
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+            toastStack.appendChild(toast);
+            window.setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(8px)";
+                toast.style.transition = "opacity 0.2s ease, transform 0.2s ease";
+            }, 2200);
+            window.setTimeout(() => toast.remove(), 2500);
+        }
+
+        function openManualModal() {
+            modalMask.hidden = false;
+            manualModal.hidden = false;
+        }
+
+        function closeManualModal() {
+            modalMask.hidden = true;
+            manualModal.hidden = true;
+            manualForm.reset();
+        }
+
+        function getStatusMeta(status) {
+            return statusMap[status] || statusMap.pending;
+        }
+
+        function readSeedPatches() {
+            return readStorage(PATCH_STORAGE_KEY, {});
+        }
+
+        function saveSeedPatches(patches) {
+            writeStorage(PATCH_STORAGE_KEY, patches);
+        }
+
+        function loadSeedClues() {
+            const patches = readSeedPatches();
+            return seedClues.map((item) => {
+                const patch = patches[item.id] || {};
+                const statusMeta = getStatusMeta(patch.status || item.status);
+                return {
+                    ...item,
+                    ...patch,
+                    status: patch.status || item.status,
+                    statusLabel: statusMeta.label,
+                    sourceLabel: item.sourceLabel,
+                    sourceType: item.sourceType
+                };
+            });
+        }
+
+        function loadManualClues() {
+            return readStorage(MANUAL_STORAGE_KEY, []).map((item) => {
+                const statusMeta = getStatusMeta(item.status || "pending");
+                return {
+                    ...item,
+                    sourceType: "manual",
+                    sourceLabel: "手动添加",
+                    status: item.status || "pending",
+                    statusLabel: statusMeta.label,
+                    priority: item.priority || "持续跟进"
+                };
+            });
+        }
+
+        function loadAiClues() {
+            return readStorage(AI_STORAGE_KEY, []).map((item) => {
+                const statusMeta = getStatusMeta(item.status || "pending");
+                return {
+                    ...item,
+                    id: item.id || `ai-${item.sourceId}`,
+                    sourceType: "ai",
+                    sourceLabel: "来自AI推荐",
+                    sourceName: item.originPage || "AI智能推荐",
+                    summary: item.summary || item.analysis || "",
+                    status: item.status || "pending",
+                    statusLabel: item.statusLabel || statusMeta.label,
+                    priority: item.priority || "高关注",
+                    createdAt: item.createdAt || item.dateTime || item.addedAt,
+                    addedAt: item.addedAt || item.createdAt || item.dateTime
+                };
+            });
+        }
+
+        function allClues() {
+            return [...loadAiClues(), ...loadManualClues(), ...loadSeedClues()].sort((left, right) => {
+                return parseDate(right.addedAt || right.createdAt) - parseDate(left.addedAt || left.createdAt);
+            });
+        }
+
+        function visibleClues() {
+            const query = state.query.trim().toLowerCase();
+            return allClues().filter((item) => {
+                if (state.source !== "all" && item.sourceType !== state.source) {
+                    return false;
+                }
+                if (state.status !== "all" && item.status !== state.status) {
+                    return false;
+                }
+                if (!query) {
+                    return true;
+                }
+
+                const source = [
+                    item.title,
+                    item.summary,
+                    item.analysis,
+                    item.domain,
+                    item.platform,
+                    item.sourceName,
+                    item.sourceLabel
+                ].join(" ").toLowerCase();
+
+                return source.includes(query);
+            });
+        }
+
+        function overviewStats() {
+            const items = allClues();
+            return [
+                {
+                    title: "总线索数",
+                    value: items.length,
+                    helper: "当前池内全部线索",
+                    className: "metric-total"
+                },
+                {
+                    title: "AI导入",
+                    value: items.filter((item) => item.sourceType === "ai").length,
+                    helper: "来自 AI智能推荐 手动加入",
+                    className: "metric-ai"
+                },
+                {
+                    title: "跟进中",
+                    value: items.filter((item) => item.status === "tracking").length,
+                    helper: "正在推进的选题线索",
+                    className: "metric-tracking"
+                },
+                {
+                    title: "已采用",
+                    value: items.filter((item) => item.status === "adopted").length,
+                    helper: "已转入正式选题",
+                    className: "metric-adopted"
+                },
+                {
+                    title: "已退回",
+                    value: items.filter((item) => item.status === "rejected").length,
+                    helper: "已结束或暂缓跟进",
+                    className: "metric-rejected"
+                }
+            ];
+        }
+
+        function renderOverview() {
+            overviewGrid.innerHTML = overviewStats().map((item) => `
+                <article class="metric-card ${item.className}">
+                    <strong>${item.value}</strong>
+                    <span>${item.title}</span>
+                    <small>${item.helper}</small>
+                </article>
+            `).join("");
+        }
+
+        function renderSourceTabs() {
+            sourceTabsNode.innerHTML = sourceTabs.map((tab) => `
+                <button class="source-tab ${state.source === tab.key ? "active" : ""}" type="button" data-source="${tab.key}">${tab.label}</button>
+            `).join("");
+        }
+
+        function clueSourceBadge(item) {
+            const sourceClass = item.sourceType === "ai"
+                ? "source-ai"
+                : item.sourceType === "manual"
+                    ? "source-manual"
+                    : "source-system";
+
+            return `<span class="badge ${sourceClass}">${item.sourceLabel}</span>`;
+        }
+
+        function statusActions(item) {
+            if (item.status === "pending") {
+                return `
+                    <button class="mini-button primary" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="tracking">转为跟进</button>
+                    <button class="mini-button success" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="adopted">采用</button>
+                    <button class="mini-button danger" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="rejected">退回</button>
+                `;
+            }
+
+            if (item.status === "tracking") {
+                return `
+                    <button class="mini-button success" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="adopted">采用</button>
+                    <button class="mini-button danger" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="rejected">退回</button>
+                `;
+            }
+
+            if (item.status === "adopted") {
+                return `
+                    <button class="mini-button primary" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="tracking">继续跟进</button>
+                    <button class="mini-button danger" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="rejected">退回</button>
+                `;
+            }
+
+            return `
+                <button class="mini-button primary" type="button" data-action="status" data-id="${item.id}" data-source-type="${item.sourceType}" data-next-status="pending">重新激活</button>
+            `;
+        }
+
+        function extraActions(item) {
+            const actions = [];
+            if (item.sourceType === "ai") {
+                actions.push(`<a class="mini-button" href="../../监测预警/AI智能推荐/index.html">查看AI推荐页</a>`);
+                actions.push(`<button class="mini-button" type="button" data-action="remove" data-id="${item.id}" data-source-type="ai">移出线索池</button>`);
+            }
+
+            if (item.sourceType === "manual") {
+                actions.push(`<button class="mini-button" type="button" data-action="remove" data-id="${item.id}" data-source-type="manual">删除线索</button>`);
+            }
+
+            return actions.join("");
+        }
+
+        function renderList() {
+            const items = visibleClues();
+            if (!items.length) {
+                clueListNode.innerHTML = `
+                    <div class="empty-state">
+                        <strong>暂无匹配线索</strong>
+                        <span>可以切换来源类型、放宽状态筛选，或通过“手动添加线索”补充新的选题来源。</span>
+                    </div>
+                `;
+                return;
+            }
+
+            clueListNode.innerHTML = items.map((item) => {
+                const statusMeta = getStatusMeta(item.status);
+                return `
+                    <article class="clue-card" data-id="${item.id}">
+                        <div class="clue-card-top">
+                            <div class="badge-row">
+                                ${clueSourceBadge(item)}
+                                <span class="badge domain">${item.domain}</span>
+                                ${item.platform ? `<span class="badge platform">${item.platform}</span>` : ""}
+                            </div>
+                            <span class="status-badge status-${statusMeta.tone}">${statusMeta.label}</span>
+                        </div>
+                        <h3 class="clue-title">${item.title}</h3>
+                        <p class="clue-summary">${item.summary}</p>
+                        ${item.analysis ? `
+                            <div class="clue-analysis">
+                                <strong>研判摘要</strong>
+                                <p>${item.analysis}</p>
+                            </div>
+                        ` : ""}
+                        <div class="clue-meta">
+                            <span>来源：${item.sourceName || item.platform || item.sourceLabel}</span>
+                            <span>发布时间：${formatDateTime(item.createdAt || item.addedAt)}</span>
+                            <span>入池时间：${formatDateTime(item.addedAt || item.createdAt)}</span>
+                        </div>
+                        <div class="clue-footer">
+                            <span class="priority-chip">${item.priority || "持续跟进"}</span>
+                            <div class="clue-actions">
+                                ${statusActions(item)}
+                                ${extraActions(item)}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function updateSeedStatus(id, nextStatus) {
+            const patches = readSeedPatches();
+            patches[id] = {
+                ...(patches[id] || {}),
+                status: nextStatus,
+                statusLabel: getStatusMeta(nextStatus).label,
+                updatedAt: new Date().toISOString()
+            };
+            saveSeedPatches(patches);
+        }
+
+        function updateAiStatus(id, nextStatus) {
+            const entries = readStorage(AI_STORAGE_KEY, []);
+            const index = entries.findIndex((item) => (item.id || `ai-${item.sourceId}`) === id);
+            if (index === -1) {
+                return;
+            }
+            entries[index] = {
+                ...entries[index],
+                status: nextStatus,
+                statusLabel: getStatusMeta(nextStatus).label,
+                updatedAt: new Date().toISOString()
+            };
+            writeStorage(AI_STORAGE_KEY, entries);
+        }
+
+        function updateManualStatus(id, nextStatus) {
+            const entries = readStorage(MANUAL_STORAGE_KEY, []);
+            const index = entries.findIndex((item) => item.id === id);
+            if (index === -1) {
+                return;
+            }
+            entries[index] = {
+                ...entries[index],
+                status: nextStatus,
+                statusLabel: getStatusMeta(nextStatus).label,
+                updatedAt: new Date().toISOString()
+            };
+            writeStorage(MANUAL_STORAGE_KEY, entries);
+        }
+
+        function removeAiClue(id) {
+            const nextEntries = readStorage(AI_STORAGE_KEY, []).filter((item) => (item.id || `ai-${item.sourceId}`) !== id);
+            writeStorage(AI_STORAGE_KEY, nextEntries);
+        }
+
+        function removeManualClue(id) {
+            const nextEntries = readStorage(MANUAL_STORAGE_KEY, []).filter((item) => item.id !== id);
+            writeStorage(MANUAL_STORAGE_KEY, nextEntries);
+        }
+
+        function updateClueStatus(sourceType, id, nextStatus) {
+            if (sourceType === "ai") {
+                updateAiStatus(id, nextStatus);
+            } else if (sourceType === "manual") {
+                updateManualStatus(id, nextStatus);
+            } else {
+                updateSeedStatus(id, nextStatus);
+            }
+
+            render();
+            showToast(`线索状态已更新为${getStatusMeta(nextStatus).label}`);
+        }
+
+        function removeClue(sourceType, id) {
+            if (sourceType === "ai") {
+                removeAiClue(id);
+                showToast("已从线索池移除，并同步 AI智能推荐 的线索池状态");
+            } else if (sourceType === "manual") {
+                removeManualClue(id);
+                showToast("手动添加的线索已删除");
+            }
+            render();
+        }
+
+        function render() {
+            renderOverview();
+            renderSourceTabs();
+            renderList();
+            statusFilter.value = state.status;
+            searchInput.value = state.query;
+        }
+
+        sourceTabsNode.addEventListener("click", (event) => {
+            const button = event.target.closest("[data-source]");
+            if (!button) {
+                return;
+            }
+            state.source = button.dataset.source;
+            render();
+        });
+
+        statusFilter.addEventListener("change", (event) => {
+            state.status = event.target.value;
+            render();
+        });
+
+        searchInput.addEventListener("input", (event) => {
+            state.query = event.target.value;
+            render();
+        });
+
+        clueListNode.addEventListener("click", (event) => {
+            const button = event.target.closest("[data-action]");
+            if (!button) {
+                return;
+            }
+
+            const { action, id, sourceType, nextStatus } = button.dataset;
+            if (action === "status") {
+                updateClueStatus(sourceType, id, nextStatus);
+                return;
+            }
+
+            if (action === "remove") {
+                removeClue(sourceType, id);
+            }
+        });
+
+        openModalButton.addEventListener("click", openManualModal);
+        closeModalButton.addEventListener("click", closeManualModal);
+        cancelModalButton.addEventListener("click", closeManualModal);
+        modalMask.addEventListener("click", closeManualModal);
+
+        manualForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const formData = new FormData(manualForm);
+            const entries = readStorage(MANUAL_STORAGE_KEY, []);
+            const nextItem = {
+                id: `manual-${Date.now()}`,
+                sourceType: "manual",
+                sourceLabel: "手动添加",
+                sourceName: formData.get("sourceName") || "人工录入",
+                title: String(formData.get("title") || "").trim(),
+                summary: String(formData.get("summary") || "").trim(),
+                domain: formData.get("domain") || "热点问题",
+                platform: String(formData.get("platform") || "人工录入").trim(),
+                priority: formData.get("priority") || "持续跟进",
+                status: "pending",
+                statusLabel: getStatusMeta("pending").label,
+                createdAt: new Date().toISOString(),
+                addedAt: new Date().toISOString()
+            };
+
+            if (!nextItem.title || !nextItem.summary) {
+                showToast("请先补充线索标题和摘要");
+                return;
+            }
+
+            entries.unshift(nextItem);
+            writeStorage(MANUAL_STORAGE_KEY, entries);
+            closeManualModal();
+            render();
+            showToast("已新增手动线索");
+        });
+
+        function toggleSidebar() {
+            if (window.innerWidth <= 1080) {
+                document.body.classList.toggle("is-sidebar-open");
+            }
+        }
+
+        menuButton.addEventListener("click", toggleSidebar);
+
+        menuButton.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                toggleSidebar();
+            }
+        });
+
+        mobileMask.addEventListener("click", () => {
+            document.body.classList.remove("is-sidebar-open");
+        });
+
+        appShell.addEventListener("click", (event) => {
+            if (event.target.closest("a.nav-item[href]")) {
+                if (window.innerWidth <= 1080) {
+                    document.body.classList.remove("is-sidebar-open");
+                }
+                return;
+            }
+
+            if (event.target.closest(".nav-item")) {
+                showToast("当前阶段已还原 AI智能推荐 与 选题线索池，其余模块可继续按同风格补齐");
+                if (window.innerWidth <= 1080) {
+                    document.body.classList.remove("is-sidebar-open");
+                }
+            }
+        });
+
+        window.addEventListener("storage", (event) => {
+            if ([AI_STORAGE_KEY, MANUAL_STORAGE_KEY, PATCH_STORAGE_KEY].includes(event.key)) {
+                render();
+            }
+        });
+
+        render();
+    </script>
+</body>
+</html>

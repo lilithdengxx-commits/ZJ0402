@@ -1,0 +1,1939 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件分析 - 事件分析详情</title>
+    <style>
+        :root {
+            --bg: #f6f8fc;
+            --bg-deep: #edf2fa;
+            --card: rgba(255, 255, 255, 0.88);
+            --line: rgba(122, 145, 184, 0.14);
+            --line-strong: rgba(122, 145, 184, 0.22);
+            --text: #2a3448;
+            --text-soft: #68778f;
+            --text-faint: #9aa8bc;
+            --primary: #2f6bff;
+            --accent-gradient: linear-gradient(135deg, #2b61ea 0%, #4e88ff 56%, #77b6ff 100%);
+            --shadow-md: 0 16px 30px rgba(26, 44, 82, 0.08);
+            --shadow-lg: 0 28px 56px rgba(26, 44, 82, 0.12);
+            --sidebar-width: 248px;
+            font-family: "Alibaba PuHuiTi 3.0", "HarmonyOS Sans SC", "Microsoft YaHei UI", sans-serif;
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% -6%, rgba(47, 107, 255, 0.12), transparent 28%),
+                radial-gradient(circle at 100% 0%, rgba(158, 199, 255, 0.18), transparent 24%),
+                linear-gradient(180deg, #fbfcff 0%, #f5f7fb 46%, #eef2f8 100%);
+            overflow-x: hidden;
+        }
+
+        a,
+        button {
+            color: inherit;
+            font: inherit;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            column-gap: 24px;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: calc(100vh - 40px);
+            margin: 20px 0 20px 20px;
+            padding: 18px 16px 24px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 249, 253, 0.92));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.14);
+            border-radius: 28px;
+            overflow-y: auto;
+            box-shadow: 0 14px 28px rgba(26, 44, 82, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        }
+
+        .sidebar::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 82px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(47, 107, 255, 0.18), rgba(158, 199, 255, 0.14) 54%, transparent 80%);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(131, 151, 194, 0.24);
+            border-radius: 999px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 4px 6px 14px;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
+        }
+
+        .brand-title strong {
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            color: #2b62ce;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .nav-group {
+            margin-bottom: 14px;
+        }
+
+        .nav-group-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 10px 5px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #8793a6;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .nav-group-title .title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-group-title svg {
+            width: 14px;
+            height: 14px;
+            color: var(--primary);
+        }
+
+        .nav-group.active .nav-group-title {
+            color: #3569d8;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            min-height: 46px;
+            padding: 11px 14px;
+            border: 1px solid rgba(122, 145, 184, 0.06);
+            border-radius: 14px;
+            background: transparent;
+            color: #4f5f7c;
+            font-size: 12px;
+            font-weight: 700;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateX(2px);
+            border-color: rgba(47, 107, 255, 0.14);
+            background: rgba(255, 255, 255, 0.84);
+            color: #375a8f;
+            box-shadow: 0 8px 16px rgba(26, 44, 82, 0.04);
+        }
+
+        .nav-item.active {
+            background: #ffffff;
+            color: var(--primary);
+            border-color: rgba(47, 107, 255, 0.08);
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+        }
+
+        .main-area {
+            min-width: 0;
+            padding: 20px 20px 20px 0;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 20px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 68px;
+            padding: 10px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            box-shadow: var(--shadow-md);
+        }
+
+        .topbar-left,
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left {
+            flex: 1 1 auto;
+        }
+
+        .topbar-title span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 36px;
+            padding: 0 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(47, 107, 255, 0.1);
+            background: linear-gradient(180deg, rgba(47, 107, 255, 0.07), rgba(158, 199, 255, 0.12));
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .icon-button,
+        .hero-action,
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 36px;
+            padding: 0 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            color: #3f5479;
+            box-shadow: 0 10px 20px rgba(26, 44, 82, 0.05);
+        }
+
+        .icon-button {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px 5px 5px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 14px 24px rgba(47, 107, 255, 0.18);
+        }
+
+        .avatar-badge {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            font-weight: 800;
+        }
+
+        .page {
+            padding: 18px 0 36px;
+        }
+
+        .notice-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(47, 107, 255, 0.1), rgba(119, 182, 255, 0.16));
+            border: 1px solid rgba(47, 107, 255, 0.16);
+            color: #1f4ccf;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .notice-banner.show {
+            display: flex;
+        }
+
+        .detail-hero,
+        .panel {
+            border-radius: 22px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 14px 28px rgba(26, 44, 82, 0.05);
+        }
+
+        .detail-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 18px 20px;
+        }
+
+        .hero-main {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .hero-main strong {
+            font-size: 28px;
+            line-height: 1.2;
+            color: #1d2a42;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #77859a;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .template-chip,
+        .mode-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 0 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .template-chip {
+            background: rgba(47, 107, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .mode-chip {
+            background: rgba(253, 166, 73, 0.12);
+            color: #b86f00;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .hero-pill {
+            min-height: 40px;
+            color: #6a7a92;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .hero-action.primary {
+            border-color: transparent;
+            background: var(--accent-gradient);
+            color: #ffffff;
+        }
+
+        .layout-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+            gap: 16px;
+        }
+
+        .panel {
+            padding: 18px;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .panel-head strong {
+            font-size: 16px;
+            color: #1d2a42;
+        }
+
+        .panel-head span {
+            color: #92a0b5;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .summary-item {
+            padding: 14px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(244, 248, 255, 0.86), rgba(255, 255, 255, 0.92));
+            border: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .summary-item span {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            color: #8594aa;
+        }
+
+        .summary-item strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #20304a;
+        }
+
+        .summary-text {
+            margin: 0;
+            color: #5a6c87;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .gauge-wrap {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .gauge-ring {
+            --score: 22.17;
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(#2f6bff 0deg 120deg, #4fc3ff 120deg 210deg, #7cd6d1 210deg 290deg, #ff9d4d 290deg 330deg, #edf2fa 330deg 360deg);
+            display: grid;
+            place-items: center;
+        }
+
+        .gauge-ring::before {
+            content: "";
+            position: absolute;
+            inset: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: inset 0 0 0 1px rgba(122, 145, 184, 0.08);
+        }
+
+        .gauge-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .gauge-content span {
+            display: block;
+            color: #8d99ac;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .gauge-content strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 34px;
+            color: #1e57d7;
+            line-height: 1;
+        }
+
+        .gauge-content small {
+            display: block;
+            margin-top: 6px;
+            color: #8d99ac;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .gauge-insight {
+            display: grid;
+            gap: 10px;
+        }
+
+        .gauge-insight .bullet {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: rgba(244, 248, 255, 0.78);
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            color: #576b86;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .metric-card {
+            padding: 16px 14px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 255, 0.92));
+            border: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .metric-card .label {
+            display: block;
+            color: #8897ac;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .metric-card strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 28px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        .metric-card small {
+            display: block;
+            margin-top: 8px;
+            color: #9aa8bc;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .metric-card.accent-blue strong { color: #336cff; }
+        .metric-card.accent-orange strong { color: #ff904b; }
+        .metric-card.accent-purple strong { color: #9b73ff; }
+        .metric-card.accent-cyan strong { color: #4ab9ff; }
+        .metric-card.accent-pink strong { color: #f264d5; }
+        .metric-card.accent-green strong { color: #5dbb63; }
+
+        .section-tabs {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .section-tabs span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: rgba(244, 248, 255, 0.92);
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            color: #6e7e97;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .chart-shell {
+            padding: 14px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(244, 248, 255, 0.82), rgba(255, 255, 255, 0.92));
+            border: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .chart-shell svg {
+            width: 100%;
+            height: 320px;
+            display: block;
+        }
+
+        .chart-legend {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .chart-legend .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6e7e97;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dual-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .feed-list,
+        .timeline-list,
+        .bar-list,
+        .rank-list,
+        .post-list,
+        .focus-list,
+        .map-rank,
+        .opinion-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .feed-item,
+        .timeline-item,
+        .rank-item,
+        .post-item,
+        .focus-item,
+        .map-rank-item,
+        .opinion-item {
+            display: grid;
+            gap: 6px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 249, 255, 0.92));
+        }
+
+        .feed-top,
+        .rank-top,
+        .post-top,
+        .timeline-top,
+        .map-rank-top,
+        .opinion-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .meta-badge,
+        .state-badge,
+        .heat-badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 0 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .meta-badge {
+            background: rgba(47, 107, 255, 0.08);
+            color: var(--primary);
+        }
+
+        .state-badge.positive {
+            background: rgba(78, 198, 95, 0.12);
+            color: #36933e;
+        }
+
+        .state-badge.warning {
+            background: rgba(255, 166, 0, 0.14);
+            color: #b27400;
+        }
+
+        .state-badge.danger {
+            background: rgba(255, 82, 82, 0.12);
+            color: #d54343;
+        }
+
+        .heat-badge {
+            background: rgba(255, 144, 75, 0.12);
+            color: #d97c2f;
+        }
+
+        .feed-title,
+        .rank-title,
+        .post-title,
+        .timeline-title,
+        .focus-title,
+        .map-rank-title,
+        .opinion-title {
+            color: #213049;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.6;
+        }
+
+        .feed-meta,
+        .rank-meta,
+        .post-meta,
+        .timeline-meta,
+        .map-rank-meta,
+        .opinion-meta {
+            color: #90a0b5;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .channel-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .donut-chart {
+            width: 210px;
+            height: 210px;
+            margin: 0 auto;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(var(--segments));
+            display: grid;
+            place-items: center;
+        }
+
+        .donut-chart::before {
+            content: "";
+            position: absolute;
+            inset: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: inset 0 0 0 1px rgba(122, 145, 184, 0.08);
+        }
+
+        .donut-chart span {
+            position: relative;
+            z-index: 1;
+            color: #30496f;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .channel-legend {
+            display: grid;
+            gap: 10px;
+        }
+
+        .channel-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: rgba(244, 248, 255, 0.84);
+            border: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .channel-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #54667f;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .channel-right {
+            color: #8594aa;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .bar-item {
+            display: grid;
+            gap: 8px;
+        }
+
+        .bar-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: #54667f;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .bar-track {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(226, 233, 246, 0.92);
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #2f6bff, #6fa7ff);
+        }
+
+        .map-shell {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .map-surface {
+            position: relative;
+            min-height: 220px;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(122, 145, 184, 0.1);
+            background: linear-gradient(180deg, rgba(245, 248, 255, 0.92), rgba(232, 241, 255, 0.96));
+        }
+
+        .map-surface::before,
+        .map-surface::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(47, 107, 255, 0.22) 0%, rgba(47, 107, 255, 0.04) 60%, transparent 72%);
+        }
+
+        .map-surface.world::before {
+            width: 220px;
+            height: 120px;
+            top: 28px;
+            left: 26px;
+        }
+
+        .map-surface.world::after {
+            width: 150px;
+            height: 96px;
+            right: 34px;
+            bottom: 30px;
+        }
+
+        .map-surface.china::before {
+            width: 190px;
+            height: 146px;
+            top: 34px;
+            left: 60px;
+        }
+
+        .map-surface.china::after {
+            width: 120px;
+            height: 90px;
+            right: 40px;
+            bottom: 36px;
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(47, 107, 255, 0.82);
+            box-shadow: 0 0 0 8px rgba(47, 107, 255, 0.08);
+        }
+
+        .map-gridline {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(122, 145, 184, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 145, 184, 0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.55;
+        }
+
+        .focus-list {
+            padding-left: 18px;
+            margin: 0;
+        }
+
+        .focus-list li {
+            margin-bottom: 14px;
+            color: #24344e;
+            font-size: 14px;
+            line-height: 1.8;
+            font-weight: 700;
+        }
+
+        .focus-list mark {
+            padding: 0 4px;
+            border-radius: 4px;
+            background: rgba(255, 120, 120, 0.18);
+            color: #d24d4d;
+        }
+
+        .toast-stack {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 90;
+        }
+
+        .toast {
+            min-width: 240px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(22, 35, 65, 0.92);
+            color: #ffffff;
+            box-shadow: 0 20px 30px rgba(8, 15, 31, 0.18);
+        }
+
+        .mobile-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 31, 63, 0.24);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.24s ease;
+            z-index: 20;
+        }
+
+        .is-sidebar-open .mobile-mask {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 1560px) {
+            .metric-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1280px) {
+            .overview-grid,
+            .dual-grid,
+            .map-shell,
+            .channel-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .gauge-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+                column-gap: 0;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 18px;
+                top: 18px;
+                bottom: 18px;
+                height: auto;
+                width: min(84vw, 300px);
+                margin: 0;
+                transform: translateX(calc(-100% - 24px));
+                transition: transform 0.24s ease;
+                z-index: 30;
+                box-shadow: 20px 0 40px rgba(17, 24, 39, 0.22);
+            }
+
+            .is-sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .main-area {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .detail-hero,
+            .hero-actions,
+            .topbar-right,
+            .summary-grid,
+            .metric-grid {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .detail-hero,
+            .hero-actions,
+            .topbar-right {
+                display: flex;
+            }
+
+            .hero-action,
+            .hero-pill {
+                width: 100%;
+            }
+
+            .gauge-ring {
+                width: 180px;
+                height: 180px;
+            }
+
+            .gauge-ring::before {
+                inset: 18px;
+            }
+
+            .chart-shell svg {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-mask" id="mobileMask"></div>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M5 8H25L15 25H5V8Z" fill="url(#brand-a)"/>
+                    <path d="M23 8H43L31 31H17L23 8Z" fill="url(#brand-b)"/>
+                    <path d="M14 28H29L22 40H14V28Z" fill="url(#brand-c)"/>
+                    <defs>
+                        <linearGradient id="brand-a" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2A72FF"/>
+                            <stop offset="1" stop-color="#11C3C4"/>
+                        </linearGradient>
+                        <linearGradient id="brand-b" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4C8FFF"/>
+                            <stop offset="1" stop-color="#2757FF"/>
+                        </linearGradient>
+                        <linearGradient id="brand-c" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#14C9B3"/>
+                            <stop offset="1" stop-color="#3D8BFF"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="brand-title"><strong>网络舆情系统</strong></div>
+            </div>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>监测预警</span>
+                    </div>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item" href="../../../监测预警/AI智能推荐/index.html"><span>AI智能推荐</span></a>
+                    <div class="nav-item"><span>热点榜单</span></div>
+                    <div class="nav-item"><span>关键对象监测</span></div>
+                    <div class="nav-item"><span>信息监测</span></div>
+                    <div class="nav-item"><span>预警查询</span></div>
+                    <a class="nav-item" href="../../../监测预警/智能检索/index.html"><span>智能检索</span></a>
+                </div>
+            </section>
+
+            <section class="nav-group active">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                        <span>事件分析</span>
+                    </div>
+                </div>
+                <div class="nav-items">
+                    <a class="nav-item active" href="../index.html"><span>事件管理</span></a>
+                    <div class="nav-item"><span>智能体编报</span></div>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>处置引导</span>
+                    </div>
+                </div>
+                <div class="nav-items">
+                    <div class="nav-item"><span>传播引导策略</span></div>
+                    <a class="nav-item" href="../../../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
+                    <div class="nav-item"><span>选题看板</span></div>
+                    <div class="nav-item"><span>多稿合并工具</span></div>
+                    <div class="nav-item"><span>舆情复盘分析</span></div>
+                </div>
+            </section>
+
+            <section class="nav-group">
+                <div class="nav-group-title">
+                    <div class="title-left">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>知识库子系统</span>
+                    </div>
+                </div>
+                <div class="nav-items">
+                    <div class="nav-item"><span>热点话题案例库</span></div>
+                    <div class="nav-item"><span>宣传引导策略库</span></div>
+                    <div class="nav-item"><span>决策报告知识库</span></div>
+                    <div class="nav-item"><span>重点关注对象库</span></div>
+                    <div class="nav-item"><span>行业术语与本体知识库</span></div>
+                </div>
+            </section>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-title" id="menuButton" role="button" tabindex="0" aria-label="切换导航">
+                        <span>事件分析详情</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="icon-button" aria-label="收藏">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="任务中心">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </button>
+                    <button class="icon-button" aria-label="通知">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                    <div class="avatar">
+                        <div class="avatar-badge">管</div>
+                        <strong>管理员</strong>
+                    </div>
+                </div>
+            </header>
+
+            <section class="page">
+                <div class="notice-banner" id="noticeBanner"></div>
+
+                <section class="detail-hero">
+                    <div class="hero-main">
+                        <strong id="eventTitle">事件分析专题</strong>
+                        <div class="hero-meta">
+                            <span class="template-chip" id="templateChip">默认模板</span>
+                            <span id="eventRange">--</span>
+                            <span id="dataSourceText">数据源 --</span>
+                            <span class="mode-chip" id="modeChip" style="display:none;">编辑模式</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="hero-action" id="backButton" type="button">返回管理</button>
+                        <button class="hero-action primary" id="exportButton" type="button">生成报告</button>
+                    </div>
+                </section>
+
+                <div class="layout-grid">
+                    <div class="overview-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>信息概况</strong>
+                                <span>概述</span>
+                            </div>
+                            <div class="summary-grid" id="summaryGrid"></div>
+                            <p class="summary-text" id="summaryText"></p>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>影响力指数</strong>
+                                <span>综合评估</span>
+                            </div>
+                            <div class="gauge-wrap">
+                                <div class="gauge-ring" id="gaugeRing">
+                                    <div class="gauge-content">
+                                        <span>影响力指数</span>
+                                        <strong id="riskValue">0.00</strong>
+                                        <small id="riskLabel">低风险</small>
+                                    </div>
+                                </div>
+                                <div class="gauge-insight" id="gaugeInsight"></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="panel">
+                        <div class="panel-head">
+                            <strong>数据概览</strong>
+                            <span>关键指标汇总</span>
+                        </div>
+                        <div class="metric-grid" id="metricGrid"></div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-head">
+                            <strong>舆情发展趋势</strong>
+                            <div class="section-tabs">
+                                <span>更新于：2025-11-27 15:00:31</span>
+                                <span>刷新</span>
+                                <span>天</span>
+                                <span>小时</span>
+                            </div>
+                        </div>
+                        <div class="chart-shell">
+                            <div class="chart-legend" id="primaryLegend"></div>
+                            <svg id="primaryChart" viewBox="0 0 960 320" preserveAspectRatio="none"></svg>
+                        </div>
+                    </section>
+
+                    <div class="dual-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>渠道首发</strong>
+                                <span>核心平台摘录</span>
+                            </div>
+                            <div class="feed-list" id="feedList"></div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>渠道声量分析</strong>
+                                <span>占比结构</span>
+                            </div>
+                            <div class="channel-layout">
+                                <div class="donut-chart" id="donutChart"><span>渠道分布</span></div>
+                                <div class="channel-legend" id="channelLegend"></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="panel">
+                        <div class="panel-head">
+                            <strong>事件脉络时间轴</strong>
+                            <span>按传播影响排序</span>
+                        </div>
+                        <div class="timeline-list" id="timelineList"></div>
+                    </section>
+
+                    <div class="dual-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>高频信息点</strong>
+                                <span>词频统计</span>
+                            </div>
+                            <div class="bar-list" id="keywordList"></div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>敏感议题分布</strong>
+                                <span>重点关注</span>
+                            </div>
+                            <div class="bar-list" id="issueList"></div>
+                        </section>
+                    </div>
+
+                    <div class="dual-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>热点分析</strong>
+                                <div class="section-tabs">
+                                    <span>热点主题</span>
+                                    <span>热点文章</span>
+                                </div>
+                            </div>
+                            <div class="rank-list" id="rankList"></div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>热点文章</strong>
+                                <span>高热文本</span>
+                            </div>
+                            <div class="post-list" id="postList"></div>
+                        </section>
+                    </div>
+
+                    <section class="panel">
+                        <div class="panel-head">
+                            <strong>情感分析</strong>
+                            <div class="section-tabs">
+                                <span>正面</span>
+                                <span>中立</span>
+                                <span>负面</span>
+                            </div>
+                        </div>
+                        <div class="chart-shell">
+                            <div class="chart-legend" id="secondaryLegend"></div>
+                            <svg id="secondaryChart" viewBox="0 0 960 260" preserveAspectRatio="none"></svg>
+                        </div>
+                    </section>
+
+                    <div class="dual-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>全球态势分布</strong>
+                                <span>地区热度</span>
+                            </div>
+                            <div class="map-shell">
+                                <div class="map-surface world">
+                                    <div class="map-gridline"></div>
+                                    <span class="map-dot" style="top:38%;left:30%;"></span>
+                                    <span class="map-dot" style="top:24%;left:56%;"></span>
+                                    <span class="map-dot" style="top:60%;left:68%;"></span>
+                                </div>
+                                <div class="map-rank" id="worldRank"></div>
+                            </div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>区域态势分布</strong>
+                                <span>省域热度</span>
+                            </div>
+                            <div class="map-shell">
+                                <div class="map-surface china">
+                                    <div class="map-gridline"></div>
+                                    <span class="map-dot" style="top:28%;left:44%;"></span>
+                                    <span class="map-dot" style="top:48%;left:62%;"></span>
+                                    <span class="map-dot" style="top:62%;left:32%;"></span>
+                                </div>
+                                <div class="map-rank" id="chinaRank"></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="dual-grid">
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>专家观点</strong>
+                                <span>观点拆解</span>
+                            </div>
+                            <div class="opinion-list" id="opinionList"></div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-head">
+                                <strong>网民观点</strong>
+                                <span>建议优先跟踪</span>
+                            </div>
+                            <div class="opinion-list" id="focusList"></div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <script>
+        const STORAGE_KEY = "eventAnalysisCreatedCards";
+        const MANAGEMENT_PAGE_PATH = "../index.html";
+        const CREATE_PAGE_PATH = "../创建分析/index.html";
+        const presetCards = [
+            {
+                id: "event-1",
+                title: "大埔宏福苑大火",
+                range: "2025-11-26 15:24:46-2025-11-27 15:24:46",
+                template: "default",
+                templateLabel: "默认模板",
+                theme: "sky",
+                dataTotal: 2311,
+                mediaTotal: 930,
+                peakSpread: 76,
+                lastEdited: "2025-11-27 15:24:46",
+                dataSource: "大埔宏福苑大火",
+                templateName: "默认模板",
+                description: "火情事件在短时间内快速扩散，社交平台与门户媒体同步放大，讨论重点集中在现场处置、人员伤情和官方通报。"
+            },
+            {
+                id: "event-2",
+                title: "河北廊坊4.2级地震",
+                range: "2026-02-24 15:24:46-2026-03-03 15:24:46",
+                template: "default",
+                templateLabel: "默认模板",
+                theme: "green",
+                dataTotal: 301,
+                mediaTotal: 147,
+                peakSpread: 27,
+                lastEdited: "2025-04-21 17:18:09",
+                dataSource: "河北廊坊4.2级地震",
+                templateName: "默认模板",
+                description: "地震类议题通常伴随位置辨识、体感反馈和灾情问询，属地媒体和短视频平台的现场信息最先放量。"
+            },
+            {
+                id: "event-3",
+                title: "文在寅父女被调查",
+                range: "2026-02-24 15:24:46-2026-03-03 15:24:46",
+                template: "default",
+                templateLabel: "默认模板",
+                theme: "purple",
+                dataTotal: 981,
+                mediaTotal: 531,
+                peakSpread: 313,
+                lastEdited: "2025-03-25 19:20:28",
+                dataSource: "文在寅父女被调查",
+                templateName: "默认模板",
+                description: "涉政议题在门户、社交平台与评论区形成多轮传播，舆论关注焦点集中在事实核验与后续政治影响。"
+            },
+            {
+                id: "event-4",
+                title: "国足vs澳大利亚",
+                range: "2026-02-24 15:24:46-2026-03-03 15:24:46",
+                template: "default",
+                templateLabel: "默认模板",
+                theme: "blue",
+                dataTotal: 333621,
+                mediaTotal: 47252,
+                peakSpread: 10716,
+                lastEdited: "2025-03-25 19:17:24",
+                dataSource: "国足vs澳大利亚",
+                templateName: "默认模板",
+                description: "体育赛事议题具有强互动和强情绪特点，直播节点、比分变化和赛后评论会驱动热度反复上扬。"
+            },
+            {
+                id: "event-5",
+                title: "青海党员干部上缴礼金",
+                range: "2026-02-24 15:24:46-2026-03-03 15:24:46",
+                template: "default",
+                templateLabel: "默认模板",
+                theme: "sky",
+                dataTotal: 0,
+                mediaTotal: 0,
+                peakSpread: 0,
+                lastEdited: "2025-03-25 19:15:07",
+                dataSource: "青海党员干部上缴礼金",
+                templateName: "默认模板",
+                description: "纪检监察类议题对通报原文、制度背景和处置尺度较为敏感，后续解读往往决定讨论走向。"
+            }
+        ];
+
+        const query = new URLSearchParams(window.location.search);
+        const selectedId = query.get("id") || "event-1";
+        const pageMode = query.get("mode") || "view";
+        const createdFlag = query.get("created") === "1";
+
+        const menuButton = document.getElementById("menuButton");
+        const mobileMask = document.getElementById("mobileMask");
+        const noticeBanner = document.getElementById("noticeBanner");
+        const eventTitle = document.getElementById("eventTitle");
+        const templateChip = document.getElementById("templateChip");
+        const eventRange = document.getElementById("eventRange");
+        const dataSourceText = document.getElementById("dataSourceText");
+        const modeChip = document.getElementById("modeChip");
+        const summaryGrid = document.getElementById("summaryGrid");
+        const summaryText = document.getElementById("summaryText");
+        const gaugeRing = document.getElementById("gaugeRing");
+        const riskValue = document.getElementById("riskValue");
+        const riskLabel = document.getElementById("riskLabel");
+        const gaugeInsight = document.getElementById("gaugeInsight");
+        const metricGrid = document.getElementById("metricGrid");
+        const primaryLegend = document.getElementById("primaryLegend");
+        const primaryChart = document.getElementById("primaryChart");
+        const feedList = document.getElementById("feedList");
+        const donutChart = document.getElementById("donutChart");
+        const channelLegend = document.getElementById("channelLegend");
+        const timelineList = document.getElementById("timelineList");
+        const keywordList = document.getElementById("keywordList");
+        const issueList = document.getElementById("issueList");
+        const rankList = document.getElementById("rankList");
+        const postList = document.getElementById("postList");
+        const secondaryLegend = document.getElementById("secondaryLegend");
+        const secondaryChart = document.getElementById("secondaryChart");
+        const worldRank = document.getElementById("worldRank");
+        const chinaRank = document.getElementById("chinaRank");
+        const opinionList = document.getElementById("opinionList");
+        const focusList = document.getElementById("focusList");
+        const toastStack = document.getElementById("toastStack");
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function numberFormat(value) {
+            return new Intl.NumberFormat("zh-CN").format(Number(value) || 0);
+        }
+
+        function loadCreatedCards() {
+            try {
+                const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "[]");
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function getAllCards() {
+            return [...loadCreatedCards(), ...presetCards];
+        }
+
+        function getSelectedCard() {
+            return getAllCards().find((item) => item.id === selectedId) || presetCards[0];
+        }
+
+        function computeRiskScore(card) {
+            if (/宏福苑/.test(card.title)) {
+                return 22.17;
+            }
+            const ratio = (Number(card.peakSpread) || 0) / Math.max(Number(card.mediaTotal) || 1, 1);
+            return Math.max(18.8, Math.min(86.4, Number((ratio * 26 + 19.2).toFixed(2))));
+        }
+
+        function riskText(score) {
+            if (score >= 70) {
+                return "高风险";
+            }
+            if (score >= 40) {
+                return "中风险";
+            }
+            return "低风险";
+        }
+
+        function buildProfile(card) {
+            const title = card.title;
+            const score = computeRiskScore(card);
+            const baseVolume = Math.max(80, Math.round(Math.max(Number(card.dataTotal) || 0, 86) / 8));
+            const mediaBase = Math.max(40, Math.round(Math.max(Number(card.mediaTotal) || 0, 18) / 4));
+            const interactionBase = Math.max(20, Math.round(Math.max(Number(card.peakSpread) || 0, 8) / 3));
+            const summaryOrig = card.description || `${title} 在监测周期内持续发酵，媒体、社交平台与短视频内容形成多轮扩散，热点主要围绕事实进展、权威通报和次生讨论展开。`;
+            const summary = /宏福苑/.test(title)
+                ? "本次分析时间范围为 2025-11-26 00:00:00 至 2025-12-31 00:00:00，共 20008 条数据。采集来源中：网页 2751 条，微博 516 条，微信 317 条，电子报刊 11 条，视频 71 条数据。本次分析共采集数据 30004 条，日传播量 513，传播指数 323.74%，中位数 262.29%，最高点 37.97%。"
+                : summaryOrig;
+            const summaryFields = [
+                { label: "事件名称", value: title },
+                { label: "数据源", value: card.dataSource || title },
+                { label: "模板名称", value: card.templateName || card.templateLabel || "默认模板" },
+                { label: "最后编辑", value: card.lastEdited || "--" }
+            ];
+
+            const metrics = [
+                { label: "信息总量", value: /宏福苑/.test(title) ? 6089 : Math.max(Number(card.dataTotal) || 0, 88), accent: "purple", note: "全平台抓取量" },
+                { label: "媒体总量", value: /宏福苑/.test(title) ? 2571 : Math.max(Math.round((Number(card.dataTotal) || 90) * 0.42), 32), accent: "orange", note: "专题关联文本" },
+                { label: "阅读总量", value: /宏福苑/.test(title) ? 7151593 : Math.max((Number(card.dataTotal) || 90) * 920, 32560), accent: "blue", note: "阅读评论转发" },
+                { label: "点赞总量", value: /宏福苑/.test(title) ? 7600 : Math.max(Math.round((Number(card.mediaTotal) || 28) * 3.8), 96), accent: "pink", note: "跨平台扩散" },
+                { label: "评论总量", value: /宏福苑/.test(title) ? 382 : Math.max(Math.round((Number(card.peakSpread) || 9) * 1.7), 24), accent: "orange", note: "单小时峰值" },
+                { label: "转发总量", value: /宏福苑/.test(title) ? 2880 : Math.max(Math.round((Number(card.mediaTotal) || 20) * 1.6), 58), accent: "green", note: "评论区讨论数" }
+            ];
+
+            const channelShare = [
+                { name: "网络", value: 50.76, color: "#2f6bff" },
+                { name: "微信", value: 23.40, color: "#6aa8ff" },
+                { name: "APP", value: 14.72, color: "#ff9b57" },
+                { name: "电子报刊", value: 1.45, color: "#5ad1c9" },
+                { name: "视频", value: 1.22, color: "#8d6dff" },
+                { name: "短信", value: 0.96, color: "#c7d2e5" },
+                { name: "总监测数", value: 0.64, color: "#a0b4d0" },
+                { name: "其他", value: 6.85, color: "#d8e2f0" }
+            ];
+
+            const feeds = [
+                { source: "资讯客户端", title: `${title} 进入重点议题池，权威媒体开始连续推送`, time: "11:26", badge: "APP" },
+                { source: "网页新闻", title: `${title} 相关现场信息开始密集出现，问询量明显增加`, time: "11:28", badge: "网页" },
+                { source: "微信", title: `属地账号针对 ${title} 发布首轮情况说明`, time: "11:35", badge: "公众号" },
+                { source: "微博", title: `${title} 相关关键词进入热搜观察位，情绪表达增多`, time: "11:42", badge: "微博" },
+                { source: "短视频", title: `现场短视频驱动二次扩散，围观型讨论抬升`, time: "11:50", badge: "视频" }
+            ];
+
+            const timeline = [
+                { state: "positive", time: "2025-11-26 14:52", title: "大埔纵火案外境曝光出图，听到消防车声，来证！", meta: "Facebook \"香港纵火案火灾群\"率先分享起火点、逃生经历等信息 | 平台: Facebook | 语言: 繁体中文（粤语）| 情感: 中性 85% | 转发: 328" },
+                { state: "positive", time: "2025-11-26 15:58", title: "《大埔火警特别通知》", meta: "消防处于当日下午2时51分接获宏福苑火警报告，3时02分火警升为三级、3时34分升为四级，消防人员正在开展灭火行动，并向附近居民发布安全提示 | 官方新闻 | 平台: 香港政府资讯中心 | 语言: 繁体中文 | 情感: 中立 78% | 热度: 8,520" },
+                { state: "warning", time: "2025-11-26 19:37", title: "《香港大埔宏福苑火警升为五级》", meta: "向全网披露火警升为香港最高火警级别，补充伤亡、救援现场等细节 | 跨境传播 | 平台: 新华网 | 语言: 简体中文 | 情感: 中立 52% | 热度: 12,680" },
+                { state: "danger", time: "2025-11-26 21:20", title: "民间针对救援事引发争议", meta: "高峰 | 活跃站点: 加拿大星岛日报、香港商报网、中国评论新闻网、巴士的报、香港01 | 活跃账号: 香港經濟日報HKET、凌逸德(香港01)、央视新闻客户端、大港區之声(微博)" }
+            ];
+
+            const keywords = [
+                { name: "大埔宏福苑", value: 100 },
+                { name: "五级火警", value: 92 },
+                { name: "人员伤亡", value: 86 },
+                { name: "消防搜救", value: 79 },
+                { name: "官方通报", value: 73 },
+                { name: "临时庇护", value: 68 },
+                { name: "争议质疑", value: 63 },
+                { name: "跨境传播", value: 57 }
+            ];
+
+            const issues = [
+                { name: "五级火警升级过程", value: 96 },
+                { name: "人员伤亡统计", value: 84 },
+                { name: "救援行动进展", value: 76 },
+                { name: "临时安置措施", value: 69 },
+                { name: "火灾原因调查", value: 61 },
+                { name: "跨境媒体报道", value: 53 },
+                { name: "民间捐助响应", value: 46 },
+                { name: "消防员受伤事件", value: 39 }
+            ];
+
+            const rankings = [
+                { source: "1", title: "香港大埔宏福苑大火已致多人伤亡", heat: 100 },
+                { source: "2", title: "香港东涌东荟城大火已致", heat: 82 },
+                { source: "3", title: "香港警方通报大埔纵火案", heat: 82 },
+                { source: "4", title: "澳门特首表态希望增加3000万港元大兴援建和重建工作", heat: 71 },
+                { source: "5", title: "香港警方表示，截至今天上午10时，已有146人受伤", heat: 71 },
+                { source: "6", title: "全红婵暖心发声：香港加油，我们和你在一起！", heat: 71 },
+                { source: "7", title: "大埔宏福苑五级火 受影响居民获安排入住临时庇护", heat: 71 },
+                { source: "8", title: "消防员在搜救时被倒塌的砖墙压住", heat: 71 }
+            ];
+
+            const posts = [
+                { source: "微博", title: "香港警方表示，截至今天上午10时，已有146人受伤，其中100人入院", heat: "16,202" },
+                { source: "新华网", title: "香港天文台在昨夜11时44分从天文台总部发出香港特别行政区政府当日下午5时开始生效", heat: "16,025" },
+                { source: "大公报", title: "天文台已收到44人受伤，香港警方表示大埔宏福苑火警升为五级", heat: "6,309" },
+                { source: "香港01", title: "香港天文台表示11月28日清晨，大埔宏福苑火警升为五级，最后回应指出：香港特区政府已介入", heat: "2,727" },
+                { source: "星岛日报", title: "香港多玛环境域生大埔宏福苑火警升为五级", heat: "2,072" },
+                { source: "央视新闻", title: "全红婵暖心发声：香港加油，我们和你在一起！", heat: "2,072" }
+            ];
+
+            const world = [
+                { name: "香港", value: 5420 },
+                { name: "美国", value: 3258 },
+                { name: "加拿大", value: 2442 },
+                { name: "英国", value: 2180 },
+                { name: "新加坡", value: 1860 }
+            ];
+
+            const china = [
+                { name: "香港", value: 5420 },
+                { name: "广东", value: 2791 },
+                { name: "北京", value: 2744 },
+                { name: "上海", value: 2631 },
+                { name: "台湾", value: 2333 }
+            ];
+
+            const opinions = [
+                { title: "王力勋：有钱出钱，有力出力", detail: "王女士说，她和同伴的想法很简单，就是\"有钱出钱，有力出力\"，\"看哪里需要帮手，我们就去哪里。\"", value: 23.1 },
+                { title: "黄伟纶：安排受影响居民入住临时庇护", detail: "财政司副司长黄伟纶表示，截至下午，已有约1555名受大埔宏福苑五级火影响的居民，获安排入住临时庇护中心。", value: 15.4 },
+                { title: "罗智强：以父亲之名捐出书籍", detail: "罗智强11月30日在脸书发文表示，决定以父亲之名，捐出《狮子找家—写给父亲的童话》新书。", value: 15.4 },
+                { title: "陈丽莎：网民关注是否有人从中煽动", detail: "部分网民质疑是否有人从中煽动，希望相关部门介入调查。", value: 15.4 },
+                { title: "王曦：希望相关部门介入调查", detail: "部分网民质疑是否有人从中煽动，希望相关部门介入调查。", value: 12.4 },
+            ];
+
+            const focus = [
+                { title: "大维修工程使用易燃物料导致火势迅速蔓延", detail: "主要观点", value: 23.1 },
+                { title: "承建商监管责任", detail: "主要观点", value: 15.4 },
+                { title: "维修棚网与发泡胶如何沦为助燃剂", detail: "核心质疑", value: 15.4 },
+                { title: "消防员受伤情况及后续处置", detail: "关注焦点", value: 12.8 },
+                { title: "受影响居民安置及临时庇护", detail: "民生关切", value: 10.5 }
+            ];
+
+            const primarySeries = [
+                { name: "网媒", color: "#2f6bff", values: [40, baseVolume * 1.8, baseVolume * 2.4, baseVolume * 2.1, baseVolume * 1.7, baseVolume * 1.3, baseVolume * 1.1, baseVolume * 0.9, baseVolume * 0.95, baseVolume * 1.15] },
+                { name: "微信", color: "#6fd3ff", values: [20, mediaBase * 1.1, mediaBase * 1.4, mediaBase * 1.35, mediaBase * 1.1, mediaBase * 0.85, mediaBase * 0.8, mediaBase * 0.76, mediaBase * 0.78, mediaBase * 0.82] },
+                { name: "APP", color: "#ff904b", values: [8, interactionBase * 1.1, interactionBase * 1.4, interactionBase * 1.3, interactionBase * 1.5, interactionBase * 1.6, interactionBase * 1.2, interactionBase, interactionBase * 0.92, interactionBase * 1.05] },
+                { name: "电子期刊", color: "#5ad1c9", values: [6, mediaBase * 0.5, mediaBase * 0.7, mediaBase * 0.6, mediaBase * 0.45, mediaBase * 0.35, mediaBase * 0.3, mediaBase * 0.25, mediaBase * 0.28, mediaBase * 0.32] },
+                { name: "微博", color: "#ff6c6c", values: [12, mediaBase * 0.8, mediaBase * 1.0, mediaBase * 0.95, mediaBase * 0.75, mediaBase * 0.6, mediaBase * 0.5, mediaBase * 0.45, mediaBase * 0.48, mediaBase * 0.55] }
+            ];
+
+            const secondarySeries = [
+                { name: "正面", color: "#2f6bff", values: [16, 34, 42, 58, 96, 102, 44, 36, 31, 28] },
+                { name: "中立", color: "#ffad42", values: [26, 38, 42, 52, 128, 162, 46, 40, 44, 34] },
+                { name: "负面", color: "#ff6c6c", values: [6, 8, 9, 11, 13, 12, 9, 8, 7, 6] }
+            ];
+
+            return {
+                title,
+                score,
+                summary,
+                summaryFields,
+                metrics,
+                channelShare,
+                feeds,
+                timeline,
+                keywords,
+                issues,
+                rankings,
+                posts,
+                world,
+                china,
+                opinions,
+                focus,
+                primarySeries,
+                secondarySeries
+            };
+        }
+
+        function getChartSvg(seriesList, width, height) {
+            const padding = { top: 12, right: 16, bottom: 28, left: 28 };
+            const innerWidth = width - padding.left - padding.right;
+            const innerHeight = height - padding.top - padding.bottom;
+            const labels = ["00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00", "24:00", "03:00"];
+            const allValues = seriesList.flatMap((series) => series.values);
+            const maxValue = Math.max(...allValues, 100);
+
+            function getPoint(index, value) {
+                const x = padding.left + (innerWidth / (labels.length - 1)) * index;
+                const y = padding.top + innerHeight - (value / maxValue) * innerHeight;
+                return [x, y];
+            }
+
+            function buildPath(values) {
+                return values.map((value, index) => {
+                    const [x, y] = getPoint(index, value);
+                    return `${index === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`;
+                }).join(" ");
+            }
+
+            const gridLines = Array.from({ length: 5 }).map((_, index) => {
+                const y = padding.top + (innerHeight / 4) * index;
+                return `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="rgba(122,145,184,0.14)" stroke-dasharray="4 6" />`;
+            }).join("");
+
+            const labelLines = labels.map((label, index) => {
+                const [x] = getPoint(index, 0);
+                return `<text x="${x}" y="${height - 4}" fill="#8fa0b6" font-size="11" text-anchor="middle">${label}</text>`;
+            }).join("");
+
+            const seriesPaths = seriesList.map((series) => `
+                <path d="${buildPath(series.values)}" fill="none" stroke="${series.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            `).join("");
+
+            return `
+                <rect x="0" y="0" width="${width}" height="${height}" rx="18" fill="transparent"></rect>
+                ${gridLines}
+                ${seriesPaths}
+                ${labelLines}
+            `;
+        }
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+            toastStack.appendChild(toast);
+            window.setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(8px)";
+                toast.style.transition = "opacity 0.2s ease, transform 0.2s ease";
+            }, 2200);
+            window.setTimeout(() => toast.remove(), 2500);
+        }
+
+        function renderPage() {
+            const card = getSelectedCard();
+            const profile = buildProfile(card);
+
+            document.title = `${card.title} - 事件分析详情`;
+            eventTitle.textContent = card.title;
+            templateChip.textContent = card.templateLabel || "默认模板";
+            eventRange.textContent = card.range || "--";
+            dataSourceText.textContent = `数据源 ${card.dataSource || card.title}`;
+            summaryText.textContent = profile.summary;
+
+            if (pageMode === "edit") {
+                modeChip.style.display = "inline-flex";
+            }
+
+            if (createdFlag) {
+                noticeBanner.classList.add("show");
+                noticeBanner.innerHTML = `<span>专题已创建成功，当前正在查看 ${escapeHtml(card.title)} 的分析详情。</span><span>可继续完善研判内容</span>`;
+            }
+
+            summaryGrid.innerHTML = profile.summaryFields.map((item) => `
+                <div class="summary-item">
+                    <span>${escapeHtml(item.label)}</span>
+                    <strong>${escapeHtml(item.value)}</strong>
+                </div>
+            `).join("");
+
+            riskValue.textContent = profile.score.toFixed(2);
+            riskLabel.textContent = riskText(profile.score);
+            gaugeRing.style.setProperty("--score", profile.score.toFixed(2));
+            gaugeInsight.innerHTML = [
+                `热度峰值主要集中在传播爆点后的 <strong>2-4</strong> 小时内。`,
+                `平台结构以 <strong>门户 + APP</strong> 为主，短视频驱动二次放量。`,
+                `建议继续盯防 <strong>事实核验</strong> 与 <strong>情绪化评论</strong> 的叠加传播。`
+            ].map((text) => `<div class="bullet">${text}</div>`).join("");
+
+            metricGrid.innerHTML = profile.metrics.map((item) => `
+                <article class="metric-card accent-${item.accent}">
+                    <span class="label">${escapeHtml(item.label)}</span>
+                    <strong>${escapeHtml(numberFormat(item.value))}</strong>
+                    <small>${escapeHtml(item.note)}</small>
+                </article>
+            `).join("");
+
+            primaryLegend.innerHTML = profile.primarySeries.map((series) => `
+                <div class="legend-item"><span class="legend-dot" style="background:${series.color};"></span>${escapeHtml(series.name)}</div>
+            `).join("");
+            primaryChart.innerHTML = getChartSvg(profile.primarySeries, 960, 320);
+
+            feedList.innerHTML = profile.feeds.map((item) => `
+                <article class="feed-item">
+                    <div class="feed-top">
+                        <span class="meta-badge">${escapeHtml(item.badge)}</span>
+                        <span class="feed-meta">${escapeHtml(item.time)} / ${escapeHtml(item.source)}</span>
+                    </div>
+                    <div class="feed-title">${escapeHtml(item.title)}</div>
+                </article>
+            `).join("");
+
+            const segmentString = profile.channelShare.reduce((accumulator, item, index, list) => {
+                const start = list.slice(0, index).reduce((sum, entry) => sum + entry.value, 0);
+                return `${accumulator}${item.color} ${start}% ${start + item.value}%${index === list.length - 1 ? "" : ", "}`;
+            }, "");
+            donutChart.style.setProperty("--segments", segmentString);
+            donutChart.innerHTML = `<span>渠道分布</span>`;
+            channelLegend.innerHTML = profile.channelShare.map((item) => `
+                <div class="channel-item">
+                    <div class="channel-left"><span class="legend-dot" style="background:${item.color};"></span>${escapeHtml(item.name)}</div>
+                    <div class="channel-right">${item.value.toFixed(2)}%</div>
+                </div>
+            `).join("");
+
+            timelineList.innerHTML = profile.timeline.map((item) => `
+                <article class="timeline-item">
+                    <div class="timeline-top">
+                        <span class="state-badge ${escapeHtml(item.state)}">${item.state === "positive" ? "关注" : item.state === "warning" ? "预警" : "高危"}</span>
+                        <span class="timeline-meta">${escapeHtml(item.time)}</span>
+                    </div>
+                    <div class="timeline-title">${escapeHtml(item.title)}</div>
+                    <div class="timeline-meta">${escapeHtml(item.meta)}</div>
+                </article>
+            `).join("");
+
+            keywordList.innerHTML = profile.keywords.map((item) => `
+                <div class="bar-item">
+                    <div class="bar-top"><span>${escapeHtml(item.name)}</span><span>${item.value}</span></div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;"></div></div>
+                </div>
+            `).join("");
+
+            issueList.innerHTML = profile.issues.map((item) => `
+                <div class="bar-item">
+                    <div class="bar-top"><span>${escapeHtml(item.name)}</span><span>${item.value}</span></div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;background:linear-gradient(90deg,#ff944d,#ffcf5f);"></div></div>
+                </div>
+            `).join("");
+
+            rankList.innerHTML = profile.rankings.map((item, index) => `
+                <article class="rank-item">
+                    <div class="rank-top">
+                        <span class="meta-badge">${index + 1}</span>
+                        <span class="rank-meta">主题热度 ${item.heat}</span>
+                    </div>
+                    <div class="rank-title">${escapeHtml(item.title)}</div>
+                </article>
+            `).join("");
+
+            postList.innerHTML = profile.posts.map((item) => `
+                <article class="post-item">
+                    <div class="post-top">
+                        <span class="meta-badge">${escapeHtml(item.source)}</span>
+                        <span class="heat-badge">${escapeHtml(item.heat)}</span>
+                    </div>
+                    <div class="post-title">${escapeHtml(item.title)}</div>
+                    <div class="post-meta">持续关注度较高，建议加入高热内容跟踪。</div>
+                </article>
+            `).join("");
+
+            secondaryLegend.innerHTML = profile.secondarySeries.map((series) => `
+                <div class="legend-item"><span class="legend-dot" style="background:${series.color};"></span>${escapeHtml(series.name)}</div>
+            `).join("");
+            secondaryChart.innerHTML = getChartSvg(profile.secondarySeries, 960, 260);
+
+            worldRank.innerHTML = profile.world.map((item) => `
+                <article class="map-rank-item">
+                    <div class="map-rank-top">
+                        <div class="map-rank-title">${escapeHtml(item.name)}</div>
+                        <div class="map-rank-meta">${numberFormat(item.value)}</div>
+                    </div>
+                </article>
+            `).join("");
+
+            chinaRank.innerHTML = profile.china.map((item) => `
+                <article class="map-rank-item">
+                    <div class="map-rank-top">
+                        <div class="map-rank-title">${escapeHtml(item.name)}</div>
+                        <div class="map-rank-meta">${numberFormat(item.value)}</div>
+                    </div>
+                </article>
+            `).join("");
+
+            opinionList.innerHTML = profile.opinions.map((item) => `
+                <article class="opinion-item">
+                    <div class="opinion-top">
+                        <div class="opinion-title">${escapeHtml(item.title)}</div>
+                        <div class="opinion-meta">占比 ${item.value}%</div>
+                    </div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;background:linear-gradient(90deg,#2f6bff,#8bb9ff);"></div></div>
+                    <div class="opinion-meta">${escapeHtml(item.detail)}</div>
+                </article>
+            `).join("");
+
+            focusList.innerHTML = profile.focus.map((item) => `
+                <article class="focus-item">
+                    <div class="opinion-top">
+                        <div class="opinion-title">${escapeHtml(item.title)}</div>
+                        <div class="opinion-meta">占比 ${item.value.toFixed(2)}%</div>
+                    </div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;background:linear-gradient(90deg,#ff944d,#ffcf5f);"></div></div>
+                    <div class="opinion-meta">${escapeHtml(item.detail)}</div>
+                </article>
+            `).join("");
+        }
+
+        document.getElementById("backButton").addEventListener("click", () => {
+            window.location.href = MANAGEMENT_PAGE_PATH;
+        });
+
+        document.getElementById("exportButton").addEventListener("click", () => {
+            showToast("已生成事件分析报告任务");
+        });
+
+        function toggleSidebar() {
+            if (window.innerWidth <= 1080) {
+                document.body.classList.toggle("is-sidebar-open");
+            }
+        }
+
+        menuButton.addEventListener("click", toggleSidebar);
+        menuButton.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                toggleSidebar();
+            }
+        });
+
+        mobileMask.addEventListener("click", () => {
+            document.body.classList.remove("is-sidebar-open");
+        });
+
+        renderPage();
+    </script>
+</body>
+</html>

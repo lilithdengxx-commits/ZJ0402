@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监测预警 - 热点榜单</title>
+<style>
+:root{--bg:#f6f8fc;--card:rgba(255,255,255,0.84);--card-strong:#fff;--line:rgba(122,145,184,0.14);--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--secondary-soft:rgba(47,107,255,0.1);--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-lg:0 28px 56px rgba(26,44,82,0.1);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select{font:inherit}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:24px;min-height:100vh}
+.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
+.brand-mark{width:36px;height:36px;flex:0 0 36px}
+.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
+.nav-group{margin-bottom:14px}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#2a3448;font-size:12px;font-weight:900}
+.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
+.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
+.nav-group.active .nav-group-title{color:#3569d8}
+.nav-items{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s,box-shadow 0.2s}
+.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f;box-shadow:0 8px 16px rgba(26,44,82,0.04)}
+.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
+.nav-item small{display:none}
+.main-area{min-width:0;padding:20px 20px 20px 0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md)}
+.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
+.topbar-title span{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:12px;border:1px solid rgba(47,107,255,0.1);background:linear-gradient(180deg,rgba(47,107,255,0.07),rgba(158,199,255,0.12));color:var(--primary);font-size:15px;font-weight:800}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;box-shadow:0 10px 20px rgba(26,44,82,0.05);transition:transform 0.2s,box-shadow 0.2s,color 0.2s;cursor:pointer}
+.icon-button:hover{transform:translateY(-2px);box-shadow:0 14px 24px rgba(26,44,82,0.08);color:#3a73dd}
+.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
+.avatar strong{color:#fff;font-size:14px;letter-spacing:0.02em}
+.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
+.page{padding:16px 0 40px}
+
+/* ===== 热点榜单专用样式 ===== */
+.content-card{background:#fff;border-radius:24px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 12px 28px rgba(26,44,82,0.06);overflow:hidden}
+.main-tabs{display:flex;gap:0;border-bottom:2px solid rgba(122,145,184,0.1);padding:0 24px;background:#fff}
+.main-tab{padding:16px 24px;font-size:14px;font-weight:700;color:#68778f;border:none;background:transparent;position:relative;cursor:pointer;transition:color 0.2s;flex:0 0 auto}
+.main-tab.active{color:var(--primary)}
+.main-tab.active::after{content:'';position:absolute;bottom:-2px;left:16px;right:16px;height:2px;background:var(--primary);border-radius:2px 2px 0 0}
+.main-tab:hover:not(.active){color:#3f5479}
+.tab-panel{display:none;padding:24px}
+.tab-panel.active{display:block}
+
+
+
+/* 领域热点 */
+.region-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.region-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.region-tab{padding:7px 18px;border-radius:999px;border:1px solid rgba(122,145,184,0.15);background:#f7f9fd;color:#68778f;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.region-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 6px 14px rgba(47,107,255,0.22)}
+.region-tab:hover:not(.active){border-color:rgba(47,107,255,0.25);color:#375a8f;background:#fff}
+.region-filters{display:flex;align-items:center;gap:8px}
+.sel-wrap{position:relative;display:inline-flex;align-items:center}
+.sel-wrap select{appearance:none;padding:7px 28px 7px 12px;border-radius:10px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#4f5f7c;font-size:12px;font-weight:600;cursor:pointer;outline:none}
+.sel-wrap::after{content:'▾';position:absolute;right:10px;color:#9aa8bc;pointer-events:none;font-size:11px}
+.btn-icon-sq{width:32px;height:32px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#68778f;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.btn-qry{padding:7px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 6px 14px rgba(47,107,255,0.2);transition:all 0.2s}
+.btn-qry:hover{background:var(--primary-deep);transform:translateY(-1px)}
+
+/* 分类网格 */
+.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cat-col{border-radius:14px;border:1px solid rgba(122,145,184,0.1);overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(26,44,82,0.04)}
+.cat-head{padding:10px 14px;font-size:13px;font-weight:800;color:#1a2234;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(122,145,184,0.08);background:linear-gradient(180deg,#f8fbff,#fff)}
+.cat-head::before{content:'';width:3px;height:13px;background:var(--primary);border-radius:2px}
+.rank-hdr{display:grid;grid-template-columns:28px 1fr 46px 42px;padding:5px 12px;font-size:10px;font-weight:700;color:#b0baca;border-bottom:1px solid rgba(122,145,184,0.06)}
+.rank-row{display:grid;grid-template-columns:28px 1fr 46px 42px;padding:7px 12px;align-items:center;border-bottom:1px solid rgba(122,145,184,0.05);transition:background 0.15s;cursor:pointer}
+.rank-row:last-child{border-bottom:none}
+.rank-row:hover{background:rgba(47,107,255,0.03)}
+.rk-n{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:10px;font-weight:900;background:rgba(122,145,184,0.1);color:#68778f}
+.rk-n.r1{background:#ff4d4f;color:#fff}.rk-n.r2{background:#ff7a45;color:#fff}.rk-n.r3{background:#ffa940;color:#fff}
+.rk-t{font-size:11px;font-weight:600;color:#1a2234;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:6px}
+.rk-p{font-size:10px;color:#b0baca;font-weight:500}
+.rk-h{font-size:10px;font-weight:700;color:#f5502a}
+
+/* 平台热榜 */
+.plat-filter-bar{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.plat-card{border-radius:14px;border:1px solid rgba(122,145,184,0.1);overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(26,44,82,0.04)}
+.plat-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(122,145,184,0.08);font-size:13px;font-weight:800;color:#1a2234}
+.plat-icon{width:22px;height:22px;border-radius:6px;font-size:13px;display:grid;place-items:center;flex:0 0 22px}
+.total-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid rgba(122,145,184,0.06);font-size:12px;cursor:pointer;transition:background 0.15s}
+.total-row:last-child{border-bottom:none}
+.total-row:hover{background:rgba(47,107,255,0.03)}
+.t-num{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:10px;font-weight:900;background:rgba(122,145,184,0.1);color:#68778f}
+.t-num.n1{background:#ff4d4f;color:#fff}.t-num.n2{background:#ff7a45;color:#fff}.t-num.n3{background:#ffa940;color:#fff}
+.t-title{flex:1;font-weight:600;color:#1a2234;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.t-icons{display:flex;gap:3px}
+.t-ico{padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;background:rgba(47,107,255,0.08);color:var(--primary)}
+.plist-item{display:flex;align-items:flex-start;gap:8px;padding:7px 14px;border-bottom:1px solid rgba(122,145,184,0.06);cursor:pointer;transition:background 0.15s}
+.plist-item:last-child{border-bottom:none}
+.plist-item:hover{background:rgba(47,107,255,0.03)}
+.p-num{width:16px;font-size:11px;font-weight:800;color:#9aa8bc;flex:0 0 16px;padding-top:1px}
+.p-title{font-size:12px;font-weight:500;color:#1a2234;line-height:1.4}
+.p-time{font-size:10px;color:#b0baca;margin-top:2px}
+.fire-tag{color:#f5502a;font-size:11px;margin-left:4px}
+
+/* 热榜预警 */
+.alert-filters{background:#fff;border-radius:14px;border:1px solid rgba(122,145,184,0.1);padding:18px 20px;box-shadow:0 4px 12px rgba(26,44,82,0.04);margin-bottom:16px}
+.af-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.af-row:last-child{margin-bottom:0}
+.af-label{font-size:12px;font-weight:700;color:#68778f;min-width:56px;flex:0 0 56px}
+.af-input{padding:7px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#f7f9fd;color:#2a3448;font-size:12px;outline:none;flex:1;min-width:180px}
+.af-chips{display:flex;gap:6px;flex-wrap:wrap}
+.af-chip{padding:5px 12px;border-radius:6px;border:1px solid rgba(122,145,184,0.12);background:#f7f9fd;color:#68778f;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.af-chip.active{background:rgba(47,107,255,0.08);color:var(--primary);border-color:rgba(47,107,255,0.2)}
+.af-chip:hover:not(.active){border-color:rgba(47,107,255,0.2);color:#375a8f}
+.af-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.btn-reset{padding:7px 16px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:700;cursor:pointer}
+.alert-list-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.alert-total{font-size:13px;color:#68778f;font-weight:600}
+.alert-sort-btn{font-size:12px;color:var(--primary);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border-radius:12px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 4px 12px rgba(26,44,82,0.04);margin-bottom:10px;transition:box-shadow 0.2s,border-color 0.2s}
+.alert-item:hover{box-shadow:0 8px 20px rgba(26,44,82,0.07);border-color:rgba(47,107,255,0.12)}
+.alert-rank{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 38px;border:1px solid rgba(122,145,184,0.12)}
+.alert-rank.fire{background:rgba(255,77,79,0.08);font-size:18px}
+.alert-rank.num{background:rgba(47,107,255,0.07);font-size:14px;font-weight:900;color:var(--primary)}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-size:13px;font-weight:700;color:#1a2234;margin-bottom:5px}
+.alert-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:#9aa8bc;flex-wrap:wrap}
+.alert-tags{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.atag{padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700}
+.atag.plat{background:rgba(47,107,255,0.08);color:var(--primary)}
+.atag.hot{background:rgba(255,77,79,0.08);color:#f5502a}
+.atag.up{background:rgba(25,165,129,0.08);color:var(--success)}
+.alert-preview{font-size:11px;color:#68778f;margin-top:4px;line-height:1.5}
+.alert-right{display:flex;align-items:center;gap:10px;flex:0 0 auto;padding-left:8px}
+.toggle-sw{width:36px;height:20px;border-radius:999px;border:none;background:rgba(122,145,184,0.22);cursor:pointer;position:relative;transition:background 0.2s}
+.toggle-sw::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.12);transition:transform 0.2s}
+.btn-link{font-size:12px;font-weight:700;color:var(--primary);background:none;border:none;cursor:pointer;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 8H25L15 25H5V8Z" fill="url(#ba)"/><path d="M23 8H43L31 31H17L23 8Z" fill="url(#bb)"/><path d="M14 28H29L22 40H14V28Z" fill="url(#bc)"/>
+        <defs><linearGradient id="ba" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="bb" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="bc" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
+      </svg>
+      <div class="brand-title"><strong>网络舆情系统</strong></div>
+    </div>
+    <section class="nav-group active">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../AI智能推荐/index.html"><span>AI智能推荐</span></a>
+        <a class="nav-item active" href="./index.html"><span>热点榜单</span></a>
+        <a class="nav-item" href="../关键对象监测/index.html"><span>关键对象监测</span></a>
+        <div class="nav-item"><span>信息监测</span></div>
+        <div class="nav-item"><span>预警查询</span></div>
+        <a class="nav-item" href="../智能检索/index.html"><span>智能检索</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+        <div class="nav-item"><span>智能体编报</span></div>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../处置引导/传播引导策略/index.html"><span>传播引导策略</span></a>
+        <a class="nav-item" href="../../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
+        <div class="nav-item"><span>选题看板</span></div>
+        <a class="nav-item" href="../../处置引导/多稿合并工具/index.html"><span>多稿合并工具</span></a>
+        <a class="nav-item" href="../../处置引导/舆情复盘分析/index.html"><span>舆情复盘分析</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span></a>
+        <div class="nav-item"><span>宣传引导策略库</span></div>
+        <div class="nav-item"><span>决策报告知识库</span></div>
+        <div class="nav-item"><span>重点关注对象库</span></div>
+        <div class="nav-item"><span>行业术语与本体知识库</span></div>
+      </div>
+    </section>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title"><span>热点榜单</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-button" aria-label="收藏"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+        <button class="icon-button" aria-label="任务中心"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <button class="icon-button" aria-label="通知"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+      </div>
+    </header>
+
+    <section class="page">
+      <div class="content-card">
+        <!-- Tab 导航 -->
+        <div class="main-tabs">
+          <button class="main-tab active" onclick="switchTab(0,this)">领域热点</button>
+          <button class="main-tab" onclick="switchTab(1,this)">平台热榜</button>
+          <button class="main-tab" onclick="switchTab(2,this)">热榜预警</button>
+        </div>
+
+        <!-- Tab 1: 领域热点 -->
+        <div class="tab-panel active" id="tp0">
+          <div class="region-bar">
+            <div class="region-tabs">
+              <button class="region-tab active" onclick="switchRegion(this)">香港</button>
+              <button class="region-tab" onclick="switchRegion(this)">澳门</button>
+              <button class="region-tab" onclick="switchRegion(this)">台湾</button>
+              <button class="region-tab" onclick="switchRegion(this)">大湾区</button>
+              <button class="region-tab" onclick="switchRegion(this)">中国内地</button>
+              <button class="region-tab" onclick="switchRegion(this)">海外国际</button>
+            </div>
+            <div class="region-filters">
+              <div class="sel-wrap"><select><option>近24小时</option><option>近7天</option><option>近30天</option></select></div>
+              <div class="sel-wrap"><select><option>最近更新</option><option>热度最高</option></select></div>
+              <button class="btn-icon-sq" title="预警设置">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V4M12 20V22M2 12H4M20 12H22M4.93 4.93L6.34 6.34M17.66 17.66L19.07 19.07M4.93 19.07L6.34 17.66M17.66 6.34L19.07 4.93" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+              <button class="btn-qry">查询</button>
+            </div>
+          </div>
+          <div class="category-grid">
+            <!-- 社会民生 -->
+            <div class="cat-col">
+              <div class="cat-head">社会民生</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">港铁票价调整方案今日正式公布</div><div class="rk-p">香港电台</div><div class="rk-h">🔥 9.8万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">垃圾收费计划推迟实施引热议</div><div class="rk-p">网页</div><div class="rk-h">🔥 8.2万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">强台风路径近五名专考虑发八号风球</div><div class="rk-p">头条</div><div class="rk-h">7.1万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">副廉署监管营制新规生效首月情况</div><div class="rk-p">网页</div><div class="rk-h">5.4万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">消费券第三期派发规则本地零售</div><div class="rk-p">网页</div><div class="rk-h">4.8万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">公立医院急症室等候时间超8小时</div><div class="rk-p">论坛</div><div class="rk-h">4.2万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">跨境学童全面恢复面授课堂</div><div class="rk-p">网页</div><div class="rk-h">3.6万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">招人才计划获批超十万份申请</div><div class="rk-p">网页</div><div class="rk-h">3.1万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">输港无人机监测引数万市民关注</div><div class="rk-p">论坛</div><div class="rk-h">2.7万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">连日暴雨多区出现严重水浸及山泥倾泻</div><div class="rk-p">网页</div><div class="rk-h">2.3万</div></div>
+            </div>
+            <!-- 政务政策 -->
+            <div class="cat-col">
+              <div class="cat-head">政务政策</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">《基本法》第23条立法公众咨询结果</div><div class="rk-p">网页</div><div class="rk-h">🔥 12.4万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">施政报告提出多项款助生育新措施</div><div class="rk-p">头条</div><div class="rk-h">🔥 9.6万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">核市全面「清样」刺激文投置回升</div><div class="rk-p">网页</div><div class="rk-h">7.8万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">新一届区议会正式履职运作顺畅</div><div class="rk-p">网页</div><div class="rk-h">6.2万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">政府公布第一轮扶贫范围及精准目标</div><div class="rk-p">网页</div><div class="rk-h">5.1万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">在港北部都会区发展新规划出炉</div><div class="rk-p">网页</div><div class="rk-h">4.5万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">扩大医疗券适用范围至大湾区机构</div><div class="rk-p">网页</div><div class="rk-h">3.8万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">引入更多外劳缓解建造及运输业人手短缺</div><div class="rk-p">论坛</div><div class="rk-h">3.2万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">打击主要生意重点计划见成效新规划出炉</div><div class="rk-p">网页</div><div class="rk-h">2.6万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">提升公土服务质素新章案提交立法会</div><div class="rk-p">网页</div><div class="rk-h">2.0万</div></div>
+            </div>
+            <!-- 国际新闻 -->
+            <div class="cat-col">
+              <div class="cat-head">国际新闻</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">特首出访中东多国投资引资留智收录</div><div class="rk-p">网页</div><div class="rk-h">🔥 10.2万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">香港与东盟多国深化经贸合作关系</div><div class="rk-p">网页</div><div class="rk-h">🔥 7.8万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">国际金融地投资峰会在港湾南举行</div><div class="rk-p">网页</div><div class="rk-h">6.2万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">驻外经贸办积极斡纠对香港不实报道</div><div class="rk-p">网页</div><div class="rk-h">5.1万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">争取尽早加入RCEP落得升级进展</div><div class="rk-p">网页</div><div class="rk-h">4.4万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">多间跨国企业宣布在香港设立亚太区总部</div><div class="rk-p">网页</div><div class="rk-h">3.7万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">国际大型体育赛事陆续回归香港举办</div><div class="rk-p">网页</div><div class="rk-h">3.1万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">香港留守全球最自由经济排名依然领先</div><div class="rk-p">网页</div><div class="rk-h">2.5万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">应对全球气候变化香港承诺碳减排</div><div class="rk-p">网页</div><div class="rk-h">2.0万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">本港科研团队参与国际大定探索项目</div><div class="rk-p">网页</div><div class="rk-h">1.6万</div></div>
+            </div>
+            <!-- 财经商业 -->
+            <div class="cat-col">
+              <div class="cat-head">财经商业</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">恒生指数上两万点关口成交额破千亿</div><div class="rk-p">网页</div><div class="rk-h">🔥 11.3万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">港交所吸引天气平台纳斯达克新规年内数实</div><div class="rk-p">网页</div><div class="rk-h">🔥 8.6万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">多家内地龙头科技企业计划年内赴港上市</div><div class="rk-p">网页</div><div class="rk-h">6.9万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">本港零售业消售额涨逾三个月业界呼吁支援</div><div class="rk-p">网页</div><div class="rk-h">5.4万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">虚拟房产交易平台发展制度正式生效</div><div class="rk-p">网页</div><div class="rk-h">4.6万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">财贷预算案财十年度录得千亿万亏</div><div class="rk-p">网页</div><div class="rk-h">3.9万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">银行业高息吸港元定期存款数量超越5厘</div><div class="rk-p">网页</div><div class="rk-h">3.2万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">本港楼价指数创七年新低交投惨淡活跃</div><div class="rk-p">网页</div><div class="rk-h">2.8万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">旅游业复之双方动核心区酒店入住率升至九成</div><div class="rk-p">网页</div><div class="rk-h">2.2万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">积金局公布强积金最新前报表现录得正增长</div><div class="rk-p">网页</div><div class="rk-h">1.8万</div></div>
+            </div>
+            <!-- 医疗卫生 -->
+            <div class="cat-col">
+              <div class="cat-head">医疗卫生</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">季节性流感踏入高峰期公立医院病房爆满</div><div class="rk-p">网页</div><div class="rk-h">🔥 9.1万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">新冠变异株JN.1感染个案增加呼吁接种疫苗</div><div class="rk-p">头条</div><div class="rk-h">🔥 7.4万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">医管局推展手机APP预约专科门诊新边框</div><div class="rk-p">网页</div><div class="rk-h">5.8万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">控烟政策建议进一步扩大无烟范围覆盖</div><div class="rk-p">网页</div><div class="rk-h">4.7万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">引入本地培训医生计划旨在扩大更多教授</div><div class="rk-p">网页</div><div class="rk-h">3.9万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">香港每间中医诊预约超前半年分定制的服务</div><div class="rk-p">网页</div><div class="rk-h">3.2万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">长者医疗券增设配备共用带有安软手柄覆盖</div><div class="rk-p">网页</div><div class="rk-h">2.7万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">精神健康关注组呼吁增加社区及学校支援</div><div class="rk-p">论坛</div><div class="rk-h">2.1万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">卫生署首席批于关注50岁以上市民接种疫苗</div><div class="rk-p">网页</div><div class="rk-h">1.7万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">学童脊骨健康筛查计划发现不良姿势普遍</div><div class="rk-p">网页</div><div class="rk-h">1.3万</div></div>
+            </div>
+            <!-- 教育就业 -->
+            <div class="cat-col">
+              <div class="cat-head">教育就业</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">DSE中学文凭试今日放榜逾生多名状元</div><div class="rk-p">网页</div><div class="rk-h">🔥 13.6万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">八大院校本年生相额逐步提升至四成</div><div class="rk-p">网页</div><div class="rk-h">🔥 8.9万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">适龄学童人口下降多间中小学面临缩班</div><div class="rk-p">网页</div><div class="rk-h">6.7万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">本港最新失业率维持2.9%低水平全民就业</div><div class="rk-p">网页</div><div class="rk-h">5.2万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">教师失业求助新接受教育局强化学校运作正常</div><div class="rk-p">网页</div><div class="rk-h">4.3万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">全面推行小学科科学科研课程模板提及改引</div><div class="rk-p">网页</div><div class="rk-h">3.6万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">大学生社交实习及交流计划接受报名及反应热烈</div><div class="rk-p">论坛</div><div class="rk-h">2.9万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">职专教育获政府注资以提升社会认受性</div><div class="rk-p">网页</div><div class="rk-h">2.3万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">建造业及运输业输入劳工计划旨扩征前数野</div><div class="rk-p">网页</div><div class="rk-h">1.8万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">人力资源调查报告届毕业生就职薪酬升达2.5万</div><div class="rk-p">网页</div><div class="rk-h">1.4万</div></div>
+            </div>
+            <!-- 旅游出行 -->
+            <div class="cat-col">
+              <div class="cat-head">旅游出行</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">「港车北上」计划预约名额持续增一签难求</div><div class="rk-p">头条</div><div class="rk-h">🔥 8.7万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">西九文化区M+博翻館全年入场人次打破记录</div><div class="rk-p">网页</div><div class="rk-h">🔥 6.4万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">香港迪士尼乐园「魔雪奇缘」新园区盛大开幕</div><div class="rk-p">网页</div><div class="rk-h">5.2万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">旅发局公布本港旅游新周报数据增长目标</div><div class="rk-p">网页</div><div class="rk-h">4.1万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">高铁香港段全线开通再掀国际旅客热潮</div><div class="rk-p">网页</div><div class="rk-h">3.5万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">内地访客团队游持续增加酒店入住率攀升</div><div class="rk-p">网页</div><div class="rk-h">2.8万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">机场第三跑道扩建如期完工整体容量提升</div><div class="rk-p">网页</div><div class="rk-h">2.2万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">大屿山南景区生态旅游路线正式对外开放</div><div class="rk-p">网页</div><div class="rk-h">1.7万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">邮轮码头扩建工程完竣大型邮轮纷纷停靠</div><div class="rk-p">网页</div><div class="rk-h">1.3万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">港府推出多项旅游基金资助扶持本地文旅业</div><div class="rk-p">网页</div><div class="rk-h">0.9万</div></div>
+            </div>
+            <!-- 文化艺术 -->
+            <div class="cat-col">
+              <div class="cat-head">文化艺术</div>
+              <div class="rank-hdr"><span>排名</span><span>标题</span><span>平台</span><span>热度</span></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t">巴塞尔艺术展(Art Basel)香港展会盛大开幕</div><div class="rk-p">网页</div><div class="rk-h">🔥 10.5万</div></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t">香港国际电影节公布开幕电影及多部全球首映</div><div class="rk-p">网页</div><div class="rk-h">🔥 7.9万</div></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t">康文署举办大型「金庸百年诞辰纪念」特展</div><div class="rk-p">网页</div><div class="rk-h">6.1万</div></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t">本地创作音乐剧荣获亚太区最佳制作殊荣</div><div class="rk-p">网页</div><div class="rk-h">4.7万</div></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t">香港故宫文化博物馆推出全新特别展览</div><div class="rk-p">网页</div><div class="rk-h">3.9万</div></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t">大型漫画文化节吸引十万人次入场参与</div><div class="rk-p">网页</div><div class="rk-h">3.2万</div></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t">本地流行歌手登上全球音乐榜单打破纪录</div><div class="rk-p">论坛</div><div class="rk-h">2.6万</div></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t">政府拨款支持本地艺团创作及海外巡演</div><div class="rk-p">网页</div><div class="rk-h">2.0万</div></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t">数字艺术平台NFT交易港元突破千万</div><div class="rk-p">网页</div><div class="rk-h">1.5万</div></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t">非遗项目粤剧再获国际文化组织高度肯定</div><div class="rk-p">网页</div><div class="rk-h">1.1万</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: 平台热榜 -->
+        <div class="tab-panel" id="tp1">
+          <div class="plat-filter-bar">
+            <div class="sel-wrap"><select><option>全图</option><option>列表</option></select></div>
+            <input type="search" style="padding:7px 12px;border-radius:10px;border:1px solid rgba(122,145,184,0.15);background:#fff;font-size:12px;outline:none;min-width:180px" placeholder="输入搜索关键词">
+            <div class="sel-wrap"><select><option>近24小时</option><option>近7天</option></select></div>
+            <button class="btn-icon-sq" title="预警设置"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V4M12 20V22M2 12H4M20 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <button class="btn-qry">查询</button>
+          </div>
+          <div class="plat-grid" style="grid-template-columns:repeat(4,1fr)">
+            <!-- 平台总榜 占两列 -->
+            <div class="plat-card" style="grid-column:span 1">
+              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff">榜</span>平台总榜</div>
+              <div class="total-row"><div class="t-num n1">1</div><div class="t-title">十四届全国人大四次会议议程公布</div><div class="t-icons"><span class="t-ico">抖音</span><span class="t-ico">微博</span><span class="t-ico">头条</span></div></div>
+              <div class="total-row"><div class="t-num n2">2</div><div class="t-title">代表建议设定3000亿元高速免费额度</div><div class="t-icons"><span class="t-ico">微博</span><span class="t-ico">百度</span></div></div>
+              <div class="total-row"><div class="t-num n3">3</div><div class="t-title">12306回应乘客在普速铁路上用排插</div><div class="t-icons"><span class="t-ico">微博</span></div></div>
+              <div class="total-row"><div class="t-num">4</div><div class="t-title">2026全国两会为什么格外重要</div><div class="t-icons"><span class="t-ico">百度</span></div></div>
+              <div class="total-row"><div class="t-num">5</div><div class="t-title">驻日大使馆提醒：防范日本「撞人族」</div><div class="t-icons"><span class="t-ico">微博</span><span class="t-ico">抖音</span></div></div>
+              <div class="total-row"><div class="t-num">6</div><div class="t-title">雷军2026两会议题</div><div class="t-icons"><span class="t-ico">微博</span></div></div>
+              <div class="total-row"><div class="t-num">7</div><div class="t-title">北京下了</div><div class="t-icons"><span class="t-ico">微博</span></div></div>
+              <div class="total-row"><div class="t-num">8</div><div class="t-title">山东修高铁站挖出5亿年前石海</div><div class="t-icons"><span class="t-ico">微博</span><span class="t-ico">抖音</span></div></div>
+              <div class="total-row"><div class="t-num">9</div><div class="t-title">政协委员建议高中纳入义务教育</div><div class="t-icons"><span class="t-ico">微博</span><span class="t-ico">百度</span></div></div>
+              <div class="total-row"><div class="t-num">10</div><div class="t-title">代表委员议建立提案如何落地</div><div class="t-icons"><span class="t-ico">微博</span></div></div>
+            </div>
+            <!-- LIHKG -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#ffd700;color:#333;font-size:10px;font-weight:800">LK</span>LIHKG 连登</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">伊朗小学遭轰炸百死 管局公开美国戡界行…<span class="fire-tag">🔥</span></div><div class="p-time">2026-03-11 14:15</div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div><div class="p-time">2026-03-11 13:52</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">大家辜负 低物感但早d退休</div><div class="p-time">2026-03-11 13:41</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">MacBook Neo开箱评测｜厚高外型＋A18 Pr...</div><div class="p-time">2026-03-11 13:20</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div><div class="p-time">2026-03-11 13:08</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">由天道酬勤，到FIRE movement，再到及时…</div><div class="p-time">2026-03-11 12:47</div></div></div>
+            </div>
+            <!-- 香港高登 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#1890ff;color:#fff;font-size:10px;font-weight:800">高</span>香港高登</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">美国比人升左希莫德旺大事重点斩行人理？<span class="fire-tag">🔥</span></div><div class="p-time">2026-03-11 13:53</div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">2026年3月 足球女将 Season 2（2）</div><div class="p-time">2026-03-11 13:21</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div><div class="p-time">2026-03-11 13:10</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">【美国实】疑幽暗人FIVE GUYS好吃好吃?</div><div class="p-time">2026-03-11 12:55</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">成日都做盘算日经结有同理行人理？T</div><div class="p-time">2026-03-11 12:40</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div><div class="p-time">2026-03-11 12:18</div></div></div>
+            </div>
+            <!-- 香港01 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#003087;color:#fff;font-size:9px;font-weight:800">01</span>香港01</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月关停…<span class="fire-tag">🔥</span></div><div class="p-time">2026-03-11 13:53</div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">中西局势脱油价受勒 升学顾升指迎20亿学…</div><div class="p-time">2026-03-11 13:21</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">油债｜刷翻展揭长子达：跨境审加大浪组引借理…</div><div class="p-time">2026-03-11 13:12</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">紫菊蓝｜美军引以为傲的技术优势，如何肇震…</div><div class="p-time">2026-03-11 12:53</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">国泰航空：向员工告放假甘当于每逾11星期薪金…</div><div class="p-time">2026-03-11 12:30</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">两毓饭英文？DSE英文口试闯两毓毓 两毓…</div><div class="p-time">2026-03-11 08:52</div></div></div>
+            </div>
+            <!-- 雅虎新闻 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#7b0099;color:#fff;font-size:10px;font-weight:800">Y!</span>雅虎新闻</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">能源搭棚翻 泛滥副成灾<span class="fire-tag">🔥</span></div><div class="p-time">2026-03-11 14:14</div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div><div class="p-time">2026-03-11 14:15</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div><div class="p-time">2026-03-11 14:13</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">两投行传人 退出竞赛关于IPO</div><div class="p-time">2026-03-11 14:13</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">中东黑火暗温 道指涨479回款</div><div class="p-time">2026-03-11 14:15</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">各地填充始 建OpenClaw产业</div><div class="p-time">2026-03-11 14:19</div></div></div>
+            </div>
+            <!-- Google趋势 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="font-size:14px">G</span>Google趋势</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">伊朗小学遭轰炸百死 管局公开美国戡界行…<span class="fire-tag">🔥</span></div><div class="p-time"></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">大家辜负 低物感但早d退休</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">MacBook Neo开箱评测｜厚高外型＋A18 Pr...</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">由天道酬勤，到FIRE movement，再到及时…</div></div></div>
+            </div>
+            <!-- 微博热搜 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#e6162d;color:#fff;font-size:12px">微</span>微博热搜</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">美国比人升左希莫德旺大事点重斩行人理？<span class="fire-tag">🔥</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">2026年3月 足球女将 Season 2（2）</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">MacBook Neo开箱评测｜厚高外型＋A18 Pr...</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div></div></div>
+            </div>
+            <!-- 抖音热搜 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:#000;color:#fff;font-size:12px">🎵</span>抖音热搜</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月关停…<span class="fire-tag">🔥</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">中西局势脱油价受勒 升学顾升指迎20亿学…</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">油价｜刷翻展揭长子达：跨境审加大浪引迪理…</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">紫菊蓝｜美军引以为傲的技术优势，如何肇震…</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">国泰航空：向员工放假当于每逾11星期薪金…</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">两毓饭英文？DSE英文口试闯两毓毓 两毓…</div></div></div>
+            </div>
+            <!-- 百度热搜 -->
+            <div class="plat-card" style="grid-column:span 1">
+              <div class="plat-head"><span class="plat-icon" style="background:#2932e1;color:#fff;font-size:10px;font-weight:800">百</span>百度热搜</div>
+              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">能源搭棚翻 泛滥副成灾<span class="fire-tag">🔥</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">两投行传人 退出竞赛关于IPO</div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">中东黑火暗温 道指涨479回款</div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">各地填充始 建OpenClaw产业</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: 热榜预警 -->
+        <div class="tab-panel" id="tp2">
+          <div class="alert-filters">
+            <div class="af-row">
+              <span class="af-label">关键词</span>
+              <input class="af-input" type="text" placeholder="请输入搜索关键词">
+              <button class="btn-icon-sq" style="margin-left:auto" title="预警设置"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V4M12 20V22M2 12H4M20 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+              <span style="font-size:12px;color:#68778f;font-weight:600;cursor:pointer">⚙ 预警设置</span>
+            </div>
+            <div class="af-row">
+              <span class="af-label">预警时间</span>
+              <div class="af-chips">
+                <span class="af-chip" onclick="toggleChip(this,'r')">今天</span>
+                <span class="af-chip active" onclick="toggleChip(this,'r')">近24小时</span>
+                <span class="af-chip" onclick="toggleChip(this,'r')">近7天</span>
+                <span class="af-chip" onclick="toggleChip(this,'r')">近30天</span>
+                <span class="af-chip" onclick="toggleChip(this,'r')">自定义</span>
+              </div>
+            </div>
+            <div class="af-row">
+              <span class="af-label">榜单平台</span>
+              <div class="af-chips">
+                <span class="af-chip active" onclick="toggleChip(this,'c')">全部</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">微博</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">抖音</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">快手</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">头条</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">小红书</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">B站</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">百度</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">知乎</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">搜狐</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">网易</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">腾讯</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">豆瓣</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">哔哩</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">虎扑</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">凤凰网</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">新浪</span>
+              </div>
+            </div>
+            <div class="af-row">
+              <span class="af-label">榜单类型</span>
+              <div class="af-chips">
+                <span class="af-chip active" onclick="toggleChip(this,'c')">全部</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">热榜</span>
+                <span class="af-chip" onclick="toggleChip(this,'c')">同城榜</span>
+              </div>
+            </div>
+            <div class="af-actions">
+              <button class="btn-reset">重置</button>
+              <button class="btn-qry">查询</button>
+            </div>
+          </div>
+          <div class="alert-list-bar">
+            <span class="alert-total">共 12 条信息</span>
+            <span class="alert-sort-btn">预警时间 ↑</span>
+          </div>
+          <div class="alert-item">
+            <div class="alert-rank fire">🔥</div>
+            <div class="alert-body">
+              <div class="alert-title">北京春季花粉致敏期开始</div>
+              <div class="alert-meta"><span>2026-03-04 上榜，在榜0小时</span></div>
+              <div class="alert-tags"><span class="atag plat">北京榜</span><span class="atag hot">排名最前</span><span class="atag up">高速曲升</span></div>
+              <div class="alert-preview">预警时间：2026-03-04 11:31:10 &nbsp;|&nbsp; 预警原因：北京；当前排名1（预设1）；…</div>
+            </div>
+            <div class="alert-right">
+              <button class="toggle-sw"></button>
+              <button class="btn-link">查看详情</button>
+              <button class="btn-link">异动快报</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-rank num">2</div>
+            <div class="alert-body">
+              <div class="alert-title">中金公司预测北京、上海楼市房价有望企稳并建议投资策略</div>
+              <div class="alert-meta"><span>2026-03-04 上榜，在榜0小时</span></div>
+              <div class="alert-tags"><span class="atag plat">热搜榜</span><span class="atag hot">排名最前</span><span class="atag up">高速曲升</span></div>
+              <div class="alert-preview">预警时间：2026-03-04 09:12:51 &nbsp;|&nbsp; 预警原因：北京；当前排名1（预设1）；…</div>
+            </div>
+            <div class="alert-right">
+              <button class="toggle-sw"></button>
+              <button class="btn-link">查看详情</button>
+              <button class="btn-link">异动快报</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-rank num">排</div>
+            <div class="alert-body">
+              <div class="alert-title">北京今日降雪，最低气温-2℃，下午影响城区</div>
+              <div class="alert-meta"><span>2026-03-04 上榜，在榜0小时</span></div>
+              <div class="alert-tags"><span class="atag plat">北京榜</span><span class="atag hot">排名最前</span><span class="atag up">高速曲升</span></div>
+              <div class="alert-preview">预警时间：2026-03-04 08:30:23 &nbsp;|&nbsp; 预警原因：北京；当前排名1（预设1）；…</div>
+            </div>
+            <div class="alert-right">
+              <button class="toggle-sw"></button>
+              <button class="btn-link">查看详情</button>
+              <button class="btn-link">异动快报</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-rank num">排</div>
+            <div class="alert-body">
+              <div class="alert-title">北京银行积存金业务因数据源异常报价1.6元/克，与市场价严重偏离</div>
+              <div class="alert-meta"><span>2026-03-04 上榜，在榜4小时</span></div>
+              <div class="alert-tags"><span class="atag plat">北京榜</span><span class="atag hot">排名最前</span><span class="atag up">高速曲升</span></div>
+              <div class="alert-preview">预警时间：2026-03-04 01:41:29 &nbsp;|&nbsp; 预警原因：北京；当前排名1（预设1）；…</div>
+            </div>
+            <div class="alert-right">
+              <button class="toggle-sw"></button>
+              <button class="btn-link">查看详情</button>
+              <button class="btn-link">异动快报</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-rank num">排</div>
+            <div class="alert-body">
+              <div class="alert-title">北京学子升学指南发布，指导新学期生活</div>
+              <div class="alert-meta"><span>2026-03-04 上榜，在榜0小时</span></div>
+              <div class="alert-tags"><span class="atag plat">北京榜</span><span class="atag hot">排名最前</span><span class="atag up">高速曲升</span></div>
+              <div class="alert-preview">预警时间：2026-03-04 01:30:12 &nbsp;|&nbsp; 预警原因：北京；当前排名1（预设1）；…</div>
+            </div>
+            <div class="alert-right">
+              <button class="toggle-sw"></button>
+              <button class="btn-link">查看详情</button>
+              <button class="btn-link">异动快报</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+function switchTab(idx, btn) {
+  document.querySelectorAll('.main-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+function switchRegion(btn) {
+  btn.closest('.region-tabs').querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleChip(el, mode) {
+  if (mode === 'r') {
+    el.closest('.af-chips').querySelectorAll('.af-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  } else {
+    el.classList.toggle('active');
+  }
+}
+</script>
+</body>
+</html>

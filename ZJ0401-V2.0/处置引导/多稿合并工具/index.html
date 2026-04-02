@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>处置引导 - 多稿合并工具</title>
+<style>
+:root{--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select,textarea{font:inherit}
+/* 外层三列布局（左：sidebar | 中间区域无列间距） */
+.app-shell{display:flex;min-height:100vh}
+/* 导航侧栏 */
+.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);width:var(--sidebar-width);flex:0 0 var(--sidebar-width);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
+.brand-mark{width:36px;height:36px;flex:0 0 36px}
+.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
+.nav-group{margin-bottom:14px}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#8793a6;font-size:11px;font-weight:800}
+.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
+.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
+.nav-items{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s}
+.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f}
+.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
+/* 主内容区全高 */
+.main-area{flex:1;display:flex;flex-direction:column;min-width:0;padding:20px 20px 20px 24px}
+.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md);margin-bottom:14px}
+.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
+.topbar-title span{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:12px;border:1px solid rgba(47,107,255,0.1);background:linear-gradient(180deg,rgba(47,107,255,0.07),rgba(158,199,255,0.12));color:var(--primary);font-size:15px;font-weight:800}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;cursor:pointer;transition:transform 0.2s}
+.icon-button:hover{transform:translateY(-2px);color:#3a73dd}
+.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
+.avatar strong{color:#fff;font-size:14px}
+.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
+
+/* ===== 多稿合并工具 三列布局 ===== */
+.tool-body{display:grid;grid-template-columns:220px 310px 1fr;gap:14px;flex:1;min-height:0;overflow:hidden;height:calc(100vh - 168px)}
+.col-panel{background:#fff;border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+/* 分类列 */
+.col-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(122,145,184,0.1);font-size:14px;font-weight:800;color:#1a2234;flex:0 0 auto}
+.col-header-row{display:flex;align-items:center;gap:8px}
+.col-body{flex:1;overflow-y:auto;padding:8px}
+.col-body::-webkit-scrollbar{width:5px}.col-body::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.2);border-radius:999px}
+/* 素材分类列 */
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:600;color:#4f5f7c;cursor:pointer;transition:all 0.15s;margin-bottom:2px}
+.cat-item:hover{background:rgba(47,107,255,0.05);color:#1a2234}
+.cat-item.active{background:rgba(47,107,255,0.1);color:var(--primary)}
+.cat-item-name{flex:1}
+.cat-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:20px;border-radius:10px;font-size:10px;font-weight:800;background:rgba(47,107,255,0.12);color:var(--primary);padding:0 6px}
+.cat-add-btn{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:12px;font-size:12px;font-weight:700;color:#9aa8bc;cursor:pointer;border:1.5px dashed rgba(122,145,184,0.25);background:transparent;margin-top:6px;width:100%;text-align:left}
+.cat-add-btn:hover{border-color:rgba(47,107,255,0.3);color:var(--primary)}
+/* 稿件选择列 */
+.draft-header-row{display:flex;align-items:center;justify-content:space-between}
+.draft-selected-info{font-size:12px;color:var(--success);font-weight:700}
+.btn-upload{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;border:1px solid rgba(47,107,255,0.2);background:rgba(47,107,255,0.06);color:var(--primary);font-size:12px;font-weight:700;cursor:pointer}
+.draft-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(122,145,184,0.08);margin-bottom:8px;cursor:pointer;transition:all 0.15s}
+.draft-item:hover{border-color:rgba(47,107,255,0.15);background:rgba(247,250,255,0.8)}
+.draft-item.checked{background:rgba(47,107,255,0.05);border-color:rgba(47,107,255,0.2)}
+.draft-check{width:16px;height:16px;accent-color:var(--primary);cursor:pointer;flex:0 0 16px;margin-top:3px}
+.draft-body{flex:1;min-width:0}
+.draft-title-row{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px}
+.type-tag{flex:0 0 auto;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff}
+.tt-social{background:#ff7a45}.tt-news{background:#faad14}.tt-editorial{background:#2f6bff}.tt-comm{background:#52c41a}
+.draft-title{font-size:12px;font-weight:600;color:#1a2234;line-height:1.4}
+.draft-meta{font-size:10px;color:#9aa8bc;display:flex;align-items:center;gap:6px}
+.draft-kwords{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.dkw{padding:2px 6px;border-radius:4px;font-size:10px;background:rgba(122,145,184,0.1);color:#68778f;font-weight:600}
+.col-footer{padding:12px;border-top:1px solid rgba(122,145,184,0.1);flex:0 0 auto}
+.btn-merge{width:100%;padding:12px;border-radius:14px;border:none;background:var(--accent-gradient);color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(47,107,255,0.28);transition:all 0.2s}
+.btn-merge:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(47,107,255,0.36)}
+/* 预览列 */
+.preview-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(122,145,184,0.1);flex:0 0 auto}
+.preview-view-btns{display:flex;gap:4px}
+.view-btn{width:32px;height:32px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;display:grid;place-items:center;cursor:pointer;color:#9aa8bc;transition:all 0.2s}
+.view-btn.active{background:rgba(47,107,255,0.08);border-color:rgba(47,107,255,0.2);color:var(--primary)}
+.preview-actions{display:flex;align-items:center;gap:8px}
+.word-count{font-size:12px;color:#9aa8bc;font-weight:600;width:fit-content;white-space:nowrap}
+.btn-push-preview{padding:8px 16px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 4px 10px rgba(47,107,255,0.2)}
+.btn-export-preview{padding:8px 14px;border-radius:10px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:700;cursor:pointer}
+.preview-body{flex:1;overflow-y:auto;padding:20px 22px}
+.preview-body::-webkit-scrollbar{width:5px}.preview-body::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.2);border-radius:999px}
+.preview-ai-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 8px;border-radius:20px;background:linear-gradient(135deg,rgba(47,107,255,0.1),rgba(78,136,255,0.07));border:1px solid rgba(47,107,255,0.12);font-size:11px;font-weight:700;color:var(--primary);margin-bottom:12px}
+.preview-gen-time{font-size:11px;color:#9aa8bc;margin-bottom:16px}
+.preview-h1{font-size:20px;font-weight:800;color:#0a1428;line-height:1.4;margin-bottom:14px}
+.preview-summary{background:rgba(47,107,255,0.04);border-radius:12px;padding:14px;border:1px solid rgba(47,107,255,0.08);margin-bottom:16px}
+.preview-summary-label{font-size:11px;font-weight:800;color:var(--primary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.preview-summary-text{font-size:13px;color:#3a4560;line-height:1.7}
+.preview-sep{border:none;border-top:1px solid rgba(122,145,184,0.1);margin:14px 0}
+.preview-content{font-size:14px;color:#2a3448;line-height:1.8}
+.preview-content p{margin:0 0 12px}
+/* empty state & loading */
+.preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;color:#9aa8bc}
+.preview-empty svg{opacity:.4}
+.preview-empty p{font-size:13px;font-weight:600;text-align:center;line-height:1.6;margin:0}
+.preview-loading{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px}
+.preview-loading.show{display:flex}
+.prev-spin{width:44px;height:44px;border-radius:50%;border:3px solid rgba(47,107,255,0.15);border-top-color:var(--primary);animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.prev-load-text{font-size:13px;font-weight:700;color:var(--primary)}
+.preview-result{display:none}
+.preview-result.show{display:block}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
+        <path d="M5 8H25L15 25H5V8Z" fill="url(#ma)"/><path d="M23 8H43L31 31H17L23 8Z" fill="url(#mb)"/><path d="M14 28H29L22 40H14V28Z" fill="url(#mc)"/>
+        <defs><linearGradient id="ma" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="mb" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="mc" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
+      </svg>
+      <div class="brand-title"><strong>网络舆情系统</strong></div>
+    </div>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../监测预警/AI智能推荐/index.html"><span>AI智能推荐</span></a>
+        <a class="nav-item" href="../../监测预警/热点榜单/index.html"><span>热点榜单</span></a>
+        <a class="nav-item" href="../../监测预警/关键对象监测/index.html"><span>关键对象监测</span></a>
+        <div class="nav-item"><span>信息监测</span></div>
+        <div class="nav-item"><span>预警查询</span></div>
+        <a class="nav-item" href="../../监测预警/智能检索/index.html"><span>智能检索</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+        <div class="nav-item"><span>智能体编报</span></div>
+      </div>
+    </section>
+    <section class="nav-group active">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../传播引导策略/index.html"><span>传播引导策略</span></a>
+        <a class="nav-item" href="../选题线索池/index.html"><span>选题线索池</span></a>
+        <div class="nav-item"><span>选题看板</span></div>
+        <a class="nav-item active" href="./index.html"><span>多稿合并工具</span></a>
+        <a class="nav-item" href="../舆情复盘分析/index.html"><span>舆情复盘分析</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span></a>
+        <div class="nav-item"><span>宣传引导策略库</span></div>
+        <div class="nav-item"><span>决策报告知识库</span></div>
+        <div class="nav-item"><span>重点关注对象库</span></div>
+        <div class="nav-item"><span>行业术语与本体知识库</span></div>
+      </div>
+    </section>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div class="topbar-left"><div class="topbar-title"><span>多稿合并工具</span></div></div>
+      <div class="topbar-right">
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+      </div>
+    </header>
+
+    <!-- 三列工具区 -->
+    <div class="tool-body">
+      <!-- 左列：素材分类 -->
+      <div class="col-panel">
+        <div class="col-header">
+          <span>素材分类</span>
+          <span style="font-size:11px;color:#9aa8bc;font-weight:600">12篇</span>
+        </div>
+        <div class="col-body">
+          <div class="cat-item active" onclick="selectCat(this)"><span class="cat-item-name">全部素材</span><span class="cat-count">12</span></div>
+          <div class="cat-item" onclick="selectCat(this)"><span class="cat-item-name">大埔宏福苑大火</span><span class="cat-count">5</span></div>
+          <div class="cat-item" onclick="selectCat(this)"><span class="cat-item-name">特区政府新政</span><span class="cat-count">3</span></div>
+          <div class="cat-item" onclick="selectCat(this)"><span class="cat-item-name">两会</span><span class="cat-count">2</span></div>
+          <div class="cat-item" onclick="selectCat(this)"><span class="cat-item-name">民意调查</span><span class="cat-count">2</span></div>
+          <button class="cat-add-btn">+ 添加自定义分类</button>
+        </div>
+      </div>
+
+      <!-- 中列：稿件选择 -->
+      <div class="col-panel">
+        <div class="col-header">
+          <div class="draft-header-row" style="width:100%">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span>稿件选择</span>
+              <span class="draft-selected-info">已选 3</span>
+            </div>
+            <button class="btn-upload">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 4V14M8 8L12 4L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 18H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              上传
+            </button>
+          </div>
+        </div>
+        <div class="col-body">
+          <div class="draft-item checked">
+            <input type="checkbox" class="draft-check" checked onchange="updateSel()">
+            <div class="draft-body">
+              <div class="draft-title-row"><span class="type-tag tt-editorial">社评</span><span class="draft-title">宏福苑大火：政府需正视公共安全执法的盲点</span></div>
+              <div class="draft-meta"><span>香港经济日报</span><span>2023-10-25</span></div>
+              <div class="draft-kwords"><span class="dkw">消防安全</span><span class="dkw">政府责任</span><span class="dkw">违规施工</span></div>
+            </div>
+          </div>
+          <div class="draft-item checked">
+            <input type="checkbox" class="draft-check" checked onchange="updateSel()">
+            <div class="draft-body">
+              <div class="draft-title-row"><span class="type-tag tt-comm">通讯</span><span class="draft-title">大埔宏福苑大火现场实拍：逾40名消防员参与救援</span></div>
+              <div class="draft-meta"><span>文汇报</span><span>2023-10-24</span></div>
+              <div class="draft-kwords"><span class="dkw">现场报道</span><span class="dkw">救援行动</span></div>
+            </div>
+          </div>
+          <div class="draft-item checked">
+            <input type="checkbox" class="draft-check" checked onchange="updateSel()">
+            <div class="draft-body">
+              <div class="draft-title-row"><span class="type-tag tt-news">新闻</span><span class="draft-title">消防署：宏福苑大火与外墙维修竹棚有关 已完全扑灭</span></div>
+              <div class="draft-meta"><span>香港电台</span><span>2023-10-24</span></div>
+              <div class="draft-kwords"><span class="dkw">官方声明</span><span class="dkw">起火原因</span></div>
+            </div>
+          </div>
+          <div class="draft-item">
+            <input type="checkbox" class="draft-check" onchange="updateSel()">
+            <div class="draft-body">
+              <div class="draft-title-row"><span class="type-tag tt-editorial">採讯</span><span class="draft-title">居民口述：事发时浓烟密布，疏散过程混乱</span></div>
+              <div class="draft-meta"><span>星岛日报</span><span>2023-10-25</span></div>
+              <div class="draft-kwords"><span class="dkw">民众声音</span><span class="dkw">疏散</span></div>
+            </div>
+          </div>
+          <div class="draft-item">
+            <input type="checkbox" class="draft-check" onchange="updateSel()">
+            <div class="draft-body">
+              <div class="draft-title-row"><span class="type-tag tt-news">新闻</span><span class="draft-title">政府建议加强外墙维修工程消防规管 引业界关注</span></div>
+              <div class="draft-meta"><span>明报</span><span>2023-10-26</span></div>
+              <div class="draft-kwords"><span class="dkw">政策建议</span><span class="dkw">行业规管</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-footer">
+          <button class="btn-merge" id="btnMerge" onclick="doMerge()">智能合并</button>
+        </div>
+      </div>
+
+      <!-- 右列：合并预览 -->
+      <div class="col-panel">
+        <div class="preview-header" style="display:flex;flex-direction:column;gap:10px;align-items:stretch;">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:14px;font-weight:800;color:#1a2234">合并稿件预览</span>
+            <div class="preview-view-btns">
+              <button class="view-btn active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="4" rx="1" fill="currentColor"/><rect x="4" y="11" width="16" height="4" rx="1" fill="currentColor" opacity=".5"/><rect x="4" y="18" width="10" height="2" rx="1" fill="currentColor" opacity=".3"/></svg></button>
+              <button class="view-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" fill="currentColor"/><rect x="13" y="4" width="7" height="7" rx="1" fill="currentColor" opacity=".5"/><rect x="4" y="13" width="7" height="7" rx="1" fill="currentColor" opacity=".3"/><rect x="13" y="13" width="7" height="7" rx="1" fill="currentColor" opacity=".2"/></svg></button>
+              <button class="view-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4L20 4M4 9L20 9M4 14L14 14M4 19L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            </div>
+          </div>
+          <div class="preview-actions">
+            <span class="word-count">实时字数：521</span>
+            <div style="flex:1"></div>
+            <button class="btn-push-preview">推送至采编平台</button>
+            <button class="btn-export-preview">导出</button>
+          </div>
+        </div>
+        <div class="preview-body">
+          <!-- 默认空状态 -->
+          <div class="preview-empty" id="previewEmpty">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 8H16M8 12H16M8 16H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <p>请在左侧勾选稿件，<br>点击"智能合并"生成合并稿件</p>
+          </div>
+          <!-- loading -->
+          <div class="preview-loading" id="previewLoading">
+            <div class="prev-spin"></div>
+            <div class="prev-load-text">AI 正在合并稿件...</div>
+          </div>
+          <!-- 合并结果 -->
+          <div class="preview-result" id="previewResult">
+            <div class="preview-ai-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.4 8.4H21.2L15.7 12.6L17.9 19L12 15L6.1 19L8.3 12.6L2.8 8.4H9.6L12 2Z" fill="currentColor"/></svg>
+              AI合并标签
+            </div>
+            <div class="preview-gen-time">生成时间：2025-03-24 16:30</div>
+            <div class="preview-h1">大埔宏福苑突发五级大火：多座大厦陷入火海，维修棚架疑为火势蔓延主因</div>
+            <div class="preview-summary">
+              <div class="preview-summary-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.4 8.4H21.2L15.7 12.6L17.9 19L12 15L6.1 19L8.3 12.6L2.8 8.4H9.6L12 2Z" fill="#2f6bff"/></svg>
+                核心信息摘要（AI索引）
+              </div>
+              <div class="preview-summary-text">▪ 时间：2025年11月26日下午把时起
+▪ 地点：大埔宏福苑（正进行大型外墙翻新工程）
+▪ 事件：突发五级火警，火势迅速升至五级
+▪ 原因：现场大型维修工程使用的竹棚技术等易燃物料引发火势蔓延。
+▪ 现状：消防处已出动多队烟斗队，动用多条消防及云梯车从外围高空射水灌救，并派员进入大厦格救困居民。</div>
+            </div>
+            <hr class="preview-sep">
+            <div class="preview-content">
+              <p>【本报讯】2025年11月26日下午15时，大埔宏福苑发生严重火警。消防处接报后迅速赶往现场救援。由于火势猛烈迅速蔓延，消防处于15时34分将火警升至三级，随后升至五级火警，情况紧急。</p>
+              <p>据本报记者现场观察，起火大厦火光冲天，浓烟弥漫。宏福苑自2024年起正展开大型外墙翻新工程，大厦外围有大量竹棚架及防护网。火势疑受强风及现场发泡胶流管等易燃建筑物料影响，迅速沿外墙棚架向上及向四周蔓延，波及相邻的多座大厦，导致救援难度大幅增加。</p>
+              <p>消防处目前已出动多队烟斗队，动用多条消防及云梯车从外围高空射水灌救，并派员进入大厦格救困居民。警方已筑锁宏福苑附近一带道路，呼吁市民免赴该区。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+function selectCat(el) {
+  el.closest('.col-body').querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+}
+function updateSel() {
+  const checked = document.querySelectorAll('.draft-check:checked').length;
+  document.querySelector('.draft-selected-info').textContent = '已选 '+checked;
+  document.querySelectorAll('.draft-item').forEach(item=>{
+    item.classList.toggle('checked', item.querySelector('.draft-check').checked);
+  });
+}
+function doMerge() {
+  const empty = document.getElementById('previewEmpty');
+  const loading = document.getElementById('previewLoading');
+  const result = document.getElementById('previewResult');
+  empty.style.display = 'none';
+  loading.classList.add('show');
+  result.classList.remove('show');
+  setTimeout(() => {
+    loading.classList.remove('show');
+    result.classList.add('show');
+  }, 2000);
+}
+</script>
+</body>
+</html>

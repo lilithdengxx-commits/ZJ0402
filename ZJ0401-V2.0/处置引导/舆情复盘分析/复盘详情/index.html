@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>复盘详情 - 大埔宏福苑大火舆情复盘报告</title>
+<style>
+:root{--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh}
+a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select,textarea{font:inherit}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:24px;min-height:100vh}
+.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
+.brand-mark{width:36px;height:36px;flex:0 0 36px}
+.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
+.nav-group{margin-bottom:14px}
+.nav-group-title{display:flex;align-items:center;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#8793a6;font-size:11px;font-weight:800}
+.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
+.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
+.nav-items{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s}
+.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f}
+.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
+.main-area{min-width:0;padding:20px 20px 40px 0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md)}
+.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:#68778f}
+.breadcrumb a{color:var(--primary);font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb-sep{color:#9aa8bc}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;cursor:pointer;transition:transform 0.2s}
+.icon-button:hover{transform:translateY(-2px);color:#3a73dd}
+.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
+.avatar strong{color:#fff;font-size:14px}
+.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
+.page{padding:20px 0;display:flex;flex-direction:column;gap:20px}
+
+/* 报告头部 */
+.report-header{background:var(--accent-gradient);border-radius:20px;padding:28px 32px;color:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.report-header-left{flex:1}
+.report-title{font-size:22px;font-weight:900;margin:0 0 14px;line-height:1.3}
+.report-meta{display:flex;flex-wrap:wrap;gap:20px}
+.report-meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.85)}
+.report-meta-item strong{color:#fff;font-weight:700}
+.report-header-actions{display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.btn-rpt{padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.btn-rpt-gen{background:#fff;color:var(--primary);border:none}
+.btn-rpt-save{background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35)}
+
+/* 统计卡片 */
+.stats-section-label{font-size:13px;font-weight:800;color:#1a2234;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.stats-section-label::before{content:'';width:4px;height:14px;border-radius:2px;background:var(--primary);display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat-card{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:18px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.stat-val{font-size:26px;font-weight:800;color:var(--primary);line-height:1.1}
+.stat-label{font-size:12px;color:#68778f;font-weight:600}
+
+/* 效果评估 */
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.effect-card{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:18px 20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.effect-val{font-size:24px;font-weight:800;line-height:1.1;margin-bottom:4px}
+.effect-label{font-size:12px;color:#68778f;font-weight:600;margin-bottom:8px}
+.effect-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700}
+.badge-good{background:rgba(25,165,129,0.12);color:var(--success)}
+.badge-ok{background:rgba(47,107,255,0.1);color:var(--primary)}
+.badge-warn{background:rgba(186,134,44,0.12);color:var(--warning)}
+.eff-blue{color:var(--primary)}
+.eff-green{color:var(--success)}
+.eff-orange{color:#e07b18}
+
+/* 时间轴 */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:18px;align-items:flex-start;padding-bottom:20px;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-left{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;width:14px}
+.tl-dot{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;background:#fff;flex-shrink:0;position:relative;z-index:1}
+.tl-line{width:2px;flex:1;background:rgba(122,145,184,0.2);min-height:20px}
+.tl-item:last-child .tl-line{display:none}
+.dot-positive{color:var(--success)}
+.dot-key{color:var(--primary)}
+.dot-check{color:var(--warning)}
+.dot-risk{color:var(--danger)}
+.tl-right{flex:1}
+.tl-time{font-size:11px;font-weight:700;color:#9aa8bc;margin-bottom:4px}
+.tl-title{font-size:13px;font-weight:800;color:#1a2234;margin-bottom:4px}
+.tl-desc{font-size:12px;color:#68778f;line-height:1.6}
+.tl-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;margin-top:6px}
+.tag-positive{background:rgba(25,165,129,0.1);color:var(--success)}
+.tag-key{background:rgba(47,107,255,0.1);color:var(--primary)}
+.tag-check{background:rgba(186,134,44,0.1);color:var(--warning)}
+.tag-risk{background:rgba(206,93,87,0.1);color:var(--danger)}
+
+/* 图表 + 策略 */
+.chart-strategy-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* SVG简单折线图 */
+.chart-wrap{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.chart-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-legend{display:flex;align-items:center;gap:14px;font-size:11px;font-weight:600}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+
+/* 策略卡片 */
+.strategy-wrap{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.strategy-item{border:1px solid rgba(122,145,184,0.12);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.strategy-item:last-child{margin-bottom:0}
+.strategy-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.strategy-num{width:22px;height:22px;border-radius:6px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.strategy-name{font-size:13px;font-weight:800;color:#1a2234;flex:1}
+.strategy-time{font-size:11px;color:#9aa8bc}
+.strategy-desc{font-size:12px;color:#68778f;line-height:1.6}
+.strategy-metrics{display:flex;gap:12px;margin-top:8px}
+.strategy-metric{font-size:11px;font-weight:700;color:#68778f}
+.strategy-metric strong{color:var(--primary)}
+
+/* 深度评估 */
+.eval-section{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.eval-item{border-bottom:1px solid rgba(122,145,184,0.08);padding:14px 0}
+.eval-item:last-child{border-bottom:none;padding-bottom:0}
+.eval-item:first-child{padding-top:0}
+.eval-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.eval-item-title{font-size:13px;font-weight:800;color:#1a2234;display:flex;align-items:center;gap:8px}
+.eval-item-score{font-size:18px;font-weight:800;color:var(--primary)}
+.eval-item-desc{font-size:12px;color:#68778f;line-height:1.6}
+.eval-progress{height:6px;background:rgba(122,145,184,0.12);border-radius:999px;margin-top:8px;overflow:hidden}
+.eval-progress-bar{height:100%;border-radius:999px;background:var(--accent-gradient)}
+
+.section-card{background:#fff;border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);padding:24px 28px}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
+        <path d="M5 8H25L15 25H5V8Z" fill="url(#det1)"/><path d="M23 8H43L31 31H17L23 8Z" fill="url(#det2)"/><path d="M14 28H29L22 40H14V28Z" fill="url(#det3)"/>
+        <defs><linearGradient id="det1" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="det2" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="det3" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
+      </svg>
+      <div class="brand-title"><strong>网络舆情系统</strong></div>
+    </div>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../../监测预警/AI智能推荐/index.html"><span>AI智能推荐</span></a>
+        <a class="nav-item" href="../../../监测预警/热点榜单/index.html"><span>热点榜单</span></a>
+        <a class="nav-item" href="../../../监测预警/关键对象监测/index.html"><span>关键对象监测</span></a>
+        <div class="nav-item"><span>信息监测</span></div>
+        <div class="nav-item"><span>预警查询</span></div>
+        <a class="nav-item" href="../../../监测预警/智能检索/index.html"><span>智能检索</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+        <div class="nav-item"><span>智能体编报</span></div>
+      </div>
+    </section>
+    <section class="nav-group active">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../传播引导策略/index.html"><span>传播引导策略</span></a>
+        <a class="nav-item" href="../../选题线索池/index.html"><span>选题线索池</span></a>
+        <div class="nav-item"><span>选题看板</span></div>
+        <a class="nav-item" href="../../多稿合并工具/index.html"><span>多稿合并工具</span></a>
+        <a class="nav-item active" href="../index.html"><span>舆情复盘分析</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span></a>
+        <div class="nav-item"><span>宣传引导策略库</span></div>
+        <div class="nav-item"><span>决策报告知识库</span></div>
+        <div class="nav-item"><span>重点关注对象库</span></div>
+        <div class="nav-item"><span>行业术语与本体知识库</span></div>
+      </div>
+    </section>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="breadcrumb">
+          <a href="../index.html">舆情复盘分析</a>
+          <span class="breadcrumb-sep">/</span>
+          <span>复盘详情</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+      </div>
+    </header>
+
+    <section class="page">
+      <!-- 报告头部 -->
+      <div class="report-header">
+        <div class="report-header-left">
+          <div class="report-title">大埔宏福苑大火舆情复盘报告</div>
+          <div class="report-meta">
+            <div class="report-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10H21M8 2V6M16 2V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>时间段：<strong>2025-11-26 至 2025-12-31</strong></span></div>
+            <div class="report-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.6"/></svg><span>涉及地域：<strong>香港</strong></span></div>
+            <div class="report-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7V12L15 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>事件来源：<strong>事件分析</strong></span></div>
+          </div>
+        </div>
+        <div class="report-header-actions">
+          <button class="btn-rpt btn-rpt-gen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.4 8.4H21.2L15.7 12.6L17.9 19L12 15L6.1 19L8.3 12.6L2.8 8.4H9.6L12 2Z" fill="currentColor"/></svg>
+            生成报告
+          </button>
+          <button class="btn-rpt btn-rpt-save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H16L21 8V19C21 20.1 20.1 21 19 21Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 3V8H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 21V14H17V21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            保存到知识库
+          </button>
+        </div>
+      </div>
+
+      <!-- 数据概览 -->
+      <div>
+        <div class="stats-section-label">数据概览</div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-val">6,089</div><div class="stat-label">信息总量</div></div>
+          <div class="stat-card"><div class="stat-val">2,571</div><div class="stat-label">媒体总量</div></div>
+          <div class="stat-card"><div class="stat-val">382</div><div class="stat-label">峰值传播量 / 小时</div></div>
+          <div class="stat-card"><div class="stat-val">186</div><div class="stat-label">日均信息量</div></div>
+          <div class="stat-card"><div class="stat-val" style="font-size:22px">7,151,593</div><div class="stat-label">阅读总量</div></div>
+          <div class="stat-card"><div class="stat-val">7,600</div><div class="stat-label">点赞总量</div></div>
+          <div class="stat-card"><div class="stat-val">2,880</div><div class="stat-label">评论总量</div></div>
+          <div class="stat-card"><div class="stat-val">1,466</div><div class="stat-label">分享总量</div></div>
+        </div>
+      </div>
+
+      <!-- 效果量化评估 -->
+      <div>
+        <div class="stats-section-label">效果量化评估</div>
+        <div class="effect-grid">
+          <div class="effect-card">
+            <div class="effect-val eff-blue">2.5h</div>
+            <div class="effect-label">响应时间</div>
+            <span class="effect-badge badge-good">✓ 优于基准</span>
+          </div>
+          <div class="effect-card">
+            <div class="effect-val eff-green">78%</div>
+            <div class="effect-label">引导覆盖率</div>
+            <span class="effect-badge badge-ok">▲ 达标</span>
+          </div>
+          <div class="effect-card">
+            <div class="effect-val eff-orange">+23%</div>
+            <div class="effect-label">传播扩散率</div>
+            <span class="effect-badge badge-good">效果好</span>
+          </div>
+          <div class="effect-card">
+            <div class="effect-val eff-green">8h</div>
+            <div class="effect-label">风险化解时长</div>
+            <span class="effect-badge badge-good">✓ 成功处置</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 事件脉络时间轴 -->
+      <div class="section-card">
+        <div class="stats-section-label" style="margin-bottom:18px">事件脉络时间轴</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot dot-positive"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-right">
+              <div class="tl-time">2025-11-26 14:52</div>
+              <div class="tl-title">火灾初报，消防到场</div>
+              <div class="tl-desc">宏福苑大厦外墙施工现场突发火警，首批消防员14:52抵达，初步控制火势蔓延并疏散低楼层居民。</div>
+              <span class="tl-tag tag-positive">正面</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot dot-key"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-right">
+              <div class="tl-time">2025-11-26 15:58</div>
+              <div class="tl-title">舆论爆发，五级火警确认</div>
+              <div class="tl-desc">消防处升级至五级火警，多个社交媒体平台大量视频和图片突发扩散，网络声量急剧攀升至当日峰值。</div>
+              <span class="tl-tag tag-key">关键节点</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot dot-check"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-right">
+              <div class="tl-time">2025-11-26 17:37</div>
+              <div class="tl-title">政府官方声明发布</div>
+              <div class="tl-desc">特区政府透过新闻处即时发出声明，消防处处长出镜说明救援进展，部分谣言和误导信息得到澄清。</div>
+              <span class="tl-tag tag-check">待核实</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-dot dot-risk"></div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-right">
+              <div class="tl-time">2025-11-26 21:20</div>
+              <div class="tl-title">网络质疑工程安全监管问题</div>
+              <div class="tl-desc">晚间舆论转向追责，多个论坛和媒体评论集中质疑大型外墙维修工程的消防安全审查机制，形成次生舆情风险。</div>
+              <span class="tl-tag tag-risk">风险</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 引导策略与舆情对冲分析 -->
+      <div>
+        <div class="stats-section-label">引导策略与舆情对冲分析</div>
+        <div class="chart-strategy-row">
+          <!-- 简单SVG折线图 -->
+          <div class="chart-wrap">
+            <div class="chart-title-row">
+              <span style="font-size:13px;font-weight:800;color:#1a2234">声量走势（11.26 – 12.02）</span>
+              <div class="chart-legend">
+                <span><span class="legend-dot" style="background:#2f6bff"></span>舆情声量</span>
+                <span><span class="legend-dot" style="background:#19a581"></span>引导触达</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 360 140" width="100%" style="display:block;overflow:visible">
+              <defs>
+                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2f6bff" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#2f6bff" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- 轴线 -->
+              <line x1="40" y1="10" x2="40" y2="118" stroke="#e8edf5" stroke-width="1"/>
+              <line x1="40" y1="118" x2="355" y2="118" stroke="#e8edf5" stroke-width="1"/>
+              <!-- 水平参考线 -->
+              <line x1="40" y1="40" x2="355" y2="40" stroke="#f0f3f8" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="40" y1="70" x2="355" y2="70" stroke="#f0f3f8" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="40" y1="100" x2="355" y2="100" stroke="#f0f3f8" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- 声量数据 (7 points: 11.26~12.02) -->
+              <polygon points="40,40 85,20 130,50 175,80 220,85 265,90 310,92 355,95 355,118 40,118" fill="url(#areaGrad)"/>
+              <polyline points="40,40 85,20 130,50 175,80 220,85 265,90 310,92 355,95" fill="none" stroke="#2f6bff" stroke-width="2.5" stroke-linejoin="round"/>
+              <!-- 引导触达 -->
+              <polyline points="40,110 85,100 130,80 175,65 220,60 265,58 310,55 355,52" fill="none" stroke="#19a581" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5,3"/>
+              <!-- X轴标签 -->
+              <text x="40" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.26</text>
+              <text x="85" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.27</text>
+              <text x="130" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.28</text>
+              <text x="175" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.29</text>
+              <text x="220" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.30</text>
+              <text x="265" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">12.01</text>
+              <text x="310" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">12.02</text>
+            </svg>
+          </div>
+
+          <!-- 引导策略卡片 -->
+          <div class="strategy-wrap">
+            <div style="font-size:13px;font-weight:800;color:#1a2234;margin-bottom:14px">引导策略执行情况</div>
+            <div class="strategy-item">
+              <div class="strategy-header">
+                <div class="strategy-num">1</div>
+                <div class="strategy-name">官方信息实时发布策略</div>
+                <div class="strategy-time">11.26 15:30</div>
+              </div>
+              <div class="strategy-desc">通过政府新闻处、各大媒体及社交平台同步发布权威消息，配合消防处处长出镜说明，压制谣言传播链条，引导舆论向事实层面回归。</div>
+              <div class="strategy-metrics">
+                <span class="strategy-metric">触达量 <strong>124万</strong></span>
+                <span class="strategy-metric">正面反馈 <strong>62%</strong></span>
+              </div>
+            </div>
+            <div class="strategy-item">
+              <div class="strategy-header">
+                <div class="strategy-num">2</div>
+                <div class="strategy-name">安全监管议题对冲策略</div>
+                <div class="strategy-time">11.27 09:00</div>
+              </div>
+              <div class="strategy-desc">针对次日爆发的施工安全追责舆情，联合房屋局和发展局联合发声明，公布整改措施并建立投诉受理机制，转移舆论焦点至解决方案。</div>
+              <div class="strategy-metrics">
+                <span class="strategy-metric">触达量 <strong>87万</strong></span>
+                <span class="strategy-metric">情绪改善 <strong>+18%</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 处置措施深度评估 -->
+      <div class="section-card">
+        <div class="stats-section-label" style="margin-bottom:18px">处置措施深度评估</div>
+        <div class="eval-section" style="box-shadow:none;border:none;padding:0">
+          <div class="eval-item">
+            <div class="eval-item-header">
+              <div class="eval-item-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2f6bff" stroke-width="1.6"/><path d="M12 7V12L15 14" stroke="#2f6bff" stroke-width="1.6" stroke-linecap="round"/></svg>
+                响应时效评估
+              </div>
+              <div class="eval-item-score">92分</div>
+            </div>
+            <div class="eval-item-desc">火警发生后2.5小时内发出官方声明，优于香港突发事件平均响应时间（4.2小时），有效遏制第一波谣言扩散，响应时效评级为优。</div>
+            <div class="eval-progress"><div class="eval-progress-bar" style="width:92%"></div></div>
+          </div>
+          <div class="eval-item">
+            <div class="eval-item-header">
+              <div class="eval-item-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12C4 12 6 4 12 4C18 4 20 12 20 12C20 12 18 20 12 20C6 20 4 12 4 12Z" stroke="#19a581" stroke-width="1.6"/><circle cx="12" cy="12" r="3" stroke="#19a581" stroke-width="1.6"/></svg>
+                引导覆盖率评估
+              </div>
+              <div class="eval-item-score" style="color:var(--success)">78%</div>
+            </div>
+            <div class="eval-item-desc">引导内容触达目标受众约78%，在主要传播渠道（YouTube、Facebook、论坛）均有渗透，但TikTok平台覆盖仍显不足，建议加强该平台布局。</div>
+            <div class="eval-progress"><div class="eval-progress-bar" style="width:78%;background:linear-gradient(to right,#19a581,#5ecba1)"></div></div>
+          </div>
+          <div class="eval-item">
+            <div class="eval-item-header">
+              <div class="eval-item-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 17L9 11L13 15L21 7" stroke="#ba862c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                情感转化评估
+              </div>
+              <div class="eval-item-score" style="color:var(--warning)">+23%</div>
+            </div>
+            <div class="eval-item-desc">危机发生后72小时内，负面情感占比由峰值58%降至35%，整体情感转化效果良好。但部分老旧社区论坛负面情绪仍较高，需持续跟踪。</div>
+            <div class="eval-progress"><div class="eval-progress-bar" style="width:65%;background:linear-gradient(to right,#ba862c,#e8a83a)"></div></div>
+          </div>
+          <div class="eval-item">
+            <div class="eval-item-header">
+              <div class="eval-item-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12" stroke="#19a581" stroke-width="1.6"/><path d="M15 9L9.5 14.5L7 12" stroke="#19a581" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                风险化解率评估
+              </div>
+              <div class="eval-item-score" style="color:var(--success)">95%</div>
+            </div>
+            <div class="eval-item-desc">核心舆情风险点（施工安全监管争议、政府责任追究、居民安置投诉）经过8小时综合引导处置，整体风险化解率达95%，属高效处置案例。</div>
+            <div class="eval-progress"><div class="eval-progress-bar" style="width:95%;background:linear-gradient(to right,#19a581,#5ecba1)"></div></div>
+          </div>
+          <div class="eval-item">
+            <div class="eval-item-header">
+              <div class="eval-item-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ce5d57" stroke-width="1.6"/><path d="M12 8V12M12 16H12.01" stroke="#ce5d57" stroke-width="1.6" stroke-linecap="round"/></svg>
+                跨境传播管控评估
+              </div>
+              <div class="eval-item-score" style="color:var(--danger)">61%</div>
+            </div>
+            <div class="eval-item-desc">境外媒体（BBC、CNN等）对本次事件的报道存在选择性取材问题，跨境传播管控有效率约61%，低于预期目标（75%），是本次复盘的主要改进方向之一。</div>
+            <div class="eval-progress"><div class="eval-progress-bar" style="width:61%;background:linear-gradient(to right,#ce5d57,#e07b7b)"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

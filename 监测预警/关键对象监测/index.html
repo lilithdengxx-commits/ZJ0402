@@ -57,15 +57,15 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .main-tab.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--primary);border-radius:2px 2px 0 0}
 /* 主体 layout */
 .body-wrap{display:grid;grid-template-columns:220px 1fr;gap:0;background:#fff;border-radius:0 0 10px 10px;border:1px solid rgba(122,145,184,0.1);border-top:none;box-shadow:0 1px 4px rgba(26,44,82,0.06);min-height:calc(100vh - 200px)}
-.left-panel{border-right:1px solid rgba(122,145,184,0.1);padding:16px 12px;background:linear-gradient(180deg,#f8fbff,#fff)}
+.left-panel{border-right:1px solid rgba(122,145,184,0.1);padding:16px 12px;background:#fff}
 .lp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 4px}
 .lp-title{font-size:13px;font-weight:800;color:#2a3448}
 .lp-actions{display:flex;gap:6px}
 .lp-btn{width:28px;height:28px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#68778f;display:grid;place-items:center;cursor:pointer;font-size:13px}
-.scheme-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:all 0.2s;margin-bottom:4px}
+.scheme-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:all 0.2s;margin-bottom:1px}
 .scheme-item:hover{background:rgba(47,107,255,0.05);border-color:rgba(47,107,255,0.1)}
 .scheme-item.active{background:rgba(47,107,255,0.08);border-color:rgba(47,107,255,0.15)}
-.si-name{font-size:12px;font-weight:700;color:#2a3448}
+.si-name{font-size:12px;font-weight:400;color:#2a3448}
 .scheme-item.active .si-name{color:var(--primary)}
 .si-del{width:20px;height:20px;border-radius:4px;border:none;background:transparent;color:#c8d0dc;cursor:pointer;font-size:12px;display:none}
 .scheme-item:hover .si-del{display:grid;place-items:center}
@@ -74,16 +74,16 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 /* Tab panels */
 .tab-panel{display:none}.tab-panel.active{display:flex;flex-direction:column;gap:0}
 /* 筛选区 */
-.filter-zone{background:#f8fbff;border-radius:12px;border:1px solid rgba(122,145,184,0.1);padding:12px 16px;margin-bottom:14px}
+.filter-zone{background:transparent;border:none;padding:0;margin-bottom:14px}
 .fz-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .fz-row:last-child{margin-bottom:0}
 .fz-label{font-size:12px;font-weight:700;color:#8793a6;min-width:52px;flex:0 0 52px}
 .time-chips{display:flex;gap:6px;flex-wrap:wrap}
-.tc{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#68778f;transition:all 0.2s}
+.tc{padding:4px 12px;border-radius:6px;font-size:12px;font-weight:400;cursor:pointer;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#68778f;transition:all 0.2s}
 .tc.active{background:rgba(47,107,255,0.1);color:var(--primary);border-color:rgba(47,107,255,0.2)}
 .tc:hover:not(.active){color:#375a8f;border-color:rgba(47,107,255,0.2)}
 .channel-chips{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.cc{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(122,145,184,0.12);background:#fff;color:#68778f;transition:all 0.2s}
+.cc{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:400;cursor:pointer;border:1px solid rgba(122,145,184,0.12);background:#fff;color:#68778f;transition:all 0.2s}
 .cc.active{background:rgba(47,107,255,0.08);color:var(--primary);border-color:rgba(47,107,255,0.2)}
 .cc:hover:not(.active){color:#375a8f}
 .more-link{font-size:11px;color:var(--primary);font-weight:600;cursor:pointer;white-space:nowrap}
@@ -110,7 +110,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .fi-check{width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(122,145,184,0.3);cursor:pointer;flex:0 0 16px;margin-top:2px;accent-color:var(--primary)}
 .fi-thumb{width:80px;height:56px;border-radius:8px;object-fit:cover;flex:0 0 80px;background:linear-gradient(135deg,#dce8ff,#eaf2ff)}
 .fi-body{flex:1;min-width:0}
-.fi-title{font-size:13px;font-weight:700;color:#1a2234;margin-bottom:6px;cursor:pointer;line-height:1.4}
+.fi-title{font-size:15px;font-weight:700;color:#1a2234;margin-bottom:6px;cursor:pointer;line-height:1.4}
 .fi-title:hover{color:var(--primary)}
 .fi-abstract{font-size:12px;color:#68778f;line-height:1.5;margin-bottom:8px}
 .fi-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:#9aa8bc}
@@ -126,7 +126,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 /* AI监测报告 tab */
 .report-layout{display:grid;grid-template-columns:240px 1fr;gap:0;height:100%}
 .report-left{border-right:1px solid rgba(122,145,184,0.1);padding:16px 12px}
-.report-right{padding:20px 24px;overflow-y:auto}
+.report-right{padding:16px 20px;overflow-y:auto}
 .rl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .rl-title{font-size:13px;font-weight:800;color:#2a3448}
 .scheme-sel{padding:5px 28px 5px 10px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#4f5f7c;font-size:12px;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%239aa8bc' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;outline:none}
@@ -171,6 +171,12 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .pc-section-title::before{content:'■';font-size:8px;color:var(--primary)}
 .pc-text{font-size:12px;color:#3a4560;line-height:1.6;padding-left:14px;margin-bottom:12px}
 .pc-text:last-child{margin-bottom:0}
+.fi-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.fi-title-row .fi-title{margin-bottom:0;flex:1 1 0;min-width:0}
+.fi-act-row{display:flex;align-items:center;gap:4px;flex:0 0 auto;flex-wrap:nowrap}
+.fi-act-row .fi-act-btn{padding:3px 8px;font-size:10px;white-space:nowrap}
+.sort-order-btn{width:24px;height:24px;border-radius:6px;border:1px solid rgba(122,145,184,0.2);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;color:#68778f;vertical-align:middle;margin-left:4px}
+.sort-order-btn:hover{background:rgba(47,107,255,0.06);color:var(--primary);border-color:rgba(47,107,255,0.2)}
 </style>
 </head>
 <body>
@@ -247,7 +253,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
           <div class="lp-header">
             <span class="lp-title">监测方案</span>
             <div class="lp-actions">
-              <button class="lp-btn" title="搜索">🔍</button>
+              <button class="lp-btn" title="搜索"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M19 19L15.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
               <button class="lp-btn" title="新建">＋</button>
             </div>
           </div>
@@ -284,16 +290,13 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   <span class="cc active">全部</span>
                   <span class="cc">网页(25)</span>
                   <span class="cc">电子报(0)</span>
-                  <span class="cc">APP(0)</span>
                   <span class="cc">微信(34)</span>
                   <span class="cc">微博(91)</span>
                   <span class="cc">短视频(0)</span>
-                  <span class="cc">视频网站(0)</span>
                   <span class="cc">论坛贴吧(3)</span>
                   <span class="cc">X(Twitter)(0)</span>
                   <span class="cc">Facebook(1)</span>
                   <span class="cc">其它(0)</span>
-                  <span class="more-link">更多 ∨</span>
                 </div>
               </div>
               <div class="fz-row">
@@ -307,7 +310,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   <span class="cc">澳门主流媒体</span>
                   <span class="cc">省级媒体</span>
                   <span class="cc">全球智库</span>
-                  <span class="more-link">更多 ∨</span>
                 </div>
               </div>
               <div class="fz-row">
@@ -318,7 +320,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   <select class="fz-select"><option>主题分类</option><span style="font-size:9px;background:#f5502a;color:#fff;border-radius:2px;padding:0 3px">NEW</span></select>
                   <select class="fz-select"><option>阅读状态</option></select>
                 </div>
-                <button class="fz-more-btn">更多筛选 ∨</button>
+                <button class="fz-more-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="margin-right:4px;vertical-align:-1px"><path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>更多筛选</button>
                 <div class="fz-actions-right">
                   <button class="btn-save">保存筛选</button>
                   <button class="btn-qry">查询</button>
@@ -330,7 +332,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               <span class="result-count">共 1,013 条</span>
               <div style="display:flex;align-items:center;gap:8px">
                 <span style="font-size:12px;color:#68778f;cursor:pointer">选择当前页</span>
-                <span style="font-size:12px;color:var(--primary);cursor:pointer">导出全部</span>
+                <span style="font-size:12px;color:#68778f;cursor:pointer">导出全部</span>
               </div>
               <div class="result-tools" style="margin-left:auto">
                 <span style="font-size:12px;color:#68778f">相似信息去重</span>
@@ -348,7 +350,17 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 <input type="checkbox" class="fi-check">
                 <div class="fi-thumb" style="background:linear-gradient(135deg,#c8dbff,#e0edff)"></div>
                 <div class="fi-body">
-                  <div class="fi-title">🔥 转：没有共产党才有新中国，打倒共产党，习近平下台 ‼</div>
+                  <div class="fi-title-row">
+                    <div class="fi-title">🔥 转：没有共产党才有新中国，打倒共产党，习近平下台 ‼</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
                   <div class="fi-abstract">转：没有共产党才有新中国，打倒共产党，习近平下台 ‼</div>
                   <div class="fi-meta">
                     <span>📅 2026-03-04 18:46:38</span>
@@ -361,21 +373,23 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   </div>
                 </div>
               </div>
-              <div class="fi-actions">
-                <button class="fi-act-btn">查看原文</button>
-                <button class="fi-act-btn">复制</button>
-                <button class="fi-act-btn warn">预警</button>
-                <button class="fi-act-btn">收藏</button>
-                <button class="fi-act-btn">加入线索池</button>
-                <button class="fi-act-btn">加入素材</button>
-              </div>
             </div>
             <div class="feed-item">
               <div class="fi-head">
                 <input type="checkbox" class="fi-check">
                 <div class="fi-body">
-                  <div class="fi-title">转发微博</div>
-                  <div class="fi-abstract">#法眼看两会##代表委员看法院#【全国人大代表黄勇、李世亮、丁海梅谈"AI换脸"——法治为对清洁AI红线 共治守好"脸面安全"】在中国人的传统观念里，"脸面"二字，既是尊严、也是信用。随着人工智能技术的迈步发展，非法合成的风险日益凸显。从肖像侵权到电信诈骗，近年来，涉"AI换脸"等新型侵权案件不断涌现。当眼见不一定为实，面孔真假难辨维艰，如何守护数字时代的"脸面安全"，成为社会治理的…</div>
+                  <div class="fi-title-row">
+                    <div class="fi-title">转发微博</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
+                  <div class="fi-abstract">#法眼看两会##代表委员看法院#【全国人大代表黄勇、李世亮、丁海梅谈"AI换脸"——法治为对清洁AI红线 共治守好"脸面安全"】在中国人的传统观念里，"脸面"二字，既是尊严、也是信用。随着人工智能技术的迈步发展，非法合成的风险日益凸显。从肖像侵权到电信诈骗，近年来，涉"…</div>
                   <div class="fi-meta">
                     <span class="senti-tag neutral">中立</span>
                     <span>📅 2026-03-04 15:00:57</span>
@@ -386,20 +400,22 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   </div>
                 </div>
               </div>
-              <div class="fi-actions">
-                <button class="fi-act-btn">查看原文</button>
-                <button class="fi-act-btn">复制</button>
-                <button class="fi-act-btn warn">预警</button>
-                <button class="fi-act-btn">收藏</button>
-                <button class="fi-act-btn">加入线索池</button>
-                <button class="fi-act-btn">加入素材</button>
-              </div>
             </div>
             <div class="feed-item">
               <div class="fi-head">
                 <input type="checkbox" class="fi-check">
                 <div class="fi-body">
-                  <div class="fi-title">【全国人大代表姚劲波：#建议新购房贷利息纳入税扣除#】#财眼观两会# 今年全国两会上，全国人大代表、58同城董事长CEO姚劲波关注住房市场领域。姚劲波建议，为激活改善性住房需求，提议建立税收优惠制度…</div>
+                  <div class="fi-title-row">
+                    <div class="fi-title">【全国人大代表姚劲波：#建议新购房贷利息纳入税扛除#】#财眼观两会#</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
                   <div class="fi-meta">
                     <span class="senti-tag neutral">中立</span>
                     <span>📅 2026-03-04 15:00:56</span>
@@ -410,20 +426,22 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   </div>
                 </div>
               </div>
-              <div class="fi-actions">
-                <button class="fi-act-btn">查看原文</button>
-                <button class="fi-act-btn">复制</button>
-                <button class="fi-act-btn warn">预警</button>
-                <button class="fi-act-btn">收藏</button>
-                <button class="fi-act-btn">加入线索池</button>
-                <button class="fi-act-btn">加入素材</button>
-              </div>
             </div>
             <div class="feed-item">
               <div class="fi-head">
                 <input type="checkbox" class="fi-check">
                 <div class="fi-body">
-                  <div class="fi-title">//@是X-Tenten #2026逐梦中国# 和@张艺兴 一超为梦想奋斗！//@张艺兴 鼓马...</div>
+                  <div class="fi-title-row">
+                    <div class="fi-title">//@是X-Tenten #2026逐梦中国# 和@张艺兴 一超为梦想奋斗！//@张艺兴 鼓马...</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
                   <div class="fi-abstract">【#2026逐梦中国#】岁序更替、华章日新，逐梦扬正当时。文旅市场热气腾腾，冰雪健儿神采飞扬，科技创新再攀新高……从人间烟火大国重器，从赛场拼搏到科技探索，每一次向前，都凝聚着你我追梦的力量。全国两会召开在即，这个春天，14亿多人民的心声，汇聚于此。一起转发。</div>
                   <div class="fi-meta">
                     <span class="senti-tag neutral">中立</span>
@@ -435,13 +453,114 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                   </div>
                 </div>
               </div>
-              <div class="fi-actions">
-                <button class="fi-act-btn">查看原文</button>
-                <button class="fi-act-btn">复制</button>
-                <button class="fi-act-btn warn">预警</button>
-                <button class="fi-act-btn">收藏</button>
-                <button class="fi-act-btn">加入线索池</button>
-                <button class="fi-act-btn">加入素材</button>
+            </div>
+            <div class="feed-item">
+              <div class="fi-head">
+                <input type="checkbox" class="fi-check">
+                <div class="fi-body">
+                  <div class="fi-title-row">
+                    <div class="fi-title">【两会聚焦】全国政协委员李稻葵：建议扩大内需、提振消费信心，推动居民收入增长与GDP同步</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
+                  <div class="fi-abstract">全国政协委员、清华大学中国经济思想与实践研究院院长李稻葵在今年两会期间表示，当前经济复苏的关键在于扩大内需，尤其要提振居民消费信心。他建议通过税收优惠、社会保障完善等手段，推动居民可支配收入增长与GDP增速基本同步，从根本上改善消费预期。</div>
+                  <div class="fi-meta">
+                    <span class="senti-tag pos">正面</span>
+                    <span>📅 2026-03-04 10:22:31</span>
+                    <span>监测时间: 2026-03-04 10:23:05</span>
+                    <span class="plat-badge">微信</span>
+                    <span>经济观察报（粉丝数: 2341000）</span>
+                    <span style="padding:2px 6px;border-radius:4px;background:rgba(206,93,87,0.08);color:var(--danger);font-size:10px;font-weight:700">原帖</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-head">
+                <input type="checkbox" class="fi-check">
+                <div class="fi-body">
+                  <div class="fi-title-row">
+                    <div class="fi-title">多名网友质疑某知名主播"带货数据造假"，相关话题冲上热搜前三</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
+                  <div class="fi-abstract">微博话题"#直播带货数据注水#"阅读量在6小时内突破3.2亿，多名认证用户发布截图称某头部主播直播间实际成交额与官方公布数据存在数量级差异。目前涉事平台已介入核查，相关视频已被标注"内容存疑"提示。</div>
+                  <div class="fi-meta">
+                    <span class="senti-tag neg">负面</span>
+                    <span>📅 2026-03-04 09:41:17</span>
+                    <span>监测时间: 2026-03-04 09:42:00</span>
+                    <span class="plat-badge">微博</span>
+                    <span>科技狐 (粉丝数: 8920000)</span>
+                    <span style="padding:2px 6px;border-radius:4px;background:rgba(206,93,87,0.08);color:var(--danger);font-size:10px;font-weight:700">原帖</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-head">
+                <input type="checkbox" class="fi-check">
+                <div class="fi-body">
+                  <div class="fi-title-row">
+                    <div class="fi-title">转发：人民日报评论｜筑牢数字经济安全底线，个人信息保护不能成空话</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
+                  <div class="fi-abstract">【人民日报评论】数字经济蓬勃发展，个人信息安全问题日益凸显。评论指出，平台企业应切实履行数据安全主体责任，监管部门应加大对违规收集、滥用用户数据行为的惩处力度，推动《个人信息保护法》真正落地见效，让广大网民在数字空间安心、放心、舒心。</div>
+                  <div class="fi-meta">
+                    <span class="senti-tag neutral">中立</span>
+                    <span>📅 2026-03-04 08:15:44</span>
+                    <span>监测时间: 2026-03-04 08:16:22</span>
+                    <span class="plat-badge">网页</span>
+                    <span>人民日报</span>
+                    <span style="padding:2px 6px;border-radius:4px;background:rgba(25,165,129,0.1);color:var(--success);font-size:10px;font-weight:700">转发</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="fi-head">
+                <input type="checkbox" class="fi-check">
+                <div class="fi-thumb" style="background:linear-gradient(135deg,#d4f0e8,#e8f7f2)"></div>
+                <div class="fi-body">
+                  <div class="fi-title-row">
+                    <div class="fi-title">央视新闻｜我国新能源汽车出口量连续14个月全球第一，比亚迪、奇瑞领跑海外市场</div>
+                    <div class="fi-act-row">
+                      <button class="fi-act-btn">查看原文</button>
+                      <button class="fi-act-btn">复制</button>
+                      <button class="fi-act-btn warn">预警</button>
+                      <button class="fi-act-btn">收藏</button>
+                      <button class="fi-act-btn">加入线索池</button>
+                      <button class="fi-act-btn">加入素材</button>
+                    </div>
+                  </div>
+                  <div class="fi-abstract">据海关总署最新数据，2026年1-2月我国新能源汽车累计出口超过98万辆，同比增长37.4%，连续14个月保持全球出口量第一。比亚迪、奇瑞、上汽等车企持续扩大海外布局，已在欧洲、东南亚、中东等地区建立本地化制造基地或服务网络。</div>
+                  <div class="fi-meta">
+                    <span class="senti-tag pos">正面</span>
+                    <span>📅 2026-03-04 07:58:09</span>
+                    <span>监测时间: 2026-03-04 07:59:01</span>
+                    <span class="plat-badge">微博</span>
+                    <span>央视新闻 (粉丝数: 103000000)</span>
+                    <span style="padding:2px 6px;border-radius:4px;background:rgba(206,93,87,0.08);color:var(--danger);font-size:10px;font-weight:700">原帖</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -453,13 +572,12 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               <div class="report-left" style="border-right:1px solid rgba(122,145,184,0.1);padding:16px 14px">
                 <div class="rl-header">
                   <span class="rl-title">报告管理</span>
-                  <select class="scheme-sel"><option>全部监测方案</option><option>关键人</option><option>特首</option></select>
                 </div>
                 <div class="report-tabs">
                   <div class="report-tab active" onclick="switchReportTab(0,this)">日报</div>
                   <div class="report-tab" onclick="switchReportTab(1,this)">周报</div>
                 </div>
-                <div class="sort-row">按时间排序 <select><option>▾</option></select></div>
+                <div class="sort-row">按时间排序 <button class="sort-order-btn" data-order="desc" onclick="toggleSortOrder(this)" title="降序（最新优先）"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
                 <div id="dailyList">
                 <div class="report-item active" onclick="selectReport(this)">
                   <div class="ri-date">【2025-11-26】关键人舆情监测日报</div>
@@ -486,7 +604,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div><!-- end weeklyList -->
               </div>
               <!-- 右：报告详情 -->
-              <div class="report-right" style="padding:20px 24px;overflow-y:auto">
+              <div class="report-right" style="padding:16px 20px;overflow-y:auto">
                 <!-- 日报详情 -->
                 <div id="dailyDetail">
                 <div class="rr-topbar">
@@ -779,6 +897,12 @@ function toggleChip(el, mode) {
   } else {
     el.classList.toggle('active');
   }
+}
+function toggleSortOrder(btn) {
+  const isDesc = btn.dataset.order === 'desc';
+  btn.dataset.order = isDesc ? 'asc' : 'desc';
+  btn.title = isDesc ? '升序（最旧优先）' : '降序（最新优先）';
+  btn.querySelector('path').setAttribute('d', isDesc ? 'M12 19V5M12 5L6 11M12 5L18 11' : 'M12 5V19M12 19L6 13M12 19L18 13');
 }
 document.querySelectorAll('.nav-group-title').forEach(title => {
   title.addEventListener('click', () => {

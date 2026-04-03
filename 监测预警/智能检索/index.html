@@ -267,20 +267,25 @@
             padding: 0 16px 0 14px;
             position: sticky;
             top: 0;
-            z-index: 30;
+            z-index: 50;
+            gap: 10px;
         }
 
         .topbar-module-label {
             font-size: 13px;
             font-weight: 600;
-            color: var(--text);
+            color: var(--text-soft);
             white-space: nowrap;
+        }
+
+        .topbar-parent {
+            color: var(--text-faint);
+            font-weight: 500;
         }
 
         .topbar-sep {
             font-size: 12px;
             color: #c5cdd9;
-            margin: 0 4px;
         }
 
         .topbar-spacer { flex: 1; }
@@ -354,8 +359,8 @@
         .avatar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 4px 10px 4px 4px;
+            gap: 6px;
+            padding: 3px 10px 3px 3px;
             border-radius: 999px;
             background: rgba(43,97,240,0.07);
             border: 1px solid rgba(43,97,240,0.13);
@@ -364,8 +369,7 @@
 
         .avatar strong {
             color: var(--text);
-            font-size: 14px;
-            letter-spacing: 0.02em;
+            font-size: 12px;
         }
 
         .avatar-badge {
@@ -377,7 +381,7 @@
             background: var(--primary);
             color: #fff;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .search-layout {
@@ -1415,15 +1419,18 @@
     <div class="mobile-mask" id="mobileMask"></div>
     <div class="app-shell" id="appShell">
         <header class="global-topbar">
-            <span style="font-size:12px;color:#9aa8bc;font-weight:500">监测预警</span>
-            <span class="topbar-sep">›</span>
+            <span class="topbar-module-label topbar-parent" id="menuButton" role="button" tabindex="0" aria-label="切换导航" style="cursor:pointer;">监测预警</span>
+            <span class="topbar-sep">/</span>
             <span class="topbar-module-label">智能检索</span>
-            <span class="topbar-spacer"></span>
+            <div class="topbar-spacer"></div>
             <button class="icon-button" aria-label="收藏">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-button" aria-label="任务中心">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
             </button>
             <button class="icon-button" aria-label="通知">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </button>
             <div class="avatar">
                 <div class="avatar-badge">管</div>
@@ -2147,7 +2154,6 @@
                 { key: "website", label: "网站" },
                 { key: "epaper", label: "电子报刊" },
                 { key: "app", label: "APP" },
-                { key: "broadcast", label: "视频网站" },
                 { key: "short-video", label: "短视频" },
                 { key: "weibo", label: "微博" },
                 { key: "wechat", label: "微信" },
@@ -2155,7 +2161,6 @@
                 { key: "twitter", label: "Twitter" },
                 { key: "twitter", label: "Instagram" },
                 { key: "twitter", label: "YouTube" },
-                { key: "twitter", label: "TikTok" },
                 { key: "forum", label: "论坛" },
                 { key: "xiaohongshu", label: "小红书" }
             ],
@@ -2171,11 +2176,9 @@
                 { key: "local", label: "香港主流媒体" },
                 { key: "social", label: "台湾主流媒体" },
                 { key: "overseas", label: "澳门主流媒体" },
-                { key: "overseas", label: "澳门主流媒体" },
                 { key: "overseas", label: "境内主流媒体" },
                 { key: "overseas", label: "地方重点媒体" },
                 { key: "overseas", label: "社交媒体平台" },
-                { key: "overseas", label: "全球智库" },
                 { key: "focus", label: "更多" }
             ],
             dataType: [

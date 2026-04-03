@@ -1,50 +1,62 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>监测预警 - 关键对象监测</title>
 <style>
-:root{--bg:#f6f8fc;--card:rgba(255,255,255,0.84);--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+:root{--bg:#eef1f8;--card:rgba(255,255,255,0.84);--text:#1e2d45;--text-soft:#6b7c95;--text-faint:#9eb0c6;--primary:#2b61f0;--primary-deep:#1a4ed4;--secondary:#7ab0ff;--secondary-soft:rgba(43,97,240,0.1);--success:#12a87a;--danger:#e04040;--warning:#c47d10;--sidebar-bg:#ffffff;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 4px 12px rgba(26,44,82,0.06);--sidebar-width:220px;font-family:"PingFang SC","Lantinghei SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh;overflow-x:hidden}
+body{margin:0;color:var(--text);background:#eef1f8;min-height:100vh;overflow-x:hidden}
+body::before,body::after{display:none}
 a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select{font:inherit}
-.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:24px;min-height:100vh}
-.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
-.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
-.brand-mark{width:36px;height:36px;flex:0 0 36px}
-.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
-.nav-group{margin-bottom:14px}
-.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#8793a6;font-size:11px;font-weight:800}
-.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
-.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
-.nav-group.active .nav-group-title{color:#3569d8}
-.nav-items{display:flex;flex-direction:column;gap:6px}
-.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s,box-shadow 0.2s}
-.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f;box-shadow:0 8px 16px rgba(26,44,82,0.04)}
-.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;grid-template-rows:44px 1fr;column-gap:0;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;grid-row:1/-1;margin:0;padding:0;background:#fff;border-radius:0;overflow:visible;display:flex;flex-direction:column;z-index:10;box-shadow:2px 0 8px rgba(26,44,82,0.08)}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:999px}
+.sidebar-nav-area{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 10px 8px}.sidebar-nav-area::-webkit-scrollbar{width:3px}.sidebar-nav-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:999px}
+.brand{display:flex;align-items:center;gap:9px;padding:0 14px;height:44px;border-bottom:1px solid rgba(0,0,0,0.07);flex:0 0 44px}
+.brand-mark{width:26px;height:26px;flex:0 0 26px}
+.brand-title strong{font-size:14px;letter-spacing:0.02em;color:var(--text);font-weight:700;white-space:nowrap}
+.nav-group{margin-bottom:0}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 6px 5px;margin-bottom:2px;border-radius:6px;color:#8a9ab8;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;user-select:none;transition:color 0.15s}
+.nav-group-title .title-left{display:flex;align-items:center;gap:7px}
+.nav-group-title svg{width:12px;height:12px;color:#8a9ab8}
+.nav-group-title small{display:inline-flex;font-size:14px;color:rgba(0,0,0,0.35);font-weight:400;letter-spacing:0;transition:transform 0.2s}
+.nav-group.collapsed .nav-group-title small{transform:rotate(180deg)}
+.nav-group-title:hover{color:#4a5c7a}
+.nav-group.active .nav-group-title{color:#4a5c7a}
+.nav-items{display:flex;flex-direction:column;gap:1px;overflow:hidden;margin-bottom:2px}
+.nav-group.collapsed .nav-items{display:none}
+.nav-item{display:flex;align-items:center;justify-content:flex-start;gap:8px;min-height:34px;padding:5px 10px 5px 14px;border:none;border-radius:7px;background:transparent;color:#4a5c7a;font-size:14px;font-weight:400;transition:background 0.15s,color 0.15s}
+.nav-item:hover{background:rgba(43,97,240,0.06);color:var(--text)}
+.nav-item.active{position:relative;background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
+.nav-item.active::after{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:999px;background:var(--primary)}
 .nav-item small{display:none}
-.main-area{min-width:0;padding:20px 20px 20px 0;display:flex;flex-direction:column}
-.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md)}
-.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
-.topbar-title span{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:12px;border:1px solid rgba(47,107,255,0.1);background:linear-gradient(180deg,rgba(47,107,255,0.07),rgba(158,199,255,0.12));color:var(--primary);font-size:15px;font-weight:800}
+.main-area{min-width:0;padding:0;display:flex;flex-direction:column;background:#eef1f8;min-height:calc(100vh - 44px);grid-row:2}
+.global-topbar{grid-column:2;grid-row:1;position:sticky;top:0;z-index:50;height:44px;display:flex;align-items:center;padding:0 16px 0 14px;background:#fff;border-bottom:1px solid rgba(122,145,184,0.14);box-shadow:0 1px 4px rgba(26,44,82,0.06);gap:10px}
+.topbar-module-label{font-size:13px;color:var(--text-soft);font-weight:600;flex:0 0 auto}
+.topbar-module-label.topbar-parent{color:var(--text-faint);font-weight:500}
+.topbar-sep{color:#c5cdd9;font-size:12px}
+.topbar-spacer{flex:1 1 auto}
+.topbar{display:none}
+.topbar-left{display:flex;align-items:center;gap:10px;flex:1 1 auto}
+.topbar-title span{display:inline-flex;align-items:center;font-size:13px;font-weight:700;color:var(--text)}
 .topbar-right{display:flex;align-items:center;gap:8px}
-.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;box-shadow:0 10px 20px rgba(26,44,82,0.05);transition:transform 0.2s,box-shadow 0.2s,color 0.2s;cursor:pointer}
-.icon-button:hover{transform:translateY(-2px);color:#3a73dd}
-.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
-.avatar strong{color:#fff;font-size:14px}
-.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
-.page{padding:16px 0 40px}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:none;border-radius:7px;background:transparent;color:#7a8ea8;box-shadow:none;transition:background 0.15s,color 0.15s;cursor:pointer}
+.icon-button:hover{background:rgba(43,97,240,0.08);color:var(--primary)}
+.avatar{display:flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:999px;background:rgba(43,97,240,0.07);border:1px solid rgba(43,97,240,0.13);color:var(--text);box-shadow:none}
+.avatar strong{color:var(--text);font-size:12px;letter-spacing:0}
+.avatar-badge{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--primary);color:#fff;border:none;font-weight:700;font-size:11px}
+.page{width:100%;max-width:none;margin:0 auto;padding:14px 16px 32px}
 
 /* ===== 关键对象监测专用 ===== */
 /* 顶部 main tabs */
-.main-tabs{display:flex;gap:0;border-bottom:1px solid rgba(122,145,184,0.12);background:#fff;border-radius:20px 20px 0 0;padding:0 20px;overflow:hidden}
-.main-tab{padding:16px 22px;font-size:14px;font-weight:700;color:#68778f;border:none;background:transparent;position:relative;cursor:pointer;transition:color 0.2s}
+.main-tabs{display:flex;gap:0;border-bottom:1px solid rgba(122,145,184,0.12);background:#fff;border-radius:10px 10px 0 0;padding:0 20px;overflow:hidden}
+.main-tab{padding:13px 20px;font-size:14px;font-weight:700;color:var(--text-soft);border:none;background:transparent;position:relative;cursor:pointer;transition:color 0.15s}
 .main-tab.active{color:var(--primary)}
-.main-tab.active::after{content:'';position:absolute;bottom:0;left:14px;right:14px;height:2px;background:var(--primary);border-radius:2px 2px 0 0}
+.main-tab.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--primary);border-radius:2px 2px 0 0}
 /* 主体 layout */
-.body-wrap{display:grid;grid-template-columns:220px 1fr;gap:0;background:#fff;border-radius:0 0 20px 20px;border:1px solid rgba(122,145,184,0.1);border-top:none;box-shadow:0 12px 28px rgba(26,44,82,0.06);min-height:calc(100vh - 200px)}
+.body-wrap{display:grid;grid-template-columns:220px 1fr;gap:0;background:#fff;border-radius:0 0 10px 10px;border:1px solid rgba(122,145,184,0.1);border-top:none;box-shadow:0 1px 4px rgba(26,44,82,0.06);min-height:calc(100vh - 200px)}
 .left-panel{border-right:1px solid rgba(122,145,184,0.1);padding:16px 12px;background:linear-gradient(180deg,#f8fbff,#fff)}
 .lp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 4px}
 .lp-title{font-size:13px;font-weight:800;color:#2a3448}
@@ -91,8 +103,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .search-inline input{border:none;outline:none;font-size:12px;color:#2a3448;min-width:140px}
 .expand-btn{padding:5px 10px;border-radius:8px;border:1px solid rgba(122,145,184,0.15);background:#fff;cursor:pointer;color:#68778f;font-size:12px}
 /* 信息条目 */
-.feed-item{position:relative;border:1px solid rgba(122,145,184,0.1);border-radius:14px;background:#fff;margin-bottom:10px;overflow:hidden;transition:box-shadow 0.2s,border-color 0.2s}
-.feed-item:hover{box-shadow:0 6px 18px rgba(26,44,82,0.07);border-color:rgba(47,107,255,0.12)}
+.feed-item{position:relative;border:1px solid rgba(122,145,184,0.1);border-radius:8px;background:#fff;margin-bottom:10px;overflow:hidden;transition:box-shadow 0.15s,border-color 0.15s}
+.feed-item:hover{box-shadow:0 4px 12px rgba(26,44,82,0.06);border-color:rgba(43,97,240,0.12)}
 .feed-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#75aaff,#2f6bff)}
 .fi-head{padding:12px 14px 8px 18px;display:flex;align-items:flex-start;gap:10px}
 .fi-check{width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(122,145,184,0.3);cursor:pointer;flex:0 0 16px;margin-top:2px;accent-color:var(--primary)}
@@ -162,7 +174,17 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 </style>
 </head>
 <body>
-<div class="app-shell">
+<div class="app-shell" id="appShell">
+  <header class="global-topbar">
+    <span class="topbar-module-label topbar-parent">监测预警</span>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-module-label">关键对象监测</span>
+    <div class="topbar-spacer"></div>
+    <button class="icon-button" aria-label="收藏"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+    <button class="icon-button" aria-label="任务中心"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <button class="icon-button" aria-label="通知"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+  </header>
   <aside class="sidebar">
     <div class="brand">
       <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
@@ -170,9 +192,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <defs><linearGradient id="ba" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="bb" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="bc" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
       </svg>
       <div class="brand-title"><strong>网络舆情系统</strong></div>
-    </div>
-    <section class="nav-group active">
-      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
+    </div>    <div class="sidebar-nav-area">    <section class="nav-group active">
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div><small>›</small></div>
       <div class="nav-items">
         <a class="nav-item" href="../AI智能推荐/index.html"><span>AI智能推荐</span></a>
         <a class="nav-item" href="../热点榜单/index.html"><span>热点榜单</span></a>
@@ -183,14 +204,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </div>
     </section>
     <section class="nav-group">
-      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div></div>
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div><small>›</small></div>
       <div class="nav-items">
         <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
         <div class="nav-item"><span>智能体编报</span></div>
       </div>
     </section>
     <section class="nav-group">
-      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div></div>
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div><small>›</small></div>
       <div class="nav-items">
         <a class="nav-item" href="../../处置引导/传播引导策略/index.html"><span>传播引导策略</span></a>
         <a class="nav-item" href="../../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
@@ -200,7 +221,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </div>
     </section>
     <section class="nav-group">
-      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div></div>
+      <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div><small>›</small></div>
       <div class="nav-items">
         <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span></a>
         <div class="nav-item"><span>宣传引导策略库</span></div>
@@ -209,19 +230,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <div class="nav-item"><span>行业术语与本体知识库</span></div>
       </div>
     </section>
+    </div>
   </aside>
 
   <main class="main-area">
-    <header class="topbar">
-      <div class="topbar-left"><div class="topbar-title"><span>关键对象监测</span></div></div>
-      <div class="topbar-right">
-        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
-        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg></button>
-        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
-      </div>
-    </header>
-
     <section class="page">
       <!-- 主Tab -->
       <div class="main-tabs">
@@ -768,6 +780,11 @@ function toggleChip(el, mode) {
     el.classList.toggle('active');
   }
 }
+document.querySelectorAll('.nav-group-title').forEach(title => {
+  title.addEventListener('click', () => {
+    title.closest('.nav-group').classList.toggle('collapsed');
+  });
+});
 </script>
 </body>
 </html>

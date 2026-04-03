@@ -527,20 +527,31 @@
             color: var(--primary);
         }
 
+        .domain-card {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(26, 44, 82, 0.05);
+        }
+
         .content-panel {
             position: relative;
             overflow: visible;
-            margin-top: 0;
-            padding: 0;
-            border-radius: 0;
-            border: none;
-            background: transparent;
-            box-shadow: none;
-            backdrop-filter: none;
+            margin-top: 10px;
+            padding: 14px 16px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(122, 145, 184, 0.12);
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(26, 44, 82, 0.05);
         }
 
         .content-panel::before {
             display: none;
+        }
+
+        .content-panel .toolbar {
+            margin-top: 0;
         }
 
         .panel-heading {
@@ -551,8 +562,7 @@
             flex-wrap: nowrap;
             position: relative;
             z-index: 1;
-            padding-bottom: 10px;
-            min-height: 40px;
+            min-height: 32px;
             border-bottom: none;
         }
 
@@ -566,11 +576,7 @@
         }
 
         .panel-title .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--primary);
-            box-shadow: 0 0 0 3px rgba(43, 97, 240, 0.18);
+            display: none;
         }
 
         .panel-title small {
@@ -603,12 +609,12 @@
             gap: 6px;
             padding: 4px 11px;
             min-width: max-content;
-            border-radius: 999px;
+            border-radius: 6px;
             border: 1px solid rgba(122, 145, 184, 0.18);
             background: #ffffff;
             color: #7f8ea3;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 400;
             box-shadow: none;
             transition: border-color 0.15s, color 0.15s, background 0.15s;
         }
@@ -624,6 +630,7 @@
             border-color: rgba(43, 97, 240, 0.35);
             background: rgba(43, 97, 240, 0.1);
             color: var(--primary);
+            font-weight: 600;
             box-shadow: none;
         }
 
@@ -651,25 +658,69 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 0;
             flex-wrap: wrap;
             position: relative;
             z-index: 1;
-            padding: 8px 10px;
-            border: 1px solid rgba(122, 145, 184, 0.16);
+            padding: 0 0 12px;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(122, 145, 184, 0.1);
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 0 0 auto;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1 1 auto;
+            justify-content: flex-end;
+        }
+
+        .toolbar-check-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 32px;
+            padding: 0 10px;
             border-radius: 8px;
+            border: 1px solid rgba(122, 145, 184, 0.16);
             background: #ffffff;
-            box-shadow: 0 1px 4px rgba(26, 44, 82, 0.05);
+            color: #7f8ea3;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .toolbar-check-all:hover {
+            border-color: rgba(47, 107, 255, 0.22);
+            color: var(--primary);
+        }
+
+        .toolbar-check-all input {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--primary);
+            cursor: pointer;
         }
 
         .toolbar-caption {
             display: inline-flex;
             align-items: center;
             min-height: 26px;
-            padding: 0 10px;
-            border-radius: 999px;
-            background: rgba(47, 107, 255, 0.07);
-            color: var(--primary);
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            color: var(--text);
             font-size: 14px;
             font-weight: 700;
             letter-spacing: 0;
@@ -680,8 +731,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            min-width: 200px;
-            flex: 1 1 280px;
+            min-width: 140px;
+            flex: 0 1 200px;
             min-height: 32px;
             padding: 0 12px;
             border-radius: 8px;
@@ -725,7 +776,7 @@
             background: #ffffff;
             color: #7f8ea3;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 400;
             box-shadow: none;
             transition: border-color 0.15s, background 0.15s, color 0.15s;
         }
@@ -749,7 +800,7 @@
 
         .insight-toggle-label {
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 400;
             color: inherit;
         }
 
@@ -796,7 +847,7 @@
             outline: none;
             background: transparent;
             color: inherit;
-            font-weight: 700;
+            font-weight: 400;
             font-size: 14px;
             appearance: none;
             cursor: pointer;
@@ -823,12 +874,11 @@
         }
 
         .filter-card {
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(122, 145, 184, 0.14);
-            background: #ffffff;
+            padding: 8px 0;
+            border-radius: 0;
+            border: none;
+            background: transparent;
             box-shadow: none;
-            backdrop-filter: none;
         }
 
         .filter-card strong {
@@ -860,7 +910,7 @@
         .content-grid {
             display: grid;
             grid-template-columns: minmax(0, 1fr) 340px;
-            gap: 12px;
+            gap: 0;
             margin-top: 10px;
             align-items: start;
             position: relative;
@@ -877,6 +927,8 @@
 
         .feed-column {
             min-width: 0;
+            border-right: 1px solid rgba(122, 145, 184, 0.12);
+            padding-right: 16px;
         }
 
         .insight-sidebar {
@@ -884,17 +936,23 @@
             top: 58px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 0;
+            padding-left: 16px;
         }
 
         .insight-card {
             position: relative;
-            overflow: hidden;
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(122, 145, 184, 0.14);
-            background: #ffffff;
+            overflow: visible;
+            padding: 0 0 16px;
+            border-radius: 0;
+            border: none;
+            background: transparent;
             box-shadow: none;
+        }
+
+        .insight-card + .insight-card {
+            border-top: 1px solid rgba(122, 145, 184, 0.1);
+            padding-top: 16px;
         }
 
         .insight-card::before {
@@ -958,8 +1016,9 @@
         .insight-card-title span,
         .insight-card-meta {
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
             color: #98a7bc;
+            display: none;
         }
 
         .insight-summary-grid {
@@ -971,16 +1030,16 @@
         }
 
         .summary-item {
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(122, 145, 184, 0.1);
-            background: #f8fafd;
+            padding: 4px 2px;
+            border-radius: 0;
+            border: none;
+            background: transparent;
         }
 
         .summary-item span {
             display: block;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 400;
             color: #95a4b8;
             letter-spacing: 0;
         }
@@ -998,16 +1057,16 @@
             margin-top: 4px;
             font-size: 14px;
             color: #a7b5c8;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         .trend-chart {
             position: relative;
             z-index: 1;
-            padding: 12px 10px 8px;
-            border-radius: 16px;
-            border: 1px solid rgba(122, 145, 184, 0.08);
-            background: linear-gradient(180deg, rgba(240, 246, 255, 0.82), rgba(255, 255, 255, 0.95));
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            background: transparent;
         }
 
         .trend-chart svg {
@@ -1023,8 +1082,8 @@
         }
 
         .trend-labels span {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 400;
             color: #97a6bb;
             text-align: center;
             white-space: nowrap;
@@ -1068,8 +1127,8 @@
 
         .sentiment-ring-inner span {
             margin-top: 4px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 400;
             color: #9aa8bc;
         }
 
@@ -1084,18 +1143,18 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(122, 145, 184, 0.08);
-            background: rgba(255, 255, 255, 0.82);
+            padding: 4px 0;
+            border-radius: 0;
+            border: none;
+            background: transparent;
         }
 
         .legend-label {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 400;
             color: #6b7d96;
         }
 
@@ -1107,8 +1166,8 @@
         }
 
         .legend-value {
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 400;
             color: #63758f;
         }
 
@@ -1131,7 +1190,7 @@
             border: 1px solid rgba(122, 145, 184, 0.1);
             background: rgba(255, 255, 255, 0.84);
             line-height: 1;
-            font-weight: 600;
+            font-weight: 400;
             letter-spacing: 0.01em;
             box-shadow: 0 8px 18px rgba(26, 44, 82, 0.04);
             transform-origin: center;
@@ -1151,14 +1210,14 @@
             color: #9aabc0;
             text-align: center;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         .feed {
             margin-top: 0;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 0;
             position: relative;
             z-index: 1;
         }
@@ -1168,12 +1227,17 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             overflow: visible;
-            border: 1px solid rgba(122, 145, 184, 0.15);
-            border-radius: 8px;
-            background: #ffffff;
-            box-shadow: 0 1px 4px rgba(26, 44, 82, 0.06);
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
             animation: none;
-            transition: box-shadow 0.15s, border-color 0.15s;
+            transition: background 0.12s;
+        }
+
+        .feed-card + .feed-card {
+            border-top: 1px solid rgba(122, 145, 184, 0.12);
+            margin-top: 2px;
         }
 
         .feed-card:last-child {
@@ -1185,14 +1249,17 @@
         }
 
         .feed-card:hover {
-            box-shadow: 0 3px 12px rgba(26, 44, 82, 0.1);
-            border-color: rgba(43, 97, 240, 0.2);
-            background: #ffffff;
+            background: rgba(43, 97, 240, 0.02);
             transform: none;
+            box-shadow: none;
         }
 
         .feed-card[data-read="false"] {
-            border-color: rgba(43, 97, 240, 0.25);
+            /* unread indicated by tag only */
+        }
+
+        .feed-card[data-read="false"] .feed-head {
+            padding-left: 14px;
         }
 
         .feed-card::before {
@@ -1206,11 +1273,24 @@
         .feed-head {
             position: relative;
             min-width: 0;
-            padding: 11px 14px 8px;
+            padding: 18px 16px 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .feed-checkbox {
+            flex: 0 0 auto;
+            margin-top: 3px;
+            width: 15px;
+            height: 15px;
+            accent-color: var(--primary);
+            cursor: pointer;
         }
 
         .feed-head-inner {
             min-width: 0;
+            flex: 1 1 auto;
             padding-right: 0;
         }
 
@@ -1452,29 +1532,17 @@
         .ai-panel {
             position: relative;
             min-width: 0;
-            height: auto;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            align-content: start;
-            align-items: center;
-            gap: 0 8px;
-            margin: 0 14px 12px;
-            padding: 10px 0 0;
+            display: block;
+            margin: 0 16px 18px calc(16px + 15px + 10px);
+            padding: 8px 0 0;
             overflow: visible;
             color: var(--text);
             background: none;
-            border-top: 1px solid rgba(122, 145, 184, 0.1);
-            box-shadow: none;
+            line-height: 1.65;
         }
 
         .ai-panel > div:last-child {
-            min-width: 0;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            display: inline;
         }
 
         .ai-panel::before {
@@ -1486,40 +1554,30 @@
         }
 
         .ai-indicator {
+            display: inline-block;
             width: 6px;
             height: 6px;
-            margin-top: 0;
+            margin-right: 5px;
+            vertical-align: middle;
             position: relative;
-            z-index: 1;
             border-radius: 50%;
             background: var(--primary);
-            box-shadow: none;
         }
 
         .ai-label {
-            position: relative;
-            z-index: 1;
-            display: inline-flex;
-            align-self: center;
-            flex-shrink: 0;
-            gap: 0;
-            padding: 0;
-            border-radius: 0;
-            background: none;
+            display: inline;
             color: #5273a6;
             font-size: 14px;
             font-weight: 700;
             letter-spacing: 0.02em;
+            margin-right: 6px;
         }
 
         .ai-body {
-            position: relative;
-            z-index: 1;
-            margin-top: 0;
+            display: inline;
             font-size: 14px;
             line-height: 1.65;
             color: #50627c;
-            flex: 1 1 0;
         }
 
         .ai-body,
@@ -1890,7 +1948,7 @@
 
         <main class="main-area">
             <section class="page">
-                <div class="content-panel">
+                <div class="domain-card">
                     <div class="panel-heading">
                         <div class="panel-title">
                             <span class="dot"></span>
@@ -1898,12 +1956,19 @@
                         </div>
                         <div class="chip-strip" id="categoryChips"></div>
                     </div>
+                </div>
 
+                <div class="content-panel">
                     <div class="toolbar">
-                        <div class="toolbar-caption" id="toolbarCaption">信息推荐</div>
+                        <div class="toolbar-left">
+                            <label class="toolbar-check-all"><input type="checkbox" id="selectAll"> 全选</label>
+                            <button class="ghost-button" type="button">数据导出</button>
+                            <button class="ghost-button" type="button">翻译</button>
+                        </div>
+                        <div class="toolbar-right">
                         <div class="toolbar-search">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 18C14.866 18 18 14.866 18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18Z" stroke="#8FA0BC" stroke-width="1.8"/><path d="M20 20L17 17" stroke="#8FA0BC" stroke-width="1.8" stroke-linecap="round"/></svg>
-                            <input id="searchInput" type="search" placeholder="请输入关键词，支持标题、正文、平台、研判内容检索">
+                            <input id="searchInput" type="search" placeholder="搜索关键词">
                         </div>
                         <div class="toolbar-actions">
                             <label class="select-like">
@@ -1922,6 +1987,8 @@
                                 <span class="insight-toggle-track" aria-hidden="true"></span>
                             </button>
                         </div>
+                        </div>
+                        <div id="toolbarCaption" style="display:none"></div>
                     </div>
 
                     <div class="advanced-filters" id="advancedFilters">
@@ -2704,6 +2771,7 @@
             feedNode.innerHTML = items.map((item, index) => `
                 <article class="feed-card" data-id="${item.id}" data-read="${item.read}" style="animation-delay:${index * 0.05}s">
                     <div class="feed-head">
+                        <input type="checkbox" class="feed-checkbox" data-id="${item.id}">
                         <div class="feed-head-inner">
                             <div class="tag-row">
                                 <div class="tag-list">
@@ -2742,13 +2810,7 @@
 
                     </div>
 
-                    <div class="ai-panel">
-                        <div class="ai-indicator"></div>
-                        <div>
-                            <div class="ai-label">AI 研判分析</div>
-                            <div class="ai-body">${item.analysis}</div>
-                        </div>
-                    </div>
+                    <div class="ai-panel"><span class="ai-indicator"></span><span class="ai-label">AI 研判分析</span><span class="ai-body">${item.analysis}</span></div>
                 </article>
             `).join("");
         }
@@ -2988,6 +3050,24 @@
 
         syncQueuedStateFromStorage();
         render();
+
+        // 全选复选框联动
+        const selectAllCheckbox = document.getElementById("selectAll");
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener("change", () => {
+                document.querySelectorAll(".feed-checkbox").forEach(cb => {
+                    cb.checked = selectAllCheckbox.checked;
+                });
+            });
+            feedNode.addEventListener("change", (e) => {
+                if (e.target.classList.contains("feed-checkbox")) {
+                    const all = document.querySelectorAll(".feed-checkbox");
+                    const checked = document.querySelectorAll(".feed-checkbox:checked");
+                    selectAllCheckbox.indeterminate = checked.length > 0 && checked.length < all.length;
+                    selectAllCheckbox.checked = checked.length === all.length;
+                }
+            });
+        }
     </script>
 </body>
 </html>

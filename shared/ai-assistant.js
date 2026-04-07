@@ -14,14 +14,13 @@
   #ai-ball {
     position: fixed; bottom: 80px; right: 28px;
     width: 58px; height: 58px; border-radius: 50%;
-    background: transparent;
-    box-shadow: 0 8px 22px rgba(18,60,210,0.48), 0 2px 6px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+    background: transparent; box-shadow: none;
     cursor: pointer; z-index: 9998;
     display: flex; align-items: center; justify-content: center;
-    user-select: none; transition: box-shadow .2s, transform .15s;
+    user-select: none; transition: filter .2s, transform .15s;
   }
-  #ai-ball:hover { box-shadow: 0 10px 30px rgba(18,60,210,0.58), 0 4px 10px rgba(0,0,0,0.25); transform: scale(1.07); }
-  #ai-ball.ai-dragging { transition: none; box-shadow: 0 14px 36px rgba(18,60,210,0.55); }
+  #ai-ball:hover { filter: brightness(1.08) drop-shadow(0 4px 10px rgba(0,0,0,0.22)); transform: scale(1.07); }
+  #ai-ball.ai-dragging { transition: none; filter: brightness(1.06); }
   #ai-ball svg { pointer-events: none; }
   #ai-ball .ai-badge {
     position: absolute; top: -2px; right: -2px;
@@ -151,15 +150,13 @@
     30%          { transform: translateY(-6px); opacity:1; }
   }
 
-  /* ── Ball single-eye blink ── */
-  @keyframes ai-eye-blink {
-    0%,86%,100% { transform: scaleY(1); }
-    91%          { transform: scaleY(0.04); }
-    93%          { transform: scaleY(1); }
-    96%          { transform: scaleY(0.04); }
-    98%          { transform: scaleY(1); }
+  /* ── Robot eye glow ── */
+  @keyframes ai-eye-glow {
+    0%,100% { opacity: 0.9; }
+    50%     { opacity: 0.3; }
   }
-  .ai-ball-eye { transform-origin: 27px 28px; animation: ai-eye-blink 5s ease-in-out infinite; }
+  .ai-robot-eye  { animation: ai-eye-glow 2.4s ease-in-out infinite; }
+  .ai-robot-eye2 { animation: ai-eye-glow 2.4s ease-in-out infinite; animation-delay: 1.2s; }
 
   /* ── Input ── */
   .ai-input-area {
@@ -203,6 +200,20 @@
   }
   .ai-clear-btn:hover { color: #9eb0c6; }
 
+  /* ── Mode Tabs ── */
+  .ai-mode-tabs {
+    display: flex; gap: 4px; padding: 8px 12px 0;
+    border-top: 1px solid rgba(122,145,184,0.1); background: #fff;
+  }
+  .ai-mode-tab {
+    flex: 1; padding: 6px 2px; border-radius: 6px;
+    border: 1px solid rgba(122,145,184,0.15); background: #f4f7fc;
+    font: inherit; font-size: 11px; font-weight: 600; color: #7a91b8;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+  }
+  .ai-mode-tab:hover { background: rgba(43,97,240,0.07); color: #2b61f0; border-color: rgba(43,97,240,0.2); }
+  .ai-mode-tab.active { background: rgba(43,97,240,0.12); color: #1a4ed4; border-color: rgba(43,97,240,0.3); }
+
   /* ── AI助手 button injected into list pages ── */
   .btn-ai-asst {
     display: inline-flex; align-items: center; gap: 5px;
@@ -236,42 +247,12 @@
   const ball = document.createElement('div');
   ball.id = 'ai-ball';
   ball.innerHTML = `
-    <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="aiSg" cx="36%" cy="28%" r="74%">
-          <stop offset="0%" stop-color="#b2eaff"/>
-          <stop offset="30%" stop-color="#55aaff"/>
-          <stop offset="65%" stop-color="#1e5ff0"/>
-          <stop offset="100%" stop-color="#0b1f80"/>
-        </radialGradient>
-        <radialGradient id="aiGl" cx="42%" cy="32%" r="52%">
-          <stop offset="0%" stop-color="white" stop-opacity="0.78"/>
-          <stop offset="60%" stop-color="white" stop-opacity="0.18"/>
-          <stop offset="100%" stop-color="white" stop-opacity="0"/>
-        </radialGradient>
-        <filter id="aiSd" x="-10%" y="-10%" width="120%" height="130%">
-          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0a1860" flood-opacity="0.35"/>
-        </filter>
-      </defs>
-      <!-- Sphere body -->
-      <circle cx="29" cy="29" r="28" fill="url(#aiSg)" filter="url(#aiSd)"/>
-      <!-- Sclera -->
-      <ellipse cx="29" cy="30" rx="13" ry="12" fill="white" opacity="0.96"/>
-      <!-- Iris + pupil group (blinks) -->
-      <g class="ai-ball-eye">
-        <ellipse cx="29" cy="30" rx="9" ry="8.5" fill="#1e5cf5"/>
-        <ellipse cx="29" cy="30" rx="6" ry="5.5" fill="#2980ff" opacity="0.5"/>
-        <circle cx="29" cy="30" r="4.5" fill="#05102e"/>
-        <circle cx="32.5" cy="26.5" r="2.5" fill="white" opacity="0.92"/>
-        <circle cx="25.5" cy="32" r="1.1" fill="white" opacity="0.38"/>
-      </g>
-      <!-- Glare / specular highlight -->
-      <ellipse cx="19" cy="17" rx="10" ry="7" fill="url(#aiGl)"/>
-      <!-- Bottom subtle reflection -->
-      <ellipse cx="38" cy="44" rx="6" ry="3.5" fill="white" fill-opacity="0.07"/>
-      <!-- Rim -->
-      <circle cx="29" cy="29" r="27.5" fill="none" stroke="#0820a0" stroke-width="1" stroke-opacity="0.18"/>
-    </svg>
+    <div style="width:58px;height:58px;border-radius:50%;background:conic-gradient(from 263deg,#d940fb,#7c4dff,#2979ff,#00b0d8,#26c87a,#c8dc30,#ff9800,#f44336,#e91e8c,#d940fb);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.22))">
+      <div style="width:46px;height:46px;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px">
+        <div style="width:11px;height:13px;background:#18102e;border-radius:5px"></div>
+        <div style="width:11px;height:13px;background:#18102e;border-radius:5px"></div>
+      </div>
+    </div>
     <div class="ai-badge">AI</div>
   `;
   document.body.appendChild(ball);
@@ -309,26 +290,11 @@
   panel.id = 'ai-panel';
   panel.innerHTML = `
     <div class="ai-ph" id="ai-ph">
-      <div class="ai-ph-avatar" style="background:none;overflow:hidden">
-        <svg width="36" height="36" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="aiSgH" cx="36%" cy="28%" r="74%">
-              <stop offset="0%" stop-color="#b2eaff"/>
-              <stop offset="30%" stop-color="#55aaff"/>
-              <stop offset="65%" stop-color="#1e5ff0"/>
-              <stop offset="100%" stop-color="#0b1f80"/>
-            </radialGradient>
-          </defs>
-          <circle cx="29" cy="29" r="28" fill="url(#aiSgH)"/>
-          <ellipse cx="29" cy="30" rx="13" ry="12" fill="white" opacity="0.96"/>
-          <g class="ai-ball-eye">
-            <ellipse cx="29" cy="30" rx="9" ry="8.5" fill="#1e5cf5"/>
-            <circle cx="29" cy="30" r="4.5" fill="#05102e"/>
-            <circle cx="32.5" cy="26.5" r="2.5" fill="white" opacity="0.9"/>
-          </g>
-          <ellipse cx="19" cy="17" rx="9" ry="6" fill="white" fill-opacity="0.38"/>
-          <circle cx="29" cy="29" r="27.5" fill="none" stroke="#0820a0" stroke-width="1" stroke-opacity="0.15"/>
-        </svg>
+      <div class="ai-ph-avatar" style="background:conic-gradient(from 263deg,#d940fb,#7c4dff,#2979ff,#00b0d8,#26c87a,#c8dc30,#ff9800,#f44336,#e91e8c,#d940fb)">
+        <div style="width:28px;height:28px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:4px">
+          <div style="width:7px;height:8px;background:#18102e;border-radius:3px"></div>
+          <div style="width:7px;height:8px;background:#18102e;border-radius:3px"></div>
+        </div>
       </div>
       <div class="ai-ph-info">
         <strong>智能舆情分析助手</strong>
@@ -392,6 +358,13 @@
       <div class="ai-chat" id="ai-chat" style="display:none;"></div>
     </div>
 
+    <!-- 功能模式切换 -->
+    <div class="ai-mode-tabs">
+      <button class="ai-mode-tab active">AI分析</button>
+      <button class="ai-mode-tab">监测方案</button>
+      <button class="ai-mode-tab">事件分析</button>
+      <button class="ai-mode-tab">智能体编报</button>
+    </div>
     <!-- 输入区 -->
     <div class="ai-input-area">
       <div class="ai-input-box">
@@ -451,6 +424,12 @@
   document.getElementById('ai-web').addEventListener('click', function () {
     S.webSearch = !S.webSearch;
     this.classList.toggle('on', S.webSearch);
+  });
+  panel.querySelectorAll('.ai-mode-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      panel.querySelectorAll('.ai-mode-tab').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
   });
   document.getElementById('ai-clear').addEventListener('click', function () {
     S.inChat = false; S.contextData = null;
@@ -576,7 +555,10 @@
 
   /* ════════════════════════════ MOCK LLM RESPONSES ════════════════════════════ */
   function generateResponse(text) {
-    // Mode 1: context data analysis
+    // Demo mode: always return 香港大埔宏福苑大火 report
+    S.contextData = null;
+    return '【香港大埔宏福苑大火事件舆情分析报告】\n事件类型：突发公共安全事件 · 风险等级：■■■■□ 高风险（4.3/5）\n报告时间：2025年11月26日 15:20\n━━━━━━━━━━━━━━━━━━━━\n\n一、事件概述\n2025年11月26日下午约14:51，香港大埔区大埔墟宏福苑一幢高层住宅外墙棚架突发起火，浓烟迅速蔓延，现场视频在社交平台迅速扩散。香港消防处接报后约8分钟内到达现场，共调派7辆消防车及47名消防员全力处置，明火于04:15完全扑灭，历时约1.5小时。\n\n据香港消防处初步通报：事故造成2人轻伤，另有数十名居民已紧急疏散。起火原因正由消防处调查总队介入调查，初步怀疑为外墙棚架电焊施工引发，最终结论尚待公布。起火楼栋外墙正进行大规模维修工程，承建商于凌晨施工安排引发居民强烈质疑，相关棚架搭建安全是否符合屋宇署规范已引发舆论高度关注。\n\n二、数据概览\n▸ 监测信息总量：7.8万条（事发后6小时内）\n▸ 综合热度指数：88.6 / 100（高位，持续攀升中）\n▸ 情感分布：负面 67.3% / 中性 24.1% / 正面 8.6%\n▸ Facebook话题阅读量：1.1亿（截至报告时间）\n▸ 连登讨论区帖子量：2,800+帖（高峰排名第2位）\n\n三、传播分析\n▸ 起爆平台：Facebook（现场视频于03:01首发，30分钟内传播破圈）\n▸ 主要渠道：Facebook（44%）> 连登/高登（22%）> Instagram（18%）> 微博（10%）> 其他（6%）\n▸ 高峰时段：07:00—09:00（早高峰信息量占全天47%）\n▸ 关键传播节点：3名粉丝超10万的港系KOL于03:30前已转发现场视频\n▸ 本地媒体：香港01、星岛日报、明报于06:00前均已发布图文报道\n▸ 湾区媒体跟进：南方都市报、广州日报于08:00同步转载，关注消防处置表现\n▸ 境外媒体：Reuters中文、BBC中文同步跟进，暂未出现明显负面放大\n\n四、关键声音\n▸ 【主要负面声音】\n  · 居民质疑施工单位深夜作业引发安全事故，追责承建商与屋宇署监管失职（占负面41%）\n  · 棚架搭建安全标准存漏洞，引申至全港楼宇维修工程安全监管议题（29%）\n  · 部分网民质疑消防处接报至到场的响应时间（18%）\n  · 深夜浓烟导致居民疏散困难，批评大厦缺乏有效预警机制（12%）\n\n▸ 【主要中立声音】\n  · 记录现场救援过程，转播消防员专业行动\n  · 科普火灾逃生知识（相关内容互动量较高）\n\n▸ 【主要正面声音】\n  · 肯定消防处人员响应速度及专业处置表现\n  · 感谢邻居在凌晨互相呼救、协助疏散的善举\n\n五、风险预警\n▸ 短期风险（24h内）：消防处调查结论与屋宇署表态将引发第二波舆论浪潮\n▸ 中期风险（72h内）：若调查指向承建商违规施工，问责舆情将持续升温\n▸ 长期风险：事件极可能引发全港「楼宇维修棚架安全」议题连锁讨论，存在政策层面舆论压力\n▸ 谣言预警：已发现1条不实信息流传（虚报伤亡数字），需立即介入处置\n\n六、引导建议（面向紫荆杂志社编辑记者）\n① 报道角度：以消防处专业响应与居民邻里互助为主线，突显香港社会韧性与应急能力，避免过度聚焦伤亡数字引发情绪化二次传播\n② 深度选题：调查香港楼宇维修工程安全监管机制，以本次棚架起火为切入点，采访屋宇署官员与建造业议会，梳理现行制度防线与监管盲点\n③ 引导策略：在Facebook与Instagram平台主动发布消防安全科普内容，借助本次事件热度占位正向议题，引导公众关注由恐慌转向行动（申报楼宇检查、了解疏散须知）\n④ 时机建议：在消防处发布调查初步结论后（预计24—48小时内），第一时间跟进发布解读稿，确保紫荆在权威解读赛道抢占首发位置\n⑤ 后续跟踪：持续监测屋宇署整改承诺落实情况，规划「事件一个月后」回访选题，保持读者黏性与议题热度';
+    // Legacy branches archived below (unreachable)
     if (S.contextData && S.contextData.length > 0) {
       var n = S.contextData.length;
       var ts = new Date().toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -647,7 +629,7 @@
     }
 
     if (/大埔|宏福苑|大火|火灾|火警/.test(t)) {
-      return '【大埔宏福苑大火事件舆情分析报告】\n事件类型：突发公共安全事件 · 风险等级：■■■■□ 高风险（4.3/5）\n报告时间：2026年4月7日 14:22\n━━━━━━━━━━━━━━━━━━━━\n\n一、事件概述\n2026年4月7日凌晨约02:40，广东省梅州市大埔县大埔镇宏福苑居民楼B座发生火灾。起火楼层为3楼，火势迅速蔓延至4至7楼，现场浓烟弥漫。消防部门接警后于约10分钟内到达现场，调派5辆消防车、32名消防员全力处置，明火于04:15完全扑灭，历时约1.5小时。\n\n据官方初步通报：事故造成9人遇难、14人受伤（其中3人伤势较重），另有数十名居民紧急疏散。起火原因已由消防调查部门介入开展调查，初步排査电气线路老化所致可能性较高，最终结论尚待公布。\n\n事发楼栋建于2003年，属早期商品住宅，小区整体消防设施存在一定老化问题，楼道逃生通道部分堵塞情况已引发舆论关注。\n\n二、数据概览\n▸ 监测信息总量：7.8万条（事发后6小时内）\n▸ 综合热度指数：88.6 / 100（高位，持续攀升中）\n▸ 情感分布：负面 67.3% / 中性 24.1% / 正面 8.6%\n▸ 微博话题#大埔宏福苑火灾#阅读量：2.3亿（截至报告时间）\n▸ 微博热搜峰值排名：第3位（持续约4小时）\n\n三、传播分析\n▸ 起爆平台：抖音（现场视频于02:58首发，30分钟内播放量破500万）\n▸ 主要渠道：抖音（44%）> 微博（33%）> 微信（16%）> 其他（7%）\n▸ 高峰时段：06:00—09:00（早高峰信息量占全天47%）\n▸ 关键传播节点：3名粉丝超百万的粤系大V 03:30前已转发现场视频\n▸ 主流媒体：南方日报、羊城晚报、新京报于06:00前均已发布图文报道\n▸ 央媒跟进：人民日报客户端、央视新闻于07:30发布现场图文，定性较为克制\n▸ 境外媒体：香港01、星岛日报同步跟进，暂未出现明显负面放大\n\n四、关键声音\n▸ 【主要负面声音】\n  · 居民楼消防设施老化"无人管"，追责物业与监管部门（占负面39%）\n  · 逃生通道被堵引发公众恐慌，引申至全国社区消防隐患话题（27%）\n  · 伤亡人数信息不一致，质疑官方通报透明度（21%）\n  · 深夜发生、人员熟睡，批评消防演练覆盖不足（13%）\n\n▸ 【主要中立声音】\n  · 记录现场救援过程，转播消防员行动\n  · 科普火灾逃生知识（相关内容互动量较高）\n\n▸ 【主要正面声音】\n  · 肯定消防员响应速度及专业处置\n  · 感谢邻居在凌晨互相呼救的善举\n\n五、风险预警\n▸ 短期风险（24h内）：伤亡人数更新、遇难者身份披露将引发第二波情绪爆发\n▸ 中期风险（72h内）：若调查结论指向消防验收/物业管理失职，问责舆情将持续升温\n▸ 长期风险：事件极可能引发全国性"老旧小区消防隐患"议题连锁讨论，存在政策舆论压力\n▸ 谣言预警：已发现2条不实信息流传（虚报死亡人数、伪造"幸存者"采访视频），需立即介入处置\n\n六、处置建议\n① 即时（0-2h）：地方政府于今日上午发布正式新闻发布会，公布权威伤亡数据，阻断谣言\n② 短期（2-12h）：积极披露救援进展、伤者救治情况及遇难者家属安置方案，回应"透明度"质疑\n③ 中期（12-48h）：将消防调查进展纳入定期通报，避免信息真空引发二次舆情\n④ 专项行动：组织全市老旧住宅消防安全自查，并公开时间表，将负面舆情转化为治理行动能量\n⑤ 谣言处置：联系微博、抖音平台对已识别的2条不实信息进行标注下架，并发布辟谣声明';
+      return '【大埔宏福苑大火事件舆情分析报告】\n事件类型：突发公共安全事件 · 风险等级：■■■■□ 高风险（4.3/5）\n报告时间：2025年11月27日 14:22\n━━━━━━━━━━━━━━━━━━━━\n\n一、事件概述\n2025年11月26日约14:52，广东省梅州市大埔县大埔镇宏福苑居民楼B座发生火灾。起火楼层为3楼，火势迅速蔓延至4至7楼，现场浓烟弥漫。消防部门接警后于约10分钟内到达现场，调派5辆消防车、32名消防员全力处置，明火于04:15完全扑灭，历时约1.5小时。\n\n据官方初步通报：事故造成9人遇难、14人受伤（其中3人伤势较重），另有数十名居民紧急疏散。起火原因已由消防调查部门介入开展调查，初步排査电气线路老化所致可能性较高，最终结论尚待公布。\n\n事发楼栋建于2003年，属早期商品住宅，小区整体消防设施存在一定老化问题，楼道逃生通道部分堵塞情况已引发舆论关注。\n\n二、数据概览\n▸ 监测信息总量：7.8万条（事发后6小时内）\n▸ 综合热度指数：88.6 / 100（高位，持续攀升中）\n▸ 情感分布：负面 67.3% / 中性 24.1% / 正面 8.6%\n▸ 微博话题#大埔宏福苑火灾#阅读量：2.3亿（截至报告时间）\n▸ 微博热搜峰值排名：第3位（持续约4小时）\n\n三、传播分析\n▸ 起爆平台：抖音（现场视频于02:58首发，30分钟内播放量破500万）\n▸ 主要渠道：抖音（44%）> 微博（33%）> 微信（16%）> 其他（7%）\n▸ 高峰时段：06:00—09:00（早高峰信息量占全天47%）\n▸ 关键传播节点：3名粉丝超百万的粤系大V 03:30前已转发现场视频\n▸ 主流媒体：南方日报、羊城晚报、新京报于06:00前均已发布图文报道\n▸ 央媒跟进：人民日报客户端、央视新闻于07:30发布现场图文，定性较为克制\n▸ 境外媒体：香港01、星岛日报同步跟进，暂未出现明显负面放大\n\n四、关键声音\n▸ 【主要负面声音】\n  · 居民楼消防设施老化"无人管"，追责物业与监管部门（占负面39%）\n  · 逃生通道被堵引发公众恐慌，引申至全国社区消防隐患话题（27%）\n  · 伤亡人数信息不一致，质疑官方通报透明度（21%）\n  · 深夜发生、人员熟睡，批评消防演练覆盖不足（13%）\n\n▸ 【主要中立声音】\n  · 记录现场救援过程，转播消防员行动\n  · 科普火灾逃生知识（相关内容互动量较高）\n\n▸ 【主要正面声音】\n  · 肯定消防员响应速度及专业处置\n  · 感谢邻居在凌晨互相呼救的善举\n\n五、风险预警\n▸ 短期风险（24h内）：伤亡人数更新、遇难者身份披露将引发第二波情绪爆发\n▸ 中期风险（72h内）：若调查结论指向消防验收/物业管理失职，问责舆情将持续升温\n▸ 长期风险：事件极可能引发全国性"老旧小区消防隐患"议题连锁讨论，存在政策舆论压力\n▸ 谣言预警：已发现2条不实信息流传（虚报死亡人数、伪造"幸存者"采访视频），需立即介入处置\n\n六、处置建议\n① 即时（0-2h）：地方政府于今日上午发布正式新闻发布会，公布权威伤亡数据，阻断谣言\n② 短期（2-12h）：积极披露救援进展、伤者救治情况及遇难者家属安置方案，回应"透明度"质疑\n③ 中期（12-48h）：将消防调查进展纳入定期通报，避免信息真空引发二次舆情\n④ 专项行动：组织全市老旧住宅消防安全自查，并公开时间表，将负面舆情转化为治理行动能量\n⑤ 谣言处置：联系微博、抖音平台对已识别的2条不实信息进行标注下架，并发布辟谣声明';
     }
 
     // Generic fallback

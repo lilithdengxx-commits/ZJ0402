@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监测预警 - 预警查询</title>
+<style>
+:root{--bg:#eef1f8;--card:#ffffff;--line:rgba(122,145,184,0.14);--text:#1e2d45;--text-soft:#6b7c95;--text-faint:#9eb0c6;--primary:#2b61f0;--primary-deep:#1a4ed4;--secondary:#7ab0ff;--secondary-soft:rgba(43,97,240,0.1);--success:#12a87a;--danger:#e04040;--warning:#c47d10;--sidebar-bg:#ffffff;--sidebar-width:220px;font-family:"PingFang SC","Lantinghei SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);background:#eef1f8;min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select{font:inherit}
+
+/* ── App Shell ── */
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;grid-template-rows:44px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;grid-row:1 / -1;background:var(--sidebar-bg);border-right:1px solid rgba(122,145,184,0.1);display:flex;flex-direction:column;z-index:10;box-shadow:2px 0 8px rgba(26,44,82,0.08)}
+.sidebar-nav-area{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 10px 8px}
+.sidebar-nav-area::-webkit-scrollbar{width:3px}.sidebar-nav-area::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.24);border-radius:999px}
+.brand{display:flex;align-items:center;gap:9px;padding:0 14px;height:44px;border-bottom:1px solid rgba(0,0,0,0.07);flex:0 0 44px}
+.brand-mark{width:26px;height:26px;flex:0 0 26px}
+.brand-title strong{font-size:14px;color:var(--text);font-weight:700;white-space:nowrap}
+.nav-group{margin-bottom:0}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 6px 5px;color:#8a9ab8;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;user-select:none}
+.nav-group-title .title-left{display:flex;align-items:center;gap:7px}
+.nav-group-title svg{width:12px;height:12px;color:#8a9ab8}
+.nav-group-title small{font-size:14px;color:rgba(0,0,0,0.3);font-weight:400;letter-spacing:0}
+.nav-group.collapsed .nav-items{display:none}
+.nav-items{display:flex;flex-direction:column;gap:1px;margin-bottom:2px}
+.nav-item{display:flex;align-items:center;gap:8px;min-height:34px;padding:5px 10px 5px 14px;border:none;border-radius:7px;background:transparent;color:#4a5c7a;font-size:14px;font-weight:400;transition:background 0.15s,color 0.15s;width:100%;text-align:left}
+.nav-item:hover{background:rgba(43,97,240,0.06);color:var(--text)}
+.nav-item.active{position:relative;background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
+.nav-item.active::after{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:999px;background:var(--primary)}
+.global-topbar{grid-column:2;grid-row:1;position:sticky;top:0;z-index:50;height:44px;display:flex;align-items:center;padding:0 16px 0 14px;background:#ffffff;border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(26,44,82,0.06);gap:10px}
+.topbar-module-label{font-size:13px;color:var(--text-soft);font-weight:600}
+.topbar-module-label.topbar-parent{color:var(--text-faint);font-weight:500}
+.topbar-sep{color:#c5cdd9;font-size:12px}
+.topbar-spacer{flex:1 1 auto}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:none;border-radius:7px;background:transparent;color:#7a8ea8;transition:background 0.15s,color 0.15s}
+.icon-button:hover{background:rgba(43,97,240,0.08);color:var(--primary)}
+.badge-btn{position:relative}
+.badge-btn .badge{position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#e04040;color:#fff;font-size:9px;font-weight:700;display:grid;place-items:center;border:1.5px solid #fff}
+.avatar{display:flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:999px;background:rgba(43,97,240,0.07);border:1px solid rgba(43,97,240,0.13);color:var(--text)}
+.avatar strong{color:var(--text);font-size:12px}
+.avatar-badge{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;font-size:11px}
+
+/* ── Main Area ── */
+.main-area{grid-column:2;grid-row:2;display:flex;min-height:0}
+
+/* ── Secondary Scheme Panel ── */
+.scheme-panel{width:180px;flex:0 0 180px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+.sp-search{display:flex;align-items:center;gap:6px;padding:10px 10px 8px;border-bottom:1px solid var(--line)}
+.sp-search-inner{display:flex;align-items:center;flex:1;border:1px solid rgba(122,145,184,0.16);border-radius:7px;background:#f8fbff;overflow:hidden;height:28px}
+.sp-search-inner input{flex:1;border:none;background:transparent;font-size:12px;color:var(--text);padding:0 8px;outline:none}
+.sp-search-inner input::placeholder{color:var(--text-faint)}
+.sp-search-inner button{width:26px;height:100%;border:none;background:transparent;color:var(--text-faint);display:grid;place-items:center;cursor:pointer}
+.sp-search-inner button:hover{color:var(--primary)}
+.sp-action-btns{display:flex;gap:4px;flex:0 0 auto}
+.sp-action-btn{width:26px;height:26px;border:1px solid rgba(122,145,184,0.18);border-radius:5px;background:#fff;color:var(--text-soft);display:grid;place-items:center;cursor:pointer;transition:all 0.15s}
+.sp-action-btn:hover{border-color:rgba(43,97,240,0.25);color:var(--primary)}
+.sp-type-list{padding:8px 8px 4px}
+.sp-type-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;font-size:13px;color:var(--text-soft);cursor:pointer;transition:background 0.12s,color 0.12s;margin-bottom:1px;user-select:none}
+.sp-type-item:hover{background:rgba(43,97,240,0.05);color:var(--text)}
+.sp-type-item.active{background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
+.sp-type-dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.sp-type-dot.blue{background:#2b61f0}
+.sp-type-dot.orange{background:#f87c00}
+.sp-type-dot.green{background:#12a87a}
+.sp-type-dot.purple{background:#9356e0}
+.sp-divider{height:1px;background:var(--line);margin:6px 8px}
+.sp-section-title{font-size:11px;font-weight:700;color:var(--text-faint);padding:6px 10px 4px;letter-spacing:0.04em;text-transform:uppercase}
+.scheme-tree{flex:1;overflow-y:auto;padding:0 8px 12px}
+.scheme-tree::-webkit-scrollbar{width:3px}.scheme-tree::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.2);border-radius:999px}
+.st-node{margin-bottom:1px}
+.st-row{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:6px;font-size:13px;color:var(--text-soft);cursor:pointer;transition:background 0.12s,color 0.12s;user-select:none}
+.st-row:hover{background:rgba(43,97,240,0.05);color:var(--text)}
+.st-row.active{background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
+.st-caret{width:14px;height:14px;display:grid;place-items:center;color:var(--text-faint);flex:0 0 14px}
+.st-caret svg{transition:transform 0.2s}
+.st-node.open .st-caret svg{transform:rotate(90deg)}
+.st-label{flex:1;font-size:13px}
+.st-count{font-size:11px;color:var(--text-faint);font-weight:600}
+.st-children{padding-left:20px;display:none}
+.st-node.open .st-children{display:block}
+.st-leaf{display:flex;align-items:center;gap:6px;padding:4px 7px;border-radius:6px;font-size:13px;color:var(--text-soft);cursor:pointer;transition:background 0.12s,color 0.12s;user-select:none}
+.st-leaf:hover{background:rgba(43,97,240,0.05);color:var(--text)}
+.st-leaf.active{color:var(--primary);font-weight:700}
+.st-leaf::before{content:'';width:5px;height:5px;border-radius:50%;background:rgba(122,145,184,0.35);flex:0 0 5px}
+.st-leaf.active::before{background:var(--primary)}
+
+/* ── Content Area ── */
+.content-area{flex:1 1 0;min-width:0;overflow-y:auto;padding:14px 16px 32px}
+.content-area::-webkit-scrollbar{width:4px}.content-area::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.22);border-radius:999px}
+
+/* ── Filter Card ── */
+.filter-card{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 4px rgba(26,44,82,0.04);margin-bottom:12px;overflow:hidden}
+.filter-row{display:flex;align-items:flex-start;gap:0;border-bottom:1px solid rgba(122,145,184,0.08);padding:8px 16px}
+.filter-row:last-child{border-bottom:none}
+.filter-label{font-size:12px;font-weight:700;color:var(--text-soft);min-width:56px;flex:0 0 56px;padding-top:5px;padding-right:8px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:5px;flex:1}
+.fchip{padding:4px 10px;border-radius:999px;border:1px solid transparent;background:transparent;font-size:12px;color:var(--text-soft);cursor:pointer;transition:all 0.12s;font-weight:600}
+.fchip:hover{background:rgba(43,97,240,0.05);color:var(--text)}
+.fchip.active{background:rgba(43,97,240,0.08);color:var(--primary);border-color:rgba(43,97,240,0.18);font-weight:700}
+.fchip.count span{color:var(--primary);font-weight:700}
+.filter-row-select{display:flex;gap:8px;flex-wrap:wrap;flex:1;align-items:center}
+.f-sel-wrap{position:relative}
+.f-sel-wrap select{appearance:none;padding:5px 22px 5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#f8fbff;color:var(--text-soft);font-size:12px;font-weight:600;cursor:pointer;outline:none}
+.f-sel-wrap::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text-faint);pointer-events:none;font-size:10px}
+.more-filter-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;cursor:pointer}
+.more-filter-btn:hover{border-color:rgba(43,97,240,0.2);color:var(--primary)}
+.filter-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid rgba(122,145,184,0.08)}
+.btn-save{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:7px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--text-soft);font-size:13px;font-weight:700;transition:all 0.12s}
+.btn-save:hover{border-color:rgba(43,97,240,0.22);color:var(--primary)}
+.btn-query{display:flex;align-items:center;gap:5px;padding:6px 18px;border-radius:7px;border:none;background:var(--primary);color:#fff;font-size:13px;font-weight:700;box-shadow:0 4px 10px rgba(43,97,240,0.22);transition:background 0.15s}
+.btn-query:hover{background:var(--primary-deep)}
+
+/* ── Stats row ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.stat-mini{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 4px rgba(26,44,82,0.04);padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.stat-mini-label{font-size:11px;color:var(--text-soft);font-weight:600}
+.stat-mini-val{font-size:22px;font-weight:800;color:var(--primary)}
+.stat-mini-sub{font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:4px}
+.stat-mini-sub.red{color:var(--danger)}
+.stat-mini-sub.green{color:var(--success)}
+.stat-mini-sub.orange{color:var(--warning)}
+
+/* ── Results bar ── */
+.results-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.res-total{font-size:13px;color:var(--text-soft);font-weight:600}
+.res-select-link{font-size:13px;color:var(--primary);font-weight:700;cursor:pointer;white-space:nowrap}
+.res-spacer{flex:1 1 auto}
+.res-actions{display:flex;align-items:center;gap:8px}
+.res-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.12s}
+.res-btn:hover{border-color:rgba(43,97,240,0.2);color:var(--primary)}
+.res-sort{display:flex;align-items:center;gap:3px;padding:5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;cursor:pointer}
+.res-search{display:flex;align-items:center;border:1px solid rgba(122,145,184,0.18);border-radius:7px;background:#fff;overflow:hidden;height:30px}
+.res-search input{border:none;background:transparent;font-size:12px;color:var(--text);padding:0 10px;outline:none;width:160px}
+.res-search input::placeholder{color:var(--text-faint)}
+.res-search-btn{width:28px;height:100%;border:none;background:transparent;color:var(--text-faint);display:grid;place-items:center;cursor:pointer}
+.res-icon-btn{width:28px;height:28px;border:1px solid rgba(122,145,184,0.16);border-radius:6px;background:#fff;color:var(--text-soft);display:grid;place-items:center;cursor:pointer;transition:all 0.12s}
+.res-icon-btn:hover{border-color:rgba(43,97,240,0.2);color:var(--primary)}
+
+/* ── Warning Item (enhanced) ── */
+.warn-item{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 4px rgba(26,44,82,0.04);padding:14px 16px;margin-bottom:8px;transition:box-shadow 0.15s,border-color 0.15s;display:flex;align-items:flex-start;gap:12px;position:relative}
+.warn-item:hover{box-shadow:0 4px 14px rgba(26,44,82,0.08);border-color:rgba(43,97,240,0.16)}
+.warn-item.high{border-left:3px solid var(--danger)}
+.warn-item.medium{border-left:3px solid var(--warning)}
+.warn-item.low{border-left:3px solid var(--secondary)}
+.warn-level{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:0 0 32px;font-size:11px;font-weight:800}
+.warn-level.high{background:rgba(224,64,64,0.08);color:var(--danger)}
+.warn-level.medium{background:rgba(196,125,16,0.08);color:var(--warning)}
+.warn-level.low{background:rgba(43,97,240,0.08);color:var(--primary)}
+.warn-body{flex:1;min-width:0}
+.warn-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.45;cursor:pointer}
+.warn-title:hover{color:var(--primary)}
+.warn-excerpt{font-size:12px;color:var(--text-soft);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.warn-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.warn-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700}
+.warn-pill.high{background:rgba(224,64,64,0.1);color:var(--danger)}
+.warn-pill.medium{background:rgba(196,125,16,0.08);color:var(--warning)}
+.warn-pill.low{background:rgba(43,97,240,0.07);color:var(--primary)}
+.warn-meta-item{font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:3px}
+.warn-meta-item strong{color:var(--text-soft);font-weight:600}
+.meta-sep{color:rgba(122,145,184,0.3);font-size:10px}
+.channel-tags{display:flex;gap:4px;flex-wrap:wrap}
+.ch-tag{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.ch-tag.weibo{background:rgba(255,100,60,0.08);color:#ff643c}
+.ch-tag.wechat{background:rgba(18,168,122,0.08);color:var(--success)}
+.ch-tag.news{background:rgba(43,97,240,0.07);color:var(--primary)}
+.ch-tag.video{background:rgba(147,86,224,0.08);color:#9356e0}
+.warn-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding-left:12px}
+.warn-toggle{width:34px;height:18px;border-radius:999px;border:none;cursor:pointer;position:relative;transition:background 0.2s;flex:0 0 34px}
+.warn-toggle.on{background:var(--primary)}
+.warn-toggle.off{background:rgba(122,145,184,0.22)}
+.warn-toggle::after{content:'';position:absolute;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.12);transition:left 0.2s}
+.warn-toggle.on::after{left:18px}
+.warn-toggle.off::after{left:2px}
+.warn-actions{display:flex;gap:6px}
+.wa-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(122,145,184,0.16);background:#fff;font-size:12px;font-weight:700;color:var(--text-soft);cursor:pointer;transition:all 0.12s}
+.wa-btn:hover{border-color:rgba(43,97,240,0.2);color:var(--primary)}
+.wa-btn.danger{color:var(--danger);border-color:rgba(224,64,64,0.15)}
+.wa-btn.danger:hover{background:rgba(224,64,64,0.04)}
+
+/* ── Pagination ── */
+.pagination{display:flex;align-items:center;gap:6px;margin-top:16px;justify-content:center}
+.pg-btn{height:30px;min-width:30px;padding:0 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.18);background:#fff;color:var(--text-soft);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.12s;display:grid;place-items:center}
+.pg-btn:hover{border-color:rgba(43,97,240,0.25);color:var(--primary)}
+.pg-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.pg-ellipsis{color:var(--text-faint);padding:0 4px;font-size:13px}
+.pg-goto{display:flex;align-items:center;gap:6px;margin-left:12px;font-size:12px;color:var(--text-soft)}
+.pg-goto input{width:44px;padding:4px 8px;border-radius:7px;border:1px solid rgba(122,145,184,0.2);font-size:12px;text-align:center;outline:none;color:var(--text)}
+
+/* ── Warning Notification Toast ── */
+.warn-toast{position:fixed;bottom:24px;right:24px;z-index:200;width:280px;background:#fff;border:1px solid rgba(224,64,64,0.25);border-radius:10px;box-shadow:0 8px 24px rgba(26,44,82,0.14);overflow:hidden;animation:slideUp 0.3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.wt-header{background:rgba(224,64,64,0.06);border-bottom:1px solid rgba(224,64,64,0.12);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.wt-header-icon{width:20px;height:20px;border-radius:50%;background:rgba(224,64,64,0.12);display:grid;place-items:center;color:var(--danger);flex:0 0 20px}
+.wt-header-title{flex:1;font-size:13px;font-weight:700;color:var(--danger)}
+.wt-close{width:22px;height:22px;border:none;background:transparent;color:var(--text-faint);cursor:pointer;border-radius:4px;display:grid;place-items:center;font-size:14px;line-height:1}
+.wt-close:hover{background:rgba(122,145,184,0.1);color:var(--text)}
+.wt-body{padding:12px 14px}
+.wt-msg{font-size:13px;color:var(--text);font-weight:600;margin-bottom:6px}
+.wt-sub{font-size:11px;color:var(--text-faint);line-height:1.5}
+.wt-item{display:flex;align-items:flex-start;gap:6px;margin-top:8px}
+.wt-dot{width:5px;height:5px;border-radius:50%;background:var(--danger);flex:0 0 5px;margin-top:4px}
+.wt-item-text{font-size:12px;color:var(--text-soft);line-height:1.5}
+.wt-footer{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.wt-view-btn{padding:5px 14px;border-radius:6px;border:none;background:var(--danger);color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:background 0.15s}
+.wt-view-btn:hover{background:#c73333}
+.wt-ignore-btn{padding:5px 14px;border-radius:6px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;cursor:pointer}
+
+@media(max-width:900px){.scheme-panel{display:none}}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- Topbar -->
+  <header class="global-topbar">
+    <span class="topbar-module-label topbar-parent">监测预警</span>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-module-label">预警查询</span>
+    <div class="topbar-spacer"></div>
+    <button class="icon-button" title="收藏">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="icon-button" title="任务中心">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
+    <button class="icon-button badge-btn" title="通知" onclick="showToast()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="badge" id="noticeBadge">1</span>
+    </button>
+    <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
+        <path d="M5 8H25L15 25H5V8Z" fill="url(#wq_a)"/><path d="M23 8H43L31 31H17L23 8Z" fill="url(#wq_b)"/><path d="M14 28H29L22 40H14V28Z" fill="url(#wq_c)"/>
+        <defs><linearGradient id="wq_a" x1="5" y1="8" x2="27" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#2A72FF"/><stop offset="1" stop-color="#11C3C4"/></linearGradient><linearGradient id="wq_b" x1="17" y1="8" x2="43" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#4C8FFF"/><stop offset="1" stop-color="#2757FF"/></linearGradient><linearGradient id="wq_c" x1="14" y1="28" x2="29" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#14C9B3"/><stop offset="1" stop-color="#3D8BFF"/></linearGradient></defs>
+      </svg>
+      <div class="brand-title"><strong>网络舆情系统</strong></div>
+    </div>
+    <div class="sidebar-nav-area">
+      <section class="nav-group active">
+        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div><small>›</small></div>
+        <div class="nav-items">
+          <a class="nav-item" href="../AI智能推荐/index.html"><span>AI智能推荐</span></a>
+          <a class="nav-item" href="../热点榜单/index.html"><span>热点榜单</span></a>
+          <a class="nav-item" href="../关键对象监测/index.html"><span>关键对象监测</span></a>
+          <a class="nav-item" href="../信息监测/index.html"><span>信息监测</span></a>
+          <a class="nav-item active" href="./index.html"><span>预警查询</span></a>
+          <a class="nav-item" href="../智能检索/index.html"><span>智能检索</span></a>
+        </div>
+      </section>
+      <section class="nav-group">
+        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div><small>›</small></div>
+        <div class="nav-items">
+          <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+          <a class="nav-item" href="../../事件分析/智能体编报/index.html"><span>智能体编报</span></a>
+        </div>
+      </section>
+      <section class="nav-group">
+        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div><small>›</small></div>
+        <div class="nav-items">
+          <a class="nav-item" href="../../处置引导/传播引导策略/index.html"><span>传播引导策略</span></a>
+          <a class="nav-item" href="../../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
+          <div class="nav-item"><span>选题看板</span></div>
+          <a class="nav-item" href="../../处置引导/多稿合并工具/index.html"><span>多稿合并工具</span></a>
+          <a class="nav-item" href="../../处置引导/舆情复盘分析/index.html"><span>舆情复盘分析</span></a>
+        </div>
+      </section>
+      <section class="nav-group">
+        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库子系统</span></div><small>›</small></div>
+        <div class="nav-items">
+          <a class="nav-item" href="../../知识库子系统/热点话题案例库/index.html"><span>热点话题案例库</span></a>
+          <div class="nav-item"><span>宣传引导策略库</span></div>
+          <div class="nav-item"><span>决策报告知识库</span></div>
+          <div class="nav-item"><span>重点关注对象库</span></div>
+          <div class="nav-item"><span>行业术语与本体知识库</span></div>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <main class="main-area">
+    <!-- Secondary Scheme Panel -->
+    <aside class="scheme-panel">
+      <div class="sp-search">
+        <div class="sp-search-inner">
+          <input type="text" placeholder="预警方案">
+          <button title="搜索">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="sp-action-btns">
+          <button class="sp-action-btn" title="新建方案">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="sp-action-btn" title="列表视图">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sp-type-list">
+        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot orange"></span><span>热点榜单预警</span></div>
+        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot purple"></span><span>账号监测预警</span></div>
+        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot blue"></span><span>信息监测预警</span></div>
+        <div class="sp-type-item active" onclick="selectType(this)"><span class="sp-type-dot green"></span><span>AI预警</span></div>
+      </div>
+      <div class="sp-divider"></div>
+      <div class="sp-section-title">预警方案</div>
+      <div class="scheme-tree">
+        <div class="st-node open">
+          <div class="st-row active" onclick="toggleNode(this)">
+            <span class="st-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="st-label">两会预警</span>
+            <span class="st-count">47</span>
+          </div>
+          <div class="st-children">
+            <div class="st-leaf active">全部预警</div>
+            <div class="st-leaf">高危预警</div>
+            <div class="st-leaf">今日新增</div>
+            <div class="st-leaf">已处理</div>
+          </div>
+        </div>
+        <div class="st-node">
+          <div class="st-row" onclick="toggleNode(this)">
+            <span class="st-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="st-label">公共安全预警</span>
+            <span class="st-count">23</span>
+          </div>
+          <div class="st-children">
+            <div class="st-leaf">全部预警</div>
+            <div class="st-leaf">高危预警</div>
+          </div>
+        </div>
+        <div class="st-node">
+          <div class="st-row" onclick="toggleNode(this)">
+            <span class="st-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="st-label">涉港澳台预警</span>
+            <span class="st-count">31</span>
+          </div>
+          <div class="st-children">
+            <div class="st-leaf">全部预警</div>
+            <div class="st-leaf">敏感信息</div>
+          </div>
+        </div>
+        <div class="st-node">
+          <div class="st-row" onclick="toggleNode(this)">
+            <span class="st-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="st-label">民生热点预警</span>
+            <span class="st-count">18</span>
+          </div>
+          <div class="st-children">
+            <div class="st-leaf">全部预警</div>
+            <div class="st-leaf">今日新增</div>
+          </div>
+        </div>
+        <div class="st-node">
+          <div class="st-row" onclick="toggleNode(this)">
+            <span class="st-caret"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <span class="st-label">舆论阵地预警</span>
+            <span class="st-count">9</span>
+          </div>
+          <div class="st-children">
+            <div class="st-leaf">全部预警</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Stats mini row -->
+      <div class="stats-row">
+        <div class="stat-mini">
+          <div class="stat-mini-label">今日预警总量</div>
+          <div class="stat-mini-val">128</div>
+          <div class="stat-mini-sub red">↑ 23条 较昨日</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">高危预警</div>
+          <div class="stat-mini-val" style="color:var(--danger)">12</div>
+          <div class="stat-mini-sub red">需立即处理</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">已处理</div>
+          <div class="stat-mini-val" style="color:var(--success)">89</div>
+          <div class="stat-mini-sub green">处置率 69.5%</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">预警方案数</div>
+          <div class="stat-mini-val" style="color:var(--text)">5</div>
+          <div class="stat-mini-sub orange">活跃中</div>
+        </div>
+      </div>
+
+      <!-- Filter Card -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <span class="filter-label">预警时间</span>
+          <div class="filter-chips">
+            <button class="fchip" onclick="selectFilter(this,'time')">今天</button>
+            <button class="fchip" onclick="selectFilter(this,'time')">近24小时</button>
+            <button class="fchip active" onclick="selectFilter(this,'time')">近3天</button>
+            <button class="fchip" onclick="selectFilter(this,'time')">近7天</button>
+            <button class="fchip" onclick="selectFilter(this,'time')">近30天</button>
+            <button class="fchip" onclick="selectFilter(this,'time')">自定义</button>
+          </div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">预警级别</span>
+          <div class="filter-chips">
+            <button class="fchip active" onclick="selectFilter(this,'level')">全部</button>
+            <button class="fchip" onclick="selectFilter(this,'level')" style="color:var(--danger)">高危</button>
+            <button class="fchip" onclick="selectFilter(this,'level')" style="color:var(--warning)">中危</button>
+            <button class="fchip" onclick="selectFilter(this,'level')" style="color:var(--primary)">低危</button>
+          </div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">处理状态</span>
+          <div class="filter-chips">
+            <button class="fchip active" onclick="selectFilter(this,'status')">全部</button>
+            <button class="fchip" onclick="selectFilter(this,'status')">待处理</button>
+            <button class="fchip" onclick="selectFilter(this,'status')">处理中</button>
+            <button class="fchip" onclick="selectFilter(this,'status')">已处理</button>
+            <button class="fchip" onclick="selectFilter(this,'status')">已忽略</button>
+          </div>
+        </div>
+        <div class="filter-row" style="border-bottom:none">
+          <span class="filter-label">来源方案</span>
+          <div class="filter-row-select">
+            <div class="f-sel-wrap"><select><option>预警类型</option><option>信息监测预警</option><option>热点榜单预警</option><option>账号监测预警</option><option>AI预警</option></select></div>
+            <div class="f-sel-wrap"><select><option>媒体来源</option><option>全部</option><option>微博</option><option>微信</option><option>网媒</option></select></div>
+            <div class="f-sel-wrap"><select><option>情感倾向</option><option>全部</option><option>负面</option><option>中立</option><option>正面</option></select></div>
+            <button class="more-filter-btn">更多筛选 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn-save">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 12L10 15L17 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            保存筛选
+          </button>
+          <button class="btn-query">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            查询
+          </button>
+        </div>
+      </div>
+
+      <!-- Results bar -->
+      <div class="results-bar">
+        <span class="res-total">共 <strong>128</strong> 条预警</span>
+        <span class="res-select-link">选择当前页</span>
+        <span style="font-size:12px;color:var(--text-faint);cursor:pointer">批量处理</span>
+        <div class="res-spacer"></div>
+        <div class="res-actions">
+          <button class="res-btn">导出预警报告</button>
+          <button class="res-sort">预警时间 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 4V20M6 14L12 20L18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <div class="res-search">
+            <input type="text" placeholder="搜索预警内容">
+            <button class="res-search-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+          <button class="res-icon-btn" title="列表视图"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Warning list -->
+      <div class="warn-list">
+
+        <div class="warn-item high">
+          <div class="warn-level high">高危</div>
+          <div class="warn-body">
+            <div class="warn-title">【紧急预警】涉"两会"负面舆情快速扩散，微博话题阅读量突破5000万</div>
+            <div class="warn-excerpt">监测发现，微博平台出现大量涉及两会相关的负面讨论帖，话题#两会代表建议争议#在短时间内阅读量突破5000万，评论区出现大量质疑声音和情绪化内容，已有多家境外媒体开始摘编相关内容，存在较高舆论风险。建议立即启动应急处置流程……</div>
+            <div class="warn-meta">
+              <span class="warn-pill high">高危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>两会预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 15:17:57</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag weibo">微博热搜</span>
+                <span class="ch-tag news">境外媒体</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>52,000,000+</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn danger">立即处置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item high">
+          <div class="warn-level high">高危</div>
+          <div class="warn-body">
+            <div class="warn-title">区考倒计时10天！2026年中央一号文件考点梳理与实战演练.pdf — 异常传播监测</div>
+            <div class="warn-excerpt">检测发现包含敏感内容的PDF文件在微信朋友圈、微博、各大知识付费平台广泛传播，传播节点主要集中在教培机构账号，该文件涉及将非公开政策文件内容包装为付费内容进行传播，来源：微信公众号，监测时间：2026-03-04 15:17:57，关联词：中央一号文件……</div>
+            <div class="warn-meta">
+              <span class="warn-pill high">高危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>两会预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 15:17:57</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag wechat">微信</span>
+                <span class="ch-tag news">知识付费</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>8,400</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn danger">立即处置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item medium">
+          <div class="warn-level medium">中危</div>
+          <div class="warn-body">
+            <div class="warn-title">微信群流传"内部文件"称政府将大幅削减农业补贴，内容经核实为虚假信息</div>
+            <div class="warn-excerpt">多个微信群内流传一份标注"内部文件"的截图，声称2026年农业补贴将大幅削减30%以上。经核实，该文件系伪造，所引用数据均与官方公布数据不符。目前已通过1000+个微信群传播，评论区情绪较为激动，部分农民账号转发量较高……</div>
+            <div class="warn-meta">
+              <span class="warn-pill medium">中危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>民生热点预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 14:35:22</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag wechat">微信</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>12,600</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn">处置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item medium">
+          <div class="warn-level medium">中危</div>
+          <div class="warn-body">
+            <div class="warn-title">境外平台出现大量诋毁两会制度相关内容，主要来自已标注"中国异见"账号</div>
+            <div class="warn-excerpt">X（原Twitter）平台监测到#China2026NPC#话题下，大量账号发布诋毁全国人大代表产生制度的内容，主要账号具有"中国异见人士"账号特征，其中10余个账号具有较高粉丝量（10万+），相关内容正在英语圈传播中……</div>
+            <div class="warn-meta">
+              <span class="warn-pill medium">中危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>涉港澳台预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 13:44:10</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag news">X(Twitter)</span>
+                <span class="ch-tag news">境外</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>47,200</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn">处置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item low">
+          <div class="warn-level low">低危</div>
+          <div class="warn-body">
+            <div class="warn-title">微博用户对新出台住房政策表达质疑，评论区讨论较为活跃</div>
+            <div class="warn-excerpt">微博平台上有关新购房贷利息税前扣除政策讨论较为活跃，部分用户认为政策力度不够，呼吁更大规模减税。整体舆论倾向中性偏负，尚未出现明显的煽动性内容，但需持续跟踪……</div>
+            <div class="warn-meta">
+              <span class="warn-pill low">低危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>两会预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 12:20:08</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag weibo">微博</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>3,100</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn">忽略</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item low">
+          <div class="warn-level low">低危</div>
+          <div class="warn-body">
+            <div class="warn-title">抖音平台出现多段两会相关"混剪"短视频，内容存在断章取义嫌疑</div>
+            <div class="warn-excerpt">抖音平台上2小时内出现超过60段以两会为主题的混剪视频，部分视频将代表发言截取拼接，形成与原意不符的解读。目前播放量总计超过120万次，整体情绪偏负，建议持续跟踪……</div>
+            <div class="warn-meta">
+              <span class="warn-pill low">低危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>舆论阵地预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 11:05:33</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag video">抖音</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>1,200,000</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn">忽略</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="warn-item medium">
+          <div class="warn-level medium">中危</div>
+          <div class="warn-body">
+            <div class="warn-title">Facebook群组【香港关注组】出现涉港澳台的敏感政治讨论，参与人数持续增加</div>
+            <div class="warn-excerpt">Facebook上的"香港关注组"在两会期间参与人数激增，出现大量涉及制度质疑、政策批评的内容，部分境外媒体账号参与其中并进行截图传播。当前群内活跃讨论帖以两会政策解读为主，整体倾向较为负面……</div>
+            <div class="warn-meta">
+              <span class="warn-pill medium">中危</span>
+              <span class="meta-sep">|</span>
+              <span class="warn-meta-item">方案：<strong>涉港澳台预警</strong></span>
+              <span class="warn-meta-item">预警时间：<strong>2026-03-04 10:30:11</strong></span>
+              <span class="meta-sep">|</span>
+              <div class="channel-tags">
+                <span class="ch-tag news">Facebook</span>
+                <span class="ch-tag news">境外</span>
+              </div>
+              <span class="warn-meta-item">传播量：<strong>6,800</strong></span>
+            </div>
+          </div>
+          <div class="warn-right">
+            <button class="warn-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+            <div class="warn-actions">
+              <button class="wa-btn">查看详情</button>
+              <button class="wa-btn">处置</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /warn-list -->
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="pg-btn">«</button>
+        <button class="pg-btn">‹</button>
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn">3</button>
+        <span class="pg-ellipsis">…</span>
+        <button class="pg-btn">13</button>
+        <button class="pg-btn">›</button>
+        <button class="pg-btn">»</button>
+        <div class="pg-goto">跳往 <input type="number" min="1" max="13" value="1"> 页</div>
+      </div>
+    </div><!-- /content-area -->
+  </main>
+</div>
+
+<!-- Warning Toast Notification -->
+<div class="warn-toast" id="warnToast">
+  <div class="wt-header">
+    <div class="wt-header-icon">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <span class="wt-header-title">预警通知（新增预警信息1条）</span>
+    <button class="wt-close" onclick="closeToast()">×</button>
+  </div>
+  <div class="wt-body">
+    <div class="wt-msg">发现新增高危预警</div>
+    <div class="wt-sub">监测时间：2026-03-04 15:17:57</div>
+    <div class="wt-item">
+      <div class="wt-dot"></div>
+      <div class="wt-item-text">区考倒计时10天！2026年中央一号文件考点梳理与实战演练.pdf</div>
+    </div>
+    <div class="wt-sub" style="margin-top:6px">来源：微信公众号 | 关联词：中央一号文件</div>
+  </div>
+  <div class="wt-footer">
+    <button class="wt-ignore-btn" onclick="closeToast()">忽略</button>
+    <button class="wt-view-btn">立即查看</button>
+  </div>
+</div>
+
+<script>
+function toggleGroup(el) {
+  el.closest('.nav-group').classList.toggle('collapsed');
+}
+function selectFilter(el, group) {
+  var parent = el.closest('.filter-chips, .filter-row-select');
+  if (parent) {
+    parent.querySelectorAll('.fchip').forEach(function(b) { b.classList.remove('active'); });
+  }
+  el.classList.add('active');
+}
+function selectType(el) {
+  document.querySelectorAll('.sp-type-item').forEach(function(i) { i.classList.remove('active'); });
+  el.classList.add('active');
+}
+function toggleNode(el) {
+  el.closest('.st-node').classList.toggle('open');
+}
+function closeToast() {
+  document.getElementById('warnToast').style.display = 'none';
+  document.getElementById('noticeBadge').style.display = 'none';
+}
+function showToast() {
+  document.getElementById('warnToast').style.display = 'block';
+  document.getElementById('noticeBadge').style.display = 'grid';
+}
+// Auto-show toast after short delay for demo
+setTimeout(function() {
+  document.getElementById('warnToast').style.display = 'block';
+}, 800);
+</script>
+</body>
+</html>

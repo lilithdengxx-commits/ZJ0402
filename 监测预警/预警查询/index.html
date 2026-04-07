@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -457,6 +457,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <span style="font-size:12px;color:var(--text-faint);cursor:pointer">批量处理</span>
         <div class="res-spacer"></div>
         <div class="res-actions">
+          <button class="btn-ai-asst" onclick="openAIForWarn()">
+            <svg width="13" height="13" viewBox="0 0 48 48" fill="none"><path d="M13 17C13 14.24 15.24 12 18 12H30C32.76 12 35 14.24 35 17V26C35 28.76 32.76 31 30 31H27L22 37V31H18C15.24 31 13 28.76 13 26V17Z" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="19.5" cy="22" r="2" fill="currentColor"/><circle cx="24" cy="22" r="2" fill="currentColor"/><circle cx="28.5" cy="22" r="2" fill="currentColor"/></svg>
+            AI助手
+          </button>
           <button class="res-btn">导出预警报告</button>
           <button class="res-sort">预警时间 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 4V20M6 14L12 20L18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
           <div class="res-search">
@@ -729,6 +733,22 @@ function showToast() {
 setTimeout(function() {
   document.getElementById('warnToast').style.display = 'block';
 }, 800);
+// 动态添加复选框到每个预警条目
+document.querySelectorAll('.warn-item').forEach(function(item) {
+  var cb = document.createElement('input');
+  cb.type = 'checkbox'; cb.className = 'warn-cb';
+  cb.style.cssText = 'position:absolute;left:12px;top:14px;width:14px;height:14px;cursor:pointer;accent-color:#2b61f0;z-index:1';
+  item.style.paddingLeft = '36px';
+  item.insertBefore(cb, item.firstChild);
+});
+function openAIForWarn() {
+  var sel = Array.from(document.querySelectorAll('.warn-cb:checked'))
+    .map(function(cb){ return cb.closest('.warn-item').querySelector('.warn-title').textContent.trim(); })
+    .filter(Boolean);
+  if (!sel.length) sel = Array.from(document.querySelectorAll('.warn-title')).map(function(t){ return t.textContent.trim(); }).slice(0, 6);
+  window.aiAssistantOpenWithData(sel);
+}
 </script>
+<script src="../../shared/ai-assistant.js"></script>
 </body>
 </html>

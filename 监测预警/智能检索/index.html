@@ -1728,6 +1728,10 @@
                                     <span>共有 <strong id="resultCount">0</strong> 条数据</span>
                                     <button class="toolbar-button" id="exportButton" type="button">数据导出</button>
                                     <button class="toolbar-button" id="translateButton" type="button">翻译</button>
+                                    <button class="btn-ai-asst" type="button" onclick="openAIForSearch()">
+                                      <svg width="13" height="13" viewBox="0 0 48 48" fill="none"><path d="M13 17C13 14.24 15.24 12 18 12H30C32.76 12 35 14.24 35 17V26C35 28.76 32.76 31 30 31H27L22 37V31H18C15.24 31 13 28.76 13 26V17Z" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="19.5" cy="22" r="2" fill="currentColor"/><circle cx="24" cy="22" r="2" fill="currentColor"/><circle cx="28.5" cy="22" r="2" fill="currentColor"/></svg>
+                                      AI分析
+                                    </button>
                                 </div>
                                 <div class="results-actions">
                                     <label class="sort-select">
@@ -2904,6 +2908,14 @@
                 title.closest('.nav-group').classList.toggle('collapsed');
             });
         });
+        function openAIForSearch() {
+            var sel = Array.from(document.querySelectorAll('.result-card input[data-select-id]:checked'))
+                .map(function(cb){ var card = cb.closest('.result-card'); return card ? card.querySelector('.result-title').textContent.trim() : ''; })
+                .filter(Boolean);
+            if (!sel.length) sel = Array.from(document.querySelectorAll('.result-title')).map(function(t){ return t.textContent.trim(); }).slice(0, 6);
+            window.aiAssistantOpenWithData(sel);
+        }
     </script>
+<script src="../../shared/ai-assistant.js"></script>
 </body>
 </html>

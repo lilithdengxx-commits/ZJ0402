@@ -264,5 +264,6 @@ function clearFilters(){document.querySelectorAll('.filter-bar input[type=text]'
 function setPage(p){document.querySelectorAll('.pg-nav .pg-btn').forEach(function(b){b.classList.remove('active');if(b.textContent.trim()===String(p))b.classList.add('active')});document.getElementById('gotoInput').value=p}
 function gotoPage(){var p=parseInt(document.getElementById('gotoInput').value);if(!isNaN(p)&&p>=1&&p<=9)setPage(p)}
 </script>
+<script src="../../shared/ai-assistant.js"></script>
 </body>
 </html>

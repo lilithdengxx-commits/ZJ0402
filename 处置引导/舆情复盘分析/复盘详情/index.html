@@ -5,62 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>复盘详情 - 大埔宏福苑大火舆情复盘报告</title>
 <style>
-:root{--text:#2a3448;--text-soft:#68778f;--text-faint:#9aa8bc;--primary:#2f6bff;--primary-deep:#1f54dd;--secondary:#9ec7ff;--success:#19a581;--danger:#ce5d57;--warning:#ba862c;--accent-gradient:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);--shadow-md:0 16px 30px rgba(26,44,82,0.08);--sidebar-width:248px;font-family:"Alibaba PuHuiTi 3.0","HarmonyOS Sans SC","Microsoft YaHei UI",sans-serif;color-scheme:light}
+:root{--text:#1e2d45;--text-soft:#6b7c95;--text-faint:#9eb0c6;--primary:#2b61f0;--primary-deep:#1a4ed4;--secondary:#7ab0ff;--secondary-soft:rgba(43,97,240,0.1);--success:#12a87a;--danger:#e04040;--warning:#c47d10;--sidebar-bg:#ffffff;--sidebar-width:220px;font-family:"PingFang SC","Lantinghei SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;color:var(--text);background:radial-gradient(circle at 12% -6%,rgba(47,107,255,0.12),transparent 28%),radial-gradient(circle at 100% 0%,rgba(158,199,255,0.18),transparent 24%),linear-gradient(180deg,#fbfcff 0%,#f5f7fb 46%,#eef2f8 100%);min-height:100vh}
+body{margin:0;color:var(--text);background:#eef1f8;min-height:100vh;overflow-x:hidden}
+body::before,body::after{display:none}
 a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,select,textarea{font:inherit}
-.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:24px;min-height:100vh}
-.sidebar{position:sticky;top:20px;height:calc(100vh - 40px);margin:20px 0 20px 20px;padding:18px 16px 24px;background:linear-gradient(180deg,rgba(255,255,255,0.88),rgba(246,249,253,0.92));backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.14);border-radius:28px;overflow-y:auto;box-shadow:0 14px 28px rgba(26,44,82,0.05),inset 0 1px 0 rgba(255,255,255,0.78)}
-.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(131,151,194,0.24);border-radius:999px}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:4px 6px 14px;border-bottom:1px solid rgba(122,145,184,0.1)}
-.brand-mark{width:36px;height:36px;flex:0 0 36px}
-.brand-title strong{font-size:15px;letter-spacing:0.02em;color:#2b62ce;font-weight:900;white-space:nowrap}
-.nav-group{margin-bottom:14px}
-.nav-group-title{display:flex;align-items:center;gap:10px;padding:7px 10px 5px;margin-bottom:8px;border-radius:12px;color:#8793a6;font-size:11px;font-weight:800}
-.nav-group-title .title-left{display:flex;align-items:center;gap:8px}
-.nav-group-title svg{width:14px;height:14px;color:var(--primary)}
-.nav-items{display:flex;flex-direction:column;gap:6px}
-.nav-item{display:flex;align-items:center;gap:10px;min-height:42px;padding:9px 14px;border:1px solid rgba(122,145,184,0.06);border-radius:12px;background:transparent;color:#4f5f7c;font-size:12px;font-weight:700;transition:transform 0.2s,border-color 0.2s,background 0.2s,color 0.2s}
-.nav-item:hover{transform:translateX(2px);border-color:rgba(47,107,255,0.14);background:rgba(255,255,255,0.84);color:#375a8f}
-.nav-item.active{background:#fff;color:var(--primary);border-color:rgba(47,107,255,0.08);box-shadow:0 10px 20px rgba(26,44,82,0.05)}
-.main-area{min-width:0;padding:20px 20px 40px 0;display:flex;flex-direction:column}
-.topbar{position:sticky;top:20px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.78);backdrop-filter:blur(20px);border:1px solid rgba(122,145,184,0.12);box-shadow:var(--shadow-md)}
-.topbar-left{display:flex;align-items:center;gap:12px;flex:1 1 auto}
-.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:#68778f}
-.breadcrumb a{color:var(--primary);font-weight:600}
-.breadcrumb a:hover{text-decoration:underline}
-.breadcrumb-sep{color:#9aa8bc}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.icon-button{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(122,145,184,0.12);border-radius:12px;background:rgba(255,255,255,0.92);color:#3f5479;cursor:pointer;transition:transform 0.2s}
-.icon-button:hover{transform:translateY(-2px);color:#3a73dd}
-.avatar{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border-radius:999px;background:var(--accent-gradient);color:#fff;box-shadow:0 14px 24px rgba(47,107,255,0.18)}
-.avatar strong{color:#fff;font-size:14px}
-.avatar-badge{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.18);font-weight:800}
-.page{padding:20px 0;display:flex;flex-direction:column;gap:20px}
-
+.app-shell{display:grid;grid-template-columns:var(--sidebar-width) 1fr;column-gap:0;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;grid-row:1/-1;margin:0;padding:0;background:#fff;border-radius:0;overflow:visible;display:flex;flex-direction:column;z-index:10;box-shadow:2px 0 8px rgba(26,44,82,0.08)}
+.sidebar-nav-area{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 10px 8px}
+.sidebar-nav-area::-webkit-scrollbar{width:3px}.sidebar-nav-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.1);border-radius:999px}
+.brand{display:flex;align-items:center;gap:9px;padding:0 14px;height:44px;border-bottom:1px solid rgba(0,0,0,0.07);flex:0 0 44px}
+.brand-mark{width:26px;height:26px;flex:0 0 26px}
+.brand-title strong{font-size:14px;letter-spacing:0.02em;color:var(--text);font-weight:700;white-space:nowrap}
+.nav-group{margin-bottom:0}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 6px 5px;margin-bottom:2px;border-radius:6px;color:#8a9ab8;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;user-select:none;transition:color 0.15s}
+.nav-group-title:hover{color:#4a5c7a}
+.nav-group-title .title-left{display:flex;align-items:center;gap:7px}
+.nav-group-title svg{width:12px;height:12px;color:#8a9ab8}
+.nav-group-title small{display:inline-flex;font-size:14px;color:rgba(0,0,0,0.35);font-weight:400;letter-spacing:0;transition:transform 0.2s}
+.nav-group.collapsed .nav-group-title small{transform:rotate(180deg)}
+.nav-group.active .nav-group-title{color:#4a5c7a}
+.nav-items{display:flex;flex-direction:column;gap:1px;overflow:hidden;margin-bottom:2px}
+.nav-group.collapsed .nav-items{display:none}
+.nav-item{display:flex;align-items:center;justify-content:flex-start;gap:8px;min-height:34px;padding:5px 10px 5px 14px;border:none;border-radius:7px;background:transparent;color:#4a5c7a;font-size:14px;font-weight:400;transition:background 0.15s,color 0.15s}
+.nav-item:hover{background:rgba(43,97,240,0.06);color:var(--text)}
+.nav-item.active{position:relative;background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
+.nav-item.active::after{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:999px;background:var(--primary)}
+.nav-item small{display:none}
+.main-area{min-width:0;padding:0;display:flex;flex-direction:column;background:#eef1f8}
+.topbar{position:sticky;top:0;z-index:50;height:44px;display:flex;align-items:center;padding:0 16px 0 14px;background:#fff;border-bottom:1px solid rgba(122,145,184,0.14);box-shadow:0 1px 4px rgba(26,44,82,0.06);gap:10px}
+.topbar-module-label{font-size:13px;color:var(--text-soft);font-weight:600;flex:0 0 auto}
+.topbar-module-label.topbar-parent{color:var(--text-faint);font-weight:500}
+.topbar-sep{color:#c5cdd9;font-size:12px}
+.topbar-spacer{flex:1 1 auto}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:none;border-radius:7px;background:transparent;color:#7a8ea8;box-shadow:none;transition:background 0.15s,color 0.15s;cursor:pointer}
+.icon-button:hover{background:rgba(43,97,240,0.08);color:var(--primary)}
+.avatar{display:flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:999px;background:rgba(43,97,240,0.07);border:1px solid rgba(43,97,240,0.13);color:var(--text);box-shadow:none}
+.avatar strong{color:var(--text);font-size:12px;letter-spacing:0}
+.avatar-badge{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--primary);color:#fff;border:none;font-weight:700;font-size:11px}
+.page{width:100%;max-width:none;margin:0 auto;padding:14px 16px 32px;display:flex;flex-direction:column;gap:20px}
 /* 报告头部 */
-.report-header{background:var(--accent-gradient);border-radius:20px;padding:28px 32px;color:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.report-header{background:linear-gradient(135deg,#2b61ea 0%,#4e88ff 56%,#77b6ff 100%);border-radius:10px;padding:22px 28px;color:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
 .report-header-left{flex:1}
 .report-title{font-size:22px;font-weight:900;margin:0 0 14px;line-height:1.3}
 .report-meta{display:flex;flex-wrap:wrap;gap:20px}
 .report-meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.85)}
 .report-meta-item strong{color:#fff;font-weight:700}
 .report-header-actions{display:flex;flex-direction:column;gap:10px;flex-shrink:0}
-.btn-rpt{padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.btn-rpt{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
 .btn-rpt-gen{background:#fff;color:var(--primary);border:none}
 .btn-rpt-save{background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35)}
 
 /* 统计卡片 */
+.data-section{background:#fff;border-radius:10px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 1px 4px rgba(26,44,82,0.04);padding:16px 20px}
+.data-section .stats-section-label{margin-bottom:12px}
 .stats-section-label{font-size:13px;font-weight:800;color:#1a2234;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .stats-section-label::before{content:'';width:4px;height:14px;border-radius:2px;background:var(--primary);display:block}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.stat-card{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:18px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.stat-card{background:rgba(43,97,240,0.03);border-radius:8px;border:1px solid rgba(122,145,184,0.12);padding:12px 16px;display:flex;flex-direction:column;gap:4px}
 .stat-val{font-size:26px;font-weight:800;color:var(--primary);line-height:1.1}
 .stat-label{font-size:12px;color:#68778f;font-weight:600}
 
 /* 效果评估 */
 .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.effect-card{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:18px 20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.effect-card{background:rgba(43,97,240,0.03);border-radius:8px;border:1px solid rgba(122,145,184,0.12);padding:12px 16px}
 .effect-val{font-size:24px;font-weight:800;line-height:1.1;margin-bottom:4px}
 .effect-label{font-size:12px;color:#68778f;font-weight:600;margin-bottom:8px}
 .effect-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700}
@@ -97,14 +105,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .chart-strategy-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
 /* SVG简单折线图 */
-.chart-wrap{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.chart-wrap{background:#fff;border-radius:10px;border:1px solid rgba(122,145,184,0.1);padding:16px;box-shadow:0 1px 4px rgba(26,44,82,0.04)}
 .chart-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .chart-legend{display:flex;align-items:center;gap:14px;font-size:11px;font-weight:600}
 .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
 
 /* 策略卡片 */
-.strategy-wrap{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
-.strategy-item{border:1px solid rgba(122,145,184,0.12);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.strategy-wrap{background:#fff;border-radius:10px;border:1px solid rgba(122,145,184,0.1);padding:16px;box-shadow:0 1px 4px rgba(26,44,82,0.04)}
+.strategy-item{border:1px solid rgba(122,145,184,0.12);border-radius:8px;padding:12px 14px;margin-bottom:8px}
 .strategy-item:last-child{margin-bottom:0}
 .strategy-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .strategy-num{width:22px;height:22px;border-radius:6px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
@@ -116,7 +124,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .strategy-metric strong{color:var(--primary)}
 
 /* 深度评估 */
-.eval-section{background:#fff;border-radius:16px;border:1px solid rgba(122,145,184,0.1);padding:20px;box-shadow:0 4px 16px rgba(26,44,82,0.05)}
+.eval-section{background:#fff;border-radius:10px;border:1px solid rgba(122,145,184,0.1);padding:16px 20px;box-shadow:0 1px 4px rgba(26,44,82,0.04)}
 .eval-item{border-bottom:1px solid rgba(122,145,184,0.08);padding:14px 0}
 .eval-item:last-child{border-bottom:none;padding-bottom:0}
 .eval-item:first-child{padding-top:0}
@@ -125,9 +133,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .eval-item-score{font-size:18px;font-weight:800;color:var(--primary)}
 .eval-item-desc{font-size:12px;color:#68778f;line-height:1.6}
 .eval-progress{height:6px;background:rgba(122,145,184,0.12);border-radius:999px;margin-top:8px;overflow:hidden}
-.eval-progress-bar{height:100%;border-radius:999px;background:var(--accent-gradient)}
+.eval-progress-bar{height:100%;border-radius:999px;background:var(--primary)}
 
-.section-card{background:#fff;border-radius:20px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 8px 24px rgba(26,44,82,0.06);padding:24px 28px}
+.section-card{background:#fff;border-radius:10px;border:1px solid rgba(122,145,184,0.1);box-shadow:0 1px 4px rgba(26,44,82,0.04);padding:18px 22px}
 </style>
 </head>
 <body>
@@ -140,6 +148,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </svg>
       <div class="brand-title"><strong>网络舆情系统</strong></div>
     </div>
+    <div class="sidebar-nav-area">
     <section class="nav-group">
       <div class="nav-group-title"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4H17V8H7V4ZM5 10H19V20H5V10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>监测预警</span></div></div>
       <div class="nav-items">
@@ -178,22 +187,20 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <div class="nav-item"><span>行业术语与本体知识库</span></div>
       </div>
     </section>
+    </div>
   </aside>
 
   <main class="main-area">
     <header class="topbar">
-      <div class="topbar-left">
-        <div class="breadcrumb">
-          <a href="../index.html">舆情复盘分析</a>
-          <span class="breadcrumb-sep">/</span>
-          <span>复盘详情</span>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
-        <button class="icon-button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-        <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
-      </div>
+      <span class="topbar-module-label topbar-parent">处置引导</span>
+      <span class="topbar-sep">/</span>
+      <a href="../index.html" class="topbar-module-label topbar-parent" style="color:inherit;text-decoration:none">舆情复盘分析</a>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-module-label">复盘详情</span>
+      <div class="topbar-spacer"></div>
+      <button class="icon-button" aria-label="收藏"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 17.4L6.12 20.5L7.24 13.93L2.48 9.3L9.06 8.34L12 2.4L14.94 8.34L21.52 9.3L16.76 13.93L17.88 20.5L12 17.4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+      <button class="icon-button" aria-label="通知"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 17H18L17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11L6 17Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19C10.4 20.2 11.1 20.8 12 20.8C12.9 20.8 13.6 20.2 14 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+      <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
     </header>
 
     <section class="page">
@@ -201,6 +208,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       <div class="report-header">
         <div class="report-header-left">
           <div class="report-title">大埔宏福苑大火舆情复盘报告</div>
+          <div class="report-summary" style="font-size:12px;color:rgba(255,255,255,0.85);line-height:1.7;margin:10px 0 14px;max-width:580px">2025年11月26日，香港大埔宏福苑大厦外墙施工现场突发火热，拤起广泛舆情关注。局自起火2.5小时内发布权威回应，联动公安、消防及建筑局共同处置，事件自月底赞声转正，主流舆论得到有效引导。</div>
           <div class="report-meta">
             <div class="report-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10H21M8 2V6M16 2V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>时间段：<strong>2025-11-26 至 2025-12-31</strong></span></div>
             <div class="report-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.6"/></svg><span>涉及地域：<strong>香港</strong></span></div>
@@ -220,7 +228,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </div>
 
       <!-- 数据概览 -->
-      <div>
+      <div class="data-section">
         <div class="stats-section-label">数据概览</div>
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-val">6,089</div><div class="stat-label">信息总量</div></div>
@@ -235,7 +243,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </div>
 
       <!-- 效果量化评估 -->
-      <div>
+      <div class="data-section">
         <div class="stats-section-label">效果量化评估</div>
         <div class="effect-grid">
           <div class="effect-card">
@@ -349,13 +357,13 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               <!-- 引导触达 -->
               <polyline points="40,110 85,100 130,80 175,65 220,60 265,58 310,55 355,52" fill="none" stroke="#19a581" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5,3"/>
               <!-- X轴标签 -->
-              <text x="40" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.26</text>
-              <text x="85" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.27</text>
-              <text x="130" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.28</text>
-              <text x="175" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.29</text>
-              <text x="220" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">11.30</text>
-              <text x="265" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">12.01</text>
-              <text x="310" y="132" fill="#9aa8bc" font-size="9" text-anchor="middle">12.02</text>
+              <text x="40" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">11.26</text>
+              <text x="85" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">11.27</text>
+              <text x="130" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">11.28</text>
+              <text x="175" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">11.29</text>
+              <text x="220" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">11.30</text>
+              <text x="265" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">12.01</text>
+              <text x="310" y="132" fill="#9aa8bc" font-size="6" text-anchor="middle">12.02</text>
             </svg>
           </div>
 

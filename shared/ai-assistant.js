@@ -335,8 +335,8 @@
         </div>
         <div class="ai-presets-label">您也可以这样问我：</div>
         <div class="ai-preset-list">
-          <div class="ai-preset-item" data-preset="帮我分析一下"新能源汽车"近三天的舆情走势">
-            帮我分析一下"新能源汽车"近三天的舆情走势
+          <div class="ai-preset-item" data-preset="近24小时舆情速递">
+            近24小时舆情速递
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
           <div class="ai-preset-item" data-preset="总结某事件在社交平台上网民的情绪分布">
@@ -361,7 +361,7 @@
     <!-- 功能模式切换 -->
     <div class="ai-mode-tabs">
       <button class="ai-mode-tab active">AI分析</button>
-      <button class="ai-mode-tab">监测方案</button>
+      <button class="ai-mode-tab">信息监测</button>
       <button class="ai-mode-tab">事件分析</button>
       <button class="ai-mode-tab">智能体编报</button>
     </div>

@@ -20,14 +20,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .brand-mark{width:26px;height:26px;flex:0 0 26px}
 .brand-title strong{font-size:14px;color:var(--text);font-weight:700;white-space:nowrap}
 .nav-group{margin-bottom:0}
-.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 6px 5px;color:#8a9ab8;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;user-select:none}
+.nav-group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 6px 5px;color:#8a9ab8;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;user-select:none}
 .nav-group-title .title-left{display:flex;align-items:center;gap:7px}
 .nav-group-title svg{width:12px;height:12px;color:#8a9ab8}
 .nav-group-title small{font-size:14px;color:rgba(0,0,0,0.3);font-weight:400;letter-spacing:0}
 .nav-group.collapsed .nav-items{display:none}
 .nav-group.collapsed .nav-group-title small{transform:rotate(180deg)}
 .nav-items{display:flex;flex-direction:column;gap:1px;margin-bottom:2px}
-.nav-item{display:flex;align-items:center;gap:8px;min-height:34px;padding:5px 10px 5px 14px;border:none;border-radius:7px;background:transparent;color:#4a5c7a;font-size:14px;font-weight:400;transition:background 0.15s,color 0.15s;width:100%;text-align:left}
+.nav-item{display:flex;align-items:center;gap:8px;min-height:34px;padding:5px 10px 5px 25px;border:none;border-radius:7px;background:transparent;color:#2c3e56;font-size:14px;font-weight:400;transition:background 0.15s,color 0.15s;width:100%;text-align:left}
 .nav-item:hover{background:rgba(43,97,240,0.06);color:var(--text)}
 .nav-item.active{position:relative;background:rgba(43,97,240,0.09);color:var(--primary);font-weight:700}
 .nav-item.active::after{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:999px;background:var(--primary)}
@@ -44,11 +44,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .avatar strong{color:var(--text);font-size:12px}
 .avatar-badge{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;font-size:11px}
 
-/* ── Main Area: secondary panel + content ── */
-.main-area{grid-column:2;grid-row:2;display:flex;min-height:0}
-
-/* ── Secondary Scheme Panel ── */
-.scheme-panel{width:180px;flex:0 0 180px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+/* ── Main Area: big card ── */
+.main-area{grid-column:2;grid-row:2;display:flex;min-height:0;padding:14px 16px;overflow:hidden}
+.big-card{flex:1;display:flex;min-height:0;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 6px rgba(26,44,82,0.07);overflow:hidden}
+.scheme-col{width:200px;flex:0 0 200px;background:#fafbfd;border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
 .sp-search{display:flex;align-items:center;gap:6px;padding:10px 10px 8px;border-bottom:1px solid var(--line)}
 .sp-search-inner{display:flex;align-items:center;flex:1;border:1px solid rgba(122,145,184,0.16);border-radius:7px;background:#f8fbff;overflow:hidden;height:28px}
 .sp-search-inner input{flex:1;border:none;background:transparent;font-size:12px;color:var(--text);padding:0 8px;outline:none}
@@ -92,31 +91,36 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .st-leaf::before{content:'';width:5px;height:5px;border-radius:50%;background:rgba(122,145,184,0.35);flex:0 0 5px}
 .st-leaf.active::before{background:var(--primary)}
 
-/* ── Content Area ── */
-.content-area{flex:1 1 0;min-width:0;overflow-y:auto;padding:14px 16px 32px}
-.content-area::-webkit-scrollbar{width:4px}.content-area::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.22);border-radius:999px}
+/* ── Content Column ── */
+.content-col{flex:1 1 0;min-width:0;overflow-y:auto;padding:14px 16px 32px}
+.content-col::-webkit-scrollbar{width:4px}.content-col::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.22);border-radius:999px}
+.content-col .filter-card{border:none;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;margin-bottom:0}
+.content-col .news-item{background:transparent;border:none;border-bottom:1px solid rgba(122,145,184,0.08);border-radius:0;box-shadow:none;padding:12px 0}
+.content-col .news-item:last-child{border-bottom:none}
+.content-col .news-item:hover{background:rgba(43,97,240,0.018);box-shadow:none}
+.content-col .results-bar{padding-top:10px}
 
-/* ── Filter Card ── */
-.filter-card{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 4px rgba(26,44,82,0.04);padding:0;margin-bottom:12px;overflow:hidden}
-.filter-row{display:flex;align-items:flex-start;gap:0;border-bottom:1px solid rgba(122,145,184,0.08);padding:8px 16px}
+.filter-scheme-bar{display:flex;align-items:center;gap:8px;padding:10px 16px 8px;font-size:12px;color:var(--text-soft);border-bottom:1px solid rgba(122,145,184,0.08);min-height:46px}
+.filter-scheme-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;background:rgba(43,97,240,0.08);color:var(--primary);font-weight:600;font-size:12px}
+.filter-row{display:flex;align-items:center;gap:0;padding:6px 16px}
 .filter-row:last-child{border-bottom:none}
-.filter-label{font-size:12px;font-weight:700;color:var(--text-soft);min-width:56px;flex:0 0 56px;padding-top:5px;padding-right:8px}
+.filter-label{font-size:12px;font-weight:400;color:#5c6e89;min-width:56px;flex:0 0 56px;padding-right:8px}
 .filter-chips{display:flex;flex-wrap:wrap;gap:5px;flex:1}
-.fchip{padding:4px 10px;border-radius:999px;border:1px solid transparent;background:transparent;font-size:12px;color:var(--text-soft);cursor:pointer;transition:all 0.12s;font-weight:600}
-.fchip:hover{background:rgba(43,97,240,0.05);color:var(--text)}
-.fchip.active{background:rgba(43,97,240,0.08);color:var(--primary);border-color:rgba(43,97,240,0.18);font-weight:700}
-.fchip.count{color:var(--text-faint)}
-.fchip.count span{color:var(--primary);font-weight:700}
+.fchip{min-height:26px;padding:0 10px;border-radius:6px;border:1px solid rgba(122,145,184,0.15);background:#fff;font-size:12px;font-weight:400;color:#60708a;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.fchip:hover{border-color:rgba(43,97,240,0.25);color:var(--primary)}
+.fchip.active{background:var(--primary);color:#fff;border-color:transparent;font-weight:500}
+.fchip.count{color:#60708a}
+.fchip.count span{color:var(--primary);font-weight:600}
 .filter-row-select{display:flex;gap:8px;flex-wrap:wrap;flex:1;align-items:center}
 .f-sel-wrap{position:relative}
-.f-sel-wrap select{appearance:none;padding:5px 22px 5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#f8fbff;color:var(--text-soft);font-size:12px;font-weight:600;cursor:pointer;outline:none}
+.f-sel-wrap select{appearance:none;min-height:28px;padding:0 22px 0 10px;border-radius:6px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#53667f;font-size:12px;font-weight:400;cursor:pointer;outline:none}
 .f-sel-wrap::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text-faint);pointer-events:none;font-size:10px}
-.more-filter-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#fff;color:var(--text-soft);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.12s}
+.more-filter-btn{display:flex;align-items:center;gap:4px;min-height:28px;padding:0 10px;border-radius:6px;border:1px solid rgba(122,145,184,0.15);background:#fff;color:#60708a;font-size:12px;font-weight:400;cursor:pointer;transition:all 0.12s}
 .more-filter-btn:hover{border-color:rgba(43,97,240,0.2);color:var(--primary)}
-.filter-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid rgba(122,145,184,0.08)}
-.btn-save{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:7px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--text-soft);font-size:13px;font-weight:700;transition:all 0.12s}
+.filter-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:8px 16px;border-top:none}
+.btn-save{display:flex;align-items:center;gap:5px;padding:5px 14px;border-radius:6px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--text-soft);font-size:12px;font-weight:400;transition:all 0.12s}
 .btn-save:hover{border-color:rgba(43,97,240,0.22);color:var(--primary)}
-.btn-query{display:flex;align-items:center;gap:5px;padding:6px 18px;border-radius:7px;border:none;background:var(--primary);color:#fff;font-size:13px;font-weight:700;box-shadow:0 4px 10px rgba(43,97,240,0.22);transition:background 0.15s}
+.btn-query{display:flex;align-items:center;gap:5px;padding:5px 18px;border-radius:6px;border:none;background:var(--primary);color:#fff;font-size:12px;font-weight:500;box-shadow:0 3px 8px rgba(43,97,240,0.22);transition:background 0.15s}
 .btn-query:hover{background:var(--primary-deep)}
 
 /* ── Results bar ── */
@@ -177,8 +181,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .news-cb{display:none}
 .news-item input[type=checkbox]{position:absolute;left:14px;top:16px;width:14px;height:14px;cursor:pointer;accent-color:var(--primary)}
 
-@media(max-width:1100px){.scheme-panel{width:160px;flex:0 0 160px}}
-@media(max-width:900px){.scheme-panel{display:none}}
+@media(max-width:1100px){.scheme-col{width:170px;flex:0 0 170px}}
+@media(max-width:900px){.scheme-col{display:none}}
 </style>
 </head>
 <body>
@@ -224,9 +228,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         </div>
       </section>
       <section class="nav-group">
-        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></div><small>›</small></div>
+        <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件研判</span></div><small>›</small></div>
         <div class="nav-items">
-          <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件管理</span></a>
+          <a class="nav-item" href="../../事件分析/事件管理/index.html"><span>事件分析</span></a>
           <a class="nav-item" href="../../事件分析/智能体编报/index.html"><span>智能体编报</span></a>
         </div>
       </section>
@@ -255,8 +259,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
   <!-- Main Area -->
   <main class="main-area">
-    <!-- Secondary Scheme Panel -->
-    <aside class="scheme-panel">
+    <div class="big-card">
+    <!-- Scheme Column -->
+    <aside class="scheme-col">
       <div class="sp-search">
         <div class="sp-search-inner">
           <input type="text" placeholder="监测方案">
@@ -274,16 +279,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         </div>
       </div>
 
-      <!-- Type list -->
-      <div class="sp-type-list">
-        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot orange"></span><span>热点榜单预警</span></div>
-        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot purple"></span><span>账号监测预警</span></div>
-        <div class="sp-type-item active" onclick="selectType(this)"><span class="sp-type-dot blue"></span><span>信息监测预警</span></div>
-        <div class="sp-type-item" onclick="selectType(this)"><span class="sp-type-dot green"></span><span>AI预警</span></div>
-      </div>
-
-      <div class="sp-divider"></div>
-      <div class="sp-section-title">监测方案</div>
+      <div class="sp-section-title" style="padding-top:10px">监测方案</div>
       <!-- Scheme tree -->
       <div class="scheme-tree">
         <div class="st-node open">
@@ -357,10 +353,16 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       </div>
     </aside>
 
-    <!-- Content Area -->
-    <div class="content-area">
+    <!-- Content Column -->
+    <div class="content-col">
       <!-- Filter Card -->
       <div class="filter-card">
+        <div class="filter-scheme-bar">
+          当前监测方案：<span class="filter-scheme-tag">
+            <svg width="8" height="8" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+            两会
+          </span>
+        </div>
         <div class="filter-row">
           <span class="filter-label">发布时间</span>
           <div class="filter-chips">
@@ -381,7 +383,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <button class="fchip count" onclick="selectFilter(this, 'media')">微信 <span>(34)</span></button>
             <button class="fchip count" onclick="selectFilter(this, 'media')">微博 <span>(91)</span></button>
             <button class="fchip count" onclick="selectFilter(this, 'media')">短视频 <span>(0)</span></button>
-            <button class="fchip count" onclick="selectFilter(this, 'media')">视频网站 <span>(0)</span></button>
             <button class="fchip count" onclick="selectFilter(this, 'media')">论坛贴吧 <span>(3)</span></button>
             <button class="fchip count" onclick="selectFilter(this, 'media')">X(Twitter) <span>(0)</span></button>
             <button class="fchip count" onclick="selectFilter(this, 'media')">Facebook <span>(1)</span></button>
@@ -407,7 +408,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <div class="f-sel-wrap"><select><option>数据类型</option><option>全部</option><option>文章</option><option>评论</option></select></div>
             <div class="f-sel-wrap"><select><option>情感倾向</option><option>全部</option><option>正面</option><option>中立</option><option>负面</option></select></div>
             <div class="f-sel-wrap"><select><option>命中位置</option><option>全部</option><option>标题</option><option>正文</option></select></div>
-            <div class="f-sel-wrap"><select><option>网读状态</option><option>全部</option><option>未读</option><option>已读</option></select></div>
+            <div class="f-sel-wrap"><select><option>阅读状态</option><option>全部</option><option>未读</option><option>已读</option></select></div>
             <button class="more-filter-btn">更多筛选 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
           </div>
         </div>
@@ -427,13 +428,16 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       <div class="results-bar">
         <span class="res-total">共 <strong>1,013</strong> 条</span>
         <span class="res-select-link">选择当前页</span>
-        <span style="font-size:12px;color:var(--text-faint);cursor:pointer">导出全部</span>
+        <button class="res-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M6 11l6 6 6-6M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          导出
+        </button>
+        <button class="btn-ai-asst" onclick="openAIForNews()">
+          <svg width="13" height="13" viewBox="0 0 48 48" fill="none"><path d="M13 17C13 14.24 15.24 12 18 12H30C32.76 12 35 14.24 35 17V26C35 28.76 32.76 31 30 31H27L22 37V31H18C15.24 31 13 28.76 13 26V17Z" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="19.5" cy="22" r="2" fill="currentColor"/><circle cx="24" cy="22" r="2" fill="currentColor"/><circle cx="28.5" cy="22" r="2" fill="currentColor"/></svg>
+          AI分析
+        </button>
         <div class="res-spacer"></div>
         <div class="res-actions">
-          <button class="btn-ai-asst" onclick="openAIForNews()">
-            <svg width="13" height="13" viewBox="0 0 48 48" fill="none"><path d="M13 17C13 14.24 15.24 12 18 12H30C32.76 12 35 14.24 35 17V26C35 28.76 32.76 31 30 31H27L22 37V31H18C15.24 31 13 28.76 13 26V17Z" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="19.5" cy="22" r="2" fill="currentColor"/><circle cx="24" cy="22" r="2" fill="currentColor"/><circle cx="28.5" cy="22" r="2" fill="currentColor"/></svg>
-            AI助手
-          </button>
           <button class="res-btn">相似信息去重</button>
           <button class="res-btn">展示选项</button>
           <button class="res-sort">发布时间 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 4V20M6 14L12 20L18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
@@ -669,7 +673,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <button class="pg-btn">»</button>
         <div class="pg-goto">跳往 <input type="number" min="1" max="102" value="1"> 页</div>
       </div>
-    </div><!-- /content-area -->
+    </div><!-- /content-col -->
+    </div><!-- /big-card -->
   </main>
 </div>
 

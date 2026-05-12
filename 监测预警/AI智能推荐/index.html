@@ -1048,7 +1048,7 @@
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 6px;
         }
 
@@ -1654,7 +1654,7 @@
         }
 
         .ai-panel > div:last-child {
-            display: inline;
+            display: block;
         }
 
         .ai-panel::before {
@@ -2017,7 +2017,9 @@
 .chip.parent-active{border-color:rgba(43,97,240,0.3);color:var(--primary);background:rgba(43,97,240,0.06)}
 /* Stats bars */
 .stats-bar-list{display:flex;flex-direction:column;gap:8px}
-.stats-bar-item{display:grid;grid-template-columns:80px 1fr 28px;align-items:center;gap:6px}
+.stats-bar-item{display:grid;grid-template-columns:80px 1fr 28px;align-items:center;gap:6px;cursor:pointer;border-radius:6px;padding:2px 4px;margin:0 -4px;transition:background 0.12s}
+.stats-bar-item:hover{background:rgba(43,97,240,0.06)}
+.stats-bar-item.filter-active{background:rgba(43,97,240,0.1);outline:1px solid rgba(43,97,240,0.22)}
 .stats-bar-name{font-size:12px;font-weight:500;color:#3a4d67;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stats-bar-track{height:6px;border-radius:999px;background:rgba(122,145,184,0.1);overflow:hidden}
 .stats-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#7ab2ff,#2f6bff);transition:width 0.4s ease}
@@ -2025,8 +2027,20 @@
 .stats-bar-count{font-size:11px;font-weight:700;color:#8fa4be;text-align:right}
 /* High freq content chips */
 .highfreq-tags{display:flex;flex-wrap:wrap;gap:6px 8px}
-.highfreq-tag{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:999px;border:1px solid rgba(122,145,184,0.14);background:rgba(255,255,255,0.84);font-size:13px;color:#4a6a9a;font-weight:400;box-shadow:0 2px 6px rgba(26,44,82,0.04)}
+.highfreq-tag{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:999px;border:1px solid rgba(122,145,184,0.14);background:rgba(255,255,255,0.84);font-size:13px;color:#4a6a9a;font-weight:400;box-shadow:0 2px 6px rgba(26,44,82,0.04);cursor:pointer;transition:background 0.12s,border-color 0.15s}
+.highfreq-tag:hover{background:rgba(43,97,240,0.06);border-color:rgba(43,97,240,0.2)}
+.highfreq-tag.filter-active{background:rgba(43,97,240,0.12)!important;border-color:var(--primary)!important;color:var(--primary)!important;font-weight:600}
 .highfreq-tag strong{font-size:10px;font-weight:700;padding-left:2px}
+/* AI分析按钮 */
+.btn-ai-asst{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:0 12px;border-radius:8px;border:1px solid rgba(43,97,240,0.2);background:rgba(43,97,240,0.06);color:var(--primary,#2b61f0);font-size:14px;font-weight:500;cursor:pointer;transition:border-color 0.15s,background 0.15s,color 0.15s}
+.btn-ai-asst:hover{border-color:rgba(43,97,240,0.38);background:rgba(43,97,240,0.12)}
+/* 事件概览 meta row */
+.ov-meta{display:block;margin-top:7px}
+.ov-ent{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;line-height:1;padding:3px 7px;border-radius:4px;background:rgba(83,120,185,0.08);color:#4a6a9a;border:1px solid rgba(83,120,185,0.14);white-space:nowrap;margin-right:8px;margin-bottom:4px}
+.ov-ent.ov-org{background:rgba(31,168,120,0.08);color:#1a8a62;border-color:rgba(31,168,120,0.18)}
+.ov-ent.ov-topic{background:rgba(100,80,200,0.07);color:#5540b0;border-color:rgba(100,80,200,0.16)}
+/* L2 chip-count */
+.chip.l2 .chip-count{font-size:10px;color:#8fa4be;margin-left:3px;font-weight:600}
 /* @@TOP-NAV-OVERRIDE@@ */
 .app-shell{display:flex!important;flex-direction:column!important;min-height:100vh!important}
 .sidebar{display:none!important}
@@ -2176,24 +2190,19 @@
 
     <script>
         const domainHierarchy = [
-            { id: "all", label: "全部", children: [] },
-            { id: "hot-topic", label: "热点议题综合", children: ["立选", "地区治理", "社会调查", "政府动态", "八项规定", "热点问题", "社会热点"] },
-            { id: "domain-dynamic", label: "领域动态综合", children: ["两岸", "青年", "创科", "法律", "医卫", "网安", "会计", "教育"] },
-            { id: "person-dynamic", label: "人物动态综合", children: ["政府官员", "立法会", "人大政协", "知名人士", "区议会", "关键人"] },
-            { id: "hot-general", label: "热点综合", children: ["管制动态", "案件关注", "热点事件", "社评个评", "调查报告", "国安关注", "外部动向"] },
-            { id: "institution", label: "机构舆情", children: [] },
-            { id: "competitor", label: "竞对动态", children: [] },
-            { id: "industry", label: "行业舆情", children: [] },
-            { id: "hk-incident", label: "涉港澳突发事件", children: [] },
-            { id: "key-dept", label: "关键部门", children: [] },
-            { id: "key-event", label: "关键事件", children: [] }
+            { id: "hot-topic", label: "热点议题", children: ["立选", "地区治理", "社会调查", "政府动态", "八项规定", "热点问题", "社会热点"] },
+            { id: "domain-dynamic", label: "领域动态", children: ["两岸", "青年", "创科", "法律", "医卫", "网安", "会计", "教育"] },
+            { id: "person-dynamic", label: "人物动态", children: ["政府官员", "立法会", "人大政协", "知名人士", "区议会", "关键人"] },
+            { id: "hot-general", label: "热点事件", children: ["管制动态", "案件关注", "热点事件", "社评个评", "调查报告", "国安关注", "外部动向"] },
+            { id: "special-monitor", label: "专项监测", children: ["机构舆情", "竞对动态", "行业舆情"] },
+            { id: "key-focus", label: "关键关注", children: ["涉港澳突发事件", "关键部门", "关键事件"] }
         ];
 
         const eventData = [
             {
                 id: "e1",
                 title: "大埔宏福苑棚架起火事件持续发酵，消防响应与居民安置受关注",
-                domainId: "hk-incident", domainLabel: "涉港澳突发事件", domainL2: null,
+                domainId: "key-focus", domainLabel: "关键关注", domainL2: "涉港澳突发事件",
                 riskLevel: "high", riskLabel: "高风险",
                 articleCount: 3, platforms: ["Facebook", "新闻资讯", "短视频"],
                 score: 96, dateTime: "2026-03-30T14:12:10", read: false, queued: true,
@@ -2317,7 +2326,7 @@
             {
                 id: "e5",
                 title: "机构舆情：杂志社专题策划遭自媒体断章取义，讨论度持续抬升",
-                domainId: "institution", domainLabel: "机构舆情", domainL2: null,
+                domainId: "special-monitor", domainLabel: "专项监测", domainL2: "机构舆情",
                 riskLevel: "medium", riskLabel: "中风险",
                 articleCount: 2, platforms: ["Threads", "短视频"],
                 score: 82, dateTime: "2026-03-30T14:12:10", read: true, queued: false,
@@ -2346,7 +2355,7 @@
             {
                 id: "e6",
                 title: "竞对传媒集团成立数字实验室，招聘信号被解读为区域媒体布局升级",
-                domainId: "competitor", domainLabel: "竞对动态", domainL2: null,
+                domainId: "special-monitor", domainLabel: "专项监测", domainL2: "竞对动态",
                 riskLevel: "medium", riskLabel: "中风险",
                 articleCount: 2, platforms: ["短视频", "LinkedIn"],
                 score: 68, dateTime: "2026-03-30T10:22:00", read: false, queued: false,
@@ -2404,8 +2413,97 @@
             }
         ];
 
+        // ── Mock event generator (keeps code compact) ──
+        function mk(id,t,di,dl,d2,risk,sc,dt,snt,snl,sum){
+            var rm={high:"高风险",medium:"中风险",low:"低风险"};
+            return{id:id,title:t,domainId:di,domainLabel:dl,domainL2:d2,riskLevel:risk,riskLabel:rm[risk]||"中风险",
+                articleCount:Math.max(2,Math.floor(sc/25)),platforms:["新闻资讯","微博"],
+                score:sc,dateTime:dt,read:false,queued:false,sentiment:snt,sentimentLabel:snl,
+                summary:sum,analysis:"AI持续监测中，建议关注后续进展。",
+                persons:[],orgs:[],
+                topics:[d2||dl,"舆情动态"],
+                viewpoints:[{text:"事件持续受到各方关注。",platform:"新闻资讯",sentiment:snt}],
+                suggestions:["持续监测事件动态","做好舆情研判预案"],
+                timeline:[{time:dt.slice(5,16).replace("T"," "),desc:"事件进入AI监测视野，自动标记待阅。"}],
+                articles:[{id:parseInt(id.replace(/\D/g,""))*10,title:t,platform:"新闻资讯",sentiment:snt,sentimentLabel:snl,dateTime:dt}]};
+        }
+        eventData.push(
+            // ── 热点议题综合 (hot-topic) ── +9 → 11 total
+            mk("e10","《基本法》23条立法一周年：各界回顾施政成效","hot-topic","热点议题综合","立选","medium",75,"2026-03-30T09:00:00","neutral","中立","立法周年引发各界回顾与展望，整体舆情平稳，政策关注度较高。"),
+            mk("e11","区议会候选人资格审查争议持续发酵","hot-topic","热点议题综合","立选","high",82,"2026-03-30T10:00:00","negative","负面","候选人资格争议在社交媒体持续扩散，各方立场分化明显。"),
+            mk("e12","政府公众咨询平台意见收集情况引媒体关注","hot-topic","热点议题综合","政府动态","low",61,"2026-03-30T11:00:00","neutral","中立","公众咨询机制有效性再受讨论，媒体聚焦参与度及结果运用。"),
+            mk("e13","八项规定执行力度加强，内地官员来港接待规格调整","hot-topic","热点议题综合","八项规定","medium",68,"2026-03-30T12:00:00","neutral","中立","接待规格调整细节引发业界关注，整体合规意识持续提升。"),
+            mk("e14","港府宣布推出新一轮青年发展政策支持计划","hot-topic","热点议题综合","社会调查","medium",72,"2026-03-30T09:30:00","positive","正面","新一轮青年政策获得积极反馈，各方评价总体正面。"),
+            mk("e15","立法会辩论教育资助制度改革草案","hot-topic","热点议题综合","地区治理","medium",78,"2026-03-30T13:00:00","neutral","中立","教育资助改革在立法会审议，各界关注细节落地情况。"),
+            mk("e16","社会舆论聚焦最低工资水平调整时间表","hot-topic","热点议题综合","热点问题","medium",74,"2026-03-29T20:00:00","neutral","中立","最低工资议题讨论热度持续，各方就调整幅度与时机看法不一。"),
+            mk("e17","本地就业市场数据出炉引发就业质量讨论","hot-topic","热点议题综合","社会热点","low",63,"2026-03-29T21:00:00","neutral","中立","最新就业数据发布，讨论聚焦工种结构变化与青年就业前景。"),
+            mk("e18","跨境家庭学位资源分配矛盾引家长群体关注","hot-topic","热点议题综合","社会调查","medium",71,"2026-03-29T22:00:00","negative","负面","学位资源分配矛盾持续发酵，相关议题在家长群体中广泛传播。"),
+            // ── 领域动态综合 (domain-dynamic) ── +10 → 11 total
+            mk("e20","两岸民间交流活动恢复情况持续受关注","domain-dynamic","领域动态综合","两岸","medium",79,"2026-03-30T09:00:00","neutral","中立","两岸民间交流渐次恢复，舆情保持理性观察态势。"),
+            mk("e21","香港青年赴内地就业政策配套细则出台","domain-dynamic","领域动态综合","青年","medium",73,"2026-03-30T10:30:00","positive","正面","配套政策细则明确，青年群体回应总体正面积极。"),
+            mk("e22","创科园区第二期招商工作启动，外资科企关注度高","domain-dynamic","领域动态综合","创科","low",65,"2026-03-30T08:00:00","positive","正面","招商工作正式启动，国际科企参与兴趣较浓。"),
+            mk("e23","本地律师协会就新修订法规发表专业立场","domain-dynamic","领域动态综合","法律","medium",70,"2026-03-30T14:00:00","neutral","中立","律师协会立场声明引发业界关注和社会讨论。"),
+            mk("e24","公立医院排队候诊时间问题再次聚焦","domain-dynamic","领域动态综合","医卫","high",85,"2026-03-30T11:00:00","negative","负面","候诊时间数据公布后讨论激烈，制度改革呼声明显上升。"),
+            mk("e25","网络安全应急演练结果引发媒体深度追踪","domain-dynamic","领域动态综合","网安","low",60,"2026-03-28T10:00:00","neutral","中立","演练结果公布后，媒体就薄弱环节展开追踪报道。"),
+            mk("e26","会计准则修订征询期结束，业界意见汇总发布","domain-dynamic","领域动态综合","会计","low",55,"2026-03-28T11:00:00","neutral","中立","业界意见汇总引发小范围专业讨论，整体影响可控。"),
+            mk("e27","本地高校学费资助政策调整引热议","domain-dynamic","领域动态综合","教育","medium",76,"2026-03-30T13:00:00","negative","负面","学费资助调整细节引发学生和家长广泛讨论。"),
+            mk("e28","两岸青年交流营活动规划受到媒体正面关注","domain-dynamic","领域动态综合","两岸","low",62,"2026-03-29T22:00:00","positive","正面","青年交流活动获得积极报道，整体氛围正向。"),
+            mk("e29","创科发展局发布季度科研成果汇报","domain-dynamic","领域动态综合","创科","low",58,"2026-03-29T23:00:00","neutral","中立","季度成果汇报引发学界和科技媒体的关注与解读。"),
+            // ── 人物动态综合 (person-dynamic) ── +11 → 11 total
+            mk("e30","行政长官出席重要经济论坛发表施政方向讲话","person-dynamic","人物动态综合","政府官员","low",72,"2026-03-30T10:00:00","neutral","中立","行政长官就经济发展方向发表重要讲话，引发多方解读。"),
+            mk("e31","财政司司长就最新财政预算案补充说明","person-dynamic","人物动态综合","政府官员","low",68,"2026-03-30T14:00:00","neutral","中立","财爷就预算补充说明澄清外界疑虑，讨论度较高。"),
+            mk("e32","立法会议员就公屋政策公开表态引关注","person-dynamic","人物动态综合","立法会","medium",75,"2026-03-30T09:30:00","negative","负面","议员表态引发舆论关注，网络讨论对其立场评价分化。"),
+            mk("e33","人大代表出席全国会议就地区发展提出建议","person-dynamic","人物动态综合","人大政协","low",64,"2026-03-29T19:00:00","neutral","中立","建议内容关注地区均衡发展，获主流媒体正向报道。"),
+            mk("e34","区议会主席就社区设施规划发表意见","person-dynamic","人物动态综合","区议会","low",60,"2026-03-29T21:00:00","neutral","中立","设施规划意见获社区居民关注，讨论较为平和。"),
+            mk("e35","知名媒体人就新闻生态议题公开表态","person-dynamic","人物动态综合","知名人士","high",83,"2026-03-30T16:00:00","negative","负面","表态引发舆论热议，社交媒体上正负评价激烈交锋。"),
+            mk("e36","关键人物：涉事官员出行动态受媒体持续追踪","person-dynamic","人物动态综合","关键人","high",87,"2026-03-30T07:00:00","negative","负面","官员动态成为舆论焦点，各方解读趋势性信号。"),
+            mk("e37","政务司司长出席立法会就政策实施答问","person-dynamic","人物动态综合","政府官员","medium",71,"2026-03-30T13:00:00","neutral","中立","答问会内容引发媒体广泛报道，政策细节成讨论重点。"),
+            mk("e38","立法会议员联名就劏房问题促当局回应","person-dynamic","人物动态综合","立法会","medium",78,"2026-03-30T11:00:00","negative","负面","联名促请关注劏房问题，引发社会广泛共鸣。"),
+            mk("e39","政协委员赴港考察期间接受媒体采访","person-dynamic","人物动态综合","人大政协","low",62,"2026-03-29T20:00:00","neutral","中立","委员就港深合作发表看法，获得理性解读。"),
+            mk("e40","区议员主导社区清洁活动获正面舆情","person-dynamic","人物动态综合","区议会","low",55,"2026-03-29T23:00:00","positive","正面","社区活动获居民好评，正面舆情持续发酵。"),
+            // ── 热点综合 (hot-general) ── +10 → 11 total
+            mk("e50","港铁服务故障波及大批乘客，管理责任遭质疑","hot-general","热点综合","热点事件","high",89,"2026-03-30T07:30:00","negative","负面","早高峰故障引发乘客强烈不满，管理责任成为舆论核心。"),
+            mk("e51","警方反罪案行动破获网络诈骗团伙","hot-general","热点综合","案件关注","medium",76,"2026-03-30T15:00:00","neutral","中立","破案通报引发市民对网络诈骗防范意识的关注。"),
+            mk("e52","政府发布调查报告：社会分化指标创近年新高","hot-general","热点综合","调查报告","high",81,"2026-03-30T14:00:00","negative","负面","报告数据引发各界高度关注，讨论焦点集中在政策应对层面。"),
+            mk("e53","媒体社评聚焦公务员绩效考核制度改革","hot-general","热点综合","社评个评","medium",69,"2026-03-30T09:00:00","neutral","中立","主流媒体社评对制度改革表达不同立场，讨论持续延伸。"),
+            mk("e54","国家安全相关监测报告摘要引发媒体解读","hot-general","热点综合","国安关注","medium",74,"2026-03-30T11:00:00","neutral","中立","报告摘要流传，各方就细节展开专业解读。"),
+            mk("e55","外部势力干预本地媒体生态相关信息曝光","hot-general","热点综合","外部动向","high",86,"2026-03-30T06:00:00","negative","负面","外部干预信息引发高度关注，安全讨论明显升温。"),
+            mk("e56","食品检测部门公布问题食品召回名单","hot-general","热点综合","管制动态","medium",72,"2026-03-30T10:00:00","negative","负面","召回名单覆盖范围较广，市民安全意识和不满情绪并存。"),
+            mk("e57","某上市公司股价异动引发监管部门高度关注","hot-general","热点综合","案件关注","medium",67,"2026-03-29T22:00:00","neutral","中立","股价异动成媒体焦点，监管动向受投资者高度关注。"),
+            mk("e58","外国媒体涉港报道被批带有明显倾向性","hot-general","热点综合","外部动向","medium",73,"2026-03-29T23:00:00","negative","负面","涉港报道准确性争议激烈，官方媒体已作出回应。"),
+            mk("e59","审计署报告披露政府部门项目超支情况","hot-general","热点综合","调查报告","high",80,"2026-03-30T08:30:00","negative","负面","超支项目细节引发社会关注，问责声音持续升温。"),
+            // ── 专项监测 (special-monitor) ── +9 → 11 total
+            mk("e60","本地传媒集团收购谈判消息流出业界广泛关注","special-monitor","专项监测","竞对动态","medium",77,"2026-03-30T14:00:00","neutral","中立","收购传闻引发媒体业界高度关注，各方预判不一。"),
+            mk("e61","监管机构就媒体内容标准发出合规提示","special-monitor","专项监测","机构舆情","medium",71,"2026-03-30T09:00:00","neutral","中立","合规提示涉及内容生产边界，机构内部已开始梳理应对。"),
+            mk("e62","广告市场萎缩影响媒体机构营收行业困境受关注","special-monitor","专项监测","行业舆情","medium",73,"2026-03-30T11:00:00","negative","负面","行业营收整体下滑，媒体转型压力引发持续讨论。"),
+            mk("e63","网络媒体订阅制转型成效差异显著","special-monitor","专项监测","行业舆情","medium",68,"2026-03-28T10:00:00","neutral","中立","各家媒体订阅制转型成效分化，商业模式讨论深化。"),
+            mk("e64","某主流媒体高层人事变动引发外界广泛揣测","special-monitor","专项监测","机构舆情","high",82,"2026-03-30T13:00:00","negative","负面","人事变动消息迅速扩散，业界对机构未来走向展开多方解读。"),
+            mk("e65","短视频平台用户增长加速传统媒体流量压力加剧","special-monitor","专项监测","行业舆情","medium",75,"2026-03-28T11:00:00","negative","负面","流量转移趋势明显，媒体业态调整紧迫性持续上升。"),
+            mk("e66","竞争对手推出AI辅助新闻生产工具","special-monitor","专项监测","竞对动态","medium",79,"2026-03-30T06:00:00","neutral","中立","AI工具发布引发业界广泛关注，技术竞争格局加速演变。"),
+            mk("e67","公关代理布局媒体合作网络引发透明度质疑","special-monitor","专项监测","行业舆情","medium",70,"2026-03-28T12:00:00","negative","负面","透明度质疑引发专业讨论，媒体生态合规边界成议题。"),
+            mk("e68","本地媒体机构年度颁奖典礼争议声音显著","special-monitor","专项监测","机构舆情","medium",66,"2026-03-29T19:00:00","neutral","中立","典礼入围和结果争议推动社会对新闻评价标准的再审视。"),
+            // ── 关键关注 (key-focus) ── +10 → 11 total
+            mk("e70","港九龙隧道连续追撞事故致多人受伤","key-focus","关键关注","涉港澳突发事件","high",88,"2026-03-30T15:30:00","negative","负面","追撞事故视频迅速传播，交通安全议题随即成为讨论焦点。"),
+            mk("e71","立法会大楼附近疑似异常物体引大规模疏散","key-focus","关键关注","涉港澳突发事件","high",94,"2026-03-30T06:30:00","negative","负面","疏散事件引发广泛关注，安全部门回应速度受到媒体跟踪。"),
+            mk("e72","关键政府部门数据泄露事件初步核查结果公布","key-focus","关键关注","关键部门","high",91,"2026-03-29T19:00:00","negative","负面","数据泄露核查结果引发严重关切，信息安全制度性讨论升温。"),
+            mk("e73","关键部门招聘考试舞弊调查进展引发批评","key-focus","关键关注","关键部门","medium",78,"2026-03-30T10:00:00","negative","负面","考试舞弊调查进展缓慢，公信力受到考验。"),
+            mk("e74","重大政策事件：行政长官政策宣示延期引各方解读","key-focus","关键关注","关键事件","high",86,"2026-03-30T08:00:00","negative","负面","宣示延期信号被多方解读为政策不确定性，舆论高度关注。"),
+            mk("e75","关键法律事件判决结果出炉各方反应迅速","key-focus","关键关注","关键事件","high",90,"2026-03-30T14:30:00","negative","负面","判决结果引发强烈反应，法律界和社会各方讨论激烈。"),
+            mk("e76","澳门某公共场所突发事故伤亡情况受持续关注","key-focus","关键关注","涉港澳突发事件","high",93,"2026-03-30T03:00:00","negative","负面","突发事故引发广泛关注，救援和管理责任成为核心讨论。"),
+            mk("e77","核心监管部门负责人拒绝出席立法会问答会","key-focus","关键关注","关键部门","high",84,"2026-03-30T11:00:00","negative","负面","拒绝出席引发问责声音，透明度和监管机制受到质疑。"),
+            mk("e78","关键历史事件周年纪念活动信息管控引关注","key-focus","关键关注","关键事件","medium",77,"2026-03-28T10:00:00","neutral","中立","纪念活动管理方式引发讨论，各方对历史叙事分歧显现。"),
+            mk("e79","医疗卫生部门疫苗接种数据差异引发公众质疑","key-focus","关键关注","关键部门","medium",74,"2026-03-30T09:00:00","negative","负面","数据差异被媒体揭露，公众对部门数据管理能力提出质疑。"),
+            // ── 热点议题补充 (hot-topic) ── +3 → 14 total
+            mk("e80","福利制度改革路线讨论升温，选举期政策聚焦","hot-topic","热点议题综合","立选","medium",73,"2026-03-30T07:00:00","neutral","中立","福利政策改革讨论持续升温，政策焦点随选举期引发广泛关注。"),
+            mk("e81","跨境通关配额重新分配引发商家及旅客关注","hot-topic","热点议题综合","地区治理","medium",69,"2026-03-30T07:30:00","neutral","中立","配额分配方案调整引发商家及旅客关注，各方期待明确说明。"),
+            mk("e82","港府推动文创产业政策，本地文艺界反应不一","hot-topic","热点议题综合","社会热点","low",61,"2026-03-30T06:30:00","neutral","中立","文创政策方向引发文艺界关注，部分认为支持力度仍有不足。"),
+            // ── 热点事件补充 (hot-general) ── +2 → 13 total
+            mk("e83","新盘预售楼花政策调整消息引楼市广泛关注","hot-general","热点综合","管制动态","medium",70,"2026-03-30T05:30:00","neutral","中立","楼花政策调整消息引发地产业界及准买家的普遍关注。"),
+            mk("e84","多名公务员因违反守则受纪律调查，问责议题升温","hot-general","热点综合","调查报告","high",83,"2026-03-30T04:30:00","negative","负面","纪律问题涉及多个部门，管治能力引发各方质疑。")
+        );
+
         const state = {
-            domainL1: "all",
+            domainL1: "hot-topic",
             domainL2: null,
             query: "",
             period: "today",
@@ -2494,9 +2592,18 @@
         }
         function domainCounts() {
             const base = baseFilteredEvents();
-            const counts = { all: base.length };
-            domainHierarchy.forEach(d => { if (d.id !== "all") counts[d.id] = 0; });
+            const counts = {};
+            domainHierarchy.forEach(d => { counts[d.id] = 0; });
             base.forEach(ev => { if (counts[ev.domainId] !== undefined) counts[ev.domainId]++; });
+            return counts;
+        }
+        function domainL2Counts() {
+            const base = baseFilteredEvents();
+            if (!state.domainL1) return {};
+            const counts = {};
+            base.filter(ev => ev.domainId === state.domainL1).forEach(ev => {
+                if (ev.domainL2) counts[ev.domainL2] = (counts[ev.domainL2] || 0) + 1;
+            });
             return counts;
         }
 
@@ -2517,6 +2624,7 @@
 
         function renderDomains() {
             const counts = domainCounts();
+            const l2counts = domainL2Counts();
             domainL1ChipsNode.innerHTML = domainHierarchy.map(d => {
                 const isActive = state.domainL1 === d.id;
                 const hasChildren = d.children.length > 0;
@@ -2530,11 +2638,15 @@
             const activeDomain = domainHierarchy.find(d => d.id === state.domainL1);
             if (activeDomain && activeDomain.children.length > 0) {
                 domainL2Row.style.display = "flex";
+                const l1total = counts[state.domainL1] || 0;
                 const opts = [{ label: "全部", value: null }, ...activeDomain.children.map(c => ({ label: c, value: c }))];
                 domainL2Row.innerHTML = `<span style="font-size:11px;font-weight:700;color:#8fa4be;white-space:nowrap;padding-right:6px;flex-shrink:0">${activeDomain.label} ▸</span>` +
-                    opts.map(c => `<button class="chip l2 ${state.domainL2 === c.value ? "active" : ""}" type="button" data-l2="${c.value || ""}">
-                        <span>${c.label}</span>
-                    </button>`).join("");
+                    opts.map(c => {
+                        const cnt = c.value ? (l2counts[c.value] || 0) : l1total;
+                        return `<button class="chip l2 ${state.domainL2 === c.value ? "active" : ""}" type="button" data-l2="${c.value || ""}">
+                            <span>${c.label}</span><span class="chip-count">${cnt}</span>
+                        </button>`;
+                    }).join("");
             } else {
                 domainL2Row.style.display = "none";
                 domainL2Row.innerHTML = "";
@@ -2622,11 +2734,11 @@
         function buildPersonStats(events) {
             const personMap = new Map();
             events.forEach(ev => { (ev.persons || []).forEach(p => { if (!personMap.has(p.name)) personMap.set(p.name, { role: p.role, count: 0 }); personMap.get(p.name).count += p.count; }); });
-            const persons = [...personMap.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, 8);
+            const persons = [...personMap.entries()].filter(([name]) => name !== '相关负责人').sort((a, b) => b[1].count - a[1].count).slice(0, 8);
             if (!persons.length) return `<div class="insight-empty">暂无人物统计数据。</div>`;
             const max = persons[0][1].count;
             return `<div class="stats-bar-list">${persons.map(([name, info]) => `
-                <div class="stats-bar-item">
+                <div class="stats-bar-item ${state.query.trim() === name ? 'filter-active' : ''}" data-filter-person="${name.replace(/"/g,'&quot;')}" title="点击带入搜索">
                     <div class="stats-bar-name" title="${name}">${name}</div>
                     <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${(info.count / max * 100).toFixed(0)}%"></div></div>
                     <div class="stats-bar-count">${info.count}</div>
@@ -2636,11 +2748,11 @@
         function buildOrgStats(events) {
             const orgMap = new Map();
             events.forEach(ev => { (ev.orgs || []).forEach(o => { if (!orgMap.has(o.name)) orgMap.set(o.name, { type: o.type, count: 0 }); orgMap.get(o.name).count += o.count; }); });
-            const orgs = [...orgMap.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, 8);
+            const orgs = [...orgMap.entries()].filter(([name]) => name !== '相关机构').sort((a, b) => b[1].count - a[1].count).slice(0, 8);
             if (!orgs.length) return `<div class="insight-empty">暂无机构统计数据。</div>`;
             const max = orgs[0][1].count;
             return `<div class="stats-bar-list">${orgs.map(([name, info]) => `
-                <div class="stats-bar-item">
+                <div class="stats-bar-item ${state.query.trim() === name ? 'filter-active' : ''}" data-filter-org="${name.replace(/"/g,'&quot;')}" title="点击带入搜索">
                     <div class="stats-bar-name" title="${name}">${name}</div>
                     <div class="stats-bar-track"><div class="stats-bar-fill org" style="width:${(info.count / max * 100).toFixed(0)}%"></div></div>
                     <div class="stats-bar-count">${info.count}</div>
@@ -2654,7 +2766,7 @@
             if (!topics.length) return `<div class="insight-empty">暂无高频关联内容。</div>`;
             const palette = ["#2f6bff", "#22b5c8", "#4b7abb", "#12a87a", "#e0870a", "#7c4dff", "#e04040", "#4289d8"];
             return `<div class="highfreq-tags">${topics.map(([topic, cnt], i) => `
-                <span class="highfreq-tag" style="color:${palette[i % palette.length]};border-color:${palette[i % palette.length]}33;">${topic}<strong>${cnt}</strong></span>`).join("")}</div>`;
+                <span class="highfreq-tag ${state.query.trim() === topic ? 'filter-active' : ''}" data-filter-topic="${topic.replace(/"/g,'&quot;')}" style="color:${palette[i % palette.length]};border-color:${palette[i % palette.length]}33;" title="点击带入搜索">${topic}<strong>${cnt}</strong></span>`).join("")}</div>`;
         }
 
         function renderInsights(events) {
@@ -2711,35 +2823,52 @@
                 feedNode.innerHTML = `<div class="empty-state"><strong>暂无匹配事件</strong><span>可以尝试放宽时间范围、取消筛选，或更换关键词继续检索。</span></div>`;
                 return;
             }
-            feedNode.innerHTML = events.map((ev, idx) => `
+            feedNode.innerHTML = events.map((ev, idx) => {
+                const persons2 = (ev.persons||[]).filter(p=>p.name!=='\u76f8\u5173\u8d1f\u8d23\u4eba').slice(0,2).map(p=>p.name).join('\u3001');
+                const orgs2 = (ev.orgs||[]).filter(o=>o.name!=='\u76f8\u5173\u673a\u6784').slice(0,2).map(o=>o.name).join('\u3001');
+                const topics2 = (ev.topics||[]).slice(0,3).join('\u3001');
+                const ovMeta = [
+                    persons2 && `<span class="ov-ent"><svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" style="flex-shrink:0;opacity:.7"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z"/></svg>\u00a0${persons2}</span>`,
+                    orgs2 && `<span class="ov-ent ov-org"><svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" style="flex-shrink:0;opacity:.7"><path d="M2 2h5v2H2V2zm0 4h5v2H2V6zm0 4h5v2H2v-2zm7-8h5v2H9V2zm0 4h5v2H9V6zm0 4h5v2H9v-2z"/></svg>\u00a0${orgs2}</span>`,
+                    topics2 && `<span class="ov-ent ov-topic"><svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" style="flex-shrink:0;opacity:.7"><path d="M9.5 1.5l5 5-7 7-5-5 7-7zm0 1.42L4.42 8l3.08 3.08L12.58 6 9.5 2.92zM1 13l2-2 2 2-2 2-2-2z"/></svg>\u00a0${topics2}</span>`
+                ].filter(Boolean).join('');
+                const readSvg = ev.read
+                    ? `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23" stroke-width="1.8" stroke-linecap="round"/></svg>`
+                    : `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+                const queueSvg = ev.queued
+                    ? `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                    : `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+                return `
                 <article class="event-card" data-id="${ev.id}" data-read="${ev.read}" style="animation-delay:${idx * 0.05}s">
-                    <div style="display:flex;align-items:flex-start;gap:10px">
-                        <input type="checkbox" class="feed-checkbox" data-id="${ev.id}" style="margin-top:20px;flex-shrink:0;width:15px;height:15px;accent-color:var(--primary);cursor:pointer">
-                        <div style="flex:1 1 auto;min-width:0">
-                            <div class="event-tag-row">
-                                <span class="tag domain"><span class="tag-dot"></span>${ev.domainLabel}</span>
-                                ${ev.domainL2 ? `<span class="tag platform">${ev.domainL2}</span>` : ""}
-                                <span class="tag risk-${ev.riskLevel}">${ev.riskLabel}</span>
-                                ${ev.queued ? `<span class="status-stamp">已加入线索池</span>` : ""}
-                            </div>
-                            <button class="event-title-btn" type="button" data-action="open-drawer" data-id="${ev.id}">
-                                <h2 class="event-title">${ev.title}</h2>
-                            </button>
-                            <div class="ai-panel" style="margin:0 0 10px"><span class="ai-indicator"></span><span class="ai-label">AI 研判</span><span class="ai-body">${ev.summary}</span></div>
-                            <div class="event-meta-row">
-                                <span class="event-source-count">聚合 ${ev.articleCount} 条信息</span>
-                                <span class="event-meta-item">${ev.platforms.join(" · ")}</span>
-                                <span class="feed-time">${formatDate(ev.dateTime)}</span>
-                                <div style="margin-left:auto;display:flex;gap:2px">
-                                    <button class="card-action-btn" type="button" data-action="toggle-read" data-id="${ev.id}" title="${ev.read ? "标记未读" : "标记已读"}">●</button>
-                                    <button class="card-action-btn" type="button" data-action="collect" data-id="${ev.id}" title="收藏">★</button>
-                                    <button class="card-action-btn" type="button" data-action="toggle-queue" data-id="${ev.id}" title="${ev.queued ? "移出线索池" : "加入线索池"}">＋</button>
-                                </div>
+                    <div style="padding:14px 16px 12px">
+                        <!-- 行1：复选框 + 标签行 + 操作按钮 -->
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">
+                            <input type="checkbox" class="feed-checkbox" data-id="${ev.id}" style="flex-shrink:0;width:14px;height:14px;accent-color:var(--primary);cursor:pointer;margin:0">
+                            <span class="tag domain"><span class="tag-dot"></span>${ev.domainLabel}</span>
+                            ${ev.domainL2 ? `<span class="tag platform">${ev.domainL2}</span>` : ""}
+                            <span class="tag risk-${ev.riskLevel}">${ev.riskLabel}</span>
+                            ${ev.queued ? `<span class="status-stamp">\u5df2\u52a0\u5165\u7ebf\u7d22\u6c60</span>` : ""}
+                            <div style="margin-left:auto;display:flex;gap:2px;flex-shrink:0">
+                                <button class="card-action-btn" type="button" data-action="toggle-read" data-id="${ev.id}" title="${ev.read ? "\u6807\u8bb0\u672a\u8bfb" : "\u6807\u8bb0\u5df2\u8bfb"}">${readSvg}</button>
+                                <button class="card-action-btn" type="button" data-action="collect" data-id="${ev.id}" title="\u6536\u85cf"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+                                <button class="card-action-btn" type="button" data-action="toggle-queue" data-id="${ev.id}" title="${ev.queued ? "\u79fb\u51fa\u7ebf\u7d22\u6c60" : "\u52a0\u5165\u7ebf\u7d22\u6c60"}">${queueSvg}</button>
                             </div>
                         </div>
+                        <!-- 行2：标题 + 聚合信息 + 媒体 + 发布时间 -->
+                        <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0;margin-bottom:8px">
+                            <button class="event-title-btn" type="button" data-action="open-drawer" data-id="${ev.id}" style="flex:0 1 auto;min-width:0">
+                                <h2 class="event-title" style="margin:0">${ev.title}</h2>
+                            </button>
+                            <span class="event-source-count" style="flex-shrink:0">\u805a\u5408 ${ev.articleCount} \u6761\u4fe1\u606f</span>
+                            <span class="event-meta-item" style="flex-shrink:0">${ev.platforms.join(" \u00b7 ")}</span>
+                            <span class="feed-time" style="margin-left:auto;flex-shrink:0">${formatDate(ev.dateTime)}</span>
+                        </div>
+                        <!-- 行3：AI 事件概览 -->
+                        <div class="ai-panel" style="margin:0"><span class="ai-indicator"></span><span class="ai-label">\u4e8b\u4ef6\u6982\u89c8</span><span class="ai-body">${ev.summary}</span>${ovMeta ? `<div class="ov-meta">${ovMeta}</div>` : ''}</div>
                     </div>
                 </article>
-            `).join("");
+            `;
+            }).join("");
         }
 
         function render() {
@@ -2895,12 +3024,40 @@
         });
 
         resetButton.addEventListener("click", () => {
-            state.domainL1 = "all"; state.domainL2 = null; state.query = "";
+            state.domainL1 = "hot-topic"; state.domainL2 = null; state.query = "";
             state.period = "today"; state.showAdvanced = false; state.sentimentFilter = "\u5168\u90e8";
             searchInput.value = ""; periodSelect.value = "today";
             document.querySelector("input[name='sentimentFilter'][value='\u5168\u90e8']").checked = true;
             render();
             showToast("\u7b5b\u9009\u6761\u4ef6\u5df2\u91cd\u7f6e");
+        });
+
+        insightsSidebar.addEventListener("click", e => {
+            const personItem = e.target.closest("[data-filter-person]");
+            const orgItem = e.target.closest("[data-filter-org]");
+            const topicItem = e.target.closest("[data-filter-topic]");
+            if (personItem) {
+                const name = personItem.dataset.filterPerson;
+                const isActive = state.query.trim() === name;
+                state.query = isActive ? "" : name;
+                searchInput.value = state.query;
+                render();
+                showToast(state.query ? `\u5df2\u641c\u7d22\u4eba\u7269\u300c${name}\u300d` : "\u5df2\u6e05\u9664\u641c\u7d22");
+            } else if (orgItem) {
+                const name = orgItem.dataset.filterOrg;
+                const isActive = state.query.trim() === name;
+                state.query = isActive ? "" : name;
+                searchInput.value = state.query;
+                render();
+                showToast(state.query ? `\u5df2\u641c\u7d22\u673a\u6784\u300c${name}\u300d` : "\u5df2\u6e05\u9664\u641c\u7d22");
+            } else if (topicItem) {
+                const topic = topicItem.dataset.filterTopic;
+                const isActive = state.query.trim() === topic;
+                state.query = isActive ? "" : topic;
+                searchInput.value = state.query;
+                render();
+                showToast(state.query ? `\u5df2\u641c\u7d22\u8bdd\u9898\u300c${topic}\u300d` : "\u5df2\u6e05\u9664\u641c\u7d22");
+            }
         });
 
         feedNode.addEventListener("click", e => {

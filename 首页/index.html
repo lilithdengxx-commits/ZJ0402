@@ -139,12 +139,12 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .topbar-actions{display:flex;align-items:center;gap:8px;padding:0 14px 0 6px;flex-shrink:0;height:56px}
 
 /* ─────────────── HOME PAGE REDESIGN ─────────────── */
-.main-area.home-main{padding:0!important;background:#eef1f8}
+.main-area.home-main{padding:0!important;background:linear-gradient(180deg,#ffffff 0%,#e8edf8 40%,#eef1f8 100%)}
 /* Hero */
-.hero-section{position:relative;background:linear-gradient(180deg,#ffffff 0%,#e6edf8 100%);overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:72px 0 0}
+.hero-section{position:relative;background:transparent;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:72px 0 0}
 .hero-bg{position:absolute;top:0;left:50%;transform:translateX(-50%);pointer-events:none}
 /* App Icons */
-.app-icons-row{display:flex;justify-content:space-evenly;align-items:flex-start;position:relative;z-index:2;margin-bottom:64px;width:100%}
+.app-icons-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2;margin-bottom:64px;width:100%;padding:0 200px;box-sizing:border-box}
 .app-icon-item{display:flex;flex-direction:column;align-items:center;gap:18px;cursor:pointer;text-decoration:none;transition:transform 0.2s ease}.app-icon-item:hover{transform:translateY(-5px)}
 .app-icon-box{width:68px;height:68px;border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.12),0 2px 6px rgba(0,0,0,0.07)}.app-icon-box svg{width:32px;height:32px}
 .app-icon-name{font-size:15px;color:#1e2d45;font-weight:700;white-space:nowrap;text-align:center}
@@ -197,8 +197,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .rhi-status.done{color:#12a87a}.rhi-status.gen{color:#c47d10}
 .rhi-dot{width:6px;height:6px;border-radius:50%;flex:0 0 6px}.rhi-status.done .rhi-dot{background:#12a87a}.rhi-status.gen .rhi-dot{background:#c47d10}
 /* Analysis Section */
-.analysis-section{padding:20px 200px 48px;background:#eef1f8}
-.analysis-inner{width:100%}
+.analysis-section{padding:20px 0 48px;background:transparent}
+.analysis-inner{margin:0 200px}
 .analysis-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .analysis-title{font-size:15px;font-weight:800;color:#1e2d45;display:flex;align-items:center;gap:8px}.analysis-title::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--primary,#2b61f0);flex:0 0 4px}
 .analysis-cards{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:14px;align-items:stretch}

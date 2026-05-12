@@ -265,61 +265,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .hd-nodes td{padding:7px 8px;border-bottom:1px solid rgba(122,145,184,0.07);color:var(--text)}
 .hd-nodes tr:last-child td{border-bottom:none}
 .hd-nodes td:first-child{width:28px;text-align:center;background:rgba(43,97,240,0.07);border-radius:4px;font-weight:700;color:var(--primary)}
-/* ---- 事件分析信息面板（全屏横向） ---- */
-#hdInfoPanel{position:fixed;inset:0;background:#eef1f7;z-index:300;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s cubic-bezier(.4,0,.2,1);overflow:hidden}
-#hdInfoPanel.open{transform:translateX(0)}
-.hd-ip-header{display:flex;align-items:center;gap:10px;padding:0 20px;height:52px;border-bottom:1px solid rgba(122,145,184,0.16);flex:0 0 52px;background:#fff;box-shadow:0 1px 4px rgba(26,44,82,0.06)}
-.hd-ip-back{display:inline-flex;align-items:center;gap:5px;padding:5px 10px 5px 6px;border:none;background:transparent;color:#6b7c95;font-size:13px;font-weight:600;cursor:pointer;border-radius:6px;transition:background .15s,color .15s;white-space:nowrap}
-.hd-ip-back:hover{background:rgba(122,145,184,0.1);color:var(--text)}
-.hd-ip-title{flex:1;font-size:14px;font-weight:700;color:var(--text)}
-.hd-ip-kw-preview{max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#2b61f0;background:rgba(43,97,240,0.08);border-radius:4px;padding:3px 10px;border:1px solid rgba(43,97,240,0.2)}
-.hd-ip-close{width:30px;height:30px;border:none;background:transparent;color:#9eb0c6;font-size:20px;cursor:pointer;border-radius:6px;display:grid;place-items:center;transition:background .15s,color .15s}
-.hd-ip-close:hover{background:rgba(122,145,184,0.12);color:var(--text)}
-.hd-ip-body{flex:1;overflow:hidden;display:flex;flex-direction:row;gap:0}
-.ip-sidebar{width:300px;flex:0 0 300px;overflow-y:auto;padding:16px 14px;border-right:1px solid rgba(122,145,184,0.16);background:#fff;display:flex;flex-direction:column;gap:10px}
-.ip-sidebar::-webkit-scrollbar{width:4px}.ip-sidebar::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.2);border-radius:999px}
-.ip-main{flex:1;min-width:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.ip-main::-webkit-scrollbar{width:4px}.ip-main::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.2);border-radius:999px}
-.ip-sidebar-section{display:flex;flex-direction:column;gap:6px}
-.ip-sidebar-label{font-size:11.5px;font-weight:700;color:#6b7c95;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:2px}
-.ip-sidebar-sep{height:1px;background:rgba(122,145,184,0.14);margin:4px 0}
-.ip-filter-card{background:#fff;border:1px solid rgba(122,145,184,0.14);border-radius:10px;padding:12px 14px 10px;display:flex;gap:10px;align-items:flex-start}
-.ip-filter-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-.ip-filter-right{display:flex;flex-direction:column;gap:6px;flex-shrink:0;align-self:flex-end}
-.ip-filter-row{display:flex;align-items:center;gap:6px;min-height:26px;flex-wrap:wrap}
-.ip-filter-label{font-size:12px;color:#6b7c95;white-space:nowrap;width:60px;flex-shrink:0}
-.ip-keyword-tag{display:inline-flex;align-items:center;background:rgba(43,97,240,0.07);color:#2b61f0;font-size:11.5px;padding:3px 8px;border-radius:4px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ip-time-range-input{display:flex;align-items:center;gap:5px;font-size:12px;color:#3a4d66;border:1px solid rgba(122,145,184,0.28);border-radius:5px;padding:3px 8px;background:#f8fafd;white-space:nowrap}
-.ip-time-sep{color:#9eb0c6;font-size:12px}
-.ip-source-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
-.ip-src-scope{font-size:12px;color:#6b7c95;width:26px;flex-shrink:0}
-.ip-platform-chip{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:#3a4d66;background:#f0f3fa;border:1px solid rgba(122,145,184,0.18);border-radius:4px;padding:2px 6px;cursor:pointer;white-space:nowrap;transition:background .15s}
-.ip-platform-chip:hover{background:rgba(43,97,240,0.07)}
-.ip-platform-chip.selected{background:rgba(43,97,240,0.1);border-color:rgba(43,97,240,0.35);color:#2b61f0}
-.ip-chip-count{color:#9eb0c6;font-size:10.5px}
-.ip-query-btn{background:#2b61f0;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.ip-query-btn:hover{background:#1a4ed4}
-.ip-stats-bar{background:#fff;border:1px solid rgba(122,145,184,0.14);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ip-total-count{font-size:12.5px;color:#3a4d66;font-weight:500;white-space:nowrap}
-.ip-bar-sep{width:1px;height:13px;background:rgba(122,145,184,0.22);flex-shrink:0}
-.ip-bar-action{font-size:12px;color:#6b7c95;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap;padding:2px 5px;border-radius:4px}
-.ip-bar-action:hover{background:rgba(122,145,184,0.1);color:#3a4d66}
-.ip-bar-right{margin-left:auto;display:flex;align-items:center;gap:6px}
-.ip-sort-btn{font-size:12px;color:#6b7c95;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:2px 5px;border-radius:4px}
-.ip-sort-btn:hover{background:rgba(122,145,184,0.1)}
-.ip-list{display:flex;flex-direction:column;gap:8px}
-.ip-item{background:#fff;border:1px solid rgba(122,145,184,0.14);border-radius:8px;padding:11px 12px 9px;position:relative}
-.ip-item-top{display:flex;align-items:flex-start;gap:7px}
-.ip-item-num{font-size:12.5px;font-weight:700;color:#6b7c95;min-width:16px;flex-shrink:0;padding-top:2px}
-.ip-item-body{flex:1;min-width:0}
-.ip-item-title{font-size:13px;font-weight:500;color:#1e2d45;line-height:1.5;margin-bottom:5px}
-.ip-item-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:11px;color:#9eb0c6}
-.ip-meta-item{display:flex;align-items:center;gap:2px}
-.ip-similar-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,180,0,0.1);color:#c47d10;border:1px solid rgba(196,125,16,0.25);border-radius:4px;font-size:11px;padding:1px 6px;font-weight:500;cursor:pointer}
-.ip-repost-tag{display:inline-flex;align-items:center;font-size:10.5px;color:#2b61f0;background:rgba(43,97,240,0.08);border-radius:4px;padding:1px 5px}
-.ip-item-actions{position:absolute;right:12px;top:11px;display:flex;align-items:center;gap:8px}
-.ip-action-btn{background:none;border:none;cursor:pointer;font-size:11.5px;color:#9eb0c6;display:flex;align-items:center;gap:2px;padding:2px 3px;border-radius:3px;transition:color .15s}
-.ip-action-btn:hover{color:#2b61f0}
 @media(max-width:1400px){.category-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:1080px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.main-area{grid-column:1;grid-row:1;min-height:100vh}.global-topbar{grid-column:1}.category-grid{grid-template-columns:repeat(2,1fr)}.plat-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.category-grid{grid-template-columns:1fr}.plat-grid{grid-template-columns:1fr}.region-bar{flex-direction:column;align-items:flex-start}}
@@ -815,7 +760,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
   <div class="hd-body">
     <div class="hd-search-row">
       <div class="hd-search-title" id="hdMainTitle"></div>
-      <button class="hd-search-btn" id="hdAnalysisBtn">事件分析</button>
+      <button class="hd-search-btn">搜一搜</button>
     </div>
     <div class="hd-links"></div>
     <div class="hd-stats"></div>
@@ -833,89 +778,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       <thead><tr><th>编号</th><th>节点</th><th>排名</th><th>热度值</th><th>时间</th></tr></thead>
       <tbody></tbody>
     </table>
-  </div>
-</div>
-<!-- 事件分析信息检索（全屏横向面板） -->
-<div id="hdInfoPanel">
-  <div class="hd-ip-header">
-    <button class="hd-ip-back" onclick="closeInfoPanel()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12l6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      返回热点详情
-    </button>
-    <span class="hd-ip-title">信息检索</span>
-    <div class="hd-ip-kw-preview" id="ipKeywordPreview"></div>
-    <button class="hd-ip-close" onclick="closeInfoPanel()">×</button>
-  </div>
-  <div class="hd-ip-body">
-    <!-- 左侧筛选栏 -->
-    <div class="ip-sidebar">
-      <div class="ip-sidebar-section">
-        <div class="ip-sidebar-label">关键词</div>
-        <div class="ip-keyword-tag" id="ipKeywordTag" style="word-break:break-all;white-space:normal;line-height:1.5;">加载中...</div>
-      </div>
-      <div class="ip-sidebar-sep"></div>
-      <div class="ip-sidebar-section">
-        <div class="ip-sidebar-label">发布时间</div>
-        <div class="ip-filter-row" style="flex-direction:column;align-items:flex-start;gap:5px;">
-          <div class="ip-time-range-input" style="width:100%;box-sizing:border-box;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#9eb0c6" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="#9eb0c6" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <span>2026-05-10 09:00</span>
-          </div>
-          <span class="ip-time-sep" style="align-self:center;">至</span>
-          <div class="ip-time-range-input" style="width:100%;box-sizing:border-box;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#9eb0c6" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="#9eb0c6" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <span>2026-05-11 09:00</span>
-          </div>
-        </div>
-      </div>
-      <div class="ip-sidebar-sep"></div>
-      <div class="ip-sidebar-section">
-        <div class="ip-sidebar-label">信息来源</div>
-        <div style="font-size:11.5px;font-weight:600;color:#3a4d66;margin-bottom:4px;">国内</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">
-          <span class="ip-platform-chip selected" onclick="this.classList.toggle('selected')">网站 <span class="ip-chip-count">(3617)</span></span>
-          <span class="ip-platform-chip selected" onclick="this.classList.toggle('selected')">微博 <span class="ip-chip-count">(4444)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">抖音 <span class="ip-chip-count">(24)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">快手 <span class="ip-chip-count">(2)</span></span>
-          <span class="ip-platform-chip selected" onclick="this.classList.toggle('selected')">今日头条 <span class="ip-chip-count">(1608)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">小红书 <span class="ip-chip-count">(10)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">视频网站 <span class="ip-chip-count">(7)</span></span>
-        </div>
-        <div style="font-size:11.5px;font-weight:600;color:#3a4d66;margin-bottom:4px;">国际</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;">
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">网站 <span class="ip-chip-count">(0)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">Facebook <span class="ip-chip-count">(0)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">Youtube <span class="ip-chip-count">(0)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">X(Twitter) <span class="ip-chip-count">(0)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">TikTok <span class="ip-chip-count">(0)</span></span>
-          <span class="ip-platform-chip" onclick="this.classList.toggle('selected')">Reddit <span class="ip-chip-count">(0)</span></span>
-        </div>
-      </div>
-      <div class="ip-sidebar-sep"></div>
-      <button class="ip-query-btn" type="button" style="width:100%;justify-content:center;" onclick="renderIpList(document.getElementById('ipKeywordTag').textContent)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>查询
-      </button>
-      <button class="il-save-btn" type="button" style="width:100%;text-align:center;">保存</button>
-    </div>
-    <!-- 右侧信息列表 -->
-    <div class="ip-main">
-      <div class="ip-stats-bar">
-        <span class="ip-total-count">共 <strong>1.2万</strong> 条信息</span>
-        <div class="ip-bar-sep"></div>
-        <button class="ip-bar-action" type="button">选择当前页</button>
-        <button class="ip-bar-action" type="button">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 16V4M8 12l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>导出全部
-        </button>
-        <button class="ip-bar-action" type="button">翻译</button>
-        <div class="ip-bar-right">
-          <button class="ip-sort-btn" type="button">相关度 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M7 3v18M3 15l4 4 4-4M17 3l4 4-4 4M21 7V3h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <button class="ip-sort-btn" type="button">发布时间 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M7 3v18M3 15l4 4 4-4M17 3l4 4-4 4M21 7V3h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <select class="il-fulltext-select"><option>全文</option><option>标题</option></select>
-          <div class="il-search-input"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9eb0c6" stroke-width="1.8"/><path d="M20 20L16 16" stroke="#9eb0c6" stroke-width="1.8" stroke-linecap="round"/></svg><span>请输入关键词</span></div>
-        </div>
-      </div>
-      <div class="ip-list" id="ipArticleList"></div>
-    </div>
   </div>
 </div>
 
@@ -1048,65 +910,6 @@ function drawHdChart(){
   ctx.textAlign='left';
   ctx.fillStyle='#2b61f0'; ctx.fillRect(padL,4,18,3); ctx.fillStyle='#5a6a82'; ctx.fillText('热度值',padL+22,10);
   ctx.fillStyle='#f5502a'; ctx.fillRect(padL+80,4,18,3); ctx.fillStyle='#5a6a82'; ctx.fillText('排名',padL+102,10);
-}
-
-/* ---- 事件分析信息面板 JS ---- */
-function openInfoPanel() {
-  var title = document.getElementById('hdMainTitle').textContent || '热点话题';
-  var kw = '(' + title + ')&(关注|讨论|报道|评论|回应|影响|最新)';
-  document.getElementById('ipKeywordTag').textContent = kw;
-  document.getElementById('ipKeywordPreview').textContent = kw;
-  renderIpList(title);
-  document.getElementById('hdInfoPanel').classList.add('open');
-}
-function closeInfoPanel() {
-  document.getElementById('hdInfoPanel').classList.remove('open');
-}
-document.getElementById('hdAnalysisBtn').addEventListener('click', function(e){
-  e.stopPropagation();
-  openInfoPanel();
-});
-function renderIpList(keyword) {
-  var kw = keyword || '热点话题';
-  var platforms = ['新华网','微博','今日头条','澎湃新闻','网站','微博','今日头条','南方都市报'];
-  var regions = ['北京','广东','上海','北京','全国','浙江','湖北','广东'];
-  var times = ['14:32','14:15','13:56','13:31','13:12','12:48','12:20','11:55'];
-  var authors = ['新华社','@每日财经','头条号','澎湃新闻','@舆情观察','政府官网','舆情研究院','南方日报'];
-  var similars = [8,12,5,3,17,2,6,4];
-  var reposts = [true,false,false,false,true,false,false,true];
-  var titles = [
-    kw + '相关：事件持续发酵，官方媒体发布最新通报',
-    '多家媒体关注' + kw + '，各方反应持续',
-    kw + '热度持续攀升，网民热议不断',
-    '专家解读：' + kw + '的深层原因与影响分析',
-    kw + ' 相关话题引发广泛讨论，多平台同步传播',
-    '权威机构回应：关于' + kw + '的最新声明',
-    kw + '：社交媒体传播链分析与舆情趋势',
-    '媒体矩阵联动：' + kw + '全渠道覆盖报道综述'
-  ];
-  var el = document.getElementById('ipArticleList');
-  el.innerHTML = titles.map(function(title, i) {
-    return '<div class="ip-item">' +
-      '<div class="ip-item-top">' +
-        '<span class="ip-item-num">' + (i+1) + '</span>' +
-        '<div class="ip-item-body">' +
-          '<div class="ip-item-title">' + title + '</div>' +
-          '<div class="ip-item-meta">' +
-            '<span class="ip-meta-item">📍 ' + regions[i] + '</span>' +
-            '<span class="ip-meta-item">🕐 ' + times[i] + '</span>' +
-            '<span class="ip-meta-item">📌 ' + platforms[i] + '</span>' +
-            '<span class="ip-meta-item">👤 ' + authors[i] + '</span>' +
-            (similars[i] > 0 ? '<span class="ip-similar-badge">相似信息 ' + similars[i] + '</span>' : '') +
-            (reposts[i] ? '<span class="ip-repost-tag">转发</span>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="ip-item-actions">' +
-        '<button class="ip-action-btn" type="button">收藏</button>' +
-        '<button class="ip-action-btn" type="button">···</button>' +
-      '</div>' +
-    '</div>';
-  }).join('');
 }
 
 // attach click handler to all list items and total rows

@@ -1,0 +1,18 @@
+app-shell styles:
+  .app-shell{display:flex!important;flex-direction:column!important}
+
+main-area styles:
+  .main-area{grid-column:unset!important;grid-row:unset!important;flex:1!important;overflow-y:auto}
+
+main-area tag: main class="main-area">
+            <section class="page">
+      
+
+=== 智能体编报 header ===
+<header class="topbar">
+      <span class="topbar-label">事件研判</span>
+      <span class="topbar-sep">/</span>
+      <span class="topbar-current">智能体编报</span>
+      <div class="topbar-spacer"></div>
+      <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
+    </header>

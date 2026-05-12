@@ -1,0 +1,14 @@
+=== 智能体编报\index.html
+  CSS injected:  True
+  has sidebar:   False
+  header class:  <header class="topbar">
+
+=== 处置引导\舆情复盘分析\index.html
+  CSS injected:  True
+  has sidebar:   False
+  header class:  <header class="topbar">
+
+=== 事件分析\事件管理\index.html
+  CSS injected:  True
+  has sidebar:   False
+  header class:  <header class="global-topbar">

@@ -1,0 +1,53 @@
+<div class="sidebar-nav-area">
+    <section class="nav-group active">
+      <a class="nav-toplevel-link" href="./index.html"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 3L21 9V20H15V14H9V20H3V9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>首页</span></a>
+    </section>
+    <section class="nav-group">
+      <a class="nav-toplevel-link" href="../事件分析/事件管理/index.html"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18L9 13L12 15L18 8L19 18H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>事件分析</span></a>
+    </section>
+    <section class="nav-group">
+      <a class="nav-toplevel-link" href="../事件分析/智能体编报/index.html"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>智能体编报</span></a>
+    </section>
+    <section class="nav-group">
+      <a class="nav-toplevel-link" href="../智能检索/index.html"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20L16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>智能检索</span></a>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>处置引导</span></div><small>›</small></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../处置引导/传播引导策略/index.html"><span>传播引导策略</span></a>
+        <a class="nav-item" href="../处置引导/选题线索池/index.html"><span>选题线索池</span></a>
+        <div class="nav-item"><span>选题看板</span></div>
+        <a class="nav-item" href="../处置引导/多稿合并工具/index.html"><span>多稿合并工具</span></a>
+        <a class="nav-item" href="../处置引导/舆情复盘分析/index.html"><span>舆情复盘分析</span></a>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>民意与满意度调查</span></div><small>›</small></div>
+      <div class="nav-items">
+        <div class="nav-item"><span>问卷管理</span></div>
+        <div class="nav-item"><span>题库管理</span></div>
+        <div class="nav-item"><span>模板管理</span></div>
+        <div class="nav-item"><span>运营与激励管理</span></div>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>市民留言板</span></div><small>›</small></div>
+      <div class="nav-items">
+        <div class="nav-item"><span>驾驶舱</span></div>
+        <div class="nav-item"><span>工单管理</span></div>
+        <div class="nav-item"><span>满意度评价统计</span></div>
+        <div class="nav-item"><span>留言板管理</span></div>
+        <div class="nav-item"><span>积分与激励管理</span></div>
+      </div>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M6 5H18V19H6V5ZM9 9H15M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>知识库</span></div><small>›</small></div>
+      <div class="nav-items">
+        <a class="nav-item" href="../知识库/热点话题案例库/index.html"><span>热点话题案例库</span></a>
+        <div class="nav-item"><span>宣传引导策略库</span></div>
+        <div class="nav-item"><span>决策报告知识库</span></div>
+        <div class="nav-item"><span>重点关注对象库</span></div>
+        <div class="nav-item"><span>行业术语与本体知识库</span></div>
+      </div>
+    </section>
+    </div>

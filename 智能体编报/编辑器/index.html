@@ -1,0 +1,960 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>关于大埔宏福苑大火报告 - 智能体编报</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:"PingFang SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:#eef1f8;color:#1a2234;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+input,select,textarea{font:inherit}
+.editor-shell{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+/* TOPBAR */
+.topbar{height:48px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0;z-index:50}
+.back-btn{display:inline-flex;align-items:center;gap:4px;color:#68778f;padding:5px 8px 5px 4px;border-radius:6px;font-size:13px;font-weight:600;transition:background .15s,color .15s;white-space:nowrap;cursor:pointer}
+.back-btn:hover{background:rgba(43,97,240,.07);color:#2b61f0}
+.topbar-sep{width:1px;height:18px;background:rgba(0,0,0,0.1);flex-shrink:0}
+.doc-title{font-size:14px;font-weight:700;color:#1a2234;white-space:nowrap}
+.save-info{display:flex;align-items:center;gap:4px;font-size:11.5px;color:#9aa8bc}
+.topbar-space{flex:1}
+.topbar-actions{display:flex;align-items:center;gap:6px}
+.t-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;font-size:12.5px;font-weight:600;color:#545e72;transition:background .15s,color .15s}
+.t-btn:hover{background:rgba(43,97,240,.07);color:#2b61f0}
+.t-btn-export{background:#2b61f0;color:#fff;box-shadow:0 3px 10px rgba(43,97,240,.22)}
+.t-btn-export:hover{background:#1a4ed4;color:#fff}
+/* FORMAT BAR */
+.fmtbar{height:40px;background:#fff;border-bottom:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;padding:0 8px;gap:1px;flex-shrink:0;overflow-x:auto}
+.fmtbar::-webkit-scrollbar{display:none}
+.fb{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:26px;padding:0 4px;border-radius:5px;font-size:12px;color:#454f63;transition:background .1s,color .1s;flex-shrink:0}
+.fb:hover,.fb.on{background:rgba(43,97,240,.09);color:#2b61f0}
+.fb-sep{width:1px;height:16px;background:rgba(0,0,0,0.1);margin:0 3px;flex-shrink:0}
+.fb-sel{height:24px;padding:0 5px;border-radius:5px;border:1px solid rgba(0,0,0,0.1);background:#f7f9fd;font-size:12px;color:#2a3a52;cursor:pointer;outline:none}
+/* BODY ROW */
+.body-row{flex:1;display:flex;overflow:hidden}
+/* TOC */
+.toc-panel{width:180px;flex-shrink:0;border-right:1px solid rgba(0,0,0,0.07);background:#f7f9fd;display:flex;flex-direction:column;overflow:hidden;transition:width .2s;display:none}
+.toc-panel.vis{display:flex}
+.toc-hd{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;flex-shrink:0}
+.toc-hd-label{font-size:10px;font-weight:800;color:#9aa8bc;letter-spacing:.05em}
+.toc-hd-btn{font-size:15px;color:#c5cdd9;cursor:pointer;transition:color .15s}
+.toc-hd-btn:hover{color:#2b61f0}
+.toc-list{flex:1;overflow-y:auto;padding:2px 0 12px}
+.toc-list::-webkit-scrollbar{display:none}
+.ti{display:flex;padding:5px 10px;font-size:14px;color:#68778f;cursor:pointer;transition:color .15s,background .15s;gap:5px;align-items:flex-start;line-height:1.4}
+.ti:hover{color:#2b61f0;background:rgba(43,97,240,.05)}
+.ti.cur{color:#2b61f0;font-weight:700}
+.ti.sub{padding-left:18px;font-size:13px}
+.ti-n{color:#b8c4d4;flex-shrink:0}
+/* DOC CANVAS */
+.doc-canvas{flex:1;overflow-y:auto;background:#eef1f8;display:flex;flex-direction:column;align-items:center;padding:0 16px}
+.doc-canvas::-webkit-scrollbar{width:6px}
+.doc-canvas::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:3px}
+/* CREATE STATE */
+.create-wrap{width:100%;max-width:720px;display:flex;flex-direction:column;align-items:center;padding:48px 0 60px}
+.create-title{font-size:24px;font-weight:800;background:linear-gradient(135deg,#2b61f0,#6090ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.create-sub{font-size:13px;color:#9aa8bc;margin-bottom:28px}
+.create-card{width:100%;border:1.5px solid #2b61f0;border-radius:12px;background:#fff;padding:18px 18px 14px;box-shadow:0 4px 20px rgba(43,97,240,.12)}
+.cc-head{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;color:#1a2234;line-height:1.6;margin-bottom:10px}
+.sparkle{color:#2b61f0;flex-shrink:0;margin-top:1px}
+.hl-topic{color:#2b61f0;font-weight:700;background:rgba(43,97,240,.08);border-radius:4px;padding:0 4px}
+.hl-date{color:#2b61f0;font-weight:600;background:rgba(43,97,240,.06);border-radius:4px;padding:0 3px}
+.cc-extra{width:100%;min-height:44px;border:none;outline:none;font-size:13px;color:#9aa8bc;resize:none;background:transparent;line-height:1.6;margin-bottom:6px}
+.cc-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(0,0,0,0.06);padding-top:10px}
+.toggle-row{display:flex;align-items:center;gap:5px;font-size:12px;color:#68778f;cursor:pointer}
+.tog-track{width:28px;height:16px;border-radius:8px;background:#2b61f0;position:relative;flex-shrink:0}
+.tog-thumb{width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px}
+.cc-right{display:flex;align-items:center;gap:8px}
+.char-ct{font-size:11px;color:#b8c4d4}
+.send-btn{width:32px;height:32px;border-radius:50%;background:#2b61f0;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(43,97,240,.3)}
+.send-btn:hover{opacity:.88}
+/* SKELETON */
+.skel-wrap{width:100%;max-width:740px;padding:28px 0 0}
+.ai-pill{display:flex;justify-content:center;margin-bottom:14px}
+.ai-pill-inner{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #2b61f0;border-radius:999px;padding:7px 18px;box-shadow:0 3px 14px rgba(43,97,240,.18)}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:#2b61f0;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.ai-pill-text{font-size:13px;font-weight:700;color:#2b61f0}
+.ai-stop-box{width:12px;height:12px;border-radius:50%;background:#2b61f0;display:grid;place-items:center;cursor:pointer}
+.ai-stop-box::after{content:'';width:5px;height:5px;background:#fff;border-radius:1px}
+.skel-page{background:#fff;padding:56px 68px 60px;box-shadow:0 2px 14px rgba(0,0,0,.09);min-height:520px}
+.sk{height:10px;border-radius:5px;background:linear-gradient(90deg,#e8ecf4 25%,#f3f5f9 50%,#e8ecf4 75%);background-size:400% 100%;animation:sh 1.5s infinite;margin-bottom:7px}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+/* DOCUMENT PAGE */
+.doc-wrap{width:100%;max-width:740px;padding:28px 0 60px}
+.doc-page{background:#fff;padding:58px 70px 80px;box-shadow:0 2px 14px rgba(0,0,0,.09);border-radius:2px;position:relative}
+/* DOC TYPOGRAPHY */
+.d-title{font-size:21px;font-weight:900;color:#111827;text-align:center;line-height:1.5;margin-bottom:5px}
+.d-period{font-size:13px;color:#6b7280;text-align:center;margin-bottom:34px}
+.d-h2{font-size:15.5px;font-weight:800;color:#111827;margin:28px 0 12px;display:flex;align-items:baseline;gap:10px}
+.sec-n{color:#9ca3af;font-size:14px}
+.d-h3{font-size:14px;font-weight:700;color:#1f2937;margin:18px 0 8px;display:flex;align-items:baseline;gap:8px}
+.sub-n{color:#9ca3af;font-size:13px}
+.d-p{font-size:14px;line-height:1.9;color:#1f2937;margin-bottom:10px;text-indent:2em}
+.d-ph{font-size:13px;line-height:1.8;color:#b0bac8;margin-bottom:6px;text-indent:2em;font-style:italic}
+/* INLINE CITE */
+.cite{display:inline-flex;align-items:center;justify-content:center;height:12px;padding:0 2px;border-radius:3px;background:rgba(100,120,170,.12);color:#6b7c95;font-size:8px;font-weight:700;vertical-align:super;margin:0 1px;cursor:pointer;white-space:nowrap;line-height:12px}
+.cite:hover{background:rgba(43,97,240,.15);color:#2b61f0}
+/* ASSIST PANEL */
+.assist-panel{width:308px;flex-shrink:0;border-left:1px solid rgba(0,0,0,0.08);background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.panel-hd{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid rgba(0,0,0,0.07);gap:8px;flex-shrink:0}
+.panel-hd-title{font-size:15px;font-weight:800;color:#2b61f0;flex:1}
+.panel-hd-btn{font-size:14px;color:#9aa8bc;cursor:pointer;transition:color .15s}
+.panel-hd-btn:hover{color:#2b61f0}
+.panel-body{flex:1;overflow-y:auto;padding:14px 12px}
+.panel-body::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:2px}
+.panel-footer{padding:12px 14px;border-top:1px solid rgba(0,0,0,0.07);flex-shrink:0}
+.gen-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#4e88ff);color:#fff;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(43,97,240,.3);cursor:pointer}
+.gen-btn:hover{opacity:.92}
+.gen-btn .rem{font-size:11px;opacity:.8;margin-left:4px}
+/* CHAT */
+.chat-user{background:rgba(43,97,240,.07);border-radius:10px 10px 2px 10px;padding:10px 13px;font-size:13px;color:#1a2234;line-height:1.65;margin-bottom:10px}
+.chat-ai{font-size:12.5px;color:#4a5c7a;line-height:1.7;margin-bottom:10px}
+/* STEP ITEM */
+.step-item{margin-bottom:8px}
+.step-hd{display:flex;align-items:flex-start;gap:7px;cursor:pointer;padding:4px 0}
+.sp{font-size:11px;color:#2b61f0;flex-shrink:0;margin-top:2px}
+.step-label{flex:1;font-size:12.5px;color:#374151;line-height:1.5;font-weight:600}
+.step-chv{font-size:11px;color:#c5cdd9;flex-shrink:0;margin-top:2px;transition:transform .2s}
+.step-item.open .step-chv{transform:rotate(180deg)}
+.step-body{padding:6px 0 4px 18px;display:none}
+.step-item.open .step-body{display:block}
+/* MCP CARD */
+.mcp-card{display:flex;align-items:center;gap:7px;background:#f7f9fd;border:1px solid rgba(0,0,0,0.08);border-radius:7px;padding:6px 10px;margin:5px 0;font-size:12px}
+.mtag{font-size:10px;font-weight:800;color:#9aa8bc;background:rgba(0,0,0,.07);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.mq{flex:1;color:#4a5c7a;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mv{font-size:11px;font-weight:700;color:#2b61f0;flex-shrink:0;cursor:pointer}
+.mv:hover{text-decoration:underline}
+/* ANGLE / DEPTH */
+.angle-item{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px;font-size:12px;color:#4a5c7a}
+.angle-item input{margin-top:2px;accent-color:#2b61f0;flex-shrink:0}
+.depth-item{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:12px;color:#4a5c7a}
+.depth-item input{accent-color:#2b61f0}
+.confirmed-btn{width:100%;padding:8px;border-radius:7px;background:rgba(43,97,240,.08);color:#9aa8bc;font-size:13px;font-weight:700;margin-top:10px;border:none;cursor:default}
+/* TASK */
+.task-list{display:flex;flex-direction:column;gap:5px;margin:5px 0}
+.tr{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#4a5c7a}
+.tn{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:10px;font-weight:800;flex-shrink:0}
+.tn.done{background:#10b981;color:#fff}
+.tt{line-height:1.5;padding-top:2px}
+.tt.done{color:#10b981}
+/* CHAPTER CHECK */
+.cr{display:flex;align-items:center;gap:8px;font-size:12px;color:#4a5c7a;margin-bottom:5px}
+.cc{width:16px;height:16px;border-radius:50%;background:#10b981;display:grid;place-items:center;flex-shrink:0}
+/* SOURCE COUNT */
+.src-ct{font-size:12px;color:#9aa8bc;margin-top:6px}
+.src-ct strong{color:#2b61f0}
+/* DONE CARD */
+.done-card{background:rgba(43,97,240,.04);border:1px solid rgba(43,97,240,.12);border-radius:9px;padding:12px;margin-top:8px}
+.done-card-title{font-size:12.5px;font-weight:800;color:#2b61f0;margin-bottom:5px}
+.done-card-text{font-size:12px;color:#4a5c7a;line-height:1.7}
+.done-card ul{margin-top:8px;list-style:none}
+.done-card ul li{display:flex;align-items:baseline;gap:6px;font-size:11.5px;color:#4a5c7a;margin-bottom:4px}
+.done-card ul li::before{content:"✓";color:#10b981;font-weight:700;flex-shrink:0}
+/* ICON RAIL */
+.icon-rail{width:44px;flex-shrink:0;border-left:1px solid rgba(0,0,0,0.07);background:#fff;display:flex;flex-direction:column;align-items:center;padding-top:10px;gap:2px}
+.ir-btn{width:36px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border-radius:8px;font-size:10px;color:#9aa8bc;cursor:pointer;transition:background .15s,color .15s;text-align:center}
+.ir-btn:hover,.ir-btn.act{background:rgba(43,97,240,.08);color:#2b61f0}
+/* STATUS BAR */
+.statusbar{height:28px;background:#fff;border-top:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;padding:0 14px;font-size:11.5px;color:#9aa8bc;flex-shrink:0;gap:8px}
+.sb-sp{flex:1}
+.zc{display:flex;align-items:center;gap:8px}
+.zb{width:20px;height:20px;border-radius:4px;display:grid;place-items:center;color:#6b778e;cursor:pointer;transition:background .15s}
+.zb:hover{background:rgba(43,97,240,.08);color:#2b61f0}
+/* SEARCH RESULTS PANEL */
+.search-wrap{display:flex;flex-direction:column;width:100%;height:100%;overflow-y:auto;padding:24px 32px;background:#fff}
+.search-hd{display:flex;align-items:center;margin-bottom:18px}
+.search-title{flex:1;font-size:22px;font-weight:900;color:#111827}
+.search-close{font-size:22px;color:#c5cdd9;cursor:pointer;line-height:1;padding:4px 8px}
+.search-meta{display:flex;align-items:center;gap:8px;background:#f7f9fd;border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:7px 12px;margin-bottom:14px}
+.search-meta-tag{font-size:10px;font-weight:800;color:#9aa8bc;background:rgba(0,0,0,.07);padding:2px 6px;border-radius:3px;flex-shrink:0}
+.search-meta-q{flex:1;font-size:13.5px;color:#1a2234;font-weight:600}
+.search-meta-ct{font-size:12px;color:#9aa8bc;flex-shrink:0}
+.search-divider{height:1px;background:rgba(0,0,0,.06);margin:0}
+.news-card{padding:13px 0}
+.news-card-hd{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}
+.news-globe{flex-shrink:0;margin-top:1px;color:#2b61f0}
+.news-title{flex:1;font-size:13.5px;font-weight:700;color:#2b61f0;line-height:1.4}
+.news-badge{flex-shrink:0;font-size:11px;color:#10b981;background:rgba(16,185,129,.1);padding:2px 7px;border-radius:4px;font-weight:700;white-space:nowrap;margin-top:1px}
+.news-excerpt{font-size:12.5px;color:#6b7280;line-height:1.6;margin-bottom:4px;padding-left:25px}
+.news-meta{font-size:11.5px;color:#9aa8bc;padding-left:25px}
+/* CONFIRM ACTIVE BUTTON */
+.confirm-btn-active{width:100%;padding:8px;border-radius:7px;background:#2b61f0;color:#fff;font-size:13px;font-weight:700;margin-top:10px;border:none;cursor:pointer;transition:opacity .15s}
+.confirm-btn-active:hover{opacity:.88}
+
+.nav-toplevel-link{display:flex;align-items:center;gap:7px;padding:12px 6px 8px;color:#8a9ab8;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;user-select:none;text-decoration:none;transition:color 0.15s;border-radius:6px}
+.nav-toplevel-link:hover{color:#4a5c7a;background:rgba(43,97,240,0.04)}
+.nav-toplevel-link svg{width:12px;height:12px;color:#8a9ab8}
+.nav-group.active>.nav-toplevel-link{color:var(--primary)}
+.nav-group.active>.nav-toplevel-link svg{color:var(--primary)}
+.topbar-sitaware-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;background:rgba(43,97,240,0.1);color:var(--primary,#2b61f0);font-size:12px;font-weight:700;border:1px solid rgba(43,97,240,0.25);cursor:pointer;text-decoration:none;transition:background 0.15s,border-color 0.15s;white-space:nowrap}
+.topbar-sitaware-btn:hover{background:rgba(43,97,240,0.18);border-color:rgba(43,97,240,0.45)}
+.topbar-sitaware-btn svg{flex:0 0 16px}
+</style>
+</head>
+<body>
+<div class="editor-shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar">
+    <button class="back-btn" onclick="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      智能体编报
+    </button>
+    <div class="topbar-sep"></div>
+    <div class="doc-title" id="docTitle">关于大埔宏福苑大火报告</div>
+    <div class="save-info" id="saveInfo" style="display:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7V12L15 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      最近保存 14:55
+    </div>
+    <div class="topbar-space"></div>
+    <div class="topbar-actions" id="topbarActions" style="display:none">
+      <button class="t-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5 22 22 17.5 22 12S17.5 2 12 2C6.5 2 2 6.5 2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M2 7V12H7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7V12L15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        历史版本
+      </button>
+      <button class="t-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H16L21 8V19C21 20.1 20.1 21 19 21Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 3V8H15M7 21V14H17V21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        保存
+      </button>
+      <button class="t-btn t-btn-export">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 16V4M8 12L12 16L16 12M4 20H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        导出
+      </button>
+    </div>
+  </div>
+
+  <!-- FORMAT BAR -->
+  <div class="fmtbar">
+    <button class="fb" title="撤销"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 7H15C17.8 7 20 9.2 20 12s-2.2 5-5 5H4M4 7L8 3M4 7L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="fb" title="重做"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 7H9C6.2 7 4 9.2 4 12s2.2 5 5 5H20M20 7L16 3M20 7L16 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="fb" title="清除格式"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20L20 4M8 4H20M4 20H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    <div class="fb-sep"></div>
+    <select class="fb-sel" style="min-width:82px"><option>方正小标宋</option><option>仿宋</option><option>黑体</option><option>宋体</option></select>
+    <select class="fb-sel" style="min-width:42px"><option>一号</option><option selected>二号</option><option>三号</option><option>小四</option></select>
+    <div class="fb-sep"></div>
+    <button class="fb" title="字体颜色"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20H20M9 16L12 4 15 16M10.5 12H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="fb on"><b>B</b></button>
+    <button class="fb"><i>I</i></button>
+    <button class="fb"><u>U</u></button>
+    <button class="fb"><s>S</s></button>
+    <div class="fb-sep"></div>
+    <button class="fb" title="左对齐"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 10H14M4 14H20M4 18H14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    <button class="fb on" title="居中"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M7 10H17M4 14H20M7 18H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    <button class="fb" title="右对齐"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M10 10H20M4 14H20M10 18H20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    <button class="fb" title="两端"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 10H20M4 14H20M4 18H20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    <div class="fb-sep"></div>
+    <select class="fb-sel" style="min-width:44px"><option>标题</option><option>段落</option></select>
+    <div class="fb-sep"></div>
+    <button class="fb" title="无序列表"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="7" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="5" cy="17" r="1.5" fill="currentColor"/><path d="M9 7H20M9 12H20M9 17H20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+    <button class="fb" title="有序列表"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 5H6M4 9H6M4 5V9M11 7H20M11 12H20M11 17H20M4 13L5 12V17H6M4 17H6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="fb-sep"></div>
+    <button class="fb" title="减少缩进"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M14 6H20M14 12H20M14 18H20M4 8L8 12 4 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="fb" title="增加缩进"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M10 6H20M10 12H20M10 18H20M8 8L4 12 8 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="fb-sep"></div>
+    <button class="fb" title="插入链接"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M10 13c.6 1 1.5 1.6 2.4 1.9.9.3 1.9.2 2.6-.1L18 12c1.5-1.5 1.5-4 0-5.5l-.5-.5C16 4.5 13.5 4.5 12 6l-1.5 1.5M14 11c-.6-1-1.5-1.6-2.4-1.9-.9-.3-1.9-.2-2.6.1L6 12c-1.5 1.5-1.5 4 0 5.5l.5.5C8 19.5 10.5 19.5 12 18l1.5-1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-row">
+
+    <!-- TOC -->
+    <div class="toc-panel" id="tocPanel">
+      <div class="toc-hd">
+        <span class="toc-hd-label">目录</span>
+        <span class="toc-hd-btn" onclick="toggleToc()">«</span>
+      </div>
+      <div class="toc-list">
+        <div class="ti cur"><span class="ti-n">一</span>事件回顾与定性</div>
+        <div class="ti sub">火灾发生与升级过程</div>
+        <div class="ti sub">伤亡与救援初步结果</div>
+        <div class="ti sub">调查与责任追究</div>
+        <div class="ti"><span class="ti-n">二</span>传播数据分析</div>
+        <div class="ti sub">舆情热度走势</div>
+        <div class="ti sub">渠道声量统计</div>
+        <div class="ti sub">热度词云</div>
+        <div class="ti"><span class="ti-n">三</span>监管失效分析</div>
+        <div class="ti sub">违规材料与监管盲区</div>
+        <div class="ti"><span class="ti-n">四</span>应急响应与社会动员</div>
+        <div class="ti"><span class="ti-n">五</span>结论与改革建议</div>
+      </div>
+    </div>
+
+    <!-- DOC CANVAS -->
+    <div class="doc-canvas" id="docCanvas">
+
+      <!-- STATE: search (data retrieval) -->
+      <div class="search-wrap" id="stSearch" style="display:none">
+        <div class="search-hd">
+          <span class="search-title">搜索</span>
+          <span class="search-close">×</span>
+        </div>
+        <div class="search-meta">
+          <span class="search-meta-tag">MCP工具</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <span class="search-meta-q">大埔宏福苑大火</span>
+          <span class="search-meta-ct">共19条数据</span>
+        </div>
+        <div class="search-divider"></div>
+        <div class="news-card">
+          <div class="news-card-hd">
+            <svg class="news-globe" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 3C12 3 8.5 6.5 8.5 12s3.5 9 3.5 9M12 3c0 0 3.5 3.5 3.5 9s-3.5 9-3.5 9M3 12h18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span class="news-title">香港宏福苑大火7座受灾楼宇将改建为新型公共屋邨</span>
+            <span class="news-badge">✓ 已读取完毕</span>
+          </div>
+          <div class="news-excerpt">财政司副司长黄伟纶表示，特区政府已决定对受灾严重的7座楼宇进行重建，预计2028年前完成基础改造工程，受灾居民可享优先申请权。</div>
+          <div class="news-meta">网易 · 2026-02-21 18:24:59</div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="news-card">
+          <div class="news-card-hd">
+            <svg class="news-globe" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 3C12 3 8.5 6.5 8.5 12s3.5 9 3.5 9M12 3c0 0 3.5 3.5 3.5 9s-3.5 9-3.5 9M3 12h18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span class="news-title">香港大埔宏福苑大火已致至少44人遇难！特区政府启动紧急安置机制</span>
+            <span class="news-badge">✓ 已读取完毕</span>
+          </div>
+          <div class="news-excerpt">11月27日凌晨5时50分，香港消防处宣布大埔宏福苑五级火警已受控，截至当日上午遇难人数升至44人，逾3800人被紧急疏散至临时庇护中心。</div>
+          <div class="news-meta">腾讯网 · 2025-11-27</div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="news-card">
+          <div class="news-card-hd">
+            <svg class="news-globe" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 3C12 3 8.5 6.5 8.5 12s3.5 9 3.5 9M12 3c0 0 3.5 3.5 3.5 9s-3.5 9-3.5 9M3 12h18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span class="news-title">特区政府公布大埔宏福苑七幢受火楼宇处置方案及居民补偿细则</span>
+            <span class="news-badge">✓ 已读取完毕</span>
+          </div>
+          <div class="news-excerpt">政务司副司长卓永兴召开记者会，详细说明受灾楼宇处置安排及居民获赔标准，现租户可享优先认购权，相关安置工作有序推进。</div>
+          <div class="news-meta">凤凰网 · 2026-03-31</div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="news-card">
+          <div class="news-card-hd">
+            <svg class="news-globe" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 3C12 3 8.5 6.5 8.5 12s3.5 9 3.5 9M12 3c0 0 3.5 3.5 3.5 9s-3.5 9-3.5 9M3 12h18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span class="news-title">大埔宏福苑大火独立调查委员会听证会细节曝光，三名被告否认全部控罪</span>
+            <span class="news-badge">✓ 已读取完毕</span>
+          </div>
+          <div class="news-excerpt">独立调查委员会第五轮公开听证，多名前线工程师出庭作证，详细还原起火前数小时施工现场情况及材料违规使用详情。</div>
+          <div class="news-meta">奥一网 · 2026-03-24</div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="news-card">
+          <div class="news-card-hd">
+            <svg class="news-globe" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 3C12 3 8.5 6.5 8.5 12s3.5 9 3.5 9M12 3c0 0 3.5 3.5 3.5 9s-3.5 9-3.5 9M3 12h18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span class="news-title">香港大埔宏福苑大火起火原因初步锁定，消防安全改革法案提请立法会</span>
+            <span class="news-badge">✓ 已读取完毕</span>
+          </div>
+          <div class="news-excerpt">香港保安局向立法会提交《消防安全（建筑物）修订条例草案》，针对宏福苑大火暴露的监管漏洞提出系统性修补方案。</div>
+          <div class="news-meta">看看新闻网 · 2026-03-24</div>
+        </div>
+      </div>
+
+      <!-- STATE: loading (skeleton) -->
+      <div class="skel-wrap" id="stLoading" style="display:none">
+        <div class="ai-pill">
+          <div class="ai-pill-inner">
+            <div class="ai-dot"></div>
+            <span class="ai-pill-text" id="loadingPillText">AI撰写中...</span>
+            <div class="ai-stop-box"></div>
+          </div>
+        </div>
+        <div class="skel-page">
+          <div class="sk" style="width:55%;margin:0 auto 8px"></div><div class="sk" style="width:40%;margin:0 auto 24px"></div>
+          <div class="sk" style="width:30%"></div><div class="sk" style="width:95%"></div><div class="sk" style="width:91%"></div><div class="sk" style="width:87%"></div><div class="sk" style="width:62%;margin-bottom:18px"></div>
+          <div class="sk" style="width:30%"></div><div class="sk" style="width:95%"></div><div class="sk" style="width:88%"></div><div class="sk" style="width:54%;margin-bottom:18px"></div>
+          <div class="sk" style="width:95%"></div><div class="sk" style="width:92%"></div><div class="sk" style="width:88%"></div><div class="sk" style="width:58%"></div>
+        </div>
+      </div>
+
+      <!-- STATE: outline (structure + placeholder body) -->
+      <div class="doc-wrap" id="stOutline" style="display:none">
+        <div class="ai-pill">
+          <div class="ai-pill-inner">
+            <div class="ai-dot"></div>
+            <span class="ai-pill-text">AI撰写中...</span>
+            <div class="ai-stop-box"></div>
+          </div>
+        </div>
+        <div class="doc-page">
+          <div class="d-title">大埔宏福苑五级大火：公共安全治理与<br>建筑维修监管的系统性漏洞</div>
+          <div class="d-period">（监测周期：2025年11月26日－2025年12月26日）</div>
+          <h2 class="d-h2"><span class="sec-n">一、</span>事件回顾与定性</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>火灾发生与升级过程</h3>
+          <p class="d-ph">梳理2025年11月26日下午2时51分火灾从宏昌阁外墙棚架起火，火势在数小时内迅速蔓延至周边7栋楼宇，火警级别在约3.5小时内从三级升至五级的全过程，突出其突发性与严重性。</p>
+          <h3 class="d-h3"><span class="sub-n">（二）</span>伤亡与救援初步结果</h3>
+          <p class="d-ph">概述火灾造成的最终伤亡数据（168人遇难，约4000人流离失所），以及消防员何伟豪殉职等关键信息，为后续分析提供事实基础。</p>
+          <h3 class="d-h3"><span class="sub-n">（三）</span>火灾初步调查与责任追究</h3>
+          <p class="d-ph">简述独立委员会听证会披露的初步调查结果，包括起火点（宏昌阁104与105室之间光井）、最可能起火原因（烟头），以及工程公司负责人因涉嫌误杀被捕的情况。</p>
+          <h2 class="d-h2"><span class="sec-n">二、</span>传播数据分析</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>舆情热度走势</h3>
+          <p class="d-ph">将调用"舆情走势"分析组件进行内容呈现</p>
+          <h3 class="d-h3"><span class="sub-n">（二）</span>渠道声量统计</h3>
+          <p class="d-ph">将调用"渠道声量统计"分析组件进行内容呈现</p>
+          <h3 class="d-h3"><span class="sub-n">（三）</span>热度词云</h3>
+          <p class="d-ph">将调用"热度词云"分析组件进行内容呈现</p>
+          <h2 class="d-h2"><span class="sec-n">三、</span>建筑维修工程中的多重监管失效分析</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>违规材料使用的操作路径与监管盲区</h3>
+          <p class="d-ph">深入分析宏福苑维修工程中，承建商宏业建筑工程有限公司使用非阻燃棚网、以发泡胶封窗等违规材料的具体操作路径。聚焦其如何通过采购环节（如指定购买非阻燃网）、文件造假（重复使用旧阻燃证书）等手段规避监管。</p>
+        </div>
+      </div>
+
+      <!-- STATE: done (full report) -->
+      <div class="doc-wrap" id="stDone" style="display:none">
+        <div class="doc-page">
+          <div class="d-title">大埔宏福苑五级大火：公共安全治理与<br>建筑维修监管的系统性漏洞</div>
+          <div class="d-period">（监测周期：2025年11月26日－2025年12月26日）</div>
+
+          <h2 class="d-h2"><span class="sec-n">一、</span>事件回顾与定性</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>火灾发生与升级过程</h3>
+          <p class="d-p">2025年11月26日下午2时51分，香港大埔宏福苑宏昌阁外墙棚架突然起火，火势在数小时内迅速蔓延至周边7栋楼宇，火警级别在约3.5小时内从三级升至五级，成为香港近年来最严重的建筑火灾之一。<span class="cite">89</span> 火灾初发时，消防处接报后立即调派多辆消防车及云梯车赶赴现场，但由于宏福苑建筑群的特殊地形与棚架结构的阻碍，云梯车最高作业高度仅56米，无法有效覆盖32层以上的高层起火点，严重制约了初期灭火效率。<span class="cite">114</span></p>
+          <h3 class="d-h3"><span class="sub-n">（二）</span>伤亡与救援初步结果</h3>
+          <p class="d-p">火灾最终造成168人遇难，约4000人流离失所，成为香港自1996年嘉利大厦火灾以来最惨烈的火灾事故。<span class="cite">85</span> 消防员何伟豪在救援过程中不幸殉职，令社会各界深感惋惜。特区政府随即启动紧急应变机制，调配竞技场等临时庇护场所，并开放多处社区中心接收无家可归的居民。</p>
+          <h3 class="d-h3"><span class="sub-n">（三）</span>火灾初步调查与责任追究</h3>
+          <p class="d-p">独立调查委员会听证会披露，火灾起火点位于宏昌阁104与105室之间的光井平台，最可能的起火原因为工人在非指定吸烟区遗留未熄灭的烟头，引燃附近杂物所致。<span class="cite">84</span><span class="cite">114</span> 警方随即以涉嫌误杀罪名逮捕3名宏业建筑工程有限公司负责人，包括2名董事和1名工程顾问，年龄介乎52至68岁之间。后续调查持续扩大，截至2026年1月，警方累计拘捕逾20名涉案人员，涵盖工程公司、搭棚公司、外墙工程公司及消防装置供货商等多个环节。</p>
+
+          <h2 class="d-h2"><span class="sec-n">二、</span>传播数据分析</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>舆情热度走势</h3>
+          <p class="d-ph">将调用"舆情走势"分析组件进行内容呈现</p>
+          <h3 class="d-h3"><span class="sub-n">（二）</span>渠道声量统计</h3>
+          <p class="d-ph">将调用"渠道声量统计"分析组件进行内容呈现</p>
+          <h3 class="d-h3"><span class="sub-n">（三）</span>热度词云</h3>
+          <p class="d-ph">将调用"热度词云"分析组件进行内容呈现</p>
+
+          <h2 class="d-h2"><span class="sec-n">三、</span>建筑维修工程中的多重监管失效分析</h2>
+          <h3 class="d-h3"><span class="sub-n">（一）</span>违规材料使用的操作路径与监管盲区</h3>
+          <p class="d-p">调查揭示，涉案工程公司在施工过程中存在大量违规行为，并通过多种手段规避监管。棚架工程中大量使用的合成纤维棚网及发泡胶封窗材料均未符合香港消防处规定的阻燃标准，部分原有阻燃棚网在施工过程中被非阻燃材料取代。<span class="cite">88</span> 更为严重的是，工程记录中发现文件造假行为，涉案公司重复使用已过期的旧阻燃证书，应付政府部门的例行检查。</p>
+          <p class="d-p">监管部门的协同机制缺失进一步加剧了审核疏漏。独立委员会指出，各部门对工地临时物料的法定要求立场分歧，劳工处称"条例无规定封窗物料"，消防处则建议找屋宇署，形成监管真空，助长了违规行为的蔓延。</p>
+
+          <h2 class="d-h2"><span class="sec-n">四、</span>火灾应急响应与社会动员机制评估</h2>
+          <p class="d-p">特区政府在火灾后迅速启动"一户一社工"支援机制，为每一个受灾家庭配备专属社工，提供个性化的情绪疏导与实际援助。<span class="cite">83</span> 中国社会福利基金会等机构募集善款逾1.16亿元，用于心理疗愈、社区复原及特殊群体关怀。香港心理卫生会通过自然疗愈项目，协助居民缓解心理创伤；香港国际社会服务社则策划传统民俗活动，协助受灾居民重建社区连接与归属感。<span class="cite">88</span></p>
+
+          <h2 class="d-h2"><span class="sec-n">五、</span>结论与系统性改革建议</h2>
+          <p class="d-p">宏福苑大火是一场完全可以预防的人祸。事件折射出香港在建筑工程安全监管、消防基础设施建设及部门协同应急响应三个层面长期存在的系统性缺陷。特区政府、立法会及独立委员会在灾后提出了一系列短期与长期改革建议，包括修订建筑法规、强化监管措施、完善应急协调机制等内容，确保整合多元社会主流与新一代观点。<span class="cite">85</span></p>
+          <p class="d-p">首先，强化建筑维修工程监管框架是根本性前提。建议修订《建筑物条例》，明确外墙维修工程中临时构筑物的防火要求，赋予屋宇署、消防处及劳工处明确的联合执法权责，消除现行监管体系中的权责真空。全面禁止竹制脚手架在30米以上建筑使用，推广金属钢架及阻燃防护网，从源头消除易燃材料隐患。<span class="cite">89</span><span class="cite">114</span> 同时，修订《消防安全条例》，将1985年前落成的老旧建筑纳入强制消防升级计划，政府承担70%改造费用，解决资金缺口问题。<span class="cite">85</span></p>
+          <p class="d-p">其次，加大消防基础设施投入与新技术应用是提升应急能力的核心。宏福苑大火中，消防云梯最高作业高度仅56米，无法覆盖32层楼宇的高层火点，凸显装备滞后性。需引入101米级智能云梯车、高压压缩空气泡沫系统（CAFS）等新型设备，提升高层灭火能力，同时推广无人机灭火系统实现6机协同作业，120米高空投射干粉灭火弹，突破传统救援的物理限制。<span class="cite">84</span><span class="cite">114</span> 在老旧社区加装屋顶直升机停机坪及缓降器等自救设施，配备家庭消防应急包（含防烟面罩、灭火毯），强化居民自救能力。<span class="cite">88</span></p>
+          <p class="d-p">最后，完善跨部门应急协调与信息共享机制，提升社区安全风险意识。建立"数字应急实战系统"，实现火情秒级预警、跨部门指挥闭环，参考重庆经验整合消防、医疗、民政等数据，优化资源调配。<span class="cite">83</span> 加强社区层面的安全培训，推广"固守待援"技巧，定期开展VR模拟演练，提升居民应急处置能力。同时借鉴上海"平灾结合"公园模式，将社区空间改造为兼具休闲与应急功能的场所，增强城市韧性。<span class="cite">85</span> 通过这些长远规划，将安全理念嵌入城市治理基因，构建更具韧性的城市安全体系。<span class="cite">88</span></p>
+        </div>
+      </div>
+
+    </div><!-- /doc-canvas -->
+
+    <!-- ASSIST PANEL -->
+    <div class="assist-panel" id="assistPanel">
+      <div class="panel-hd">
+        <div class="panel-hd-title">报告助手</div>
+        <span class="panel-hd-btn" onclick="hidePanel()">»</span>
+      </div>
+      <div class="panel-body" id="panelBody">
+
+        <div class="chat-user" id="chatUser">请帮我生成一份关于<strong>大埔宏福苑大火</strong>的报告，报告关注时间为：2025-11-26 00:00:00 至2025-12-26 14:44:18。</div>
+        <div class="chat-ai" id="chatAi">已成功接收，我将梳理思路，为你呈现全面且精准的答案。</div>
+
+        <!-- 步骤1：背景调查 -->
+        <div class="step-item open" id="si1">
+          <div class="step-hd" onclick="toggleStep('si1')">
+            <span class="sp">✦</span>
+            <span class="step-label">我将使用网络深度搜索工具来针对该事件进行背景调查，了解该报告的核心信息。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div style="font-size:12px;color:#6b7280;margin-bottom:6px">任务理解：用户需要撰写一份关于"大埔宏福苑大火"的分析报告。</div>
+            <div class="mcp-card">
+              <span class="mtag">MCP工具</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <span class="mq">搜索　大埔宏福苑大火</span>
+              <span class="mv">查看</span>
+            </div>
+            <div style="font-size:12px;color:#4a5c7a;line-height:1.7;margin-top:7px">我已从多方信源获悉香港大埔宏福苑大火核心信息，这是一场涉及建筑安全、施工监管和公共安全的重大灾难事件<span class="cite">1</span>，提供了事件基本情况：2025年11月26日宏福苑发生火灾，火警升至5级，初期造成4人死亡5人受伤……</div>
+          </div>
+        </div>
+
+        <!-- 步骤2：确认需求 -->
+        <div class="step-item open" id="si2">
+          <div class="step-hd" onclick="toggleStep('si2')">
+            <span class="sp">✦</span>
+            <span class="step-label">我已理解核心信息，我需要先确认一下这个报告的具体要求。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:8px">请选择以下作为写作角度（多选）</div>
+            <label class="angle-item"><input type="checkbox" checked>评估香港消防处在宏福苑五级火警中的云梯覆盖不足、内部通讯混乱等应响短板，以及民安队、临时庇护中心等社会动员机制的实际效能。</label>
+            <label class="angle-item"><input type="checkbox" checked>探讨香港《建筑物条例》中关于外墙维修材料防火标准的条款模糊性，以及施工单位规避阻燃测试的具体手段与监管执行失效的关联。</label>
+            <label class="angle-item"><input type="checkbox">对比火灾初期（伤亡4人）与听证会阶段（168人遇难），香港主流媒体对事件叙事框架从"意外事故"向"系统性人祸"的转变过程。</label>
+            <label class="angle-item"><input type="checkbox">分析宏福苑居民返家执拾安排中，"一户一社工"机制对受灾者心理创伤的缓解效果，以及临时庇护中心物资供给与情绪支援的匹配程度。</label>
+            <label class="angle-item"><input type="checkbox">研究宏福苑42年楼龄公共房屋的消防设施老化（如消防水缸渗漏）、维修工程监管缺失等结构性问题，及其对香港公屋系统改革方向的启示。</label>
+            <div style="font-size:12px;font-weight:700;color:#374151;margin:10px 0 8px">请选择以下写作篇幅（单选）</div>
+            <label class="depth-item"><input type="radio" name="dep">简短</label>
+            <label class="depth-item"><input type="radio" name="dep" checked>深入</label>
+            <button class="confirm-btn-active" id="confirmBtn" onclick="doConfirm()">确认</button>
+            <button class="confirmed-btn" id="confirmedBtnEl" style="display:none">已确认</button>
+          </div>
+        </div>
+
+        <!-- 步骤3：生成大纲 -->
+        <div class="step-item open" id="si3">
+          <div class="step-hd" onclick="toggleStep('si3')">
+            <span class="sp">✦</span>
+            <span class="step-label">已确认您的需求。现在将根据您的报告主题为您规划报告撰写的大纲。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div style="font-size:12px;color:#4a5c7a;line-height:1.7;margin-bottom:6px">我已从多方信源获悉该事件核心信息，现需梳理针对该类事件的报告撰写大纲。</div>
+            <div class="mcp-card">
+              <span class="mtag">MCP工具</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M4 6H20M4 10H16M4 14H20M4 18H12" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <span class="mq">大纲生成</span>
+              <span class="mv">查看</span>
+            </div>
+            <div style="font-size:12px;color:#4a5c7a;line-height:1.7;margin-top:7px">现在我已完成报告大纲撰写工作，您可在左侧查看大纲的内容。您也可在下方输入优化建议，将为您重新生成大纲。</div>
+          </div>
+        </div>
+
+        <!-- 步骤4：任务规划 -->
+        <div class="step-item open" id="si4">
+          <div class="step-hd" onclick="toggleStep('si4')">
+            <span class="sp">✦</span>
+            <span class="step-label">已接收报告大纲，现在将为您罗列出详细任务规划。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div class="task-list">
+              <div class="tr"><div class="tn done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tt done">01　事件详细过程与伤亡数据收集</div></div>
+              <div class="tr"><div class="tn done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tt done">02　建筑维修工程违规操作与监管漏洞调查</div></div>
+              <div class="tr"><div class="tn done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tt done">03　消防响应与应急措施缺陷分析</div></div>
+              <div class="tr"><div class="tn done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tt done">04　社会动员与灾后安置机制评估</div></div>
+              <div class="tr"><div class="tn done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="tt done">05　多方观点与系统性改革建议收集</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 步骤5：深度搜索 -->
+        <div class="step-item" id="si5">
+          <div class="step-hd" onclick="toggleStep('si5')">
+            <span class="sp">✦</span>
+            <span class="step-label">我将使用网络深度搜索工具，按照任务规划清单开始进行全面分析。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div class="mcp-card"><span class="mtag">MCP工具</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg><span class="mq">宏福苑大火 媒体评论 专家分析 网民观点</span><span class="mv">查看</span></div>
+            <div class="mcp-card"><span class="mtag">MCP工具</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg><span class="mq">香港政府 宏福苑大火 改革建议 建筑法规修订</span><span class="mv">查看</span></div>
+            <div class="mcp-card"><span class="mtag">MCP工具</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg><span class="mq">立法会 宏福苑 监管措施 应急协调提案</span><span class="mv">查看</span></div>
+            <div class="mcp-card"><span class="mtag">MCP工具</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="11" cy="11" r="7" stroke="#9aa8bc" stroke-width="1.5"/><path d="M16 16L21 21" stroke="#9aa8bc" stroke-width="1.4" stroke-linecap="round"/></svg><span class="mq">民间组织 宏福苑大火 安全体系 长期规划</span><span class="mv">查看</span></div>
+            <div class="src-ct">共检索并深度分析 <strong>198</strong> 个相关信息</div>
+          </div>
+        </div>
+
+        <!-- 步骤6：撰写报告（完成）-->
+        <div class="step-item open" id="si6">
+          <div class="step-hd" onclick="toggleStep('si6')">
+            <span class="sp">✦</span>
+            <span class="step-label">我已完成所有阶段的研究工作，现在我将基于前面的研究成果，撰写完整的分析报告。</span>
+            <span class="step-chv">▾</span>
+          </div>
+          <div class="step-body">
+            <div style="font-size:12px;color:#4a5c7a;margin-bottom:8px">我将逐章进行报告的撰写：</div>
+            <div class="cr"><div class="cc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>一、事件回顾与定性</div>
+            <div class="cr"><div class="cc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>二、传播数据分析</div>
+            <div class="cr"><div class="cc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>三、建筑维修工程中的多重监管失效分析</div>
+            <div class="cr"><div class="cc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>四、火灾应急响应与社会动员机制评估</div>
+            <div class="cr"><div class="cc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>五、结论与系统性改革建议</div>
+            <div class="done-card">
+              <div class="done-card-title">✦ 报告已完成生成</div>
+              <div class="done-card-text">我已完成报告撰写，该报告基于全网的舆情数据对大埔宏福苑大火事件进行了全面分析，报告包含了事件回顾与定性、传播数据分析、建筑维修工程中的多重监管失效分析等内容，满足了对深入分析的需求。</div>
+              <ul>
+                <li>引用来源：198 条相关信息</li>
+                <li>报告字数：8,961 字</li>
+                <li>涵盖章节：5 个主章节</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /panel-body -->
+      <div class="panel-footer" id="panelFooter">
+        <button class="gen-btn" id="genReportBtn" onclick="doGenReport()" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 2V8H20M8 13H16M8 17H13" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+          生成报告
+        </button>
+      </div>
+    </div>
+
+    <!-- ICON RAIL -->
+    <div class="icon-rail">
+      <div class="ir-btn act" id="irAssist" onclick="togglePanel()" title="报告助手">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 2V8H20M8 13H16M8 17H13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>报告<br>助手</span>
+      </div>
+      <div class="ir-btn" id="irAnal" title="AI分析" onclick="switchToAnal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>AI<br>分析</span>
+      </div>
+    </div>
+
+  </div><!-- /body-row -->
+
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <span id="wc">字数：0 字</span>
+    <span style="color:#d8dfe8">|</span>
+    <span id="saveStatus">草稿中</span>
+    <div class="sb-sp"></div>
+    <div class="zc">
+      <button class="zb" onclick="dz(-10)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <span id="zv">100%</span>
+      <button class="zb" onclick="dz(10)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+</div><!-- /editor-shell -->
+
+<script>
+// ── State management ──
+let state = 'search';
+let panelVisible = true;
+let zoom = 100;
+
+const allDocStates = ['stSearch','stLoading','stOutline','stDone'];
+
+function hideAllDocStates() {
+  allDocStates.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function showState(s) {
+  state = s;
+  hideAllDocStates();
+
+  var isDone = s === 'report';
+  document.getElementById('saveInfo').style.display = isDone ? 'flex' : 'none';
+  document.getElementById('topbarActions').style.display = isDone ? 'flex' : 'none';
+  var toc = document.getElementById('tocPanel');
+  if (isDone) toc.classList.add('vis'); else toc.classList.remove('vis');
+  document.getElementById('wc').textContent = isDone ? '字数：8961字' : '字数：0字';
+  document.getElementById('saveStatus').textContent = isDone ? '已保存' : '草稿中';
+
+  var si1 = document.getElementById('si1');
+  var si2 = document.getElementById('si2');
+  var si3 = document.getElementById('si3');
+  var si4 = document.getElementById('si4');
+  var si5 = document.getElementById('si5');
+  var si6 = document.getElementById('si6');
+  var genReportBtn   = document.getElementById('genReportBtn');
+  var confirmBtn     = document.getElementById('confirmBtn');
+  var confirmedBtnEl = document.getElementById('confirmedBtnEl');
+
+  if (s === 'search') {
+    document.getElementById('loadingPillText').textContent = '数据搜索中';
+    document.getElementById('stLoading').style.display = 'block';
+    var chatUser = document.getElementById('chatUser');
+    var chatAi   = document.getElementById('chatAi');
+    [chatUser, chatAi, si1, si2].forEach(function(el) {
+      if (!el) return;
+      el.style.display = 'block'; el.style.opacity = '0'; el.style.transition = 'none';
+    });
+    si1.classList.add('open'); si2.classList.add('open');
+    si3.style.display = 'none'; si4.style.display = 'none';
+    si5.style.display = 'none'; si6.style.display = 'none';
+    if (confirmBtn) confirmBtn.style.display = 'block';
+    if (confirmedBtnEl) confirmedBtnEl.style.display = 'none';
+    genReportBtn.style.display = 'none';
+    document.getElementById('panelBody').scrollTop = 0;
+    setTimeout(function() {
+      if (state !== 'search') return;
+      document.getElementById('stLoading').style.display = 'none';
+      document.getElementById('stSearch').style.display = 'flex';
+      animatePanelSearch();
+    }, 2000);
+
+  } else if (s === 'outline') {
+    document.getElementById('stOutline').style.display = 'block';
+    si1.style.display = 'block'; si1.style.opacity = '1'; si1.classList.remove('open');
+    si2.style.display = 'block'; si2.style.opacity = '1'; si2.classList.add('open');
+    si3.style.display = 'block'; si3.style.opacity = '1'; si3.classList.add('open');
+    si4.style.display = 'none'; si5.style.display = 'none'; si6.style.display = 'none';
+    if (confirmBtn) confirmBtn.style.display = 'none';
+    if (confirmedBtnEl) confirmedBtnEl.style.display = 'block';
+    genReportBtn.style.display = 'none';
+    animateOutline();
+
+  } else if (s === 'report') {
+    // Left: loading until panel reaches si6
+    document.getElementById('loadingPillText').textContent = 'AI撰写中...';
+    document.getElementById('stLoading').style.display = 'block';
+    si1.style.display = 'block'; si1.style.opacity = '1'; si1.classList.remove('open');
+    si2.style.display = 'block'; si2.style.opacity = '1'; si2.classList.remove('open');
+    si3.style.display = 'block'; si3.style.opacity = '1'; si3.classList.remove('open');
+    [si4, si5, si6].forEach(function(el) {
+      el.style.display = 'block'; el.style.opacity = '0'; el.style.transition = 'none';
+    });
+    if (confirmBtn) confirmBtn.style.display = 'none';
+    if (confirmedBtnEl) confirmedBtnEl.style.display = 'block';
+    genReportBtn.style.display = 'none';
+    animatePanelReport(function() {
+      document.getElementById('stLoading').style.display = 'none';
+      document.getElementById('stDone').style.display = 'block';
+      animateReport();
+    });
+  }
+}
+
+// ── Confirm: left loading → outline ──
+function doConfirm() {
+  var confirmBtn     = document.getElementById('confirmBtn');
+  var confirmedBtnEl = document.getElementById('confirmedBtnEl');
+  if (confirmBtn) confirmBtn.style.display = 'none';
+  if (confirmedBtnEl) confirmedBtnEl.style.display = 'block';
+
+  state = 'outline';
+  hideAllDocStates();
+  document.getElementById('loadingPillText').textContent = 'AI撰写中...';
+  document.getElementById('stLoading').style.display = 'block';
+
+  var si1 = document.getElementById('si1');
+  var si2 = document.getElementById('si2');
+  var si3 = document.getElementById('si3');
+  si1.style.display = 'block'; si1.classList.remove('open');
+  si2.style.display = 'block'; si2.classList.add('open');
+  si3.style.display = 'block'; si3.classList.add('open');
+  ['si4','si5','si6'].forEach(function(id) { document.getElementById(id).style.display = 'none'; });
+  document.getElementById('genReportBtn').style.display = 'none';
+
+  animatePanelOutline();
+
+  setTimeout(function() {
+    if (state !== 'outline') return;
+    document.getElementById('stLoading').style.display = 'none';
+    document.getElementById('stOutline').style.display = 'block';
+    animateOutline();
+  }, 2000);
+}
+
+// ── Generate report ──
+function doGenReport() {
+  showState('report');
+}
+
+// ── Scroll helper: push-up (scroll minimum to reveal el bottom) ──
+function scrollToReveal(container, el) {
+  setTimeout(function() {
+    var elRect = el.getBoundingClientRect();
+    var ctRect = container.getBoundingClientRect();
+    if (elRect.bottom > ctRect.bottom) {
+      container.scrollTop += (elRect.bottom - ctRect.bottom) + 6;
+    }
+  }, 120);
+}
+
+// ── Panel stream: search (fresh from top) ──
+function animatePanelSearch() {
+  var pb = document.getElementById('panelBody');
+  var items = [
+    document.getElementById('chatUser'),
+    document.getElementById('chatAi'),
+    document.getElementById('si1'),
+    document.getElementById('si2')
+  ];
+  items.forEach(function(el, i) {
+    if (!el) return;
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '1';
+      scrollToReveal(pb, el);
+    }, (i + 1) * 900);
+  });
+}
+
+// ── Panel stream: outline (si3 body children, continue from current scroll) ──
+function animatePanelOutline() {
+  var pb = document.getElementById('panelBody');
+  var bodyItems = document.querySelectorAll('#si3 .step-body > *');
+  bodyItems.forEach(function(el) { el.style.opacity = '0'; el.style.transition = 'none'; });
+  bodyItems.forEach(function(el, i) {
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '1';
+      scrollToReveal(pb, el);
+    }, (i + 1) * 1100);
+  });
+}
+
+// ── Left outline paragraphs; genReportBtn at end; doc scrolls back to top ──
+function animateOutline() {
+  var dc  = document.getElementById('docCanvas');
+  var phs = document.querySelectorAll('#stOutline .d-ph');
+  phs.forEach(function(el) { el.style.opacity = '0'; el.style.transition = 'none'; });
+  var delay = 700;
+  phs.forEach(function(el, i) {
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '1';
+      scrollToReveal(dc, el);
+    }, (i + 1) * delay);
+  });
+  // After last paragraph: show button + scroll doc back to title
+  setTimeout(function() {
+    var btn = document.getElementById('genReportBtn');
+    if (btn) btn.style.display = 'flex';
+    dc.scrollTop = 0;
+  }, (phs.length + 1) * delay + 400);
+}
+
+// ── Panel stream: report (si4 → si5 → si6, continue from current scroll) ──
+function animatePanelReport(onSi6Revealed) {
+  var pb = document.getElementById('panelBody');
+  var t = 0;
+  var step = 800;
+
+  function fadeIn(el, delay) {
+    el.style.opacity = '0';
+    el.style.transition = 'none';
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.45s';
+      el.style.opacity = '1';
+      scrollToReveal(pb, el);
+    }, delay);
+  }
+
+  var si4 = document.getElementById('si4');
+  var si5 = document.getElementById('si5');
+  var si6 = document.getElementById('si6');
+  var si4rows = si4.querySelectorAll('.step-body .tr');
+  var si5rows = si5.querySelectorAll('.step-body > *');
+  var si6rows = si6.querySelectorAll('.step-body > *');
+
+  // Pre-hide children while parent still at opacity:0
+  [si4rows, si5rows, si6rows].forEach(function(list) {
+    list.forEach(function(el) { el.style.opacity = '0'; el.style.transition = 'none'; });
+  });
+
+  // si4: show accordion header, then each task row
+  t += 500;
+  setTimeout(function() {
+    si4.classList.add('open');
+    si4.style.transition = 'opacity 0.5s'; si4.style.opacity = '1';
+    scrollToReveal(pb, si4);
+  }, t);
+  si4rows.forEach(function(el) { t += step; fadeIn(el, t); });
+
+  // si5: show accordion header, then each MCP card / source count
+  t += step;
+  setTimeout(function() {
+    si5.classList.add('open');
+    si5.style.transition = 'opacity 0.5s'; si5.style.opacity = '1';
+    scrollToReveal(pb, si5);
+  }, t);
+  si5rows.forEach(function(el) { t += step; fadeIn(el, t); });
+
+  // si6: show accordion header → trigger left reveal → then each chapter row
+  t += step;
+  setTimeout(function() {
+    si6.classList.add('open');
+    si6.style.transition = 'opacity 0.5s'; si6.style.opacity = '1';
+    scrollToReveal(pb, si6);
+    if (onSi6Revealed) onSi6Revealed();
+  }, t);
+  si6rows.forEach(function(el) { t += step; fadeIn(el, t); });
+}
+
+// ── Left report paragraphs from doc top; scroll back to title when done ──
+function animateReport() {
+  var dc = document.getElementById('docCanvas');
+  dc.scrollTop = 0;
+  var ps = document.querySelectorAll('#stDone .d-p, #stDone .d-ph');
+  ps.forEach(function(el) { el.style.opacity = '0'; el.style.transition = 'none'; });
+  ps.forEach(function(el, i) {
+    setTimeout(function() {
+      el.style.transition = 'opacity 0.5s';
+      el.style.opacity = '1';
+      scrollToReveal(dc, el);
+    }, (i + 1) * 380);
+  });
+  // Scroll back to title when all done
+  setTimeout(function() {
+    dc.scrollTop = 0;
+  }, (ps.length + 2) * 380);
+}
+
+// ── Init ──
+function showCompleted() {
+  state = 'report';
+  hideAllDocStates();
+  document.getElementById('stDone').style.display = 'block';
+  document.getElementById('saveInfo').style.display = 'flex';
+  document.getElementById('topbarActions').style.display = 'flex';
+  document.getElementById('tocPanel').classList.add('vis');
+  document.getElementById('wc').textContent = '字数：8961字';
+  document.getElementById('saveStatus').textContent = '已保存';
+  ['si1','si2','si3','si4','si5','si6'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = 'block';
+    el.style.opacity = '1';
+  });
+  var confirmBtn     = document.getElementById('confirmBtn');
+  var confirmedBtnEl = document.getElementById('confirmedBtnEl');
+  if (confirmBtn) confirmBtn.style.display = 'none';
+  if (confirmedBtnEl) confirmedBtnEl.style.display = 'block';
+  document.getElementById('genReportBtn').style.display = 'none';
+}
+
+var _urlParams = new URLSearchParams(window.location.search);
+if (_urlParams.get('mode') === 'view') {
+  showCompleted();
+} else {
+  showState('search');
+}
+
+function goBack() {
+  if (history.length > 1) history.back();
+  else { window.location.href = '../index.html'; }
+}
+
+// ── TOC ──
+function toggleToc() {
+  document.getElementById('tocPanel').classList.toggle('vis');
+}
+
+// ── Steps ──
+function toggleStep(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── Panel ──
+function showAssistPanel() {
+  document.getElementById('assistPanel').style.display = 'flex';
+  document.getElementById('irAssist').classList.add('act');
+  panelVisible = true;
+}
+function hidePanel() {
+  document.getElementById('assistPanel').style.display = 'none';
+  document.getElementById('irAssist').classList.remove('act');
+  panelVisible = false;
+}
+function togglePanel() {
+  if (panelVisible) hidePanel(); else showAssistPanel();
+}
+function switchToAnal() {
+  document.getElementById('irAnal').classList.toggle('act');
+}
+
+// ── Zoom ──
+function dz(d) {
+  zoom = Math.max(60, Math.min(200, zoom + d));
+  document.getElementById('zv').textContent = zoom + '%';
+  document.querySelectorAll('.doc-page').forEach(function(p) { p.style.zoom = zoom / 100; });
+}
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.key === '1') showState('search');
+  else if (e.key === '2') showState('outline');
+  else if (e.key === '3') showState('report');
+});
+function toggleGroup(el){var g=el.closest('.nav-group');if(g){g.classList.toggle('collapsed');}}
+</script>
+<script src="../../../shared/ai-assistant.js"></script>
+</body>
+</html>

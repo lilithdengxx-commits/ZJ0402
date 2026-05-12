@@ -1,0 +1,6 @@
+<div class="sidebar-nav-area">
+    <section class="nav-group active">
+      <a class="nav-toplevel-link" href="../首页/index.html"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 3L21 9V20H15V14H9V20H3V9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>首页</span></a>
+    </section>
+    <section class="nav-group">
+      <div class="nav-group-title" onclick="toggleGroup(this)"><div class="title-left"><svg viewBox="0 0 24 24" fill="none"><path d="M3 3h18v12H3V3zM8 21h8M12 15v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round

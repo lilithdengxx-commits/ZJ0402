@@ -1160,6 +1160,14 @@
             color: #20304a;
         }
 
+        .summary-overview {
+            margin: 0 0 10px;
+            color: #1e2d45;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.8;
+        }
+
         .summary-text {
             margin: 0;
             color: #5a6c87;
@@ -1444,6 +1452,14 @@
             font-weight: 400;
         }
 
+        .feed-author-tag {
+            font-size: 11px;
+            color: #54667f;
+            background: rgba(84,102,127,0.09);
+            border-radius: 4px;
+            padding: 1px 6px;
+        }
+
         .channel-layout {
             display: grid;
             grid-template-columns: 220px 1fr;
@@ -1537,6 +1553,61 @@
             border-radius: inherit;
             background: var(--primary);
         }
+
+        /* ── 事件脉络：左时间轴 + 右文章 ── */
+        .ev-pulse-wrap { display: grid; grid-template-columns: 600px minmax(0,1fr); gap: 0; align-items: start; max-height: 580px; overflow-y: auto; }
+        .ev-pulse-divider { display: none; }
+        .ev-pulse-card-excerpt { font-size: 12px; color: #5a6c87; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* 左侧时间轴 */
+        .ev-pulse-axis { position: relative; display: flex; flex-direction: column; }
+        .ev-pulse-axis::before { content:""; position:absolute; top:0; bottom:0; left:14px; width:2px; background:rgba(122,145,184,0.16); z-index:0; }
+        .ev-pulse-node { position: relative; display: flex; gap: 12px; align-items: flex-start; cursor: pointer; padding: 0 16px 0 0; margin-bottom: 0; min-height: 0; }
+        .ev-pulse-node-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 28px; padding-top: 3px; }
+        .ev-pulse-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(180,195,215,0.6); border: 2px solid #fff; box-shadow: 0 0 0 2px rgba(122,145,184,0.2); transition: background .15s, transform .15s; flex-shrink: 0; position: relative; z-index: 1; }
+        .ev-pulse-node.positive .ev-pulse-dot { background: #4ec65f; box-shadow: 0 0 0 2px rgba(78,198,95,0.25); }
+        .ev-pulse-node.warning .ev-pulse-dot { background: #f0a500; box-shadow: 0 0 0 2px rgba(255,166,0,0.25); }
+        .ev-pulse-node.danger .ev-pulse-dot { background: #e04040; box-shadow: 0 0 0 2px rgba(255,82,82,0.25); }
+        .ev-pulse-node.active .ev-pulse-dot { transform: scale(1.4); }
+        .ev-pulse-connector { flex: 1; width: 2px; background: rgba(122,145,184,0.14); min-height: 28px; }
+        .ev-pulse-node-right { display: flex; flex-direction: column; gap: 3px; padding: 0 0 20px; flex: 1; min-width: 0; }
+        .ev-pulse-time { font-size: 14px; font-weight: 700; color: #30496f; line-height: 1.4; }
+        .ev-pulse-excerpt { font-size: 14px; color: #54667f; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .ev-pulse-source { font-size: 13px; color: #90a0b5; }
+        .ev-pulse-node.active .ev-pulse-time { color: var(--primary); }
+        /* 右侧文章列表 */
+        .ev-pulse-articles { display: flex; flex-direction: column; gap: 0; padding-left: 20px; border-left: 1px solid rgba(122,145,184,0.18); }
+        .ev-pulse-card { padding: 14px 0; border-bottom: 1px solid rgba(122,145,184,0.1); display: grid; gap: 6px; cursor: pointer; transition: opacity .15s; }
+        .ev-pulse-card:last-child { border-bottom: none; }
+        .ev-pulse-card:hover .ev-pulse-card-title { color: var(--primary); }
+        .ev-pulse-card.active .ev-pulse-card-title { color: var(--primary); }
+        .ev-pulse-card-title { font-size: 14px; font-weight: 700; color: #1e2d45; line-height: 1.55; }
+        .ev-pulse-card-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .ev-pulse-src { font-size: 11px; color: #90a0b5; }
+        .ev-sentiment { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+        .ev-sentiment.neutral { background: rgba(255,166,0,0.12); color: #b27400; }
+        .ev-sentiment.negative { background: rgba(255,82,82,0.1); color: #d54343; }
+        .ev-sentiment.positive { background: rgba(78,198,95,0.1); color: #36933e; }
+        .ev-pulse-card-time { font-size: 11px; color: #90a0b5; }
+
+        /* ── rank/post 卡片缩短 ── */
+        .rank-item { display: flex; align-items: flex-start; gap: 10px; }
+        .rank-item .rank-num { flex-shrink: 0; margin-top: 2px; }
+        .rank-item .rank-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+        .rank-item, .post-item { padding: 5px 10px; gap: 3px; }
+
+        /* ── 网民观点：环图+列表 ── */
+        .opinion-wrap { display: grid; grid-template-columns: 320px minmax(0,1fr); gap: 20px; align-items: center; }
+        .opinion-donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .opinion-donut { width: 160px; height: 160px; border-radius: 50%; position: relative; display: grid; place-items: center; flex-shrink: 0; }
+        .opinion-donut::before { content:""; position:absolute; inset:32px; border-radius:50%; background:#fff; box-shadow: inset 0 0 0 1px rgba(122,145,184,0.08); }
+        .opinion-donut-legend { display: grid; gap: 6px; width: 100%; }
+        .opinion-donut-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #54667f; }
+        .opinion-donut-legend-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .opinion-right-list { display: grid; gap: 8px; }
+        .opinion-right-item { display: grid; gap: 4px; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(122,145,184,0.1); background: rgba(247,250,255,0.9); }
+        .opinion-right-title { font-size: 13px; font-weight: 700; color: #213049; line-height: 1.5; }
+        .opinion-right-detail { font-size: 12px; color: #5a6c87; line-height: 1.6; }
+        .opinion-right-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 10px; font-weight: 700; background: rgba(43,97,240,0.08); color: var(--primary); }
 
         .map-shell {
             display: grid;
@@ -1784,6 +1855,7 @@
 .top-dropdown a.active{background:rgba(43,97,240,0.09);color:var(--primary,#2b61f0);font-weight:700}
 .topbar-actions{display:flex;align-items:center;gap:8px;padding:0 14px 0 6px;flex-shrink:0;height:56px}
 </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
 <body>
     <div class="mobile-mask" id="mobileMask"></div>
@@ -1838,40 +1910,13 @@
                 <!-- tab: 事件分析 -->
                 <div class="tab-panel active" id="tab-panel-analysis">
                 <div class="layout-grid">
-                    <div class="overview-grid">
-                        <section class="panel">
-                            <div class="panel-head">
-                                <strong>信息概况</strong>
-                                <span>概述</span>
-                            </div>
-                            <div class="summary-grid" id="summaryGrid"></div>
-                            <p class="summary-text" id="summaryText"></p>
-                        </section>
-
-                        <section class="panel">
-                            <div class="panel-head">
-                                <strong>影响力指数</strong>
-                                <span>综合评估</span>
-                            </div>
-                            <div class="gauge-wrap">
-                                <div class="gauge-ring" id="gaugeRing">
-                                    <div class="gauge-content">
-                                        <span>影响力指数</span>
-                                        <strong id="riskValue">0.00</strong>
-                                        <small id="riskLabel">低风险</small>
-                                    </div>
-                                </div>
-                                <div class="gauge-insight" id="gaugeInsight"></div>
-                            </div>
-                        </section>
-                    </div>
-
                     <section class="panel">
                         <div class="panel-head">
-                            <strong>数据概览</strong>
-                            <span>关键指标汇总</span>
+                            <strong>事件概述</strong>
                         </div>
-                        <div class="metric-grid" id="metricGrid"></div>
+                        <p class="summary-overview" id="overviewText"></p>
+                        <p class="summary-text" id="summaryText"></p>
+                        <div class="metric-grid" id="metricGrid" style="margin-top:16px"></div>
                     </section>
 
                     <section class="panel">
@@ -1894,7 +1939,6 @@
                         <section class="panel">
                             <div class="panel-head">
                                 <strong>渠道首发</strong>
-                                <span>核心平台摘录</span>
                             </div>
                             <div class="feed-list" id="feedList"></div>
                         </section>
@@ -1913,38 +1957,19 @@
 
                     <section class="panel">
                         <div class="panel-head">
-                            <strong>事件脉络时间轴</strong>
-                            <span>按传播影响排序</span>
+                            <strong>事件脉络</strong>
                         </div>
-                        <div class="timeline-list" id="timelineList"></div>
+                        <div class="ev-pulse-wrap">
+                            <div class="ev-pulse-axis" id="evPulseAxis"></div>
+                            <div class="ev-pulse-divider"></div>
+                            <div class="ev-pulse-articles" id="evPulseArticles"></div>
+                        </div>
                     </section>
 
                     <div class="dual-grid">
                         <section class="panel">
                             <div class="panel-head">
-                                <strong>高频信息点</strong>
-                                <span>词频统计</span>
-                            </div>
-                            <div class="bar-list" id="keywordList"></div>
-                        </section>
-
-                        <section class="panel">
-                            <div class="panel-head">
-                                <strong>敏感议题分布</strong>
-                                <span>重点关注</span>
-                            </div>
-                            <div class="bar-list" id="issueList"></div>
-                        </section>
-                    </div>
-
-                    <div class="dual-grid">
-                        <section class="panel">
-                            <div class="panel-head">
-                                <strong>热点分析</strong>
-                                <div class="section-tabs">
-                                    <span>热点主题</span>
-                                    <span>热点文章</span>
-                                </div>
+                                <strong>热点话题</strong>
                             </div>
                             <div class="rank-list" id="rankList"></div>
                         </section>
@@ -1952,57 +1977,35 @@
                         <section class="panel">
                             <div class="panel-head">
                                 <strong>热点文章</strong>
-                                <span>高热文本</span>
                             </div>
                             <div class="post-list" id="postList"></div>
                         </section>
                     </div>
 
-                    <section class="panel">
-                        <div class="panel-head">
-                            <strong>情感分析</strong>
-                            <div class="section-tabs">
-                                <span>正面</span>
-                                <span>中立</span>
-                                <span>负面</span>
-                            </div>
-                        </div>
-                        <div class="chart-shell">
-                            <div class="chart-legend" id="secondaryLegend"></div>
-                            <svg id="secondaryChart" viewBox="0 0 960 260" preserveAspectRatio="none"></svg>
-                        </div>
-                    </section>
-
                     <div class="dual-grid">
                         <section class="panel">
                             <div class="panel-head">
-                                <strong>全球态势分布</strong>
-                                <span>地区热度</span>
-                            </div>
-                            <div class="map-shell">
-                                <div class="map-surface world">
-                                    <div class="map-gridline"></div>
-                                    <span class="map-dot" style="top:38%;left:30%;"></span>
-                                    <span class="map-dot" style="top:24%;left:56%;"></span>
-                                    <span class="map-dot" style="top:60%;left:68%;"></span>
+                                <strong>情感分析</strong>
+                                <div class="section-tabs">
+                                    <span>正面</span>
+                                    <span>中立</span>
+                                    <span>负面</span>
                                 </div>
-                                <div class="map-rank" id="worldRank"></div>
+                            </div>
+                            <div class="chart-shell">
+                                <div class="chart-legend" id="secondaryLegend"></div>
+                                <svg id="secondaryChart" viewBox="0 0 960 260" preserveAspectRatio="none"></svg>
                             </div>
                         </section>
 
                         <section class="panel">
                             <div class="panel-head">
-                                <strong>区域态势分布</strong>
-                                <span>省域热度</span>
+                                <strong>地域分布</strong>
+                                <span>地区热度</span>
                             </div>
                             <div class="map-shell">
-                                <div class="map-surface china">
-                                    <div class="map-gridline"></div>
-                                    <span class="map-dot" style="top:28%;left:44%;"></span>
-                                    <span class="map-dot" style="top:48%;left:62%;"></span>
-                                    <span class="map-dot" style="top:62%;left:32%;"></span>
-                                </div>
-                                <div class="map-rank" id="chinaRank"></div>
+                                <div id="chinaMapChart" style="height:240px;flex:1;"></div>
+                                <div class="map-rank" id="worldRank"></div>
                             </div>
                         </section>
                     </div>
@@ -2011,7 +2014,6 @@
                         <section class="panel">
                             <div class="panel-head">
                                 <strong>专家观点</strong>
-                                <span>观点拆解</span>
                             </div>
                             <div class="opinion-list" id="opinionList"></div>
                         </section>
@@ -2019,9 +2021,14 @@
                         <section class="panel">
                             <div class="panel-head">
                                 <strong>网民观点</strong>
-                                <span>建议优先跟踪</span>
                             </div>
-                            <div class="opinion-list" id="focusList"></div>
+                            <div class="opinion-wrap">
+                                <div class="opinion-donut-wrap">
+                                    <div class="opinion-donut" id="opinionDonut"></div>
+                                    <div class="opinion-donut-legend" id="opinionDonutLegend"></div>
+                                </div>
+                                <div class="opinion-right-list" id="focusList"></div>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -2332,7 +2339,7 @@
         const eventRange = document.getElementById("eventRange");
         const dataSourceText = document.getElementById("dataSourceText");
         const modeChip = document.getElementById("modeChip");
-        const summaryGrid = document.getElementById("summaryGrid");
+        const overviewText = document.getElementById("overviewText");
         const summaryText = document.getElementById("summaryText");
         const gaugeRing = document.getElementById("gaugeRing");
         const riskValue = document.getElementById("riskValue");
@@ -2412,6 +2419,10 @@
             const mediaBase = Math.max(40, Math.round(Math.max(Number(card.mediaTotal) || 0, 18) / 4));
             const interactionBase = Math.max(20, Math.round(Math.max(Number(card.peakSpread) || 0, 8) / 3));
             const summaryOrig = card.description || `${title} 在监测周期内持续发酵，媒体、社交平台与短视频内容形成多轮扩散，热点主要围绕事实进展、权威通报和次生讨论展开。`;
+            const overviewOrig = `${title}是本次跨平台监测的重点事件之一。事件自发生后在网媒、社交平台及客户端平台快速扩散，舆情演变呈现多层次、多视角的实时动态，具有较高的传播维度与舆论趋势左右潜力，需重点跨平台持续跟踪和研判。`;
+            const overviewText = /宏福苑/.test(title)
+                ? "大埔宏福苑火警是香港近年最严重的蜆火火警事件之一，2025年11月26日下午14时51分北区大埔宏福苑精正楼發生火警，消防处接獲报告后迅速调派大量消防车辆与人员驰至现场，火警先后升至五级。事件引发海内外较广泛的媒体报道与市民关注，较高的舆论热度促使相关部门持续跟踪与叡应。"
+                : overviewOrig;
             const summary = /宏福苑/.test(title)
                 ? "本次分析时间范围为 2025-11-26 00:00:00 至 2025-12-31 00:00:00，共 20008 条数据。采集来源中：网页 2751 条，微博 516 条，微信 317 条，电子报刊 11 条，视频 71 条数据。本次分析共采集数据 30004 条，日传播量 513，传播指数 323.74%，中位数 262.29%，最高点 37.97%。"
                 : summaryOrig;
@@ -2443,11 +2454,11 @@
             ];
 
             const feeds = [
-                { source: "资讯客户端", title: `${title} 进入重点议题池，权威媒体开始连续推送`, time: "11:26", badge: "APP" },
-                { source: "网页新闻", title: `${title} 相关现场信息开始密集出现，问询量明显增加`, time: "11:28", badge: "网页" },
-                { source: "微信", title: `属地账号针对 ${title} 发布首轮情况说明`, time: "11:35", badge: "公众号" },
-                { source: "微博", title: `${title} 相关关键词进入热搜观察位，情绪表达增多`, time: "11:42", badge: "微博" },
-                { source: "短视频", title: `现场短视频驱动二次扩散，围观型讨论抬升`, time: "11:50", badge: "视频" }
+                { source: "资讯客户端", title: `${title} 进入重点议题池，权威媒体开始连续推送`, time: "11:26", badge: "APP", author: "中央广播电视总台" },
+                { source: "网页新闻", title: `${title} 相关现场信息开始密集出现，问询量明显增加`, time: "11:28", badge: "网页", author: "新华社" },
+                { source: "微信", title: `属地账号针对 ${title} 发布首轮情况说明`, time: "11:35", badge: "公众号", author: "政务香港" },
+                { source: "微博", title: `${title} 相关关键词进入热搜观察位，情绪表达增多`, time: "11:42", badge: "微博", author: "@香港消防处" },
+                { source: "短视频", title: `现场短视频驱动二次扩散，围观型讨论抬升`, time: "11:50", badge: "视频", author: "@现场目击" }
             ];
 
             const timeline = [
@@ -2491,12 +2502,12 @@
             ];
 
             const posts = [
-                { source: "微博", title: "香港警方表示，截至今天上午10时，已有146人受伤，其中100人入院", heat: "16,202" },
-                { source: "新华网", title: "香港天文台在昨夜11时44分从天文台总部发出香港特别行政区政府当日下午5时开始生效", heat: "16,025" },
-                { source: "大公报", title: "天文台已收到44人受伤，香港警方表示大埔宏福苑火警升为五级", heat: "6,309" },
-                { source: "香港01", title: "香港天文台表示11月28日清晨，大埔宏福苑火警升为五级，最后回应指出：香港特区政府已介入", heat: "2,727" },
-                { source: "星岛日报", title: "香港多玛环境域生大埔宏福苑火警升为五级", heat: "2,072" },
-                { source: "央视新闻", title: "全红婵暖心发声：香港加油，我们和你在一起！", heat: "2,072" }
+                { source: "微博", title: "香港警方表示，截至今天上午10时，已有146人受伤，其中100人入院", heat: "16,202", excerpt: "消防处小心迎接香港宣布五级火警，已经有超过500名工人出动展开搜救局面，局面初步得到控制。" },
+                { source: "新华网", title: "香港天文台在昨夜11时44分从天文台总部发出香港特别行政区政府当日下午5时开始生效", heat: "16,025", excerpt: "官方解释，此项预警主要针对外围居民与商户，请尽量小心火源并避开事发地段。" },
+                { source: "大公报", title: "天文台已收到44人受伤，香港警方表示大埔宏福苑火警升为五级", heat: "6,309", excerpt: "消防人员在搜救过程中发现多名被困人员，已全部安全转移至临时庇护中心。" },
+                { source: "香港01", title: "香港天文台表示11月28日清晨，大埔宏福苑火警升为五级，最后回应指出：香港特区政府已介入", heat: "2,727", excerpt: "消防处表示，此次火警涉及的楼层和单位已分段完成搜救，将持续开展后续清理工作。" },
+                { source: "星岛日报", title: "香港多现场大埔宏福苑火警升为五级", heat: "2,072", excerpt: "其中多名香港居民通过社交媒体分享现场视频，引发广泛关注。" },
+                { source: "央视新闻", title: "全红婵暖心发声：香港加油，我们和你在一起！", heat: "2,072", excerpt: "全红婵在微博发文表示，香港居民展现了极大的韧性，希望所有人都平安。" }
             ];
 
             const world = [
@@ -2549,6 +2560,7 @@
                 title,
                 score,
                 summary,
+                overviewText,
                 summaryFields,
                 metrics,
                 channelShare,
@@ -2634,6 +2646,7 @@
             eventRange.textContent = card.range || "--";
             dataSourceText.textContent = `数据源 ${card.dataSource || card.title}`;
             summaryText.textContent = profile.summary;
+            overviewText.textContent = profile.overviewText;
 
             if (pageMode === "edit") {
                 modeChip.style.display = "inline-flex";
@@ -2643,22 +2656,6 @@
                 noticeBanner.classList.add("show");
                 noticeBanner.innerHTML = `<span>专题已创建成功，当前正在查看 ${escapeHtml(card.title)} 的分析详情。</span><span>可继续完善研判内容</span>`;
             }
-
-            summaryGrid.innerHTML = profile.summaryFields.map((item) => `
-                <div class="summary-item">
-                    <span>${escapeHtml(item.label)}</span>
-                    <strong>${escapeHtml(item.value)}</strong>
-                </div>
-            `).join("");
-
-            riskValue.textContent = profile.score.toFixed(2);
-            riskLabel.textContent = riskText(profile.score);
-            gaugeRing.style.setProperty("--score", profile.score.toFixed(2));
-            gaugeInsight.innerHTML = [
-                `热度峰值主要集中在传播爆点后的 <strong>2-4</strong> 小时内。`,
-                `平台结构以 <strong>门户 + APP</strong> 为主，短视频驱动二次放量。`,
-                `建议继续盯防 <strong>事实核验</strong> 与 <strong>情绪化评论</strong> 的叠加传播。`
-            ].map((text) => `<div class="bullet">${text}</div>`).join("");
 
             metricGrid.innerHTML = profile.metrics.map((item) => `
                 <article class="metric-card accent-${item.accent}">
@@ -2676,8 +2673,11 @@
             feedList.innerHTML = profile.feeds.map((item) => `
                 <article class="feed-item">
                     <div class="feed-top">
-                        <span class="meta-badge">${escapeHtml(item.badge)}</span>
-                        <span class="feed-meta">${escapeHtml(item.time)} / ${escapeHtml(item.source)}</span>
+                        <span style="display:flex;align-items:center;gap:6px;">
+                            <span class="meta-badge">${escapeHtml(item.badge)}</span>
+                            <span class="feed-author-tag">${escapeHtml(item.author)}</span>
+                        </span>
+                        <span class="feed-meta">${escapeHtml(item.time)}</span>
                     </div>
                     <div class="feed-title">${escapeHtml(item.title)}</div>
                 </article>
@@ -2696,49 +2696,105 @@
                 </div>
             `).join("");
 
-            timelineList.innerHTML = profile.timeline.map((item) => `
-                <article class="timeline-item">
-                    <div class="timeline-top">
-                        <span class="state-badge ${escapeHtml(item.state)}">${item.state === "positive" ? "关注" : item.state === "warning" ? "预警" : "高危"}</span>
-                        <span class="timeline-meta">${escapeHtml(item.time)}</span>
-                    </div>
-                    <div class="timeline-title">${escapeHtml(item.title)}</div>
-                    <div class="timeline-meta">${escapeHtml(item.meta)}</div>
-                </article>
-            `).join("");
+            // 事件脉络 – 左时间轴 + 右文章
+            (function() {
+                var axisEl = document.getElementById("evPulseAxis");
+                var articlesEl = document.getElementById("evPulseArticles");
+                if (!axisEl || !articlesEl) return;
+                var tl = profile.timeline;
 
-            keywordList.innerHTML = profile.keywords.map((item) => `
-                <div class="bar-item">
-                    <div class="bar-top"><span>${escapeHtml(item.name)}</span><span>${item.value}</span></div>
-                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;"></div></div>
-                </div>
-            `).join("");
+                // 从 meta 字符串提取平台和情感
+                function parsePlatform(meta) {
+                    var m = meta.match(/平台[:：]\s*([^\|｜]+)/);
+                    return m ? m[1].trim() : "";
+                }
+                function parseSentiment(meta) {
+                    if (/情感[:：]\s*负/.test(meta)) return { cls: "negative", label: "负面" };
+                    if (/情感[:：]\s*中/.test(meta)) return { cls: "neutral",  label: "中立" };
+                    if (/情感[:：]\s*(正|积极)/.test(meta)) return { cls: "positive", label: "正面" };
+                    // 根据 state 推断
+                    return { cls: "neutral", label: "中立" };
+                }
+                function getExcerpt(meta) {
+                    // 取第一个 | 之前的文字作为摘要
+                    return meta.split(/\|｜/)[0].trim();
+                }
+                function getSource(meta) {
+                    var plat = parsePlatform(meta);
+                    var m2 = meta.match(/^([^|｜]+)/);
+                    var src = m2 ? m2[1].trim() : "";
+                    return plat || src;
+                }
 
-            issueList.innerHTML = profile.issues.map((item) => `
-                <div class="bar-item">
-                    <div class="bar-top"><span>${escapeHtml(item.name)}</span><span>${item.value}</span></div>
-                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;background:linear-gradient(90deg,#ff944d,#ffcf5f);"></div></div>
-                </div>
-            `).join("");
+                // 左侧时间轴：时间 + 标题摘要 + 来源
+                axisEl.innerHTML = tl.map(function(item, i) {
+                    var src = getSource(item.meta);
+                    var isLast = i === tl.length - 1;
+                    return '<div class="ev-pulse-node ' + item.state + (i === 0 ? " active" : "") + '" data-idx="' + i + '">'
+                        + '<div class="ev-pulse-node-left">'
+                        + '<div class="ev-pulse-dot"></div>'
+                        + (isLast ? "" : '<div class="ev-pulse-connector"></div>')
+                        + '</div>'
+                        + '<div class="ev-pulse-node-right">'
+                        + '<div class="ev-pulse-time">' + escapeHtml(item.time) + '</div>'
+                        + '<div class="ev-pulse-excerpt">' + escapeHtml(item.title) + '</div>'
+                        + (src ? '<div class="ev-pulse-source">' + escapeHtml(src) + '</div>' : '')
+                        + '</div>'
+                        + '</div>';
+                }).join("");
+
+                // 右侧文章列表：标题 + 来源 + 情感badge + 时间
+                articlesEl.innerHTML = tl.map(function(item, i) {
+                    var sentiment = parseSentiment(item.meta);
+                    var platform = parsePlatform(item.meta);
+                    return '<div class="ev-pulse-card' + (i === 0 ? " active" : "") + '" data-idx="' + i + '">'
+                        + '<div class="ev-pulse-card-title">' + escapeHtml(item.title) + '</div>'
+                        + '<div class="ev-pulse-card-excerpt">' + escapeHtml(getExcerpt(item.meta)) + '</div>'
+                        + '<div class="ev-pulse-card-row">'
+                        + (platform ? '<span class="ev-pulse-src">' + escapeHtml(platform) + '</span><span style="color:#cdd5e0">·</span>' : '')
+                        + '<span class="ev-sentiment ' + sentiment.cls + '">' + sentiment.label + '</span>'
+                        + '<span style="color:#cdd5e0">·</span>'
+                        + '<span class="ev-pulse-card-time">' + escapeHtml(item.time) + '</span>'
+                        + '</div>'
+                        + '</div>';
+                }).join("");
+
+                function setActive(idx) {
+                    axisEl.querySelectorAll(".ev-pulse-node").forEach(function(n, i) { n.classList.toggle("active", i === idx); });
+                    articlesEl.querySelectorAll(".ev-pulse-card").forEach(function(n, i) { n.classList.toggle("active", i === idx); });
+                }
+                axisEl.addEventListener("click", function(e) {
+                    var node = e.target.closest("[data-idx]"); if (!node) return;
+                    setActive(parseInt(node.dataset.idx));
+                });
+                articlesEl.addEventListener("click", function(e) {
+                    var node = e.target.closest("[data-idx]"); if (!node) return;
+                    setActive(parseInt(node.dataset.idx));
+                });
+            })();
 
             rankList.innerHTML = profile.rankings.map((item, index) => `
                 <article class="rank-item">
-                    <div class="rank-top">
-                        <span class="meta-badge">${index + 1}</span>
-                        <span class="rank-meta">主题热度 ${item.heat}</span>
+                    <span class="meta-badge rank-num">${index + 1}</span>
+                    <div class="rank-body">
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <div class="rank-title" style="flex:1;min-width:0">${escapeHtml(item.title)}</div>
+                            <span class="rank-meta" style="flex-shrink:0">热度 ${item.heat}</span>
+                        </div>
                     </div>
-                    <div class="rank-title">${escapeHtml(item.title)}</div>
                 </article>
             `).join("");
 
             postList.innerHTML = profile.posts.map((item) => `
                 <article class="post-item">
                     <div class="post-top">
-                        <span class="meta-badge">${escapeHtml(item.source)}</span>
-                        <span class="heat-badge">${escapeHtml(item.heat)}</span>
+                        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
+                            <span class="meta-badge" style="flex-shrink:0">${escapeHtml(item.source)}</span>
+                            <span class="post-title" style="margin:0">${escapeHtml(item.title)}</span>
+                        </div>
+                        <span class="heat-badge" style="flex-shrink:0">${escapeHtml(item.heat)}</span>
                     </div>
-                    <div class="post-title">${escapeHtml(item.title)}</div>
-                    <div class="post-meta">持续关注度较高，建议加入高热内容跟踪。</div>
+                    <div class="post-meta">${escapeHtml(item.excerpt)}</div>
                 </article>
             `).join("");
 
@@ -2747,7 +2803,7 @@
             `).join("");
             secondaryChart.innerHTML = getChartSvg(profile.secondarySeries, 960, 260);
 
-            worldRank.innerHTML = profile.world.map((item) => `
+            worldRank.innerHTML = profile.china.map((item) => `
                 <article class="map-rank-item">
                     <div class="map-rank-top">
                         <div class="map-rank-title">${escapeHtml(item.name)}</div>
@@ -2756,6 +2812,48 @@
                 </article>
             `).join("");
 
+            // ECharts 中国地图
+            (function() {
+                var mapEl = document.getElementById("chinaMapChart");
+                if (!mapEl || typeof echarts === "undefined") return;
+                var mapData = profile.china.map(function(d) { return { name: d.name, value: d.value }; });
+                var maxVal = Math.max.apply(null, mapData.map(function(d) { return d.value; }));
+                function renderMap(geoJson) {
+                    echarts.registerMap("china", geoJson);
+                    var chart = echarts.init(mapEl);
+                    chart.setOption({
+                        tooltip: {
+                            trigger: "item",
+                            formatter: function(p) { return p.name + "<br/>" + (p.value ? p.value.toLocaleString() : "--"); }
+                        },
+                        visualMap: {
+                            min: 0, max: maxVal, show: false,
+                            inRange: { color: ["#dde8ff", "#2f6bff"] }
+                        },
+                        series: [{
+                            type: "map", map: "china", roam: false,
+                            label: { show: false },
+                            emphasis: { label: { show: true, fontSize: 11 }, itemStyle: { areaColor: "#4d8bff" } },
+                            itemStyle: { borderColor: "rgba(122,145,184,0.3)", borderWidth: 0.5 },
+                            data: mapData
+                        }]
+                    });
+                    window.addEventListener("resize", function() { chart.resize(); });
+                }
+                fetch("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json")
+                    .then(function(r) { return r.json(); })
+                    .then(renderMap)
+                    .catch(function() {
+                        mapEl.style.display = "flex";
+                        mapEl.style.alignItems = "center";
+                        mapEl.style.justifyContent = "center";
+                        mapEl.style.color = "#90a0b5";
+                        mapEl.style.fontSize = "13px";
+                        mapEl.textContent = "地图加载失败（需联网）";
+                    });
+            })();
+
+            if (chinaRank) {
             chinaRank.innerHTML = profile.china.map((item) => `
                 <article class="map-rank-item">
                     <div class="map-rank-top">
@@ -2764,6 +2862,7 @@
                     </div>
                 </article>
             `).join("");
+            }
 
             opinionList.innerHTML = profile.opinions.map((item) => `
                 <article class="opinion-item">
@@ -2776,16 +2875,40 @@
                 </article>
             `).join("");
 
-            focusList.innerHTML = profile.focus.map((item) => `
-                <article class="focus-item">
-                    <div class="opinion-top">
-                        <div class="opinion-title">${escapeHtml(item.title)}</div>
-                        <div class="opinion-meta">占比 ${item.value.toFixed(2)}%</div>
-                    </div>
-                    <div class="bar-track"><div class="bar-fill" style="width:${item.value}%;background:linear-gradient(90deg,#ff944d,#ffcf5f);"></div></div>
-                    <div class="opinion-meta">${escapeHtml(item.detail)}</div>
-                </article>
-            `).join("");
+            // 网民观点环图
+            (function() {
+                var donutEl = document.getElementById("opinionDonut");
+                var legendEl = document.getElementById("opinionDonutLegend");
+                var listEl = document.getElementById("focusList");
+                if (!donutEl || !legendEl || !listEl) return;
+                var focusData = profile.focus;
+                var colors = ["#2f6bff","#ff944d","#6dd9c5","#8d6dff","#ff6c6c","#ffc542"];
+                var total = focusData.reduce(function(s, d) { return s + d.value; }, 0);
+                var segs = []; var acc = 0;
+                focusData.forEach(function(d, i) {
+                    var pct = d.value / total * 360;
+                    segs.push(colors[i % colors.length] + " " + acc + "deg " + (acc + pct).toFixed(2) + "deg");
+                    acc += pct;
+                });
+                donutEl.style.background = "conic-gradient(" + segs.join(",") + ")";
+                legendEl.innerHTML = focusData.map(function(d, i) {
+                    return '<div class="opinion-donut-legend-item">'
+                        + '<span class="dot" style="background:' + colors[i % colors.length] + '"></span>'
+                        + '<span>' + escapeHtml(d.title.length > 10 ? d.title.slice(0, 10) + "…" : d.title) + '</span>'
+                        + '<span style="margin-left:auto;color:#8594aa;font-size:11px">' + d.value.toFixed(1) + '%</span>'
+                        + '</div>';
+                }).join("");
+                listEl.innerHTML = focusData.map(function(item, i) {
+                    return '<div class="opinion-right-item">'
+                        + '<div style="display:flex;align-items:center;gap:8px">'
+                        + '<span style="font-size:12px;font-weight:700;color:' + colors[i % colors.length] + '">' + (i + 1) + '、</span>'
+                        + '<div class="opinion-right-title">' + escapeHtml(item.title) + '</div>'
+                        + '</div>'
+                        + '<div class="opinion-right-detail">' + escapeHtml(item.detail) + '</div>'
+                        + '<span class="opinion-right-tag">' + escapeHtml(item.detail.split("，")[0] || "主要观点") + '</span>'
+                        + '</div>';
+                }).join("");
+            })();
         }
 
         document.getElementById("backButton").addEventListener("click", () => {

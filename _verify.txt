@@ -1,7 +1,0 @@
-<header class="global-topbar">
-  <nav class="top-nav">
-  </nav>
-  <div class="topbar-actions">
-    <div class="avatar"><div class="avatar-badge">管</div><strong>管理员</strong></div>
-  </div>
-</header>

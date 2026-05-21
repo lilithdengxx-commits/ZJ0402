@@ -1,0 +1,2298 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网络舆情态势感知中心 · 紫荆杂志社</title>
+<style>
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+:root {
+  --bg:       #050e1c;
+  --bg2:      #081428;
+  --card:     rgba(10,24,48,0.75);
+  --border:   rgba(80,140,255,0.12);
+  --border-hi:rgba(43,97,240,0.4);
+  --primary:  #2b61f0;
+  --primary-glow: rgba(43,97,240,0.35);
+  --brand:    #7b36c4;
+  --brand-glow: rgba(123,54,196,0.35);
+  --success:  #12a87a;
+  --success-g:rgba(18,168,122,0.3);
+  --danger:   #e04040;
+  --danger-g: rgba(224,64,64,0.3);
+  --warning:  #e08810;
+  --warning-g:rgba(224,136,16,0.3);
+  --text:     rgba(220,235,255,0.92);
+  --text-2:   rgba(160,190,230,0.60);
+  --text-3:   rgba(120,155,200,0.40);
+  --font:     "PingFang SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); }
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background-image:
+    radial-gradient(ellipse 100% 60% at 50% -10%, rgba(43,97,240,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 85% 90%, rgba(123,54,196,0.06) 0%, transparent 55%);
+}
+/* scanline overlay */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+}
+a { color:inherit; text-decoration:none; }
+button { cursor:pointer; font-family:var(--font); }
+
+/* ══════════════════════════════════════════
+   LAYOUT SHELL
+══════════════════════════════════════════ */
+.screen { display:grid; grid-template-rows:62px 1fr; width:100vw; height:100vh; overflow:hidden; }
+
+/* ══════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════ */
+.hd {
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;
+  padding: 0 16px 0 0;
+  border-bottom: 1px solid rgba(80,140,255,0.14);
+  position:relative; overflow:hidden;
+  background: linear-gradient(90deg, rgba(43,97,240,0.06) 0%, transparent 35%);
+  flex-shrink:0;
+}
+.hd::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--brand) 45%, transparent 80%);
+  opacity:.55;
+}
+
+.hd-brand {
+  display:flex; align-items:center; gap:11px;
+  padding:0 16px; height:100%;
+  border-right:1px solid rgba(80,140,255,0.1);
+}
+.hd-logo {
+  width:34px; height:34px; border-radius:9px; flex-shrink:0;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--primary) 100%);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 0 18px var(--brand-glow), 0 0 6px rgba(255,255,255,0.1) inset;
+}
+@keyframes hd-shimmer {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+.hd-title-wrap { display:flex; align-items:center; gap:10px; }
+.hd-title-main {
+  font-size:22px; font-weight:900; letter-spacing:.12em; white-space:nowrap;
+  background: linear-gradient(90deg,#38d9ff,#6aadff,#a78bfa,#c084ff,#7b36c4,#2b61f0,#38d9ff);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: hd-shimmer 5s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(107,173,255,.55)) drop-shadow(0 0 2px rgba(192,132,255,.4));
+}
+.hd-title-sub  { font-size:10px; color:var(--text-3); letter-spacing:.06em; margin-top:2px; }
+
+/* KPI Bar */
+.hd-kpis { display:flex; align-items:center; justify-content:center; height:100%; }
+.hd-kpi {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:0 22px; height:100%; cursor:pointer; position:relative;
+  transition:background .2s;
+}
+.hd-kpi:hover { background:rgba(43,97,240,0.06); }
+.hd-kpi + .hd-kpi::before {
+  content:''; position:absolute; left:0; top:22%; bottom:22%;
+  width:1px; background:rgba(80,140,255,0.13);
+}
+.hd-kpi-val { font-size:20px; font-weight:800; line-height:1; margin-bottom:4px; font-variant-numeric:tabular-nums; }
+.hd-kpi-val.c-blue   { color:#6aadff; }
+.hd-kpi-val.c-red    { color:var(--danger); text-shadow:0 0 14px var(--danger-g); }
+.hd-kpi-val.c-orange { color:#f0ab30; }
+.hd-kpi-val.c-green  { color:var(--success); }
+.hd-kpi-val.c-white  { color:rgba(210,230,255,0.75); }
+.hd-kpi-label { font-size:11px; color:var(--text-3); white-space:nowrap; }
+
+/* Risk + Clock */
+.hd-right { display:flex; align-items:center; gap:14px; padding-left:14px; justify-self:end; }
+.risk-badge {
+  display:flex; align-items:center; gap:7px;
+  padding:5px 12px; border-radius:7px; border:1px solid; font-size:11px; font-weight:700;
+}
+.risk-badge.normal { background:rgba(18,168,122,0.09); border-color:rgba(18,168,122,0.28); color:var(--success); }
+.risk-badge.watch  { background:rgba(224,136,16,0.09);  border-color:rgba(224,136,16,0.3);  color:#f0ab30; }
+.risk-badge.alert  { background:rgba(224,64,64,0.1);   border-color:rgba(224,64,64,0.38);  color:var(--danger); }
+.risk-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.risk-badge.normal .risk-dot { background:var(--success); box-shadow:0 0 6px var(--success); }
+.risk-badge.watch  .risk-dot { background:#f0ab30; box-shadow:0 0 6px rgba(240,171,48,0.6); animation:pulse-dot 1.6s ease-in-out infinite; }
+.risk-badge.alert  .risk-dot { background:var(--danger); box-shadow:0 0 8px var(--danger-g); animation:blink-dot .9s ease-in-out infinite; }
+
+.hd-clock { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
+.hd-clock-time { font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:.05em; }
+.hd-clock-date { font-size:10px; color:var(--text-3); }
+.hd-update { font-size:10px; color:var(--text-3); padding:2px 7px; border-radius:4px; background:rgba(255,255,255,0.03); border:1px solid rgba(80,140,255,0.1); }
+.back-btn {
+  display:inline-flex; align-items:center; gap:5px; padding:5px 12px;
+  border-radius:7px; border:1px solid rgba(80,140,255,0.15); background:rgba(255,255,255,0.04);
+  color:var(--text-2); font-size:11px; font-weight:600; transition:all .15s;
+}
+.back-btn:hover { background:rgba(43,97,240,0.12); border-color:rgba(43,97,240,0.3); color:var(--text); }
+
+/* ══════════════════════════════════════════
+   BODY
+══════════════════════════════════════════ */
+.body {
+  display:grid;
+  grid-template-columns: 25% 50% 25%;
+  overflow:hidden;
+  height:100%;
+}
+.col {
+  display:flex; flex-direction:column; gap:8px;
+  padding:8px; overflow:hidden;
+}
+.col-l { border-right:1px solid rgba(80,140,255,0.07); }
+.col-c { padding:8px 6px; }
+.col-r { border-left:1px solid rgba(80,140,255,0.07); }
+
+/* ══════════════════════════════════════════
+   PANELS
+══════════════════════════════════════════ */
+.panel {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:9px;
+  display:flex; flex-direction:column;
+  overflow:hidden; position:relative;
+  backdrop-filter: blur(8px);
+}
+.panel::before {
+  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(80,160,255,0.25), transparent);
+}
+/* corner decorations */
+.panel::after {
+  content:''; position:absolute;
+  top:5px; left:5px; width:12px; height:12px;
+  border-top:1px solid rgba(43,97,240,0.35);
+  border-left:1px solid rgba(43,97,240,0.35);
+}
+
+.panel-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 13px 7px; flex-shrink:0;
+}
+.panel-title {
+  display:flex; align-items:center; gap:7px;
+  font-size:12px; font-weight:700; color:var(--text);
+}
+.panel-title::before {
+  content:''; width:3px; height:12px; border-radius:2px; flex-shrink:0;
+  background:linear-gradient(180deg, var(--primary), var(--brand));
+}
+.panel-hd-r { display:flex; align-items:center; gap:7px; }
+.p-tag {
+  font-size:9px; color:var(--text-3); padding:2px 6px; border-radius:3px;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(80,140,255,0.1);
+}
+.p-tag.red { background:rgba(224,64,64,0.09); border-color:rgba(224,64,64,0.2); color:var(--danger); }
+
+/* mini tabs */
+.tab-m { display:flex; background:rgba(255,255,255,0.04); border-radius:5px; padding:2px; gap:1px; }
+.tab-m-btn {
+  padding:2px 8px; border-radius:3px; border:none; background:transparent;
+  color:var(--text-3); font-size:10px; font-weight:700; cursor:pointer; transition:all .15s;
+  font-family:var(--font);
+}
+.tab-m-btn.active { background:var(--primary); color:#fff; }
+
+/* ══════════════════════════════════════════
+   LEFT ① — KEY OBJECTS
+══════════════════════════════════════════ */
+.obj-list { padding:2px 12px 10px; display:flex; flex-direction:column; gap:5px; }
+.obj-item {
+  display:flex; align-items:center; gap:9px;
+  padding:7px 9px; border-radius:7px;
+  background:rgba(255,255,255,0.02); border:1px solid rgba(80,140,255,0.07);
+  cursor:pointer; transition:all .2s;
+}
+.obj-item:hover { background:rgba(43,97,240,0.07); border-color:rgba(43,97,240,0.25); }
+.obj-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.obj-dot.red    { background:var(--danger); box-shadow:0 0 7px var(--danger-g); animation:pulse-dot 1.8s ease-in-out infinite; }
+.obj-dot.orange { background:#f0ab30; box-shadow:0 0 7px rgba(240,171,48,.4); }
+.obj-dot.blue   { background:var(--primary); box-shadow:0 0 7px var(--primary-glow); }
+.obj-dot.gray   { background:rgba(160,190,230,0.3); }
+.obj-name { font-size:12px; font-weight:700; flex:0 0 68px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.obj-stats { flex:1; min-width:0; }
+.obj-vol { font-size:10px; color:var(--text-2); display:flex; align-items:center; gap:6px; }
+.obj-neg { font-size:10px; font-weight:700; }
+.obj-neg.high { color:var(--danger); }
+.obj-neg.med  { color:#f0ab30; }
+.obj-neg.low  { color:var(--text-3); }
+.obj-badge { font-size:9px; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0; }
+.obj-badge.up     { background:rgba(224,64,64,0.12); color:var(--danger); }
+.obj-badge.stable { background:rgba(255,255,255,0.05); color:var(--text-3); }
+.obj-badge.down   { background:rgba(18,168,122,0.1); color:var(--success); }
+
+/* ══════════════════════════════════════════
+   LEFT ② — TREND CHART
+══════════════════════════════════════════ */
+.trend-wrap { flex:1; min-height:0; padding:2px 12px 8px; display:flex; flex-direction:column; }
+#trendCanvas { display:block; width:100%; flex:1; min-height:0; }
+.trend-legend-bar { display:flex; align-items:center; justify-content:center; gap:14px; padding:3px 0 1px; flex-shrink:0; }
+.tl-item { display:flex; align-items:center; gap:4px; font-size:9px; color:rgba(160,190,230,0.5); }
+.tl-item em { display:inline-block; width:7px; height:7px; border-radius:50%; font-style:normal; }
+
+/* ══════════════════════════════════════════
+   LEFT ③ — CHANNELS
+══════════════════════════════════════════ */
+.ch-list { padding:2px 12px 10px; display:flex; flex-direction:column; gap:7px; }
+.ch-row { display:flex; align-items:center; gap:8px; }
+.ch-name { font-size:10px; color:var(--text-2); width:52px; flex-shrink:0; text-align:right; }
+.ch-bar-bg { flex:1; height:5px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden; }
+.ch-bar { height:100%; border-radius:3px; transition:width 1s ease; }
+.ch-pct { font-size:10px; color:var(--text-3); width:26px; text-align:right; flex-shrink:0; }
+
+/* ══════════════════════════════════════════
+   CENTER ④ — MAP
+══════════════════════════════════════════ */
+.map-panel {
+  flex:1; min-height:0;
+  display:flex; flex-direction:column;
+  position:relative;
+}
+.map-view-tabs { display:flex; justify-content:center; gap:5px; padding:3px 6px; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); z-index:10; background:rgba(4,12,28,0.78); border:1px solid rgba(43,97,240,0.22); border-radius:7px; backdrop-filter:blur(6px); white-space:nowrap; }
+.mv-tab {
+  padding:3px 12px; border-radius:5px; border:1px solid rgba(80,140,255,0.15);
+  background:transparent; color:var(--text-3); font-size:10px; font-weight:700;
+  cursor:pointer; transition:all .15s; font-family:var(--font);
+}
+.mv-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.mv-tab:hover:not(.active) { border-color:rgba(43,97,240,0.4); color:var(--text-2); }
+
+.map-container { flex:1; min-height:0; position:relative; overflow:hidden; }
+.map-legend {
+  position:absolute; bottom:10px; right:12px; z-index:10;
+  display:flex; flex-direction:column; gap:4px;
+  pointer-events:none;
+}
+.map-legend-bar {
+  width:120px; height:8px; border-radius:4px;
+  background:linear-gradient(to right, #0e1e3c, #1040a0, #c07000, #e04500, #bf1515);
+  border:1px solid rgba(80,150,255,0.2);
+}
+.map-legend-labels {
+  display:flex; justify-content:space-between; width:120px;
+  font-size:10px; color:rgba(180,210,255,0.6); font-family:inherit;
+}
+.map-scan-line {
+  position:absolute; left:0; right:0; height:2px; z-index:2; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(43,97,240,0.55), transparent);
+  animation:scan 4s linear infinite;
+}
+#mapChart { display:block; width:100%; height:100%; }
+
+.map-legend { display:flex; align-items:center; justify-content:center; gap:14px; padding:5px 13px 7px; flex-shrink:0; }
+.leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--text-3); }
+.leg-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+/* corner deco on map */
+.c-deco { position:absolute; width:14px; height:14px; pointer-events:none; z-index:3; }
+.c-deco.tl { top:112px; left:6px; border-top:1px solid rgba(43,97,240,0.45); border-left:1px solid rgba(43,97,240,0.45); }
+.c-deco.tr { top:112px; right:6px; border-top:1px solid rgba(43,97,240,0.45); border-right:1px solid rgba(43,97,240,0.45); }
+.c-deco.bl { bottom:6px; left:6px; border-bottom:1px solid rgba(43,97,240,0.45); border-left:1px solid rgba(43,97,240,0.45); }
+.c-deco.br { bottom:6px; right:6px; border-bottom:1px solid rgba(43,97,240,0.45); border-right:1px solid rgba(43,97,240,0.45); }
+
+/* ══════════════════════════════════════════
+   CENTER ⑤ — DONUT + GAUGE
+══════════════════════════════════════════ */
+.bottom-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; flex-shrink:0; }
+.bottom-panel {
+  background:var(--card); border:1px solid var(--border); border-radius:9px;
+  display:flex; flex-direction:column; overflow:hidden; position:relative;
+}
+.bottom-panel::before {
+  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(80,160,255,0.2), transparent);
+}
+
+.donut-wrap { display:flex; flex-direction:column; align-items:center; padding:6px 12px 10px; gap:7px; }
+.donut-svg-box { position:relative; width:90px; height:90px; flex-shrink:0; }
+.donut-svg-box svg { width:100%; height:100%; }
+.donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.donut-num { font-size:15px; font-weight:800; color:var(--text); }
+.donut-lbl { font-size:9px; color:var(--text-3); margin-top:1px; }
+.donut-legend { display:grid; grid-template-columns:1fr 1fr; gap:3px 8px; width:100%; }
+.dl-row { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--text-2); overflow:hidden; }
+.dl-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.dl-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.gauge-wrap { display:flex; flex-direction:column; align-items:center; padding:6px 12px 10px; gap:6px; }
+.gauge-svg-box { position:relative; width:100px; height:56px; flex-shrink:0; }
+.gauge-svg-box svg { width:100%; height:100%; }
+.gauge-center { position:absolute; bottom:-2px; left:50%; transform:translateX(-50%); text-align:center; }
+.gauge-big { font-size:18px; font-weight:800; display:block; line-height:1; }
+.gauge-sub-lbl { font-size:9px; color:var(--text-3); display:block; margin-top:2px; white-space:nowrap; }
+.gauge-items { display:flex; gap:12px; }
+.gauge-item { display:flex; align-items:center; gap:4px; font-size:10px; color:var(--text-2); }
+.gauge-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* ══════════════════════════════════════════
+   RIGHT ⑥ — PRIORITY EVENTS
+══════════════════════════════════════════ */
+.ev-list { display:flex; flex-direction:column; gap:5px; padding:2px 11px 9px; }
+.ev-item {
+  padding:8px 10px; border-radius:7px;
+  background:rgba(255,255,255,0.02); border:1px solid rgba(80,140,255,0.07);
+  cursor:pointer; transition:all .2s; display:flex; flex-direction:column; gap:4px;
+}
+.ev-item:hover { background:rgba(43,97,240,0.07); border-color:rgba(43,97,240,0.22); }
+.ev-item.lv-high { border-left:2px solid var(--danger); background:rgba(224,64,64,0.04); border-color:rgba(224,64,64,0.2); }
+.ev-item.lv-med  { border-left:2px solid #f0ab30; background:rgba(240,171,48,0.03); border-color:rgba(240,171,48,0.18); }
+.ev-item-tags { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.ev-tag { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; }
+.ev-tag.type-ev  { background:rgba(43,97,240,0.14); color:#7ab4ff; }
+.ev-tag.type-obj { background:rgba(123,54,196,0.14); color:#c084ff; }
+.ev-tag.lv-high  { background:rgba(224,64,64,0.14); color:var(--danger); }
+.ev-tag.lv-med   { background:rgba(240,171,48,0.12); color:#f0ab30; }
+.ev-tag.lv-low   { background:rgba(43,97,240,0.1); color:#7ab4ff; }
+.ev-tag.need-dec { background:rgba(224,64,64,0.13); color:var(--danger); border:1px solid rgba(224,64,64,0.3); animation:blink-dot 1.4s ease-in-out infinite; }
+.ev-title-row { display:flex; align-items:center; gap:5px; overflow:hidden; }
+.ev-title { flex:1; min-width:0; font-size:12px; font-weight:700; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ev-region { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; flex-shrink:0; }
+.ev-region-hk { background:rgba(43,97,240,0.14); color:#7ab4ff; }
+.ev-region-cn { background:rgba(240,171,48,0.10); color:#f0ab30; }
+.ev-region-os { background:rgba(148,84,220,0.14); color:#c084ff; }
+.ev-meta  { display:flex; align-items:center; gap:7px; font-size:10px; color:var(--text-3); flex-wrap:wrap; }
+.ev-meta .vol { color:#6aaeff; font-weight:600; }
+.ev-meta .neg-hi { color:var(--danger); font-weight:600; }
+.ev-meta .neg-md { color:#f0ab30; font-weight:600; }
+
+/* ══════════════════════════════════════════
+   RIGHT ⑦ — HOT LIST
+══════════════════════════════════════════ */
+.hot-list { padding:2px 11px 8px; display:flex; flex-direction:column; }
+.hot-item { display:flex; align-items:center; gap:7px; padding:5px 6px; border-radius:5px; cursor:pointer; transition:background .12s; border-bottom:1px solid rgba(80,140,255,0.06); }
+.hot-item:last-child { border-bottom:none; }
+.hot-item:hover { background:rgba(43,97,240,0.06); }
+.hot-rank { font-size:12px; font-weight:800; width:16px; text-align:center; flex-shrink:0; color:var(--text-3); }
+.hot-rank.r1 { color:#ff4e4e; } .hot-rank.r2 { color:#ff8c00; } .hot-rank.r3 { color:#ffc107; }
+.hot-title { flex:1; font-size:11px; color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hot-new { font-size:8px; font-weight:700; padding:1px 4px; border-radius:2px; background:rgba(224,64,64,0.14); color:var(--danger); flex-shrink:0; }
+.hot-heat { font-size:10px; font-weight:700; color:#5b9fff; flex-shrink:0; }
+
+/* ══════════════════════════════════════════
+   RIGHT ⑧ — ALERT FEED
+══════════════════════════════════════════ */
+.alert-feed { flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+.alert-scroll { flex:1; overflow:hidden; padding:2px 11px 8px; position:relative; }
+.alert-scroll:hover .alert-auto { animation-play-state:paused; }
+.alert-auto { animation:scroll-up 28s linear infinite; }
+.alert-list { display:flex; flex-direction:column; gap:5px; }
+.alert-item {
+  display:flex; align-items:flex-start; gap:7px;
+  padding:7px 8px; border-radius:6px;
+  background:rgba(255,255,255,0.02); border:1px solid rgba(80,140,255,0.07);
+  cursor:pointer; transition:all .15s; flex-shrink:0;
+}
+.alert-item:hover { background:rgba(43,97,240,0.07); border-color:rgba(43,97,240,0.2); }
+.alert-item.lv-high { border-color:rgba(224,64,64,0.28); background:rgba(224,64,64,0.04); animation:alert-flash 2s ease-in-out infinite; }
+.alert-item.lv-med  { border-color:rgba(240,171,48,0.2); background:rgba(240,171,48,0.03); }
+.alert-lvdot { width:7px; height:7px; border-radius:50%; margin-top:3px; flex-shrink:0; }
+.lv-high .alert-lvdot { background:var(--danger); box-shadow:0 0 6px var(--danger-g); }
+.lv-med  .alert-lvdot { background:#f0ab30; box-shadow:0 0 6px rgba(240,171,48,.4); }
+.lv-low  .alert-lvdot { background:var(--primary); }
+.alert-body { flex:1; min-width:0; }
+.alert-title { font-size:11px; font-weight:600; color:var(--text); margin-bottom:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.alert-meta  { font-size:9px; color:var(--text-3); display:flex; gap:6px; }
+.alert-badge { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; flex-shrink:0; }
+.lv-high .alert-badge { background:rgba(224,64,64,0.14); color:var(--danger); }
+.lv-med  .alert-badge { background:rgba(240,171,48,0.12); color:#f0ab30; }
+.lv-low  .alert-badge { background:rgba(43,97,240,0.1); color:#7ab4ff; }
+
+/* ══════════════════════════════════════════
+   FULLSCREEN BTN
+══════════════════════════════════════════ */
+.fs-btn {
+  position:fixed; bottom:12px; right:12px; z-index:100;
+  width:32px; height:32px; border-radius:7px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(80,140,255,0.15);
+  color:var(--text-3); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .15s;
+}
+.fs-btn:hover { background:rgba(43,97,240,0.14); color:var(--text); }
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════ */
+@keyframes pulse-dot  { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.35)} }
+@keyframes blink-dot  { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes alert-flash{ 0%,100%{border-color:rgba(224,64,64,.28);box-shadow:none} 50%{border-color:rgba(224,64,64,.65);box-shadow:0 0 10px rgba(224,64,64,.12)} }
+@keyframes scan       { 0%{top:-2px} 100%{top:100%} }
+@keyframes scroll-up  { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+@keyframes fade-in    { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* ══════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width:3px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:rgba(80,140,255,0.18); border-radius:2px; }
+
+/* ══════════════════════════════════════════
+   MAP KPI BAR
+══════════════════════════════════════════ */
+.map-kpi-bar { display:flex; align-items:stretch; flex-shrink:0; border-bottom:1px solid var(--border); background:rgba(3,10,22,0.6); }
+.mkpi { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 4px; cursor:pointer; transition:background .2s; position:relative; }
+.mkpi:hover { background:rgba(43,97,240,0.08); }
+.mkpi+.mkpi::before { content:''; position:absolute; left:0; top:18%; bottom:18%; width:1px; background:rgba(80,140,255,0.13); }
+.mkpi-val { font-size:18px; font-weight:800; line-height:1; margin-bottom:3px; font-variant-numeric:tabular-nums; }
+.mkpi-val.c-blue   { color:#6aadff; }
+.mkpi-val.c-red    { color:var(--danger); text-shadow:0 0 14px var(--danger-g); }
+.mkpi-val.c-orange { color:#f0ab30; }
+.mkpi-val.c-green  { color:var(--success); }
+.mkpi-val.c-white  { color:rgba(210,230,255,0.75); }
+.mkpi-lbl { font-size:10px; color:var(--text-3); white-space:nowrap; }
+
+/* ══════════════════════════════════════════
+   COMBINED TREND + CHANNEL PANEL
+══════════════════════════════════════════ */
+.combined-row { display:flex; flex:1; min-height:0; overflow:hidden; }
+.tr-half { flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden; }
+.ch-half { flex:0 0 118px; border-left:1px solid rgba(80,140,255,0.08); display:flex; flex-direction:column; overflow:hidden; }
+.combined-sub-hd { font-size:10px; font-weight:700; color:var(--text-3); padding:4px 10px 2px; flex-shrink:0; letter-spacing:.03em; }
+
+/* ══════════════════════════════════════════
+   col-c flex layout
+══════════════════════════════════════════ */
+.col-c { display:flex; flex-direction:column; overflow:hidden; }
+
+/* ══════════════════════════════════════════
+   舆情概览 - 文字总结
+══════════════════════════════════════════ */
+.overview-summary {
+  margin:0 12px 6px; padding:8px 10px;
+  background:rgba(43,97,240,0.06); border:1px solid rgba(43,97,240,0.14);
+  border-radius:6px; font-size:11px; color:var(--text-2); line-height:1.7; flex-shrink:0;
+}
+.overview-summary em { color:var(--danger); font-style:normal; font-weight:700; }
+.overview-summary strong { color:#6aadff; font-weight:700; }
+
+/* ══════════════════════════════════════════
+   关注领域动态 items
+══════════════════════════════════════════ */
+.domain-item {
+  display:flex; align-items:center; gap:8px; padding:5px 9px; border-radius:6px;
+  background:rgba(255,255,255,0.02); border:1px solid rgba(80,140,255,0.07);
+  cursor:pointer; transition:all .2s;
+}
+.domain-item:hover { background:rgba(43,97,240,0.07); border-color:rgba(43,97,240,0.25); }
+.domain-tag { font-size:9px; font-weight:700; padding:2px 5px; border-radius:3px; flex-shrink:0; background:rgba(43,97,240,0.14); color:#7ab4ff; white-space:nowrap; }
+.domain-content { flex:1; min-width:0; display:flex; align-items:center; gap:6px; }
+.domain-title { flex:1; font-size:11px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.domain-meta { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.domain-sent { font-size:9px; font-weight:700; padding:1px 4px; border-radius:2px; }
+.domain-sent.pos { background:rgba(18,168,122,0.12); color:var(--success); }
+.domain-sent.neg { background:rgba(224,64,64,0.12); color:var(--danger); }
+.domain-sent.neu { background:rgba(255,255,255,0.05); color:var(--text-3); }
+.domain-vol { font-size:9px; color:var(--text-3); }
+.domain-lv { font-size:8px; font-weight:700; padding:1px 4px; border-radius:2px; }
+.domain-lv.high { background:rgba(224,64,64,0.1); color:var(--danger); }
+.domain-lv.med  { background:rgba(240,171,48,0.1); color:#f0ab30; }
+.domain-lv.low  { background:rgba(43,97,240,0.1); color:#7ab4ff; }
+
+/* ══════════════════════════════════════════
+   预警实况 - 三级统计
+══════════════════════════════════════════ */
+.alert-level-stats { display:flex; align-items:center; gap:4px; }
+.als-item { font-size:9px; font-weight:700; padding:2px 5px; border-radius:3px; }
+.als-item.high { background:rgba(224,64,64,0.1); color:var(--danger); }
+.als-item.med  { background:rgba(240,171,48,0.1); color:#f0ab30; }
+.als-item.low  { background:rgba(43,97,240,0.1);  color:#7ab4ff; }
+
+/* ══════════════════════════════════════════
+   信息统计条 (Info Stats Bar)
+══════════════════════════════════════════ */
+.info-stats-bar { flex-shrink:0; background:rgba(3,10,22,0.6); border-bottom:1px solid var(--border); }
+.isb-main { display:flex; align-items:center; padding:7px 10px 7px 20px; gap:10px; min-height:82px; }
+.isb-left { flex:0 0 158px; }
+.isb-tot-lbl { font-size:10px; color:var(--text-3); margin-bottom:2px; }
+.isb-tot-num { font-size:19px; font-weight:800; color:#6aadff; letter-spacing:.02em; font-variant-numeric:tabular-nums; line-height:1; margin-bottom:5px; }
+.isb-sub-row { display:flex; align-items:center; gap:5px; margin-bottom:2px; flex-wrap:nowrap; }
+.isb-sub-name { font-size:10px; color:var(--text-3); white-space:nowrap; }
+.isb-sub-val  { font-size:11px; font-weight:700; color:var(--text-2); font-variant-numeric:tabular-nums; }
+.isb-chg { font-size:9px; font-weight:700; }
+.isb-chg.up   { color:var(--danger); }
+.isb-chg.down { color:var(--success); }
+.isb-divider { width:1px; align-self:stretch; background:rgba(80,140,255,0.18); margin:6px 4px; flex-shrink:0; }
+.isb-donut-area { flex:0 0 76px; display:flex; align-items:center; justify-content:center; }
+.isb-right { flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
+.isb-time-row { display:flex; align-items:center; gap:4px; }
+.isb-arrow { color:var(--primary); font-size:11px; font-weight:900; margin-right:2px; }
+.isb-tab { padding:2px 8px; border-radius:4px; border:1px solid rgba(80,140,255,0.15); background:transparent; color:var(--text-3); font-size:10px; font-weight:700; cursor:pointer; transition:all .15s; font-family:var(--font); }
+.isb-tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+.isb-legend-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px 8px; }
+.isb-leg-row { display:flex; align-items:center; gap:4px; font-size:10px; overflow:hidden; }
+.isb-leg-dot  { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.isb-leg-name { color:var(--text-3); flex-shrink:0; }
+.isb-leg-pct  { color:#6aadff; font-weight:700; flex-shrink:0; }
+.isb-leg-val  { color:var(--text-2); font-variant-numeric:tabular-nums; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ══════════════════════════════════════════
+   热点榜单 - 平台图标
+══════════════════════════════════════════ */
+.hot-plat { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; }
+.hot-plat-icon { width:14px; height:14px; border-radius:3px; font-size:7px; font-weight:800; display:grid; place-items:center; flex-shrink:0; line-height:1; }
+.plat-wb   { background:#e44d26; color:#fff; }
+.plat-dy   { background:#111; color:#fff; border:1px solid rgba(255,255,255,0.15); }
+.plat-bd   { background:#2932e1; color:#fff; }
+.plat-lk   { background:#c8a800; color:#fff; }
+.plat-hkgd { background:#1890ff; color:#fff; }
+.plat-hk01 { background:#003087; color:#fff; }
+.plat-yh   { background:#7b0099; color:#fff; }
+.plat-gg   { background:#4285f4; color:#fff; }
+
+/* ══════════════════════════════════════════
+   EVENT DETAIL MODAL
+══════════════════════════════════════════ */
+.evm-overlay {
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(0,4,16,0.9); display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.evm-panel {
+  width:90vw; max-width:1280px; height:88vh;
+  background:linear-gradient(160deg,rgba(4,14,38,0.99) 0%,rgba(2,8,24,0.99) 100%);
+  border:1px solid rgba(43,97,240,0.5); border-radius:10px;
+  display:flex; flex-direction:column; overflow:hidden; position:relative;
+  box-shadow:0 0 80px rgba(20,80,255,0.25), inset 0 0 60px rgba(5,20,60,0.4);
+}
+.evm-panel::before {
+  content:''; position:absolute; top:0; left:8%; right:8%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(80,160,255,0.5),transparent);
+}
+/* corner marks */
+.evm-deco { position:absolute; width:18px; height:18px; pointer-events:none; }
+.evm-deco.tl { top:4px; left:4px; border-top:1px solid rgba(80,160,255,0.7); border-left:1px solid rgba(80,160,255,0.7); }
+.evm-deco.tr { top:4px; right:4px; border-top:1px solid rgba(80,160,255,0.7); border-right:1px solid rgba(80,160,255,0.7); }
+.evm-deco.bl { bottom:4px; left:4px; border-bottom:1px solid rgba(80,160,255,0.7); border-left:1px solid rgba(80,160,255,0.7); }
+.evm-deco.br { bottom:4px; right:4px; border-bottom:1px solid rgba(80,160,255,0.7); border-right:1px solid rgba(80,160,255,0.7); }
+/* header */
+.evm-header {
+  display:flex; align-items:center; justify-content:center; gap:16px;
+  padding:11px 20px; border-bottom:1px solid rgba(43,97,240,0.3);
+  background:rgba(6,18,50,0.7); flex-shrink:0; position:relative;
+}
+.evm-header-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(43,97,240,0.45)); }
+.evm-header-line.r { background:linear-gradient(90deg,rgba(43,97,240,0.45),transparent); }
+.evm-header-title { font-size:18px; font-weight:900; color:#bdd8ff; letter-spacing:.25em; white-space:nowrap; }
+.evm-close {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  background:transparent; border:1px solid rgba(80,140,255,0.35); color:#7ab4ff;
+  font-size:13px; width:26px; height:26px; border-radius:5px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .15s;
+}
+.evm-close:hover { background:rgba(43,97,240,0.2); border-color:rgba(80,140,255,0.7); color:#fff; }
+/* event headline */
+.evm-ev-title {
+  padding:8px 20px 6px; flex-shrink:0;
+  font-size:15px; font-weight:800; color:#e0eeff; letter-spacing:.04em;
+  border-bottom:1px solid rgba(43,97,240,0.18);
+}
+/* stats row */
+.evm-stats-row {
+  display:flex; align-items:center; gap:32px; padding:6px 20px;
+  border-bottom:1px solid rgba(43,97,240,0.15); flex-shrink:0;
+  font-size:10px; color:rgba(160,200,255,0.6);
+}
+.evm-stats-row b { color:#6aaeff; font-size:12px; font-weight:800; }
+/* ai box */
+.evm-ai-box {
+  display:flex; gap:10px; padding:8px 20px 10px; flex-shrink:0;
+  background:rgba(15,35,85,0.35); border-bottom:1px solid rgba(43,97,240,0.18);
+}
+.evm-ai-badge {
+  flex-shrink:0; background:rgba(43,97,240,0.3); color:#7ab4ff;
+  font-size:9px; font-weight:900; padding:2px 7px; border-radius:4px;
+  height:fit-content; margin-top:3px; border:1px solid rgba(43,97,240,0.4); letter-spacing:.05em;
+}
+.evm-ai-text { font-size:11px; color:rgba(200,220,255,0.8); line-height:1.75; }
+/* body 3-col */
+.evm-body { flex:1; min-height:0; display:grid; grid-template-columns:360px 1fr 360px; overflow:hidden; }
+.evm-col { padding:12px 14px; overflow-y:auto; border-right:1px solid rgba(43,97,240,0.12); }
+.evm-col::-webkit-scrollbar { width:3px; }
+.evm-col::-webkit-scrollbar-thumb { background:rgba(43,97,240,0.3); border-radius:2px; }
+.evm-col:last-child { border-right:none; }
+.evm-sec { font-size:10px; font-weight:700; color:#5b9fff; padding-left:8px;
+  border-left:3px solid rgba(43,97,240,0.7); margin-bottom:10px; margin-top:14px; letter-spacing:.05em; }
+.evm-sec:first-child { margin-top:0; }
+/* platform list */
+.evm-plat-row { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.evm-plat-name { font-size:10px; color:rgba(160,200,255,0.7); width:56px; flex-shrink:0; }
+.evm-plat-bar-bg { flex:1; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.evm-plat-bar { height:100%; border-radius:2px; }
+.evm-plat-val { font-size:10px; color:rgba(160,200,255,0.6); width:38px; text-align:right; flex-shrink:0; }
+/* timeline */
+.evm-tl-item { display:flex; gap:10px; margin-bottom:12px; position:relative; }
+.evm-tl-item::before {
+  content:''; position:absolute; left:34px; top:20px; bottom:-12px; width:1px;
+  background:rgba(43,97,240,0.2);
+}
+.evm-tl-item:last-child::before { display:none; }
+.evm-tl-date { flex-shrink:0; text-align:right; width:32px; }
+.evm-tl-d { font-size:10px; font-weight:700; color:#6aaeff; }
+.evm-tl-t { font-size:9px; color:rgba(120,170,255,0.5); }
+.evm-tl-dot { flex-shrink:0; width:8px; height:8px; border-radius:50%; background:#2b61f0;
+  border:1px solid rgba(80,160,255,0.6); margin-top:4px; box-shadow:0 0 6px rgba(43,97,240,0.5); }
+.evm-tl-content { flex:1; min-width:0; }
+.evm-tl-title { font-size:11px; font-weight:600; color:rgba(210,230,255,0.9); line-height:1.4; margin-bottom:2px; }
+.evm-tl-src { font-size:9px; color:rgba(120,170,255,0.5); }
+/* expert / public */
+.evm-op-item { display:flex; gap:6px; margin-bottom:9px; align-items:flex-start; }
+.evm-op-num { flex-shrink:0; width:16px; height:16px; border-radius:50%;
+  background:rgba(43,97,240,0.2); color:#7ab4ff; font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.evm-op-text { font-size:10px; color:rgba(190,215,255,0.8); line-height:1.55; flex:1; min-width:0; }
+.evm-pub-item { margin-bottom:10px; }
+.evm-pub-text { font-size:10px; color:rgba(190,215,255,0.85); line-height:1.5; margin-bottom:4px; display:flex; gap:6px; align-items:flex-start; }
+.evm-pub-bar-bg { height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.evm-pub-bar { height:100%; border-radius:2px; background:linear-gradient(90deg,#2b61f0,#5b9fff); }
+.evm-pub-pct { font-size:9px; color:#6aaeff; font-weight:700; flex-shrink:0; white-space:nowrap; }
+/* dist chart + legend row */
+.evm-dist-row { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+.evm-dist-legend { flex:1; min-width:0; }
+/* bar + pct inline */
+.evm-pub-bar-row { display:flex; align-items:center; gap:6px; }
+.evm-pub-bar-row .evm-pub-bar-bg { flex:1; }
+/* sentiment tags */
+.evm-sentiment-tag { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; flex-shrink:0; white-space:nowrap; }
+.evm-sentiment-tag.positive { background:rgba(18,168,122,0.2); color:#12a87a; border:1px solid rgba(18,168,122,0.35); }
+.evm-sentiment-tag.neutral  { background:rgba(240,171,48,0.2);  color:#f0ab30; border:1px solid rgba(240,171,48,0.35); }
+.evm-sentiment-tag.negative { background:rgba(224,64,64,0.2);   color:#e04040; border:1px solid rgba(224,64,64,0.35); }
+/* expert header */
+.evm-expert-header { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
+.evm-expert-name { font-size:10px; color:#6aaeff; font-weight:700; }
+/* peak topics */
+.evm-peak-topics { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; align-items:center; }
+.evm-peak-topic-tag { font-size:9px; color:rgba(160,200,255,0.75); background:rgba(43,97,240,0.15); border:1px solid rgba(43,97,240,0.3); border-radius:3px; padding:1px 6px; }
+
+/* ══════════════════════════════════════════
+   HOT LIST DETAIL MODAL  (.hlm-)
+══════════════════════════════════════════ */
+.hlm-overlay {
+  position:fixed; inset:0; z-index:9100;
+  background:rgba(0,4,16,0.92); display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(7px);
+}
+.hlm-panel {
+  width:92vw; max-width:1340px; height:90vh;
+  background:linear-gradient(160deg,rgba(4,14,38,0.99) 0%,rgba(2,8,24,0.99) 100%);
+  border:1px solid rgba(43,97,240,0.5); border-radius:10px;
+  display:flex; flex-direction:column; overflow:hidden; position:relative;
+  box-shadow:0 0 80px rgba(20,80,255,0.25), inset 0 0 60px rgba(5,20,60,0.4);
+}
+.hlm-panel::before {
+  content:''; position:absolute; top:0; left:8%; right:8%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(80,160,255,0.5),transparent);
+}
+.hlm-deco { position:absolute; width:18px; height:18px; pointer-events:none; }
+.hlm-deco.tl { top:4px; left:4px; border-top:1px solid rgba(80,160,255,0.7); border-left:1px solid rgba(80,160,255,0.7); }
+.hlm-deco.tr { top:4px; right:4px; border-top:1px solid rgba(80,160,255,0.7); border-right:1px solid rgba(80,160,255,0.7); }
+.hlm-deco.bl { bottom:4px; left:4px; border-bottom:1px solid rgba(80,160,255,0.7); border-left:1px solid rgba(80,160,255,0.7); }
+.hlm-deco.br { bottom:4px; right:4px; border-bottom:1px solid rgba(80,160,255,0.7); border-right:1px solid rgba(80,160,255,0.7); }
+/* header */
+.hlm-header {
+  display:flex; align-items:center; justify-content:center; gap:16px;
+  padding:11px 20px; border-bottom:1px solid rgba(43,97,240,0.3);
+  background:rgba(6,18,50,0.7); flex-shrink:0; position:relative;
+}
+.hlm-header-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(43,97,240,0.45)); }
+.hlm-header-line.r { background:linear-gradient(90deg,rgba(43,97,240,0.45),transparent); }
+.hlm-header-title { font-size:18px; font-weight:900; color:#bdd8ff; letter-spacing:.25em; white-space:nowrap; }
+.hlm-close {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  background:transparent; border:1px solid rgba(80,140,255,0.35); color:#7ab4ff;
+  font-size:13px; width:26px; height:26px; border-radius:5px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .15s;
+}
+.hlm-close:hover { background:rgba(43,97,240,0.2); border-color:rgba(80,140,255,0.7); color:#fff; }
+/* topic info row */
+.hlm-topic-row {
+  padding:8px 20px 7px; flex-shrink:0;
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  border-bottom:1px solid rgba(43,97,240,0.18);
+}
+.hlm-topic-title { font-size:15px; font-weight:800; color:#e0eeff; letter-spacing:.03em; }
+.hlm-topic-meta { display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(140,180,255,0.6); }
+.hlm-topic-meta b { color:#7ab4ff; }
+.hlm-src-badge { display:inline-flex; align-items:center; gap:4px; padding:1px 7px; border-radius:3px; font-size:10px; font-weight:700; background:rgba(228,77,38,0.15); color:#f07050; border:1px solid rgba(228,77,38,0.3); }
+/* ai box */
+.hlm-ai-box {
+  display:flex; gap:10px; padding:8px 20px 9px; flex-shrink:0;
+  background:rgba(15,35,85,0.35); border-bottom:1px solid rgba(43,97,240,0.18);
+}
+.hlm-ai-badge {
+  flex-shrink:0; background:rgba(43,97,240,0.3); color:#7ab4ff;
+  font-size:9px; font-weight:900; padding:2px 7px; border-radius:4px;
+  height:fit-content; margin-top:3px; border:1px solid rgba(43,97,240,0.4); letter-spacing:.05em;
+}
+.hlm-ai-text { font-size:11px; color:rgba(200,220,255,0.8); line-height:1.75; }
+/* body 2-col */
+.hlm-body { flex:1; min-height:0; display:grid; grid-template-columns:1fr 310px; overflow:hidden; }
+.hlm-left { padding:12px 14px 12px 16px; overflow-y:auto; border-right:1px solid rgba(43,97,240,0.12); display:flex; flex-direction:column; gap:2px; }
+.hlm-left::-webkit-scrollbar { width:3px; }
+.hlm-left::-webkit-scrollbar-thumb { background:rgba(43,97,240,0.3); border-radius:2px; }
+.hlm-right { padding:12px 14px; overflow-y:auto; }
+.hlm-right::-webkit-scrollbar { width:3px; }
+.hlm-right::-webkit-scrollbar-thumb { background:rgba(43,97,240,0.3); border-radius:2px; }
+/* section label */
+.hlm-sec { font-size:10px; font-weight:700; color:#5b9fff; padding-left:8px;
+  border-left:3px solid rgba(43,97,240,0.7); margin-bottom:10px; margin-top:14px; letter-spacing:.05em; }
+.hlm-sec:first-child { margin-top:0; }
+/* stat grid */
+.hlm-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:6px; }
+.hlm-stats-grid2 { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:12px; }
+.hlm-stat-card {
+  background:rgba(6,18,50,0.6); border:1px solid rgba(43,97,240,0.22); border-radius:6px;
+  padding:7px 10px 8px; display:flex; flex-direction:column; align-items:center;
+  position:relative; overflow:hidden;
+}
+.hlm-stat-card::before {
+  content:''; position:absolute; inset:0; border-radius:6px;
+  background:linear-gradient(135deg,rgba(43,97,240,0.08) 0%,transparent 60%);
+}
+.hlm-stat-label { font-size:9px; color:rgba(120,170,255,0.55); letter-spacing:.04em; margin-bottom:4px; }
+.hlm-stat-value { font-size:18px; font-weight:900; color:#6ec6ff; letter-spacing:.02em; line-height:1; }
+.hlm-stat-value.sm { font-size:14px; }
+.hlm-stat-value.rank { color:#f0ab30; }
+/* trend chart */
+.hlm-chart-box { width:100%; height:140px; flex-shrink:0; }
+/* nodes table */
+.hlm-table { width:100%; border-collapse:collapse; font-size:11px; }
+.hlm-table th { text-align:left; padding:4px 10px; font-size:9px; font-weight:700; color:#5b9fff; letter-spacing:.04em; border-bottom:1px solid rgba(43,97,240,0.25); background:rgba(6,18,50,0.5); }
+.hlm-table td { padding:5px 10px; border-bottom:1px solid rgba(43,97,240,0.1); color:rgba(190,215,255,0.85); vertical-align:middle; }
+.hlm-table tr:last-child td { border-bottom:none; }
+.hlm-table tr:hover td { background:rgba(43,97,240,0.06); }
+.hlm-node-badge { display:inline-block; padding:1px 7px; border-radius:3px; font-size:9px; font-weight:700; background:rgba(43,97,240,0.15); color:#7ab4ff; border:1px solid rgba(43,97,240,0.3); }
+.hlm-node-badge.peak { background:rgba(240,171,48,0.15); color:#f0ab30; border-color:rgba(240,171,48,0.35); }
+.hlm-node-badge.drop { background:rgba(224,64,64,0.12); color:#e08080; border-color:rgba(224,64,64,0.3); }
+.hlm-node-badge.back { background:rgba(18,168,122,0.12); color:#5fd4b2; border-color:rgba(18,168,122,0.3); }
+/* opinions */
+.hlm-op-item { display:flex; gap:6px; margin-bottom:9px; align-items:flex-start; }
+.hlm-op-num { flex-shrink:0; width:16px; height:16px; border-radius:50%;
+  background:rgba(43,97,240,0.2); color:#7ab4ff; font-size:9px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.hlm-op-text { font-size:10px; color:rgba(190,215,255,0.8); line-height:1.55; flex:1; min-width:0; }
+.hlm-pub-item { margin-bottom:10px; }
+.hlm-pub-text { font-size:10px; color:rgba(190,215,255,0.85); line-height:1.5; margin-bottom:4px; display:flex; gap:6px; align-items:flex-start; }
+.hlm-pub-bar-bg { height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+.hlm-pub-bar { height:100%; border-radius:2px; background:linear-gradient(90deg,rgba(43,97,240,0.8),#5b9fff); }
+.hlm-pub-pct { font-size:9px; color:#6aaeff; font-weight:700; flex-shrink:0; white-space:nowrap; }
+.hlm-pub-bar-row { display:flex; align-items:center; gap:6px; }
+.hlm-pub-bar-row .hlm-pub-bar-bg { flex:1; }
+.hlm-expert-header { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
+.hlm-expert-name { font-size:10px; color:#6aaeff; font-weight:700; }
+/* hot title click style */
+.hot-title-link { cursor:pointer; transition:color .15s; }
+.hot-title-link:hover { color:#7ab4ff !important; text-decoration:underline; text-underline-offset:3px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+</head>
+<body>
+<div class="screen">
+
+<!-- ████████ HEADER ████████ -->
+<header class="hd">
+  <div class="hd-brand" style="border-right:none">
+    <div class="hd-clock">
+      <div class="hd-clock-time" id="clock">--:--:--</div>
+      <div class="hd-clock-date" id="clockDate">--</div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:center">
+    <div class="hd-title-wrap">
+      <div class="hd-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="1.6" fill="none"/>
+          <circle cx="12" cy="12" r="3.5" fill="white" opacity=".75"/>
+        </svg>
+      </div>
+      <span class="hd-title-main">紫荆集团·网络舆情态势感知中心</span>
+    </div>
+  </div>
+
+  <div class="hd-right">
+    <div class="isb-time-row" style="padding-right:12px;border-right:1px solid rgba(80,140,255,0.2);margin-right:4px">
+      <button class="isb-tab active" onclick="switchInfoTime(this)">近24小时</button>
+      <button class="isb-tab" onclick="switchInfoTime(this)">当天</button>
+      <button class="isb-tab" onclick="switchInfoTime(this)">当周</button>
+      <button class="isb-tab" onclick="switchInfoTime(this)">当月</button>
+    </div>
+    <button id="fsBtn" onclick="toggleFullscreen()" class="back-btn" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;padding:0 10px 0 0">
+      <svg id="fsIcon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/></svg>
+      全屏
+    </button>
+    <a href="../首页/index.html" class="back-btn">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M7 2L3.5 5.5 7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      返回系统
+    </a>
+  </div>
+</header>
+
+<!-- ████████ BODY ████████ -->
+<div class="body">
+
+  <!-- ══ LEFT COLUMN ══ -->
+  <div class="col col-l">
+
+    <!-- ① 舆情概览 -->
+    <div class="panel" style="flex:0 0 205px">
+      <div class="panel-hd" style="padding-bottom:3px">
+        <div class="panel-title">舆情概览</div>
+      </div>
+      <div class="overview-summary">
+        当前舆情处于<em>关注级别</em>。涉港信息在微博、境外媒体渠道波动明显，<strong>紫荆杂志社</strong>话题声量持续攀升，负面占比38%。近24小时监测<strong>38,521</strong>条信息，2项高风险预警需重点处置。
+      </div>
+      <div class="trend-wrap" style="flex:1;min-height:0;padding:2px 8px 2px">
+        <canvas id="trendCanvas"></canvas>
+        <div class="trend-legend-bar">
+          <span class="tl-item"><em style="background:rgba(18,168,122,.75)"></em>正面</span>
+          <span class="tl-item"><em style="background:rgba(170,185,210,.55)"></em>中性</span>
+          <span class="tl-item"><em style="background:rgba(224,64,64,.75)"></em>负面</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 关注领域动态 -->
+    <div class="panel" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
+      <div class="panel-hd">
+        <div class="panel-title">关注领域动态</div>
+      </div>
+      <div class="obj-list" id="objList" style="overflow-y:auto;flex:1"></div>
+    </div>
+
+    <!-- ③ 预警实况 -->
+    <div class="panel" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden">
+      <div class="panel-hd">
+        <div class="panel-title">预警实况</div>
+        <div class="alert-level-stats" id="alertLevelStats"></div>
+      </div>
+      <div class="alert-scroll" style="flex:1;min-height:0">
+        <div class="alert-auto" id="alertAuto">
+          <div class="alert-list" id="alertList"></div>
+          <div class="alert-list" id="alertListDup"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ CENTER COLUMN ══ -->
+  <div class="col-c">
+
+    <!-- ④ 态势地图 -->
+    <div class="panel map-panel">
+      <div class="c-deco tl"></div>
+      <div class="c-deco tr"></div>
+      <div class="c-deco bl"></div>
+      <div class="c-deco br"></div>
+
+      <!-- 信息统计 -->
+      <div class="info-stats-bar">
+        <div class="isb-main">
+          <div class="isb-left">
+            <div class="isb-tot-lbl">舆情总量</div>
+            <div class="isb-tot-num">248,368,290</div>
+            <div class="isb-sub-row"><span class="isb-sub-name">香港舆情总量</span>&nbsp;<span class="isb-sub-val">978,290</span>&nbsp;<span class="isb-chg up">▲ 5%</span></div>
+            <div class="isb-sub-row"><span class="isb-sub-name">内地舆情总量</span>&nbsp;<span class="isb-sub-val">8,362</span>&nbsp;<span class="isb-chg down">▼ 5%</span></div>
+          </div>
+          <div class="isb-divider"></div>
+          <div class="isb-donut-area">
+            <svg id="isbDonut" viewBox="0 0 100 100" width="72" height="72"></svg>
+          </div>
+          <div class="isb-right">
+            <div class="isb-legend-grid" id="isbLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-hd" style="margin-top:10px;padding-top:5px;padding-bottom:3px">
+        <div class="panel-title">舆情地理态势分布</div>
+      </div>
+      <div class="map-container">
+        <div id="mapChart" style="width:100%;height:100%"></div>
+        <div class="map-legend">
+          <div class="map-legend-bar"></div>
+          <div class="map-legend-labels"><span>低</span><span>高</span></div>
+        </div>
+        <div class="map-view-tabs">
+          <button class="mv-tab active" onclick="switchMap(this,'hk')">香港</button>
+          <button class="mv-tab" onclick="switchMap(this,'cn')">内地</button>
+          <button class="mv-tab" onclick="switchMap(this,'gl')">全球</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT COLUMN ══ -->
+  <div class="col col-r">
+
+    <!-- ⑥ 重点事件 -->
+    <div class="panel" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
+      <div class="panel-hd">
+        <div class="panel-title">重点事件</div>
+      </div>
+      <div class="ev-list" id="evList" style="overflow-y:auto;flex:1;padding-bottom:8px"></div>
+    </div>
+
+    <!-- ⑦ 热点榜单 -->
+    <div class="panel" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
+      <div class="panel-hd">
+        <div class="panel-title">热点榜单</div>
+        <div class="tab-m">
+          <button class="tab-m-btn active" onclick="switchHot(this,'hk')">香港</button>
+          <button class="tab-m-btn" onclick="switchHot(this,'cn')">内地</button>
+        </div>
+      </div>
+      <div class="hot-list" id="hotList" style="overflow-y:auto;flex:1;padding-bottom:4px"></div>
+    </div>
+
+</div><!-- /body -->
+</div><!-- /screen -->
+
+<button class="fs-btn" onclick="toggleFS()" title="全屏 (F)">
+  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+</button>
+
+<script>
+/* ══════════════════════════════════════════
+   MOCK DATA
+══════════════════════════════════════════ */
+const D = {
+  domainItems: [
+    { domain:'两岸关系', title:'两岸民间交流活动恢复情况持续受关注', lv:'med',  sent:'neu', vol:79 },
+    { domain:'青年发展', title:'香港青年赴内地就业政策配套细则出台', lv:'med',  sent:'pos', vol:73 },
+    { domain:'医疗卫生', title:'公立医院排队候诊时间问题再次聚焦', lv:'high', sent:'neg', vol:85 },
+    { domain:'教育文教', title:'本地高校学费资助政策调整引热议',     lv:'med',  sent:'neg', vol:76 },
+    { domain:'法律法治', title:'本地律师协会就新修订法规发表专业立场', lv:'med',  sent:'neu', vol:70 },
+    { domain:'科创产业', title:'创科园区第二期招商启动，外资科企关注度高', lv:'low',  sent:'pos', vol:65 },
+    { domain:'网络安全', title:'网络安全应急演练结果引发媒体深度追踪', lv:'low',  sent:'neu', vol:60 },
+    { domain:'两岸关系', title:'两岸青年交流营活动规划受媒体正面关注', lv:'low',  sent:'pos', vol:62 },
+  ],
+  channels: [
+    { name:'微博',   pct:34, color:'#2b61f0' },
+    { name:'微信',   pct:22, color:'#7b36c4' },
+    { name:'新闻媒体',pct:18, color:'#12a87a' },
+    { name:'境外媒体',pct:12, color:'#e04040' },
+    { name:'抖音',   pct: 8, color:'#f0ab30' },
+    { name:'论坛',   pct: 6, color:'#5b9fff' },
+  ],
+  events: [
+    { type:'event', lv:'high', region:'hk', title:'某重大涉港舆情事件持续发酵',         vol:12430, neg:38, trend:'急速上升', ago:'2分钟前',  nd:true  },
+    { type:'object',lv:'high', region:'hk', title:'紫荆杂志社官微遭集中评论攻击',       vol: 4210, neg:45, trend:'上升中',  ago:'8分钟前',  nd:true  },
+    { type:'event', lv:'high', region:'os', title:'境外媒体集中炒作涉港负面叙事',       vol: 3760, neg:62, trend:'急速上升', ago:'11分钟前', nd:true  },
+    { type:'object',lv:'high', region:'cn', title:'某官方账号遭境外平台批量举报封禁',   vol: 2890, neg:51, trend:'上升中',  ago:'18分钟前', nd:true  },
+    { type:'event', lv:'med',  region:'hk', title:'香港本地论坛某议题持续升温',         vol: 3180, neg:28, trend:'平稳上升',ago:'15分钟前', nd:false },
+    { type:'object',lv:'med',  region:'cn', title:'涉某重点人物负面报道多渠道传播',     vol: 1940, neg:33, trend:'缓慢上升',ago:'22分钟前', nd:false },
+    { type:'event', lv:'med',  region:'os', title:'海外华文媒体转载失实报道扩散',       vol: 1530, neg:41, trend:'缓慢上升',ago:'29分钟前', nd:false },
+    { type:'event', lv:'med',  region:'hk', title:'集团旗下品牌遭KOL公开负面点评',     vol: 1120, neg:37, trend:'平稳上升',ago:'34分钟前', nd:false },
+    { type:'object',lv:'low',  region:'cn', title:'内地官媒正面报道带动舆情回暖',       vol:  970, neg: 8, trend:'下降中',  ago:'41分钟前', nd:false },
+    { type:'event', lv:'low',  region:'cn', title:'集团公益活动报道引媒体跟进报道',     vol:  890, neg: 9, trend:'平稳',   ago:'55分钟前', nd:false },
+  ],
+  hotCn: [
+    { t:'十四届全国人大四次会议议程公布',           h:'8.6万', n:true,  logos:['wb','dy','bd'] },
+    { t:'代表建议设定3000亿元高速免费额度',       h:'6.8万', n:false, logos:['wb','bd'] },
+    { t:'12306回应乘客在普速铁路上用排插',          h:'5.4万', n:false, logos:['wb','dy'] },
+    { t:'2026全国两会为什么格外重要',              h:'4.9万', n:false, logos:['bd','wb'] },
+    { t:'驻日大使馆提醒：防范日本「撞人族」',  h:'4.2万', n:true,  logos:['wb','dy'] },
+    { t:'雷军2026两会议题引发广泛关注',            h:'3.8万', n:false, logos:['wb','bd'] },
+    { t:'北京今日迎来今年第一场大雪',              h:'3.1万', n:false, logos:['wb','dy'] },
+    { t:'山东修高鐵站挖出5亿年前化石石海',       h:'2.7万', n:false, logos:['wb','dy'] },
+    { t:'多省市宣平2026年春季开学时间',             h:'2.3万', n:false, logos:['wb','bd'] },
+    { t:'国务院发布优化营商环境新举措',           h:'2.1万', n:false, logos:['wb','bd'] },
+    { t:'住建部：严控房产开发商预售资金',       h:'1.8万', n:true,  logos:['wb'] },
+    { t:'多地出现今年首批「人感染H3N2」',          h:'1.6万', n:true,  logos:['wb','dy'] },
+    { t:'全国政协委员建议恢复五一黄金周',          h:'1.4万', n:false, logos:['bd','wb'] },
+    { t:'广州新型地铁线路开工付布',                h:'1.2万', n:false, logos:['wb'] },
+    { t:'央行：下调部分銀行存款利率',              h:'1.0万', n:false, logos:['wb','bd'] },
+    { t:'教育部通知：规范课后延时服务',             h:'0.9万', n:false, logos:['bd'] },
+    { t:'农业农村部：今年粮食生产开局良好',    h:'0.8万', n:false, logos:['bd','wb'] },
+    { t:'国家医保局公広2026年医保目录',               h:'0.7万', n:false, logos:['wb','bd'] },
+    { t:'文旅部：五一长假出行再创历史新高',    h:'0.6万', n:false, logos:['wb','dy'] },
+    { t:'国家能源局：可再生能源装机占比50%',    h:'0.5万', n:false, logos:['bd'] },
+  ],
+  hotHk: [
+    { t:'港铁票价调整方案今日正式公布',         n:false, logos:['lk'] },
+    { t:'《基本法》第23条立法公众咨询结果出炉', n:true,  logos:['hkgd'] },
+    { t:'新冠变异株JN.1感染个案增加 呼吁接种',  n:true,  logos:['hk01'] },
+    { t:'香港迪士尼「魔雪奇缘」新园区盛大开幕', n:false, logos:['yh'] },
+    { t:'季节性流感踏入高峰期公立医院病房爆满', n:true,  logos:['gg'] },
+    { t:'LIHKG热议：伊朗小学遭轰炸管局公开',    n:true,  logos:['lk'] },
+    { t:'跨境学童全面恢复面授课堂',             n:false, logos:['hkgd'] },
+    { t:'驻外经贸办积极斡纠对香港不实报道',     n:false, logos:['hk01'] },
+    { t:'香港特区政府公布2026年度财政预算摘要', n:false, logos:['hk01'] },
+    { t:'立法会审议《网络安全条例》草案',       n:true,  logos:['lk'] },
+    { t:'港交所发布新一轮市场改革方案',         n:false, logos:['hkgd'] },
+    { t:'香港失业率升至4.2% 创近两年新高',      n:true,  logos:['hk01','yh'] },
+    { t:'香港机场客运量恢复至疫前水平逾95%',    n:false, logos:['yh'] },
+    { t:'本港天文台：五月初或有热带气旋形成',   n:true,  logos:['hkgd'] },
+    { t:'廉政公署侦破涉400万行贿案件',          n:true,  logos:['lk'] },
+    { t:'粤港澳大湾区新增两项重大基建项目',     n:false, logos:['hk01'] },
+    { t:'香港大学最新QS排名跌出全球前25',       n:true,  logos:['yh','gg'] },
+    { t:'北部都会区发展规划新一期咨询展开',     n:false, logos:['hkgd'] },
+    { t:'香港政务司司长到访深圳洽谈合作',       n:false, logos:['hk01'] },
+    { t:'人民币对港元汇率创年内新高',           n:false, logos:['yh'] },
+  ],
+  alerts: [
+    { lv:'high', title:'【高风险】涉集团信息负面声量24h急速攀升',     time:'3分钟前', src:'微博' },
+    { lv:'high', title:'【高风险】境外媒体集中发布涉港负面稿件',       time:'7分钟前', src:'境外媒体' },
+    { lv:'med',  title:'【中风险】关键词小时声量超预警阈值',           time:'12分钟前',src:'全渠道' },
+    { lv:'med',  title:'【中风险】重点关注账号发布涉集团内容',         time:'18分钟前',src:'微信' },
+    { lv:'med',  title:'【中风险】港媒议题热度持续超基线20%',         time:'25分钟前',src:'新闻媒体' },
+    { lv:'low',  title:'竞品媒体品牌声量出现明显波动',               time:'31分钟前',src:'微博' },
+    { lv:'low',  title:'周期性行业报告发布引爆相关舆论',             time:'44分钟前',src:'论坛' },
+    { lv:'low',  title:'监测词命中率较昨日上升超10%',               time:'58分钟前',src:'全渠道' },
+  ],
+  donut: [
+    { label:'热点议题综合', v:28, c:'#2b61f0' },
+    { label:'领域动态综合', v:22, c:'#7b36c4' },
+    { label:'人物动态',     v:16, c:'#12a87a' },
+    { label:'涉港澳突发',   v:12, c:'#e04040' },
+    { label:'经济财经',     v: 9, c:'#f0ab30' },
+    { label:'文化娱乐',     v: 7, c:'#5b9fff' },
+    { label:'科技创新',     v: 4, c:'#c084ff' },
+    { label:'其他',         v: 2, c:'#3a4a6a' },
+  ],
+  mapCn: [
+    { n:'北京', x:.61, y:.22, vol:4821, al:true  },
+    { n:'上海', x:.73, y:.40, vol:6234, al:false },
+    { n:'广州', x:.64, y:.67, vol:3842, al:true  },
+    { n:'深圳', x:.65, y:.70, vol:3120, al:false },
+    { n:'武汉', x:.61, y:.48, vol:1843, al:false },
+    { n:'成都', x:.44, y:.52, vol:1421, al:false },
+    { n:'杭州', x:.73, y:.41, vol:1243, al:false },
+    { n:'南京', x:.70, y:.37, vol: 987, al:false },
+    { n:'天津', x:.62, y:.25, vol: 876, al:false },
+    { n:'重庆', x:.49, y:.54, vol: 723, al:false },
+    { n:'香港', x:.66, y:.73, vol:2843, al:true  },
+  ],
+  mapHk: [
+    { n:'中西区', x:.36, y:.56, vol:1243, al:true  },
+    { n:'湾仔',   x:.46, y:.52, vol: 984, al:false },
+    { n:'观塘',   x:.60, y:.47, vol: 872, al:false },
+    { n:'深水埗', x:.34, y:.44, vol: 743, al:true  },
+    { n:'九龙城', x:.42, y:.43, vol: 621, al:false },
+    { n:'沙田',   x:.55, y:.33, vol: 512, al:false },
+    { n:'荃湾',   x:.27, y:.39, vol: 434, al:false },
+    { n:'元朗',   x:.19, y:.30, vol: 387, al:false },
+  ],
+  mapGl: [
+    { n:'纽约',   x:.27, y:.34, vol:3421, al:false },
+    { n:'伦敦',   x:.45, y:.24, vol:2843, al:true  },
+    { n:'巴黎',   x:.47, y:.26, vol:1234, al:false },
+    { n:'东京',   x:.80, y:.34, vol:2103, al:false },
+    { n:'北京',   x:.75, y:.32, vol:4821, al:true  },
+    { n:'香港',   x:.76, y:.42, vol:2843, al:true  },
+    { n:'台北',   x:.78, y:.41, vol:1120, al:false },
+    { n:'新加坡', x:.74, y:.54, vol: 987, al:false },
+    { n:'悉尼',   x:.84, y:.68, vol: 421, al:false },
+  ],
+};
+
+/* ══════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════ */
+function go(url){ window.location.href = url; }
+function pad(n){ return String(n).padStart(2,'0'); }
+
+/* ══════════════════════════════════════════
+   CLOCK
+══════════════════════════════════════════ */
+function tick(){
+  const now = new Date();
+  document.getElementById('clock').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  document.getElementById('clockDate').textContent = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 周${'日一二三四五六'[now.getDay()]}`;
+}
+setInterval(tick, 1000); tick();
+
+/* ══════════════════════════════════════════
+   RENDER: OBJECTS
+══════════════════════════════════════════ */
+function renderObjs(){
+  document.getElementById('objList').innerHTML = D.domainItems.map(d=>`
+    <div class="domain-item" onclick="go('../监测预警/港澳动态/index.html')">
+      <span class="domain-tag">${d.domain}</span>
+      <div class="domain-content">
+        <div class="domain-title">${d.title}</div>
+        <div class="domain-meta">
+          <span class="domain-lv ${d.lv}">${d.lv==='high'?'高风险':d.lv==='med'?'中风险':'低风险'}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════
+   RENDER: CHANNELS
+══════════════════════════════════════════ */
+function renderCh(){
+  document.getElementById('chList').innerHTML = D.channels.map(c=>`
+    <div class="ch-row">
+      <div class="ch-name">${c.name}</div>
+      <div class="ch-bar-bg">
+        <div class="ch-bar" style="width:${c.pct}%;background:linear-gradient(90deg,${c.color},${c.color}88)"></div>
+      </div>
+      <div class="ch-pct">${c.pct}%</div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════
+   RENDER: EVENTS
+══════════════════════════════════════════ */
+function renderEvs(){
+  document.getElementById('evList').innerHTML = D.events.map((e,i)=>`
+    <div class="ev-item lv-${e.lv}" onclick="go('../事件分析/事件管理/index.html')">
+      <div class="ev-title-row" onclick="event.stopPropagation();openEventDetail(${i})" style="cursor:pointer">
+        <span class="ev-region ev-region-${e.region}">${e.region==='hk'?'香港':e.region==='cn'?'内地':'海外'}</span>
+        <span class="ev-title">${e.title}</span>
+      </div>
+      <div class="ev-meta">
+        <span class="vol">声量 ${e.vol.toLocaleString()}</span>
+        <span class="${e.neg>30?'neg-hi':e.neg>18?'neg-md':''}">负面 ${e.neg}%</span>
+        <span>${e.trend}</span>
+        <span style="margin-left:auto">${e.ago}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════
+   RENDER: HOT LIST
+══════════════════════════════════════════ */
+function renderHot(key){
+  const list = key==='cn' ? D.hotCn : D.hotHk;
+  const platNames = {wb:'微',dy:'抖',bd:'百',lk:'LK',hkgd:'高',hk01:'01',yh:'Y!',gg:'G'};
+  document.getElementById('hotList').innerHTML = list.map((h,i)=>`
+    <div class="hot-item" onclick="go('../智能检索/index.html')">
+      <div class="hot-rank ${i<3?'r'+(i+1):''}">${i+1}</div>
+      <div class="hot-plat">${(h.logos||[]).slice(0,2).map(p=>`<span class="hot-plat-icon plat-${p}">${platNames[p]||p}</span>`).join('')}</div>
+      <div class="hot-title hot-title-link" onclick="event.stopPropagation();openHotDetail('${key}',${i})">${h.t}</div>
+      ${h.n?'<div class="hot-new">NEW</div>':''}
+      ${h.h?`<div class="hot-heat">${h.h}</div>`:''}
+    </div>
+  `).join('');
+}
+function switchHot(btn, key){
+  btn.closest('.tab-m').querySelectorAll('.tab-m-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHot(key);
+}
+
+/* ══════════════════════════════════════════
+   RENDER: ALERTS (auto-scroll duplicate)
+══════════════════════════════════════════ */
+function renderAlerts(){
+  const html = D.alerts.map(a=>`
+    <div class="alert-item lv-${a.lv}" onclick="go('../监测预警/预警中心/index.html')">
+      <div class="alert-lvdot"></div>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-meta"><span>${a.time}</span><span>${a.src}</span></div>
+      </div>
+      <div class="alert-badge">${a.lv==='high'?'高风险':a.lv==='med'?'中风险':'低风险'}</div>
+    </div>
+  `).join('');
+  document.getElementById('alertList').innerHTML = html;
+  document.getElementById('alertListDup').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════
+   ALERT LEVEL STATS
+══════════════════════════════════════════ */
+function renderAlertStats(){
+  const high = D.alerts.filter(a=>a.lv==='high').length;
+  const med  = D.alerts.filter(a=>a.lv==='med').length;
+  const low  = D.alerts.filter(a=>a.lv==='low').length;
+  const el = document.getElementById('alertLevelStats');
+  if(el) el.innerHTML =
+    `<span class="als-item high">高风险 ${high}</span>` +
+    `<span class="als-item med">中风险 ${med}</span>` +
+    `<span class="als-item low">低风险 ${low}</span>`;
+}
+
+/* ══════════════════════════════════════════
+   INFO STATS (center bar)
+══════════════════════════════════════════ */
+const D_infoChannels = [
+  { name:'网站',     pct:45, val:'11,389万', c:'#2b61f0' },
+  { name:'微博',     pct:27, val:'6,844万',  c:'#e44d26' },
+  { name:'微信',     pct:21, val:'5,128万',  c:'#07c160' },
+  { name:'抖音',     pct: 2, val:'522万',    c:'#555' },
+  { name:'Twitter', pct: 2, val:'428万',    c:'#1d9bf0' },
+  { name:'Facebook',pct: 2, val:'385万',    c:'#1877f2' },
+  { name:'其他',     pct: 1, val:'140万',    c:'#3a4a6a' },
+];
+function renderInfoStats(){
+  const svg = document.getElementById('isbDonut');
+  if(!svg) return;
+  const cx=50,cy=50,R=44,ri=28;
+  let a=-Math.PI/2,paths='';
+  D_infoChannels.forEach(d=>{
+    const da=(d.pct/100)*2*Math.PI,ea=a+da;
+    const [x1,y1]=[cx+R*Math.cos(a),cy+R*Math.sin(a)];
+    const [x2,y2]=[cx+R*Math.cos(ea),cy+R*Math.sin(ea)];
+    const [ix1,iy1]=[cx+ri*Math.cos(a),cy+ri*Math.sin(a)];
+    const [ix2,iy2]=[cx+ri*Math.cos(ea),cy+ri*Math.sin(ea)];
+    const lg=da>Math.PI?1:0;
+    paths+=`<path d="M${x1.toFixed(2)},${y1.toFixed(2)}A${R},${R},0,${lg},1,${x2.toFixed(2)},${y2.toFixed(2)}L${ix2.toFixed(2)},${iy2.toFixed(2)}A${ri},${ri},0,${lg},0,${ix1.toFixed(2)},${iy1.toFixed(2)}Z" fill="${d.c}" opacity=".88"/>`;
+    a=ea;
+  });
+  svg.innerHTML=paths;
+  const leg = document.getElementById('isbLegend');
+  if(leg) leg.innerHTML=D_infoChannels.map(d=>`
+    <div class="isb-leg-row">
+      <div class="isb-leg-dot" style="background:${d.c}"></div>
+      <span class="isb-leg-name">${d.name}</span>
+      <span class="isb-leg-pct">${d.pct}%</span>
+      <span class="isb-leg-val">${d.val}</span>
+    </div>
+  `).join('');
+}
+function switchInfoTime(btn){
+  btn.closest('.isb-time-row').querySelectorAll('.isb-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   RENDER: DONUT CHART
+══════════════════════════════════════════ */
+function renderDonut(){
+  const total = D.donut.reduce((s,d)=>s+d.v,0);
+  const cx=50, cy=50, R=46, ri=30;
+  let a = -Math.PI/2, paths='';
+  D.donut.forEach(d=>{
+    const da = (d.v/total)*2*Math.PI;
+    const ea = a + da;
+    const [x1,y1] = [cx+R*Math.cos(a), cy+R*Math.sin(a)];
+    const [x2,y2] = [cx+R*Math.cos(ea),cy+R*Math.sin(ea)];
+    const [ix1,iy1] = [cx+ri*Math.cos(a), cy+ri*Math.sin(a)];
+    const [ix2,iy2] = [cx+ri*Math.cos(ea),cy+ri*Math.sin(ea)];
+    const lg = da>Math.PI?1:0;
+    paths += `<path d="M${x1},${y1}A${R},${R},0,${lg},1,${x2},${y2}L${ix2},${iy2}A${ri},${ri},0,${lg},0,${ix1},${iy1}Z" fill="${d.c}" opacity=".82"/>`;
+    a = ea;
+  });
+  document.getElementById('donutSvg').innerHTML = paths;
+  document.getElementById('donutLegend').innerHTML = D.donut.slice(0,6).map(d=>`
+    <div class="dl-row"><div class="dl-dot" style="background:${d.c}"></div><div class="dl-name">${d.label}</div></div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════
+   RENDER: GAUGE
+══════════════════════════════════════════ */
+function renderGauge(){
+  const pos=43, neu=29, neg=28;
+  const svg = document.getElementById('gaugeSvg');
+  const cx=50, cy=50, R=46, ri=32;
+  function arc(s,e,color,op){
+    const sr=(s-180)*Math.PI/180, er=(e-180)*Math.PI/180;
+    const [x1,y1]=[cx+R*Math.cos(sr),cy+R*Math.sin(sr)];
+    const [x2,y2]=[cx+R*Math.cos(er),cy+R*Math.sin(er)];
+    const [ix1,iy1]=[cx+ri*Math.cos(sr),cy+ri*Math.sin(sr)];
+    const [ix2,iy2]=[cx+ri*Math.cos(er),cy+ri*Math.sin(er)];
+    const lg=(e-s)>180?1:0;
+    return `<path d="M${x1},${y1}A${R},${R},0,${lg},1,${x2},${y2}L${ix2},${iy2}A${ri},${ri},0,${lg},0,${ix1},${iy1}Z" fill="${color}" opacity="${op}"/>`;
+  }
+  const posEnd = pos*1.8, neuEnd = posEnd+neu*1.8;
+  svg.innerHTML =
+    `<path d="M${cx-R},${cy}A${R},${R},0,0,1,${cx+R},${cy}L${cx+ri},${cy}A${ri},${ri},0,0,0,${cx-ri},${cy}Z" fill="rgba(255,255,255,0.04)"/>` +
+    arc(0, posEnd, '#12a87a', .82) +
+    arc(posEnd, neuEnd, 'rgba(180,190,215,.4)', .9) +
+    arc(neuEnd, 180, '#e04040', .82);
+}
+
+/* ══════════════════════════════════════════
+   ECHARTS MAP
+══════════════════════════════════════════ */
+let eMap = null;
+let mapView = 'hk'; // default: 香港
+
+const mapViewCfg = {
+  hk: { center:[114.10,22.37], zoom:21 },
+  cn: { center:[105,36],       zoom:3.5  },
+  gl: { center:[10,20],        zoom:1.1  }
+};
+
+const mapCityData = {
+  hk: [
+    {name:'中西区', value:[114.154,22.282,1243], al:true },
+    {name:'湾仔区', value:[114.183,22.277,984 ], al:false},
+    {name:'东区',   value:[114.224,22.283,872 ], al:false},
+    {name:'南区',   value:[114.160,22.243,563 ], al:false},
+    {name:'油尖旺区', value:[114.172,22.311,743 ], al:true },
+    {name:'深水埗区', value:[114.162,22.328,680 ], al:false},
+    {name:'九龙城区', value:[114.190,22.327,621 ], al:false},
+    {name:'黄大仙区', value:[114.201,22.341,512 ], al:false},
+    {name:'观塘区', value:[114.226,22.310,872 ], al:false},
+    {name:'荃湾区', value:[114.117,22.372,434 ], al:false},
+    {name:'屯门区', value:[113.977,22.393,387 ], al:false},
+    {name:'元朗区', value:[114.032,22.444,320 ], al:false},
+    {name:'北区',   value:[114.148,22.495,290 ], al:false},
+    {name:'大埔区', value:[114.171,22.446,350 ], al:false},
+    {name:'沙田区', value:[114.195,22.383,512 ], al:false},
+    {name:'西贡区', value:[114.270,22.382,310 ], al:false},
+    {name:'葵青区', value:[114.130,22.358,420 ], al:false},
+    {name:'离岛区', value:[113.946,22.282,280 ], al:false},
+  ],
+  cn: [
+    {name:'北京', value:[116.4,39.9,4821], al:true },
+    {name:'上海', value:[121.5,31.2,6234], al:false},
+    {name:'广州', value:[113.3,23.1,3842], al:true },
+    {name:'深圳', value:[114.1,22.5,3120], al:false},
+    {name:'武汉', value:[114.3,30.6,1843], al:false},
+    {name:'成都', value:[104.1,30.7,1421], al:false},
+    {name:'杭州', value:[120.2,30.3,1243], al:false},
+    {name:'南京', value:[118.8,32.1,987 ], al:false},
+    {name:'香港', value:[114.17,22.3,2843], al:true},
+  ],
+  gl: [
+    {name:'纽约',   value:[-74.0,40.7,3421], al:false},
+    {name:'伦敦',   value:[-0.1,51.5,2843],  al:true },
+    {name:'巴黎',   value:[2.3,48.9,1234],   al:false},
+    {name:'东京',   value:[139.7,35.7,2103],  al:false},
+    {name:'北京',   value:[116.4,39.9,4821],  al:true },
+    {name:'香港',   value:[114.17,22.3,2843], al:true },
+    {name:'台北',   value:[121.5,25.1,1120],  al:false},
+    {name:'新加坡', value:[103.8,1.35,987],   al:false},
+    {name:'悉尼',   value:[151.2,-33.9,421],  al:false},
+  ]
+};
+
+/* 内地省级声量数据（匹配 Aliyun DataV 省名） */
+const mapProvinceData = [
+  {name:'北京市',           value:4821},
+  {name:'上海市',           value:6234},
+  {name:'广东省',           value:3842},
+  {name:'香港特别行政区',   value:2843},
+  {name:'浙江省',           value:1843},
+  {name:'四川省',           value:1421},
+  {name:'江苏省',           value:1521},
+  {name:'湖北省',           value:1243},
+  {name:'福建省',           value:987},
+  {name:'山东省',           value:1123},
+  {name:'重庆市',           value:421},
+  {name:'天津市',           value:312},
+  {name:'河南省',           value:876},
+  {name:'湖南省',           value:654},
+  {name:'陕西省',           value:543},
+  {name:'辽宁省',           value:432},
+  {name:'河北省',           value:387},
+  {name:'安徽省',           value:321},
+  {name:'江西省',           value:321},
+  {name:'云南省',           value:298},
+  {name:'广西壮族自治区',   value:421},
+  {name:'山西省',           value:276},
+  {name:'黑龙江省',         value:287},
+  {name:'吉林省',           value:198},
+  {name:'贵州省',           value:198},
+  {name:'海南省',           value:143},
+  {name:'内蒙古自治区',     value:187},
+  {name:'甘肃省',           value:154},
+  {name:'宁夏回族自治区',   value:98},
+  {name:'新疆维吾尔自治区', value:132},
+  {name:'青海省',           value:76},
+  {name:'西藏自治区',       value:54},
+];
+
+/* 全球国家声量数据（匹配 ECharts world.js 英文国名） */
+const mapCountryData = [
+  {name:'China',           value:8000},
+  {name:'United States',   value:3421},
+  {name:'United Kingdom',  value:2843},
+  {name:'France',          value:1234},
+  {name:'Japan',           value:2103},
+  {name:'Singapore',       value:987},
+  {name:'Australia',       value:421},
+  {name:'Germany',         value:876},
+  {name:'South Korea',     value:654},
+  {name:'India',           value:543},
+  {name:'Russia',          value:765},
+  {name:'Canada',          value:321},
+  {name:'Brazil',          value:432},
+  {name:'Thailand',        value:298},
+  {name:'Malaysia',        value:243},
+  {name:'Indonesia',       value:187},
+  {name:'Philippines',     value:154},
+];
+
+function buildMapOption(view){
+  const cfg  = mapViewCfg[view];
+  const data = mapCityData[view];
+  const maxV = Math.max(...data.map(d=>d.value[2]));
+  const normal = data.filter(d=>!d.al);
+  const alerts = data.filter(d=>d.al);
+
+  if(view === 'hk'){
+    return {
+      backgroundColor:'transparent',
+      visualMap:{
+        show:false, min:0, max:maxV,
+        inRange:{ color:['#0e1e3c','#1040a0','#c07000','#e04500','#bf1515'] }
+      },
+      series:[{
+        type:'map',
+        map:'香港',
+        roam:false,
+        layoutCenter:['50%','50%'],
+        layoutSize:'100%',
+        label:{ show:true, color:'rgba(190,220,255,0.85)', fontSize:8.5, fontWeight:'normal' },
+        emphasis:{ label:{ show:true, color:'#fff', fontSize:9 }, itemStyle:{ areaColor:'#4a90ff' } },
+        itemStyle:{ borderColor:'rgba(80,150,255,0.55)', borderWidth:0.8 },
+        data: data.map(d=>({ name:d.name, value:d.value[2] }))
+      }],
+      tooltip:{
+        trigger:'item',
+        formatter: p=>`<div style="font-size:11px;line-height:1.6">${p.name}<br/>声量: ${(p.value?p.value:0).toLocaleString()}</div>`,
+        backgroundColor:'rgba(5,14,28,0.92)',
+        borderColor:'rgba(43,97,240,0.3)',
+        textStyle:{ color:'#dce8ff', fontSize:11 }
+      }
+    };
+  }
+
+  if(view === 'cn'){
+    const cnMax = Math.max(...mapProvinceData.map(d=>d.value));
+    return {
+      backgroundColor:'transparent',
+      visualMap:{ show:false, min:0, max:cnMax,
+        inRange:{ color:['#0e1e3c','#1040a0','#c07000','#e04500','#bf1515'] }
+      },
+      series:[{
+        type:'map', map:'中国', roam:false,
+        layoutCenter:['50%','50%'], layoutSize:'111%',
+        label:{ show:true, color:'rgba(200,220,255,0.45)', fontSize:7, fontWeight:'normal' },
+        emphasis:{ label:{ show:true, color:'#fff', fontSize:8 }, itemStyle:{ areaColor:'#4a90ff' } },
+        itemStyle:{ borderColor:'rgba(80,150,255,0.35)', borderWidth:0.5 },
+        data: mapProvinceData
+      }],
+      tooltip:{ trigger:'item',
+        formatter: p=>`<div style="font-size:11px;line-height:1.6">${p.name}<br/>声量: ${(p.value?p.value:0).toLocaleString()}</div>`,
+        backgroundColor:'rgba(5,14,28,0.92)', borderColor:'rgba(43,97,240,0.3)',
+        textStyle:{ color:'#dce8ff', fontSize:11 }
+      }
+    };
+  }
+
+  // gl：全球按国家热力
+  const glMax = Math.max(...mapCountryData.map(d=>d.value));
+  return {
+    backgroundColor:'transparent',
+    visualMap:{ show:false, min:0, max:glMax,
+      inRange:{ color:['#0e1e3c','#1040a0','#c07000','#e04500','#bf1515'] }
+    },
+    series:[{
+      type:'map', map:'world', roam:false,
+      layoutCenter:['50%','50%'], layoutSize:'150%',
+      label:{ show:false },
+      emphasis:{ label:{ show:true, color:'#fff', fontSize:9 }, itemStyle:{ areaColor:'#4a90ff' } },
+      itemStyle:{ areaColor:'#081428', borderColor:'rgba(43,97,240,0.22)', borderWidth:0.5 },
+      data: mapCountryData
+    }],
+    tooltip:{ trigger:'item',
+      formatter: p=>`<div style="font-size:11px;line-height:1.6">${p.name}<br/>声量: ${(p.value?p.value:0).toLocaleString()}</div>`,
+      backgroundColor:'rgba(5,14,28,0.92)', borderColor:'rgba(43,97,240,0.3)',
+      textStyle:{ color:'#dce8ff', fontSize:11 }
+    }
+  };
+}
+
+let _hkGeoP = null;
+function _ensureHkGeo(){
+  if(!_hkGeoP) _hkGeoP = fetch('https://geo.datav.aliyun.com/areas_v3/bound/810000_full.json')
+    .then(r=>r.json()).then(geo=>{ echarts.registerMap('香港', geo); });
+  return _hkGeoP;
+}
+
+let _cnGeoP = null;
+function _ensureCnGeo(){
+  if(!_cnGeoP) _cnGeoP = fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+    .then(r=>r.json()).then(geo=>{ echarts.registerMap('中国', geo); });
+  return _cnGeoP;
+}
+
+function _applyMap(view){
+  if(!eMap) return;
+  if(view==='hk'){
+    _ensureHkGeo()
+      .then(()=>{ if(eMap) eMap.setOption(buildMapOption('hk'), true); })
+      .catch(()=>{ if(eMap) eMap.setOption(buildMapOption('hk'), true); });
+  } else if(view==='cn'){
+    _ensureCnGeo()
+      .then(()=>{ if(eMap) eMap.setOption(buildMapOption('cn'), true); })
+      .catch(()=>{ if(eMap) eMap.setOption(buildMapOption('cn'), true); });
+  } else {
+    eMap.setOption(buildMapOption(view), true);
+  }
+}
+function initMap(){
+  const el = document.getElementById('mapChart');
+  if(!el) return;
+  if(eMap){ eMap.dispose(); eMap=null; }
+  eMap = echarts.init(el, null, {renderer:'canvas'});
+  _applyMap(mapView);
+  window.addEventListener('resize', ()=> eMap && eMap.resize());
+}
+
+function switchMap(btn, view){
+  mapView = view;
+  _applyMap(view);
+  btn.closest('.map-view-tabs').querySelectorAll('.mv-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   TREND CHART (stacked area)
+══════════════════════════════════════════ */
+let trendRaf;
+function renderTrend(range='24h'){
+  const canvas = document.getElementById('trendCanvas');
+  if(!canvas) return;
+  const wrap = canvas.parentElement;
+  const W = wrap.clientWidth||280, H = wrap.clientHeight||130;
+  canvas.width=W; canvas.height=H; canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const ctx = canvas.getContext('2d');
+
+  const pts = range==='6h'?6:range==='3d'?72:24;
+  const pos=[], neu=[], neg=[];
+  const seed = 42;
+  function rnd(s){ let x=Math.sin(s)*10000; return x-Math.floor(x); }
+
+  for(let i=0;i<pts;i++){
+    const base = 800+500*Math.sin(i*.38)+200*rnd(i*seed);
+    const nv = base*(.18+.12*rnd(i*seed+1));
+    const pv = base*(.33+.09*rnd(i*seed+2));
+    neg.push(nv); pos.push(pv); neu.push(base-nv-pv);
+  }
+  // add spike
+  const spk = Math.floor(pts*.65);
+  neg[spk]*=2.8; pos[spk]*=1.6; neu[spk]*=1.4;
+
+  const stNeg = neg;
+  const stNeu = neg.map((v,i)=>v+neu[i]);
+  const stPos = pos.map((v,i)=>stNeu[i]+pos[i]);
+  const maxV  = Math.max(...stPos);
+
+  const PL=6,PR=6,PT=10,PB=20;
+  const cW=W-PL-PR, cH=H-PT-PB;
+  const toX = i=>(PL + (i/(pts-1))*cW);
+  const toY = v=>(PT + cH - (v/maxV)*cH);
+
+  function area(stack, col, alpha){
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(stack[0]));
+    for(let i=1;i<pts;i++){
+      const cpx=(toX(i-1)+toX(i))/2;
+      ctx.bezierCurveTo(cpx,toY(stack[i-1]),cpx,toY(stack[i]),toX(i),toY(stack[i]));
+    }
+    ctx.lineTo(toX(pts-1),PT+cH); ctx.lineTo(toX(0),PT+cH); ctx.closePath();
+    const g=ctx.createLinearGradient(0,PT,0,PT+cH);
+    g.addColorStop(0,col.replace('1)',`${alpha})`));
+    g.addColorStop(1,col.replace('1)','0.02)'));
+    ctx.fillStyle=g; ctx.fill();
+    // stroke
+    ctx.beginPath();
+    ctx.moveTo(toX(0),toY(stack[0]));
+    for(let i=1;i<pts;i++){
+      const cpx=(toX(i-1)+toX(i))/2;
+      ctx.bezierCurveTo(cpx,toY(stack[i-1]),cpx,toY(stack[i]),toX(i),toY(stack[i]));
+    }
+    ctx.strokeStyle=col.replace('1)','.65)'); ctx.lineWidth=1.4; ctx.stroke();
+  }
+
+  ctx.clearRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle='rgba(80,140,255,0.07)'; ctx.lineWidth=.5;
+  for(let y=0;y<=3;y++){ const yp=PT+(y/3)*cH; ctx.beginPath();ctx.moveTo(PL,yp);ctx.lineTo(W-PR,yp);ctx.stroke(); }
+  // axis labels
+  ctx.font='9px PingFang SC,Microsoft YaHei,sans-serif';
+  ctx.fillStyle='rgba(160,190,230,0.35)'; ctx.textAlign='center';
+  const ticks = range==='6h'?[0,2,4,5]:range==='3d'?[0,24,48,71]:[0,6,12,18,23];
+  ticks.forEach(h=>{ ctx.fillText(range==='3d'?`${h}h`:h+'h',toX(h),H-4); });
+
+  area(stPos,'rgba(18,168,122,1)',.22);
+  area(stNeu,'rgba(170,185,210,1)',.18);
+  area(stNeg,'rgba(224,64,64,1)',.28);
+
+  // peak dot
+  ctx.beginPath(); ctx.arc(toX(spk),toY(stPos[spk]),2.5,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fill();
+}
+function switchTrend(btn, range){
+  btn.closest('.tab-m').querySelectorAll('.tab-m-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTrend(range);
+}
+
+/* ══════════════════════════════════════════
+   FULLSCREEN
+══════════════════════════════════════════ */
+function toggleFS(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='f'||e.key==='F') toggleFS();
+  if(e.key==='Escape'&&!document.fullscreenElement) history.back();
+});
+
+/* ══════════════════════════════════════════
+   AUTO REFRESH SIMULATION
+══════════════════════════════════════════ */
+let minutesAgo = 0;
+setInterval(()=>{
+  minutesAgo++;
+  const utEl = document.getElementById('updateTag');
+  if(utEl) utEl.textContent = minutesAgo < 1 ? '刚刚更新' : `${minutesAgo}分钟前更新`;
+  if(minutesAgo >= 1){ minutesAgo = 0; if(utEl) utEl.textContent = '刚刚更新'; }
+}, 60000);
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+function init(){
+  _ensureHkGeo(); // 提前预加载香港区级GeoJSON
+  _ensureCnGeo(); // 提前预加载内地省级GeoJSON
+  renderObjs();
+  renderEvs();
+  renderHot('hk');
+  renderAlerts();
+  renderAlertStats();
+  renderInfoStats();
+
+  // ECharts map + trend canvas after layout is painted
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{
+      initMap();
+      renderTrend('24h');
+    }, 150);
+  });
+
+  // resize: re-render trend chart
+  window.addEventListener('resize', ()=> renderTrend('24h'));
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+function toggleFullscreen(){
+  const iconEnter = '<path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/>';
+  const iconExit  = '<path d="M5 1v4H1M13 5H9V1M9 13v-4h4M1 9h4v4"/>';
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    document.getElementById('fsIcon').innerHTML = iconExit;
+    document.getElementById('fsBtn').childNodes[2].textContent = ' 退出全屏';
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+    document.getElementById('fsIcon').innerHTML = iconEnter;
+    document.getElementById('fsBtn').childNodes[2].textContent = ' 全屏';
+  }
+}
+document.addEventListener('fullscreenchange', ()=>{
+  if(!document.fullscreenElement){
+    const btn = document.getElementById('fsBtn');
+    if(btn){
+      document.getElementById('fsIcon').innerHTML = '<path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/>';
+      btn.childNodes[2].textContent = ' 全屏';
+    }
+  }
+});
+
+/* ══════════════════════════════════════════
+   EVENT DETAIL MODAL DATA & LOGIC
+══════════════════════════════════════════ */
+const evDetails = [
+  { recent:167, ai:'8月1日，多个境外媒体账号及香港本地论坛同步推送涉港负面叙事，舆情在6小时内急速扩散，微博、抖音平台转发量超4万次。专家研判认为存在协调放大迹象，建议立即启动应急响应机制，重点管控二次传播节点，同步组织权威媒体正面发声予以压制。',
+    platforms:[{name:'微博',val:4484,color:'#e44d26'},{name:'新闻网站',val:4018,color:'#2b61f0'},{name:'抖音',val:1683,color:'#888'},{name:'今日头条',val:1205,color:'#f0ab30'},{name:'小红书',val:267,color:'#ff4d7c'},{name:'快手',val:262,color:'#ff6b2c'}],
+    trend:[12,18,24,31,28,45,62,88,110,134,142,138,120,98,87,72,65,58],
+    peakTopics:['境外势力炒作','香港局势','舆情应对','协调发布','虚假叙事'],
+    timeline:[
+      {date:'今天',time:'14:32',title:'多个境外媒体账号同步发布涉港负面报道',src:'境外媒体监测'},
+      {date:'今天',time:'12:15',title:'香港本地论坛话题贴热度突破10万浏览',src:'LIHKG监测'},
+      {date:'今天',time:'09:47',title:'微博相关话题词条冲上热搜第8位',src:'微博舆情'},
+      {date:'昨天',time:'21:30',title:'首批相关内容在Telegram频道开始传播',src:'境外平台'},
+      {date:'昨天',time:'16:00',title:'事件起始信息在小圈子社群首次出现',src:'社群监测'},
+      {date:'昨天',time:'11:20',title:'相关议题在境外华文论坛预热讨论',src:'华文媒体'},
+      {date:'前天',time:'23:45',title:'境外协调账号完成内容分发预备部署',src:'情报分析'},
+      {date:'前天',time:'18:10',title:'目标话题词被多个账号批量预置',src:'关键词监测'},
+      {date:'前天',time:'10:30',title:'可疑账号群组激活，开始增粉互关',src:'账号行为分析'},
+      {date:'3天前',time:'08:00',title:'相关叙事框架在境外特定圈子内成型',src:'溯源研判'}
+    ],
+    expert:[
+      {name:'张明远（传播学研究院）',sentiment:'negative',text:'境外平台的协同发布时间高度一致，研判存在人为组织放大的可能性'},
+      {name:'李慧敏（新媒体实验室）',sentiment:'negative',text:'当前舆情负面比例远超自然传播均值，建议列为一级响应事件'},
+      {name:'王建国（风险评估中心）',sentiment:'negative',text:'本次传播链条涉及至少3个独立平台，跨平台协同特征明显'},
+      {name:'陈思远（智库分析师）',sentiment:'neutral',text:'关键信源账号近期互动数据出现异常峰值，需追溯背景'},
+      {name:'刘晓峰（舆情顾问）',sentiment:'neutral',text:'建议在黄金4小时内发布官方回应，抢占舆论先机'}
+    ],
+    public:[
+      {text:'对事件真实性存疑，希望看到官方权威表态',pct:34,sentiment:'neutral'},
+      {text:'认为相关报道存在夸大和断章取义',pct:27,sentiment:'negative'},
+      {text:'对当前局势感到担忧，呼吁理性对待',pct:19,sentiment:'neutral'},
+      {text:'认为应追究恶意散布者的法律责任',pct:13,sentiment:'negative'},
+      {text:'表示支持相关管理部门采取积极应对措施',pct:7,sentiment:'positive'}
+    ]
+  },
+  { recent:89, ai:'紫荆杂志社官方微博在过去12小时内遭受大规模协调评论攻击，涉及负面评论超2000条，部分内容含误导性信息。攻击账号呈现明显批量注册特征，IP地址分布集中于境外节点。建议立即向平台申请评论清理，同时发布声明澄清事实，联系可信KOL进行正面转发扩散。',
+    platforms:[{name:'微博',val:3210,color:'#e44d26'},{name:'抖音',val:512,color:'#888'},{name:'今日头条',val:288,color:'#f0ab30'},{name:'新闻网站',val:134,color:'#2b61f0'},{name:'微信',val:66,color:'#12a87a'}],
+    trend:[8,11,9,15,22,35,48,62,71,68,65,58,52,45,38,30,25,20],
+    peakTopics:['评论攻击','账号封禁','机器账号','水军洗版','信息澄清'],
+    timeline:[
+      {date:'今天',time:'13:05',title:'评论攻击峰值达到每小时380条',src:'微博监测'},
+      {date:'今天',time:'11:40',title:'平台介入人工审核，攻击速度有所下降',src:'平台反馈'},
+      {date:'今天',time:'10:30',title:'首批异常评论出现，账号创建时间集中在近48小时',src:'账号分析'},
+      {date:'今天',time:'09:00',title:'官方账号发布声明，呼吁平台介入处置',src:'官方声明'},
+      {date:'今天',time:'08:00',title:'有组织攻击行动启动，协调指令在境外平台发出',src:'境外追踪'},
+      {date:'昨天',time:'23:15',title:'目标账号被列入某境外群组攻击名单',src:'情报监测'},
+      {date:'昨天',time:'20:00',title:'境外Telegram群组发布攻击详细指引',src:'境外追踪'},
+      {date:'昨天',time:'16:30',title:'攻击脚本在暗网论坛出现测试版本',src:'暗网监测'},
+      {date:'前天',time:'10:00',title:'目标账号影响力数据被纳入攻击优先列表',src:'情报分析'},
+      {date:'前天',time:'06:00',title:'相关账号群组完成预热激活操作',src:'账号行为分析'}
+    ],
+    expert:[
+      {name:'周晓梅（网络安全专家）',sentiment:'negative',text:'攻击账号的注册时间和互动模式高度相似，判定为机器账号群组'},
+      {name:'吴大伟（平台治理研究员）',sentiment:'negative',text:'评论内容使用标准化模板，存在明显的脚本化操作痕迹'},
+      {name:'赵文博（舆情分析师）',sentiment:'negative',text:'此类针对媒体机构的攻击行为在近三个月内呈上升趋势'},
+      {name:'孙晶晶（数字安全顾问）',sentiment:'neutral',text:'建议媒体机构加强账号安全设置，开启评论关键词过滤'}
+    ],
+    public:[
+      {text:'谴责恶意攻击行为，支持媒体正当发声权利',pct:42,sentiment:'positive'},
+      {text:'对平台应对速度感到不满，希望更快处置',pct:28,sentiment:'negative'},
+      {text:'担心攻击行为对媒体公信力造成长期影响',pct:18,sentiment:'neutral'},
+      {text:'建议涉事平台追究攻击账号的法律责任',pct:12,sentiment:'neutral'}
+    ]
+  },
+  { recent:203, ai:'过去24小时内，BBC、路透社等12家主要境外媒体同步发布涉港负面报道，关键叙事框架高度雷同，指向性明显。相关报道被境外华文自媒体二次传播，影响圈层扩展至海外华人社区。建议集中资源开展英文舆论反制，联动官方媒体发布事实核查报告，并向相关平台提交内容投诉申请。',
+    platforms:[{name:'境外新闻',val:5621,color:'#e04040'},{name:'Twitter/X',val:3840,color:'#1d9bf0'},{name:'Facebook',val:2290,color:'#1877f2'},{name:'YouTube',val:1150,color:'#f00'},{name:'Instagram',val:430,color:'#c13584'}],
+    trend:[25,30,28,42,58,75,92,115,128,140,136,125,112,98,84,70,58,45],
+    peakTopics:['BBC偏颇报道','媒体联动','香港形象','舆论反制','事实核查'],
+    timeline:[
+      {date:'今天',time:'16:00',title:'路透社发布后续深度报道，引发更大范围关注',src:'路透社'},
+      {date:'今天',time:'14:30',title:'官方媒体发布英文事实核查反驳文章',src:'新华社英文'},
+      {date:'今天',time:'11:20',title:'BBC中文网跟进报道，附加负面评论',src:'BBC中文网'},
+      {date:'今天',time:'08:45',title:'路透社首发相关报道，奠定议题框架',src:'路透社'},
+      {date:'昨天',time:'22:00',title:'境外华文自媒体开始二次传播并添加评论',src:'自媒体监测'},
+      {date:'昨天',time:'19:30',title:'相关议题在Twitter首先由特定账号群引爆',src:'Twitter监测'},
+      {date:'昨天',time:'16:00',title:'境外记者团体发布"关注声明"',src:'记者协会'},
+      {date:'昨天',time:'12:00',title:'境外非政府组织向相关媒体提供信源',src:'NGO追踪'},
+      {date:'前天',time:'22:00',title:'特定方向的叙事框架在境外媒体内部流传',src:'媒体追踪'},
+      {date:'前天',time:'10:00',title:'前期舆论铺垫内容开始在境外社媒预热',src:'境外平台'}
+    ],
+    expert:[
+      {name:'方建平（国际传播学者）',sentiment:'negative',text:'多家媒体使用相同信源和类似框架，疑似存在信息共享或协调机制'},
+      {name:'姜丽华（外宣研究员）',sentiment:'negative',text:'本次负面议题与近期特定政治事件存在时间关联性'},
+      {name:'卢志远（公关策略专家）',sentiment:'neutral',text:'建议在24小时内发布多语言版本的官方立场声明'},
+      {name:'何明杰（舆情顾问）',sentiment:'neutral',text:'历史数据显示此类境外舆情高峰持续周期约为72小时'}
+    ],
+    public:[
+      {text:'认为境外报道存在选择性叙事，不够客观全面',pct:38,sentiment:'negative'},
+      {text:'希望官方媒体主动出击，进行有力回应',pct:31,sentiment:'positive'},
+      {text:'对境外媒体的报道持续感到担忧',pct:18,sentiment:'neutral'},
+      {text:'认为应当扩大正面信息的对外传播渠道',pct:13,sentiment:'positive'}
+    ]
+  },
+  { recent:124, ai:'过去48小时内，集团旗下3个官方海外社媒账号遭受批量举报，其中1个Facebook账号已被临时封禁，影响粉丝约42万。举报行动与某境外网络活动团体相关，呈现明显的打压正规媒体声音的意图。建议立即启动账号申诉流程，同时在其他渠道发布公告说明情况，并准备备用账号应对持续打压。',
+    platforms:[{name:'Facebook',val:2140,color:'#1877f2'},{name:'Twitter/X',val:1320,color:'#1d9bf0'},{name:'Instagram',val:890,color:'#c13584'},{name:'YouTube',val:540,color:'#f00'}],
+    trend:[15,18,14,12,20,38,52,67,74,68,55,42,35,28,22,18,15,12],
+    peakTopics:['账号封禁','批量举报','媒体打压','境外团体','申诉维权'],
+    timeline:[
+      {date:'今天',time:'11:00',title:'Facebook账号收到平台违规通知，功能受限',src:'平台通知'},
+      {date:'今天',time:'09:15',title:'举报数量在2小时内激增至正常值的15倍',src:'账号监测'},
+      {date:'今天',time:'07:30',title:'紧急向Facebook平台提交账号申诉材料',src:'运营处置'},
+      {date:'昨天',time:'22:00',title:'Instagram账号同步遭受举报攻击',src:'账号监测'},
+      {date:'昨天',time:'20:30',title:'境外活动团体发布"集中举报"号召帖',src:'境外追踪'},
+      {date:'昨天',time:'17:00',title:'举报行动首波攻击目标为YouTube频道',src:'YouTube监测'},
+      {date:'昨天',time:'14:00',title:'异常举报行为首次被监测系统捕获',src:'系统预警'},
+      {date:'前天',time:'21:00',title:'境外团体在私密频道讨论攻击计划',src:'情报追踪'},
+      {date:'前天',time:'14:00',title:'集团账号被纳入定向打压目标清单',src:'情报监测'},
+      {date:'前天',time:'08:00',title:'相关组织完成账号举报工具的部署准备',src:'技术分析'}
+    ],
+    expert:[
+      {name:'陈国华（网络对抗专家）',sentiment:'negative',text:'此次账号攻击是近期针对亲政府媒体系统性打压行动的一部分'},
+      {name:'梁思琪（平台政策研究员）',sentiment:'neutral',text:'建议在申诉同时向外交渠道反映，寻求平台层面的制度性保护'},
+      {name:'魏明远（公关危机顾问）',sentiment:'negative',text:'封禁行为对受众触达率的影响可能持续1-2周'},
+      {name:'蔡晓燕（数字传播专家）',sentiment:'neutral',text:'建议尽快激活备用账号并通知受众迁移关注'}
+    ],
+    public:[
+      {text:'愤慨于此类政治化的平台滥权行为',pct:45,sentiment:'negative'},
+      {text:'支持官方采取一切必要措施维权',pct:30,sentiment:'positive'},
+      {text:'担忧境外信息管控带来的长远影响',pct:15,sentiment:'neutral'},
+      {text:'希望国内平台加强与受影响账号的联动',pct:10,sentiment:'neutral'}
+    ]
+  },
+  { recent:72, ai:'LIHKG等香港本地论坛近日出现某一话题的持续讨论热潮，累计回复量超5000条，以中立及轻微负面情绪为主。讨论主要聚焦于政策实施细节与市民生活影响，尚未出现明显的对立激化迹象。建议密切追踪关键意见领袖的发言走向，适时安排专业人员参与讨论引导，避免议题被极端化利用。',
+    platforms:[{name:'LIHKG',val:2840,color:'#c8a800'},{name:'香港01',val:980,color:'#003087'},{name:'雅虎香港',val:560,color:'#7b0099'},{name:'高登',val:380,color:'#1890ff'},{name:'Google新闻',val:220,color:'#4285f4'}],
+    trend:[20,22,25,28,32,38,44,52,58,62,60,56,50,45,40,36,32,28],
+    peakTopics:['政策争议','本地论坛','生活影响','市民关切','意见引导'],
+    timeline:[
+      {date:'今天',time:'15:30',title:'话题帖子被置顶，浏览量突破10万',src:'LIHKG'},
+      {date:'今天',time:'12:00',title:'论坛版主介入整理讨论，删除激进内容',src:'LIHKG'},
+      {date:'今天',time:'10:00',title:'多名高影响力用户发表长篇分析帖',src:'LIHKG'},
+      {date:'今天',time:'08:00',title:'香港01整理论坛观点发布综合报道',src:'香港01'},
+      {date:'昨天',time:'21:00',title:'原始话题贴发布，24小时内获500+回复',src:'LIHKG'},
+      {date:'昨天',time:'18:30',title:'高登论坛同步出现类似话题帖',src:'高登'},
+      {date:'昨天',time:'14:30',title:'香港01新闻报道为该话题提供了触发素材',src:'香港01'},
+      {date:'昨天',time:'10:00',title:'相关话题在WhatsApp群组开始扩散',src:'社群监测'},
+      {date:'前天',time:'20:00',title:'讨论话题由单一议题演变为多角度争论',src:'内容分析'},
+      {date:'前天',time:'14:00',title:'核心议题在小范围圈子内预热发酵',src:'早期监测'}
+    ],
+    expert:[
+      {name:'许志远（香港民意研究员）',sentiment:'neutral',text:'本次讨论参与者以25-40岁本地居民为主，诉求具有一定代表性'},
+      {name:'钟惠芬（社会政策分析师）',sentiment:'positive',text:'建议相关部门主动公开政策解读资料，填补信息空白'},
+      {name:'叶世明（舆情顾问）',sentiment:'neutral',text:'论坛讨论热度峰值通常在72小时后自然消退'},
+      {name:'甘宝琳（政策传播专家）',sentiment:'positive',text:'当前讨论中的关键诉求点可以转化为政策优化的参考输入'}
+    ],
+    public:[
+      {text:'希望相关部门正式回应论坛主流关切',pct:36,sentiment:'neutral'},
+      {text:'认为当前政策需要更细致的配套说明',pct:29,sentiment:'neutral'},
+      {text:'对议题走向持观望态度',pct:20,sentiment:'neutral'},
+      {text:'认为网络讨论能推动政策改进',pct:15,sentiment:'positive'}
+    ]
+  },
+  { recent:55, ai:'关于某重点关注人物的负面报道在过去36小时内经由微博、微信公众号、境外媒体多渠道传播，单篇阅读量最高达73万次。报道内容混合事实与推测，存在一定程度的歪曲。建议核实报道关键事实，通过授权媒体发布正式回应，同时追踪各传播节点防止进一步扩散。',
+    platforms:[{name:'微博',val:1820,color:'#e44d26'},{name:'微信公众号',val:1130,color:'#12a87a'},{name:'今日头条',val:640,color:'#f0ab30'},{name:'境外媒体',val:320,color:'#e04040'},{name:'抖音',val:180,color:'#888'}],
+    trend:[10,12,15,18,24,32,38,45,52,58,54,48,42,36,30,26,22,18],
+    peakTopics:['人物负面','不实报道','大V扩散','澄清声明','法律追责'],
+    timeline:[
+      {date:'今天',time:'14:00',title:'某大V账号二次转载，引发新一轮扩散',src:'微博监测'},
+      {date:'今天',time:'11:00',title:'当事方委托律师发表法律声明',src:'法律动态'},
+      {date:'今天',time:'09:30',title:'微信公众号头条推送，阅读量破50万',src:'微信监测'},
+      {date:'今天',time:'07:00',title:'境外媒体英文版跟进报道',src:'境外监测'},
+      {date:'昨天',time:'22:15',title:'境外媒体转载并添加评论，扩大影响范围',src:'境外监测'},
+      {date:'昨天',time:'18:00',title:'首篇负面报道在小号发布，测试传播效果',src:'溯源分析'},
+      {date:'昨天',time:'14:00',title:'策划讨论在特定圈子内进行',src:'情报追踪'},
+      {date:'昨天',time:'10:00',title:'信源材料被秘密传递至多家媒体',src:'溯源分析'},
+      {date:'前天',time:'20:00',title:'相关材料在境外平台完成初步整合',src:'境外监测'},
+      {date:'前天',time:'08:00',title:'负面报道叙事框架完成初步构建',src:'情报分析'}
+    ],
+    expert:[
+      {name:'林建国（媒体法律专家）',sentiment:'negative',text:'报道中的关键数据存在核实偏差，建议逐点发布澄清'},
+      {name:'苏晓峰（危机公关顾问）',sentiment:'neutral',text:'该报道的发布时间节点与某特定事件高度关联'},
+      {name:'邓丽华（舆情分析师）',sentiment:'negative',text:'大V账号介入标志着舆情进入快速扩散阶段'},
+      {name:'谢明远（传播策略师）',sentiment:'neutral',text:'建议在48小时内完成媒体公关策略部署'}
+    ],
+    public:[
+      {text:'希望当事方发表正式声明澄清事实',pct:41,sentiment:'neutral'},
+      {text:'对报道内容持保留态度，等待更多信息',pct:32,sentiment:'neutral'},
+      {text:'认为相关报道带有明显议题设置意图',pct:16,sentiment:'negative'},
+      {text:'支持通过法律途径追究不实报道责任',pct:11,sentiment:'positive'}
+    ]
+  },
+  { recent:48, ai:'北美、东南亚地区约18家海外华文媒体在48小时内先后转载某失实报道，覆盖海外华人读者约230万。部分媒体在转载时进行了主观加工，进一步放大负面效应。建议通过驻外机构联系当地华文媒体进行交涉，提供准确信息源，同时加强与海外华人社区意见领袖的沟通协调。',
+    platforms:[{name:'海外华文网站',val:1240,color:'#2b61f0'},{name:'Facebook华人群',val:890,color:'#1877f2'},{name:'WeChat海外群',val:620,color:'#12a87a'},{name:'YouTube华语',val:340,color:'#f00'},{name:'Twitter中文圈',val:180,color:'#1d9bf0'}],
+    trend:[8,10,12,15,20,28,35,40,38,32,28,24,20,18,16,14,12,10],
+    peakTopics:['海外华媒','失实报道','北美华人','东南亚华社','二次传播'],
+    timeline:[
+      {date:'今天',time:'12:00',title:'东南亚华文媒体联盟集体转载报道',src:'境外监测'},
+      {date:'今天',time:'10:00',title:'驻外机构启动华媒沟通联络工作',src:'机构反馈'},
+      {date:'今天',time:'08:30',title:'北美最大华文日报刊发相关报道',src:'北美华媒'},
+      {date:'昨天',time:'22:00',title:'海外华人KOL发表评论扩大传播范围',src:'KOL监测'},
+      {date:'昨天',time:'19:00',title:'首个海外华人Facebook群组开始传播',src:'社群监测'},
+      {date:'昨天',time:'15:00',title:'新加坡主要华文媒体发布相关报道',src:'新加坡媒体'},
+      {date:'昨天',time:'11:00',title:'失实报道原文在某境外中文论坛发布',src:'论坛监测'},
+      {date:'前天',time:'20:00',title:'信息在海外华人即时通讯群中预扩散',src:'社群监测'},
+      {date:'前天',time:'14:00',title:'相关材料被翻译成英文后广泛传播',src:'内容分析'},
+      {date:'前天',time:'08:00',title:'原始不实信息在特定圈子内生成',src:'溯源分析'}
+    ],
+    expert:[
+      {name:'冯志华（海外华媒研究专家）',sentiment:'negative',text:'海外华文媒体生态分散，需要针对性地逐一开展沟通工作'},
+      {name:'黄碧珊（国际传播学者）',sentiment:'neutral',text:'东南亚华文媒体影响力正在快速提升，需纳入常规监测范围'},
+      {name:'潘建文（驻外媒体顾问）',sentiment:'positive',text:'建议建立海外华媒联络机制，提高信息传递效率'},
+      {name:'田雪莲（跨文化传播研究员）',sentiment:'negative',text:'情感化内容在华人社区的传播效率远高于理性分析'}
+    ],
+    public:[
+      {text:'希望官方渠道及时向海外华人社区传递准确信息',pct:38,sentiment:'positive'},
+      {text:'对海外华文媒体的新闻把关能力表示担忧',pct:29,sentiment:'negative'},
+      {text:'建议加强与海外华人媒体的日常联系与合作',pct:21,sentiment:'positive'},
+      {text:'认为海外华人社区是重要的舆论阵地',pct:12,sentiment:'neutral'}
+    ]
+  },
+  { recent:38, ai:'某百万级粉丝KOL近日发布针对集团旗下某品牌的批评性视频，播放量已达120万次，评论区出现大量跟风负面评论。视频内容包含部分信息不准确之处，但整体影响力不可忽视。建议评估是否通过私下沟通渠道联系KOL进行纠偏，同时联动正面KOL发布体验对比内容，稀释负面声量。',
+    platforms:[{name:'抖音',val:980,color:'#888'},{name:'微博',val:620,color:'#e44d26'},{name:'小红书',val:340,color:'#ff4d7c'},{name:'B站',val:180,color:'#00a1d6'},{name:'微信',val:90,color:'#12a87a'}],
+    trend:[5,8,12,18,28,45,68,82,75,62,52,44,38,32,26,22,18,15],
+    peakTopics:['KOL批评','品牌危机','评论洪潮','私信沟通','口碑反制'],
+    timeline:[
+      {date:'今天',time:'13:20',title:'KOL视频播放量突破百万，热度仍在攀升',src:'抖音监测'},
+      {date:'今天',time:'11:00',title:'品牌方发布回应声明，部分澄清关键数据',src:'官方回应'},
+      {date:'今天',time:'10:00',title:'多名中腰部KOL开始跟评转发扩大声势',src:'KOL监测'},
+      {date:'今天',time:'08:00',title:'品牌忠实用户自发发起正面话题讨论',src:'用户行为'},
+      {date:'昨天',time:'20:00',title:'KOL发布视频后12小时播放量达50万',src:'抖音监测'},
+      {date:'昨天',time:'18:30',title:'视频发布，初期自然传播阶段',src:'内容监测'},
+      {date:'昨天',time:'16:00',title:'KOL提前预告将发布品牌评测内容',src:'KOL追踪'},
+      {date:'昨天',time:'12:00',title:'KOL团队完成视频后期制作',src:'内容分析'},
+      {date:'前天',time:'20:00',title:'KOL在直播中暗示即将发布批评内容',src:'直播监测'},
+      {date:'前天',time:'10:00',title:'KOL账号近期言论中出现对该品牌的批评倾向',src:'历史分析'}
+    ],
+    expert:[
+      {name:'郑佳佳（品牌危机顾问）',sentiment:'negative',text:'KOL视频中的关键批评点有2处与事实不符，应重点澄清'},
+      {name:'庄文博（KOL营销专家）',sentiment:'neutral',text:'建议优先走私下沟通路线，避免公开对抗激化粉丝情绪'},
+      {name:'曾晓敏（口碑监测分析师）',sentiment:'neutral',text:'正面内容的反制效果通常在发布后48小时才能显现'},
+      {name:'袁丽华（内容策略顾问）',sentiment:'positive',text:'可考虑联系品牌忠实用户自发发布使用体验内容'}
+    ],
+    public:[
+      {text:'希望品牌官方能够正式回应KOL的核心质疑',pct:44,sentiment:'neutral'},
+      {text:'认为消费者有权听到来自不同角度的声音',pct:27,sentiment:'neutral'},
+      {text:'对KOL批评内容的准确性持保留态度',pct:18,sentiment:'neutral'},
+      {text:'建议品牌优化被批评的具体问题',pct:11,sentiment:'positive'}
+    ]
+  },
+  { recent:22, ai:'人民日报、新华社等主流媒体近日发布系列正面报道，相关话题在微博获得数亿曝光，成功带动舆情情绪由负面转向正面。此次官媒联动发声效果显著，正面声量已超过同期负面内容的3倍。建议趁势扩大传播声势，联动地方媒体和合作KOL进行二次传播，巩固当前积极舆情走势。',
+    platforms:[{name:'新闻网站',val:3840,color:'#2b61f0'},{name:'微博',val:2120,color:'#e44d26'},{name:'今日头条',val:1360,color:'#f0ab30'},{name:'微信',val:980,color:'#12a87a'},{name:'抖音',val:620,color:'#888'}],
+    trend:[55,52,48,45,42,48,55,62,70,78,85,90,88,84,80,76,72,68],
+    peakTopics:['官媒联动','热搜置顶','正面引导','舆情逆转','地方跟进'],
+    timeline:[
+      {date:'今天',time:'15:00',title:'相关话题登上微博热搜榜前5位',src:'微博监测'},
+      {date:'今天',time:'12:00',title:'地方省级媒体全面跟进正面报道',src:'地方媒体'},
+      {date:'今天',time:'10:30',title:'新华社发布深度报道，获各大平台置顶推荐',src:'新华社'},
+      {date:'今天',time:'08:00',title:'人民日报早版头版刊登相关正面报道',src:'人民日报'},
+      {date:'昨天',time:'22:00',title:'央视新闻连线报道，收视率创近期新高',src:'央视'},
+      {date:'昨天',time:'20:00',title:'官媒联合报道协调会议落实发稿计划',src:'内部消息'},
+      {date:'昨天',time:'16:00',title:'合作KOL矩阵完成内容转发传播',src:'KOL矩阵'},
+      {date:'昨天',time:'12:00',title:'正面话题标签在微博提前上线',src:'微博运营'},
+      {date:'前天',time:'20:00',title:'媒体联动方案经审核批准正式执行',src:'策略部署'},
+      {date:'前天',time:'10:00',title:'正面舆论引导专项方案启动策划',src:'议题策划'}
+    ],
+    expert:[
+      {name:'钱明亮（正面传播策略师）',sentiment:'positive',text:'本次官媒集中发声时机选择精准，在负面舆情高峰后及时介入'},
+      {name:'郝丽芳（媒体议题研究员）',sentiment:'positive',text:'正面报道议题设置与社会关切高度契合，受众接受度高'},
+      {name:'蔡志明（舆情效果评估专家）',sentiment:'positive',text:'建议持续输出正面内容至少5天，以确保舆情稳定转向'},
+      {name:'唐文华（媒体合作顾问）',sentiment:'neutral',text:'地方媒体的跟进报道可以进一步扩大覆盖面'}
+    ],
+    public:[
+      {text:'对官媒正面报道内容表示认同和支持',pct:52,sentiment:'positive'},
+      {text:'希望相关正面工作能够持续推进而非一时',pct:28,sentiment:'positive'},
+      {text:'认为媒体应当客观呈现事实的多个方面',pct:13,sentiment:'neutral'},
+      {text:'期待看到更多基层受益故事的真实报道',pct:7,sentiment:'positive'}
+    ]
+  },
+  { recent:18, ai:'集团近期开展的系列公益活动引发媒体自发跟进报道，已有24家媒体进行正面报道，总阅读量超180万次。活动话题在微博获得较好的自然传播，公众评价以正面为主。建议汇总媒体报道资源，制作传播效果报告，同时策划二期活动以延续正面舆论热度，进一步强化集团社会责任形象。',
+    platforms:[{name:'新闻网站',val:820,color:'#2b61f0'},{name:'微博',val:540,color:'#e44d26'},{name:'微信公众号',val:390,color:'#12a87a'},{name:'今日头条',val:220,color:'#f0ab30'},{name:'抖音',val:130,color:'#888'}],
+    trend:[8,10,12,14,16,18,20,22,20,18,17,16,15,14,13,12,11,10],
+    peakTopics:['公益活动','媒体自发','社会责任','品牌美誉','持续传播'],
+    timeline:[
+      {date:'今天',time:'11:00',title:'第三方公益机构发布联合声明肯定活动成效',src:'公益机构'},
+      {date:'今天',time:'09:00',title:'人民日报微信公众号刊登活动报道',src:'人民日报'},
+      {date:'今天',time:'07:30',title:'活动感人故事在朋友圈大量自发转发',src:'社群监测'},
+      {date:'昨天',time:'20:00',title:'某知名公益人士微博点赞并转发报道',src:'微博监测'},
+      {date:'昨天',time:'16:30',title:'活动现场短视频在抖音获得良好传播反响',src:'抖音'},
+      {date:'昨天',time:'12:00',title:'多家门户网站主动在首页推荐活动新闻',src:'门户监测'},
+      {date:'昨天',time:'10:00',title:'公益活动正式启动，现场媒体开始报道',src:'活动现场'},
+      {date:'前天',time:'18:00',title:'受益群体代表在媒体发声，引发广泛共鸣',src:'内容监测'},
+      {date:'前天',time:'14:00',title:'活动预告稿件被各大平台提前推送',src:'媒体联络'},
+      {date:'前天',time:'08:00',title:'公益活动策划方案最终定稿并启动执行',src:'内部文件'}
+    ],
+    expert:[
+      {name:'徐晓芸（公益传播研究员）',sentiment:'positive',text:'活动议题与当前社会热点高度契合，传播效率超出预期'},
+      {name:'岳文斌（品牌形象顾问）',sentiment:'positive',text:'建议将本次活动打造为年度品牌公益IP'},
+      {name:'程丽娟（媒体公关专家）',sentiment:'positive',text:'媒体自发跟进是品牌公信力的重要体现'},
+      {name:'罗建明（内容策略顾问）',sentiment:'neutral',text:'可考虑邀请受益群体代表参与后续传播，增强真实感'}
+    ],
+    public:[
+      {text:'对集团积极履行社会责任的行为表示赞赏',pct:58,sentiment:'positive'},
+      {text:'希望公益活动能够持续化、系统化推进',pct:24,sentiment:'positive'},
+      {text:'建议扩大活动受益范围，惠及更多群体',pct:12,sentiment:'neutral'},
+      {text:'期待看到活动成效的透明化数据报告',pct:6,sentiment:'neutral'}
+    ]
+  }
+];
+
+let _evmDistChart = null, _evmTrendChart = null;
+
+function openEventDetail(idx){
+  const e = D.events[idx];
+  const d = evDetails[idx];
+  const modal = document.getElementById('evModal');
+  document.getElementById('evmEvTitle').textContent = e.title;
+  document.getElementById('evmVol').textContent = e.vol.toLocaleString() + '条';
+  document.getElementById('evmRecent').textContent = d.recent + '条';
+  document.getElementById('evmAiText').textContent = d.ai;
+  const maxPV = Math.max(...d.platforms.map(p=>p.val));
+  document.getElementById('evmPlatList').innerHTML = d.platforms.map(p=>`
+    <div class="evm-plat-row">
+      <span class="evm-plat-name">${p.name}</span>
+      <div class="evm-plat-bar-bg"><div class="evm-plat-bar" style="width:${Math.round(p.val/maxPV*100)}%;background:${p.color}88;border-right:2px solid ${p.color}"></div></div>
+      <span class="evm-plat-val">${p.val.toLocaleString()}条</span>
+    </div>`).join('');
+  document.getElementById('evmTimeline').innerHTML = d.timeline.map(t=>`
+    <div class="evm-tl-item">
+      <div class="evm-tl-date"><div class="evm-tl-d">${t.date}</div><div class="evm-tl-t">${t.time}</div></div>
+      <div class="evm-tl-dot"></div>
+      <div class="evm-tl-content"><div class="evm-tl-title">${t.title}</div><div class="evm-tl-src">${t.src}</div></div>
+    </div>`).join('');
+  const SENT_LABEL = {positive:'正面', neutral:'中立', negative:'负面'};
+  const PUB_BAR_COLOR = {
+    positive:'linear-gradient(90deg,#12a87a,#2de0a8)',
+    neutral:'linear-gradient(90deg,#f0ab30,#ffd070)',
+    negative:'linear-gradient(90deg,#e04040,#ff7070)'
+  };
+  document.getElementById('evmExpert').innerHTML = d.expert.map((s,i)=>`
+    <div class="evm-op-item">
+      <div class="evm-op-num">${i+1}</div>
+      <div style="flex:1;min-width:0">
+        <div class="evm-expert-header">
+          <span class="evm-expert-name">${s.name}</span>
+          <span class="evm-sentiment-tag ${s.sentiment}">${SENT_LABEL[s.sentiment]}</span>
+        </div>
+        <div class="evm-op-text">${s.text}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('evmPublic').innerHTML = d.public.map((s,i)=>`
+    <div class="evm-pub-item">
+      <div class="evm-pub-text">
+        <div class="evm-op-num">${i+1}</div>
+        <div style="flex:1">${s.text}</div>
+        <span class="evm-sentiment-tag ${s.sentiment}">${SENT_LABEL[s.sentiment]}</span>
+      </div>
+      <div class="evm-pub-bar-row">
+        <div class="evm-pub-bar-bg"><div class="evm-pub-bar" style="width:${s.pct}%;background:${PUB_BAR_COLOR[s.sentiment]}"></div></div>
+        <span class="evm-pub-pct">${s.pct}%</span>
+      </div>
+    </div>`).join('');
+  modal.style.display = 'flex';
+  if(_evmDistChart){ _evmDistChart.dispose(); }
+  _evmDistChart = echarts.init(document.getElementById('evmDistChart'), null, {renderer:'canvas'});
+  _evmDistChart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{trigger:'item',formatter:'{b}: {c}条 ({d}%)',backgroundColor:'rgba(5,14,28,0.92)',borderColor:'rgba(43,97,240,0.3)',textStyle:{color:'#dce8ff',fontSize:11}},
+    series:[{type:'pie',radius:['38%','68%'],center:['50%','50%'],
+      data:d.platforms.map(p=>({name:p.name,value:p.val,itemStyle:{color:p.color}})),
+      label:{show:false},emphasis:{label:{show:true,fontSize:10,color:'#fff'}},
+      itemStyle:{borderColor:'rgba(4,12,30,0.8)',borderWidth:2}}]
+  });
+  if(_evmTrendChart){ _evmTrendChart.dispose(); }
+  _evmTrendChart = echarts.init(document.getElementById('evmTrendChart'), null, {renderer:'canvas'});
+  const maxTrendVal = Math.max(...d.trend);
+  const maxTrendIdx = d.trend.indexOf(maxTrendVal);
+  _evmTrendChart.setOption({
+    backgroundColor:'transparent',
+    grid:{top:12,bottom:22,left:36,right:10},
+    xAxis:{type:'category',data:d.trend.map((_,i)=>`${i*2}h`),axisLine:{lineStyle:{color:'rgba(80,140,255,0.2)'}},axisTick:{show:false},axisLabel:{color:'rgba(120,170,255,0.5)',fontSize:8}},
+    yAxis:{type:'value',splitLine:{lineStyle:{color:'rgba(80,140,255,0.1)'}},axisLabel:{color:'rgba(120,170,255,0.5)',fontSize:8}},
+    series:[{type:'line',data:d.trend,smooth:true,
+      lineStyle:{color:'#2b61f0',width:2},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(43,97,240,0.4)'},{offset:1,color:'rgba(43,97,240,0.02)'}]}},
+      symbol:'none',
+      markPoint:{
+        data:[{coord:[maxTrendIdx,maxTrendVal]}],
+        symbol:'circle',symbolSize:8,label:{show:false},
+        itemStyle:{color:'#fff',borderColor:'#ffca28',borderWidth:2,shadowColor:'rgba(255,202,40,0.6)',shadowBlur:6}
+      },
+      markLine:{
+        silent:true,symbol:'none',
+        data:[{xAxis:maxTrendIdx}],
+        lineStyle:{color:'rgba(255,202,40,0.35)',type:'dashed',width:1},
+        label:{show:false}
+      }
+    }]
+  });
+  const peaks = d.peakTopics || [];
+  document.getElementById('evmPeakTopics').innerHTML = peaks.length
+    ? '<span style="font-size:9px;color:rgba(255,202,40,0.65);flex-shrink:0;align-self:center;white-space:nowrap">峰值热议：</span>'
+      + peaks.map(t=>`<span class="evm-peak-topic-tag">#${t}</span>`).join('')
+    : '';
+}
+
+function closeEvModal(evt){
+  if(evt && evt.target !== document.getElementById('evModal')) return;
+  document.getElementById('evModal').style.display = 'none';
+}
+
+/* ══ HOT LIST DETAIL DATA ══ */
+const hlDetails={cn:[
+{reads:'3821.5万',discuss:'1203.6万',heat:'8.6万',maxHeat:'12.4万',rank:1,maxRank:1,duration:'36.5h',time:'2026.03.01 09:00',src:'微博',ai:'十四届全国人大四次会议议程正式公布，涵盖审议《政府工作报告》、审查2025年国民经济和社会发展计划执行情况及2026年计划草案等重要议题。话题一经发布迅速登顶微博热搜榜单，抖音、百度搜索量同步激增。民众高度关注政策走向，讨论焦点集中于经济目标、民生改善及科技发展战略，整体情绪偏向积极期待。',trendX:['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30'],trendHeat:[3.2,5.8,8.6,10.2,12.4,11.8,10.5,9.8,9.1,8.6],trendRank:[5,3,1,1,1,1,1,1,1,1],nodes:[{node:'首次上榜',rank:5,heat:'3.2万',time:'03-01 09:00'},{node:'榜单峰值',rank:1,heat:'12.4万',time:'03-01 11:00'},{node:'当前状态',rank:1,heat:'8.6万',time:'03-01 13:30'}],expert:['全国人大会议议程发布是年度政治生活重要节点，舆论热度属于预期内高峰','民众关注焦点高度集中于"经济增长目标"与"社会稳定"两大议题','建议做好官方媒体同步解读，引导受众准确理解会议议程含义','预计热度将持续至会议正式开幕后3-5天，属于健康的政治关注热情'],public:[{text:'对全国人大会议议程内容高度关注，积极学习政策方向',pct:52},{text:'希望今年两会着重推进经济复苏与就业改善',pct:28},{text:'对会议能否解决实际民生问题持观望态度',pct:13},{text:'认为公众舆论参与有助于推动政策更贴近民意',pct:7}]},
+{reads:'2418.3万',discuss:'876.2万',heat:'6.8万',maxHeat:'9.1万',rank:2,maxRank:1,duration:'28.2h',time:'2026.03.01 10:30',src:'微博',ai:'全国人大代表提出建议设定3000亿元高速公路免费通行额度，引发广泛共鸣。提案核心诉求是降低物流运输成本、减轻节假日出行压力并促进区域经济流通。相关话题在微博、百度高搜索量持续，用户反响以支持为主，但也有部分声音对可行性和资金来源提出疑问。',trendX:['10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00'],trendHeat:[2.1,4.3,6.8,9.1,8.7,7.9,7.2,6.8,6.5,6.3],trendRank:[8,4,2,1,2,2,2,2,2,2],nodes:[{node:'首次上榜',rank:8,heat:'2.1万',time:'03-01 10:30'},{node:'榜单峰值',rank:1,heat:'9.1万',time:'03-01 12:00'},{node:'当前状态',rank:2,heat:'6.8万',time:'03-01 15:00'}],expert:['高速免费提案切中物流成本痛点，与中小企业、货运从业者利益高度相关','3000亿元额度测算需进一步论证，但提案本身具有较强的政策信号价值','建议跟踪提案后续审议进展，及时发布权威解读防止误读发酵','历次两会民生类提案容易引发情绪化讨论，需做好舆情预判'],public:[{text:'强烈支持降低高速收费，认为此举有效促进物流降本',pct:48},{text:'担忧政策如何落地，希望看到可操作的配套方案',pct:27},{text:'认为减少节假日拥堵比单纯免费更重要',pct:16},{text:'对大额财政支出的合理性持理性审视态度',pct:9}]},
+{reads:'1923.7万',discuss:'645.1万',heat:'5.4万',maxHeat:'7.2万',rank:3,maxRank:2,duration:'19.8h',time:'2026.03.01 11:15',src:'微博',ai:'12306官方账号回应网友关于在普速铁路上使用排插充电的问题，声明部分老旧普速列车插座功率不足，大功率排插可能引发安全隐患，建议旅客使用充电宝替代。此话题触发大量旅客共鸣，引发对铁路服务设施升级改造的广泛讨论，微博评论区以轻松调侃为主。',trendX:['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'],trendHeat:[1.8,3.6,5.4,7.2,6.8,6.1,5.8,5.5,5.2,4.9],trendRank:[9,5,3,2,2,3,3,3,3,3],nodes:[{node:'首次上榜',rank:9,heat:'1.8万',time:'03-01 11:00'},{node:'榜单峰值',rank:2,heat:'7.2万',time:'03-01 12:30'},{node:'当前状态',rank:3,heat:'5.4万',time:'03-01 15:30'}],expert:['此话题属于民生轻舆情，整体情绪积极，无需特别干预','12306官方及时回应体现了良好的舆情应对机制','可借此机会推广铁路服务设施升级改造进展，转化为正面宣传机会','预计24小时内热度自然回落，无需额外舆情应对资源'],public:[{text:'对12306官方及时回应表示认可，希望加快列车设施现代化',pct:45},{text:'表达乘坐普速列车的充电困扰，期待服务升级',pct:32},{text:'对此议题持轻松心态，认为是正常的民生反馈',pct:15},{text:'建议优先在旅游旺季线路推进充电设施改造',pct:8}]},
+{reads:'1756.4万',discuss:'589.3万',heat:'4.9万',maxHeat:'6.3万',rank:4,maxRank:3,duration:'22.1h',time:'2026.03.01 08:45',src:'百度',ai:'2026全国两会前夕，多家媒体发布深度报道分析本届会议的特殊背景与重要意义，相关搜索量在百度、微博同步激增。报道聚焦于内外部经济环境挑战、科技自立目标及民生改善三大主线。舆论整体呈现高度关注与理性讨论并存的健康态势，是典型的政治议题正向舆情。',trendX:['08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00'],trendHeat:[1.2,2.8,4.9,6.3,5.9,5.4,5.1,4.9,4.7,4.5],trendRank:[12,7,4,3,3,4,4,4,4,4],nodes:[{node:'首次上榜',rank:12,heat:'1.2万',time:'03-01 08:30'},{node:'榜单峰值',rank:3,heat:'6.3万',time:'03-01 10:00'},{node:'当前状态',rank:4,heat:'4.9万',time:'03-01 13:00'}],expert:['两会前期舆论预热属于正常政治传播现象，有助于提升公众参与意识','建议增加与民生关切高度相关的官方解读内容供给','深度报道的质量直接影响两会期间的舆论走向，需保持高标准','可将此议题作为官方媒体正面叙事的入口，引导受众形成理性预期'],public:[{text:'积极学习两会相关知识，希望了解政策走向',pct:46},{text:'认为今年两会在内外部挑战背景下格外重要',pct:31},{text:'希望两会关注就业、教育、医疗等切身民生议题',pct:15},{text:'对两会成果的实际落地持理性期待',pct:8}]},
+{reads:'1534.2万',discuss:'498.7万',heat:'4.2万',maxHeat:'5.8万',rank:5,maxRank:4,duration:'16.3h',time:'2026.03.01 13:20',src:'微博',ai:'驻日本大使馆通过官方微博发布领事提醒，警示在日中国公民注意"撞人族"（故意碰瓷）不法行为，附有具体防范建议。话题迅速引发广泛关注，评论区情绪较为激烈，部分网友将此与对日情绪相关联。建议引导舆论聚焦于安全提醒的实用价值，避免情绪化解读将正常领事服务行为政治化。',trendX:['13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],trendHeat:[0.9,2.4,4.2,5.8,5.2,4.7,4.3,4.2,3.9,3.7],trendRank:[18,9,5,4,5,5,5,5,5,5],nodes:[{node:'首次上榜',rank:18,heat:'0.9万',time:'03-01 13:00'},{node:'榜单峰值',rank:4,heat:'5.8万',time:'03-01 14:30'},{node:'当前状态',rank:5,heat:'4.2万',time:'03-01 17:30'}],expert:['此次领事提醒是正常外交服务，但与当前对日舆论环境叠加导致热度超预期','评论区情绪化内容需要关注，部分言论存在扩大化解读风险','建议大使馆后续发布更多具体防范细节，将话题引导回实用信息层面','相关话题的情绪走向值得持续监测，防止被特定账号借题发挥'],public:[{text:'感谢大使馆及时发布安全提醒，将做好出行防范',pct:41},{text:'认为此类事件折射出赴日安全环境的客观问题',pct:35},{text:'希望官方提供更具体的遭遇不法行为后的处置指南',pct:15},{text:'认为应理性看待个案，不宜过度泛化',pct:9}]},
+{reads:'1280.6万',discuss:'412.3万',heat:'3.8万',maxHeat:'5.1万',rank:6,maxRank:5,duration:'18.7h',time:'2026.03.01 10:00',src:'微博',ai:'小米董事长雷军在2026年全国两会期间提出多项重要议题，涵盖人工智能产业政策、智能电动车发展路线及青年创业环境改善等方面。相关话题在微博引发大量讨论，雷军的企业家代表身份使议题兼具政策影响力与商业关注度，整体舆论正向积极。',trendX:['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],trendHeat:[1.5,3.1,5.1,4.8,4.2,3.9,3.8,3.7,3.6,3.5],trendRank:[14,7,5,6,6,6,6,6,6,6],nodes:[{node:'首次上榜',rank:14,heat:'1.5万',time:'03-01 10:00'},{node:'榜单峰值',rank:5,heat:'5.1万',time:'03-01 11:00'},{node:'当前状态',rank:6,heat:'3.8万',time:'03-01 14:30'}],expert:['雷军作为科技企业家代表的两会议题兼具政策与市场双重关注度','AI产业政策议题与当前科技自立战略高度契合，社会共识度高','建议媒体持续跟进议题后续推进，维持正向舆情热度','企业家代表提案是展示民营经济活力的重要舆论机会'],public:[{text:'关注雷军两会议题，期待AI政策进一步放开',pct:44},{text:'认为新能源汽车议题切中产业发展痛点',pct:31},{text:'希望更多企业家代表发声推动营商环境改善',pct:17},{text:'对提案实际落地效果持观望态度',pct:8}]},
+{reads:'1054.8万',discuss:'338.5万',heat:'3.1万',maxHeat:'4.3万',rank:7,maxRank:6,duration:'14.5h',time:'2026.03.01 07:30',src:'微博',ai:'北京今日迎来今年入冬以来第一场大雪，降雪量预计达到中雪量级，多条主干道交通受影响。相关话题以轻松愉快的情绪为主，大量市民晒雪景图片，同时也有对交通出行和老人防滑的实用性讨论。整体为正向轻舆情，无需特别干预。',trendX:['07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30'],trendHeat:[0.8,1.9,3.1,4.3,4.0,3.7,3.4,3.2,3.1,2.9],trendRank:[20,12,7,6,7,7,7,7,7,7],nodes:[{node:'首次上榜',rank:20,heat:'0.8万',time:'03-01 07:00'},{node:'榜单峰值',rank:6,heat:'4.3万',time:'03-01 08:30'},{node:'当前状态',rank:7,heat:'3.1万',time:'03-01 11:30'}],expert:['天气类话题属于正向轻舆情，整体无风险','雪景相关内容在社交媒体天然具有高传播性','可借机推广冬季出行安全提示，将轻舆情转化为民生服务机会','预计24小时内随天气变化自然消退'],public:[{text:'开心迎接北京初雪，分享雪景心情愉快',pct:55},{text:'关注降雪对交通出行的影响，注意安全驾驶',pct:25},{text:'提醒老年人注意防滑，关心家中长辈',pct:14},{text:'担忧降雪影响正常工作和通勤',pct:6}]},
+{reads:'892.3万',discuss:'276.1万',heat:'2.7万',maxHeat:'3.8万',rank:8,maxRank:7,duration:'12.3h',time:'2026.03.01 09:15',src:'微博',ai:'山东某高铁站在施工过程中发现大量5亿年前寒武纪古生物化石，经专家鉴定含有三叶虫等珍贵标本。消息在微博、抖音广泛传播，网友对科学发现表现出浓厚兴趣，评论以惊叹和好奇为主。整体为正向科普类舆情，可作为科学传播的良好素材。',trendX:['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30'],trendHeat:[0.7,1.6,2.7,3.8,3.5,3.2,2.9,2.7,2.5,2.3],trendRank:[22,14,8,7,8,8,8,8,8,8],nodes:[{node:'首次上榜',rank:22,heat:'0.7万',time:'03-01 09:00'},{node:'榜单峰值',rank:7,heat:'3.8万',time:'03-01 10:30'},{node:'当前状态',rank:8,heat:'2.7万',time:'03-01 13:30'}],expert:['科学发现类话题具有天然正向属性，适合做科普内容延伸','建议联动自然博物馆、科研机构发布权威解读，增加公众科学兴趣','此类话题可以强化"基建强国"与"科学强国"的正向叙事','预计热度维持2-3天后自然消退'],public:[{text:'对古生物化石发现感到惊叹，希望了解更多科学知识',pct:53},{text:'支持加强对出土文物和化石的专业保护',pct:27},{text:'期待博物馆开放展览让公众观看实物',pct:13},{text:'认为此次发现展示了中国基建与科研的综合实力',pct:7}]},
+{reads:'768.4万',discuss:'231.8万',heat:'2.3万',maxHeat:'3.2万',rank:9,maxRank:8,duration:'10.6h',time:'2026.03.01 08:00',src:'百度',ai:'全国多省市相继公布2026年春季学期开学时间，多数集中在2月底至3月初，与往年基本持平。话题在百度搜索量明显上升，家长和学生群体关注度较高，讨论主要集中于假期安排与开学准备，整体情绪中性偏正面。',trendX:['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30'],trendHeat:[0.6,1.4,2.3,3.2,2.9,2.6,2.4,2.3,2.2,2.1],trendRank:[25,16,9,8,9,9,9,9,9,9],nodes:[{node:'首次上榜',rank:25,heat:'0.6万',time:'03-01 08:00'},{node:'榜单峰值',rank:8,heat:'3.2万',time:'03-01 09:30'},{node:'当前状态',rank:9,heat:'2.3万',time:'03-01 12:30'}],expert:['开学时间公告属于定期民生信息，舆论热度可预期','家长群体的讨论集中于实际操作层面，无需干预','可借此推出开学季相关教育政策正面解读','话题热度随开学日临近自然消退'],public:[{text:'关注开学时间安排，做好工作与接送的时间规划',pct:48},{text:'希望假期适当延长，让孩子有更充分的休息时间',pct:27},{text:'认为各省统一公布时间有助于家庭安排',pct:15},{text:'对新学期的教育政策变化有所期待',pct:10}]},
+{reads:'688.1万',discuss:'198.4万',heat:'2.1万',maxHeat:'2.9万',rank:10,maxRank:9,duration:'9.2h',time:'2026.03.01 14:00',src:'百度',ai:'国务院发布优化营商环境新举措，涵盖减少行政审批、加强知识产权保护、完善市场准入机制等多项内容。相关话题在百度、微博引发关注，企业界和创业者群体反应积极，主流媒体跟进解读，整体舆情正面。',trendX:['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'],trendHeat:[0.5,1.2,2.1,2.9,2.7,2.4,2.2,2.1,2.0,1.9],trendRank:[28,18,10,9,10,10,10,10,10,10],nodes:[{node:'首次上榜',rank:28,heat:'0.5万',time:'03-01 14:00'},{node:'榜单峰值',rank:9,heat:'2.9万',time:'03-01 15:30'},{node:'当前状态',rank:10,heat:'2.1万',time:'03-01 18:30'}],expert:['营商环境政策是企业信心指数的重要参考，舆论正向高','建议主流媒体持续跟进政策落实进展，延续正面热度','企业界的积极回应可以进一步收集整理，用于正面宣传素材','本次举措的实际落地效果将是后续舆情的关注焦点'],public:[{text:'对优化营商环境举措表示欢迎，期待尽快落实',pct:51},{text:'希望政策能真正减少企业的行政负担',pct:29},{text:'关注知识产权保护措施的实际执行力度',pct:13},{text:'期待更多鼓励创新创业的配套政策',pct:7}]},
+{reads:'589.2万',discuss:'168.3万',heat:'1.8万',maxHeat:'2.4万',rank:11,maxRank:10,duration:'8.1h',time:'2026.03.01 15:30',src:'微博',ai:'住建部发出通知，要求严格控制房产开发商预售资金的使用范围和提取条件，强化监管防止资金挪用。相关话题引发购房者、地产从业者及投资者的广泛关注，舆论对监管加强总体持欢迎态度。',trendX:['15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30'],trendHeat:[0.4,1.0,1.8,2.4,2.2,2.0,1.9,1.8,1.7,1.6],trendRank:[30,20,11,10,11,11,11,11,11,11],nodes:[{node:'首次上榜',rank:30,heat:'0.4万',time:'03-01 15:00'},{node:'榜单峰值',rank:10,heat:'2.4万',time:'03-01 16:30'},{node:'当前状态',rank:11,heat:'1.8万',time:'03-01 19:30'}],expert:['预售资金监管加强是楼市风险防控的重要举措，社会舆论正向','购房者保护意识上升，对监管政策接受度高','地产行业舆情需关注从业者的合理诉求，防止极端声音放大','此举与整体楼市调控方向一致，舆论走势总体稳定'],public:[{text:'支持加强预售资金监管，保护购房者合法权益',pct:55},{text:'担忧监管加强对楼盘正常交付进度的影响',pct:22},{text:'认为此举有助于从源头防范烂尾楼风险',pct:15},{text:'地产从业者关注政策对行业资金流动性的影响',pct:8}]},
+{reads:'502.7万',discuss:'144.8万',heat:'1.6万',maxHeat:'2.1万',rank:12,maxRank:11,duration:'7.4h',time:'2026.03.01 10:45',src:'微博',ai:'国内多地疾控中心报告今年首批H3N2亚型流感病毒感染病例，疫情部门提示市民做好防护并接种流感疫苗。话题在微博、抖音引发关注，网友对流感病毒与新冠病毒的区别有较多讨论，整体以实用防护信息传播为主，未出现恐慌情绪。',trendX:['10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00'],trendHeat:[0.4,0.9,1.6,2.1,2.0,1.8,1.7,1.6,1.5,1.4],trendRank:[32,22,12,11,12,12,12,12,12,12],nodes:[{node:'首次上榜',rank:32,heat:'0.4万',time:'03-01 10:30'},{node:'榜单峰值',rank:11,heat:'2.1万',time:'03-01 12:00'},{node:'当前状态',rank:12,heat:'1.6万',time:'03-01 15:00'}],expert:['H3N2流感属于季节性病毒，每年均有流行，无需引发社会恐慌','疾控部门的及时预警信息有效引导了公众的理性应对','建议加强疫苗接种科普，提升公众主动防护意识','流感季节性话题通常热度维持1-2周，可纳入常规监测计划'],public:[{text:'关注H3N2病毒信息，计划接种流感疫苗做好防护',pct:42},{text:'希望疾控部门及时公布详细疫情数据',pct:33},{text:'对季节性流感有理性认知，不会过度恐慌',pct:16},{text:'担忧老年人和儿童等高危人群的防护问题',pct:9}]},
+{reads:'421.5万',discuss:'122.6万',heat:'1.4万',maxHeat:'1.9万',rank:13,maxRank:12,duration:'6.8h',time:'2026.03.01 11:30',src:'百度',ai:'全国政协委员提交提案建议恢复五一七天黄金周假期，理由包括促进内需消费、缓解旅游拥堵分布不均及给劳动者更充分的休假权利。话题在百度、微博引发热烈讨论，网友支持声音占主流，是年度两会期间民生类热点的典型代表。',trendX:['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'],trendHeat:[0.3,0.8,1.4,1.9,1.8,1.6,1.5,1.4,1.3,1.2],trendRank:[35,25,13,12,13,13,13,13,13,13],nodes:[{node:'首次上榜',rank:35,heat:'0.3万',time:'03-01 11:00'},{node:'榜单峰值',rank:12,heat:'1.9万',time:'03-01 12:30'},{node:'当前状态',rank:13,heat:'1.4万',time:'03-01 15:30'}],expert:['五一假期延长提案是典型的高民意共识议题，每年均有讨论','舆论支持声音强烈，但政策层面需综合考量经济效益与社会成本','建议官方媒体适时跟进政策回应，满足公众信息需求','提案话题热度可持续至两会闭幕，属于可控的积极舆情'],public:[{text:'强烈支持恢复五一黄金周，希望有更多连续休息时间',pct:62},{text:'认为延长假期有助于提升旅游消费和内需',pct:22},{text:'关注加班补偿和带薪休假的配套执行',pct:10},{text:'认为应更注重落实现有带薪休假制度',pct:6}]},
+{reads:'368.9万',discuss:'98.4万',heat:'1.2万',maxHeat:'1.6万',rank:14,maxRank:13,duration:'5.9h',time:'2026.03.01 12:00',src:'微博',ai:'广州市宣布新型地铁线路正式开工，线路连接多个重要商业及居住区，预计2029年通车。相关新闻在微博及本地论坛引发关注，广州市民对通勤改善预期积极，讨论聚焦于线路走向、沿线物业影响及预计工期等。整体为正向城市建设类轻舆情。',trendX:['12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'],trendHeat:[0.3,0.7,1.2,1.6,1.5,1.4,1.3,1.2,1.1,1.0],trendRank:[38,28,14,13,14,14,14,14,14,14],nodes:[{node:'首次上榜',rank:38,heat:'0.3万',time:'03-01 12:00'},{node:'榜单峰值',rank:13,heat:'1.6万',time:'03-01 13:30'},{node:'当前状态',rank:14,heat:'1.2万',time:'03-01 16:30'}],expert:['城市轨道交通建设类话题属于正向基建舆情','沿线居民和通勤族讨论呈现实用性导向，无负面风险','可借机宣传城市规划和民生改善成果','地铁开工新闻热度一般持续2-3天后自然消退'],public:[{text:'期待新地铁线路开通改善日常通勤效率',pct:49},{text:'关注线路沿线房价及周边配套设施的变化',pct:28},{text:'希望工程如期保质完工，尽早服务市民',pct:15},{text:'关注建设期间对周边道路交通的影响',pct:8}]},
+{reads:'312.4万',discuss:'82.7万',heat:'1.0万',maxHeat:'1.3万',rank:15,maxRank:14,duration:'5.1h',time:'2026.03.01 14:30',src:'微博',ai:'中国人民银行发出通知，宣布下调部分商业银行的存款基准利率，幅度为10-15个基点。话题在微博、百度引发储户和投资者关注，讨论焦点集中于降息对储蓄收益的影响和对楼市、股市的传导效应。整体舆论情绪偏中性，专业讨论与情绪化反应并存。',trendX:['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'],trendHeat:[0.2,0.6,1.0,1.3,1.2,1.1,1.0,0.9,0.9,0.8],trendRank:[40,30,15,14,15,15,15,15,15,15],nodes:[{node:'首次上榜',rank:40,heat:'0.2万',time:'03-01 14:00'},{node:'榜单峰值',rank:14,heat:'1.3万',time:'03-01 15:30'},{node:'当前状态',rank:15,heat:'1.0万',time:'03-01 18:30'}],expert:['央行存款利率调整是重要货币政策信号，需关注专业媒体的解读质量','普通储户对降息的情绪反应需要权威说明来引导','建议及时发布官方政策解读，防止误读和过度恐慌','此类政策话题的舆情通常在2-3天内回归理性讨论'],public:[{text:'担忧降息对储蓄收益的影响，考虑调整资产配置',pct:38},{text:'希望官方提供更清晰的政策背景和影响说明',pct:34},{text:'认为降息有助于刺激经济和降低贷款成本',pct:18},{text:'对货币政策保持理性看待，关注长期走势',pct:10}]},
+{reads:'258.6万',discuss:'67.3万',heat:'0.9万',maxHeat:'1.2万',rank:16,maxRank:15,duration:'4.3h',time:'2026.03.01 09:30',src:'百度',ai:'教育部发布通知，对课后延时服务的收费标准、服务内容及质量监管提出规范要求，强调公益属性和自愿参与原则。相关话题在百度引发家长和教育从业者关注，讨论以服务质量和收费合理性为主，整体舆情中性偏正面。',trendX:['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30'],trendHeat:[0.2,0.5,0.9,1.2,1.1,1.0,0.9,0.9,0.8,0.8],trendRank:[42,32,16,15,16,16,16,16,16,16],nodes:[{node:'首次上榜',rank:42,heat:'0.2万',time:'03-01 09:00'},{node:'榜单峰值',rank:15,heat:'1.2万',time:'03-01 10:30'},{node:'当前状态',rank:16,heat:'0.9万',time:'03-01 13:30'}],expert:['延时服务规范化是教育减负政策的延伸，具有积极政策意义','家长关注实际服务质量而非政策文本，需做好落地监督','建议地方教育局同步发布实施细则，消除家长疑虑','此话题热度温和，无舆情风险，可纳入常规监测'],public:[{text:'欢迎规范延时服务，希望收费标准合理且服务质量有保障',pct:47},{text:'关注具体实施细节，担忧地方执行偏差',pct:30},{text:'认为延时服务应真正体现公益属性',pct:16},{text:'建议加强对学校延时服务内容质量的监督考核',pct:7}]},
+{reads:'214.3万',discuss:'54.8万',heat:'0.8万',maxHeat:'1.0万',rank:17,maxRank:16,duration:'3.8h',time:'2026.03.01 11:00',src:'百度',ai:'农业农村部发布报告指出，2026年春季全国粮食生产开局情况良好，冬小麦苗情总体优于去年同期，春耕备耕工作有序推进。相关话题在百度引发关注，整体以积极正面的政策宣传为主，对国家粮食安全保障的讨论较多，舆论情绪稳定正向。',trendX:['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'],trendHeat:[0.2,0.4,0.8,1.0,0.9,0.9,0.8,0.8,0.7,0.7],trendRank:[44,34,17,16,17,17,17,17,17,17],nodes:[{node:'首次上榜',rank:44,heat:'0.2万',time:'03-01 11:00'},{node:'榜单峰值',rank:16,heat:'1.0万',time:'03-01 12:30'},{node:'当前状态',rank:17,heat:'0.8万',time:'03-01 15:30'}],expert:['粮食生产开局良好属于正向政策议题，可有效提升民众安全感','建议结合国际粮食安全形势进行解读，凸显国家粮食保障能力','此类话题是展示农业农村政策成效的良好宣传窗口','舆情持续时间较短，建议做好内容预备以备持续输出'],public:[{text:'对国家粮食生产形势感到安心，支持农业政策',pct:56},{text:'关注气候变化对农业生产的潜在影响',pct:24},{text:'希望加大农业科技投入，提升单产水平',pct:13},{text:'期待惠农政策进一步落地，提升农民收入',pct:7}]},
+{reads:'178.5万',discuss:'43.2万',heat:'0.7万',maxHeat:'0.9万',rank:18,maxRank:17,duration:'3.2h',time:'2026.03.01 13:45',src:'微博',ai:'国家医疗保障局正式公布2026年国家医保药品目录调整结果，新增药品93种，将多类抗肿瘤药、罕见病用药纳入报销范围，惠及患者超过200万人。相关话题在微博引发广泛关注，患者群体及医疗从业者反应积极，整体舆情正向。',trendX:['13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'],trendHeat:[0.2,0.4,0.7,0.9,0.9,0.8,0.8,0.7,0.7,0.6],trendRank:[46,36,18,17,18,18,18,18,18,18],nodes:[{node:'首次上榜',rank:46,heat:'0.2万',time:'03-01 13:30'},{node:'榜单峰值',rank:17,heat:'0.9万',time:'03-01 15:00'},{node:'当前状态',rank:18,heat:'0.7万',time:'03-01 18:00'}],expert:['医保目录扩容是重要民生政策，具有高社会认同度','罕见病用药纳入医保尤其引发正向情感共鸣','建议详细科普新纳入药品的使用范围和报销比例','此类话题是展示医疗改革成果的理想素材'],public:[{text:'为新增医保药品感到欣慰，尤其支持罕见病用药纳入',pct:58},{text:'希望进一步扩大医保覆盖范围，减轻患者负担',pct:24},{text:'关注新药品实际报销比例和申请流程',pct:12},{text:'期待医保覆盖更多基层医疗机构常用药品',pct:6}]},
+{reads:'145.8万',discuss:'34.6万',heat:'0.6万',maxHeat:'0.8万',rank:19,maxRank:18,duration:'2.7h',time:'2026.03.01 10:15',src:'微博',ai:'文化旅游部公布五一长假旅游数据，国内出游人数再创历史新高，超过4.2亿人次，旅游消费总额同比增长18%，多个热门景区创下单日接待人次纪录。相关数据话题在微博、抖音引发网友分享假期体验，整体情绪积极，是消费复苏的正向舆情信号。',trendX:['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],trendHeat:[0.1,0.3,0.6,0.8,0.7,0.7,0.6,0.6,0.6,0.5],trendRank:[48,38,19,18,19,19,19,19,19,19],nodes:[{node:'首次上榜',rank:48,heat:'0.1万',time:'03-01 10:00'},{node:'榜单峰值',rank:18,heat:'0.8万',time:'03-01 11:30'},{node:'当前状态',rank:19,heat:'0.6万',time:'03-01 14:30'}],expert:['五一旅游数据创新高是消费复苏的重要正向信号','建议将数据与居民消费信心提升关联，强化经济复苏叙事','旅游类话题带有天然的情感共鸣属性，传播效率高','可借此机会推广未来旅游目的地宣传，延续热度'],public:[{text:'分享五一出游体验，感受到旅游市场的全面回暖',pct:52},{text:'认为旅游数据创新高反映了消费信心的回升',pct:28},{text:'希望热门景区加强接待容量和服务质量管理',pct:13},{text:'关注旅游数据对相关产业链的带动效应',pct:7}]},
+{reads:'118.2万',discuss:'27.4万',heat:'0.5万',maxHeat:'0.7万',rank:20,maxRank:19,duration:'2.1h',time:'2026.03.01 15:00',src:'百度',ai:'国家能源局发布报告显示，截至2025年底全国可再生能源装机容量占总装机比例突破50%，风电、光伏发电量实现历史性跨越。相关话题在百度及财经媒体引发关注，讨论集中于能源转型的进展成果与未来展望，整体情绪积极。',trendX:['15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30'],trendHeat:[0.1,0.3,0.5,0.7,0.6,0.6,0.5,0.5,0.4,0.4],trendRank:[50,40,20,19,20,20,20,20,20,20],nodes:[{node:'首次上榜',rank:50,heat:'0.1万',time:'03-01 15:00'},{node:'榜单峰值',rank:19,heat:'0.7万',time:'03-01 16:30'},{node:'当前状态',rank:20,heat:'0.5万',time:'03-01 19:30'}],expert:['可再生能源占比突破50%是能源转型的里程碑成就','建议将此数据与国际比较结合，凸显中国绿色发展成就','能源类专业话题需配合简明易懂的科普内容提升传播效率','此类正向政策议题可与碳达峰碳中和目标叙事结合'],public:[{text:'为可再生能源占比突破50%感到自豪，支持绿色发展',pct:54},{text:'关注能源转型对电价和工业成本的影响',pct:25},{text:'希望加快储能技术发展以解决间歇性供电问题',pct:14},{text:'期待更多绿色能源政策红利惠及普通用户',pct:7}]}
+],hk:[
+{reads:'843.2万',discuss:'312.8万',heat:'12.4万',maxHeat:'18.6万',rank:1,maxRank:1,duration:'28.5h',time:'2026.05.18 08:30',src:'LIHKG',ai:'港铁票价调整方案经咨询期后正式公布，整体票价平均上调2.3%，部分常用线路调整幅度超过3%。消息在LIHKG论坛、高登讨论区引发大量讨论，主流声音对加价幅度表示不满，尤其是通勤族群体反应强烈。建议港铁公司加强公众沟通，详细说明调价依据及服务改善计划，以缓和舆论压力。',trendX:['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30'],trendHeat:[3.2,6.8,12.4,18.6,16.2,14.8,13.5,12.8,12.4,11.9],trendRank:[6,3,1,1,1,1,1,1,1,1],nodes:[{node:'首次上榜',rank:6,heat:'3.2万',time:'05-18 08:00'},{node:'榜单峰值',rank:1,heat:'18.6万',time:'05-18 09:30'},{node:'当前状态',rank:1,heat:'12.4万',time:'05-18 12:30'}],expert:['港铁票价调整每年均会引发固定舆情周期，此次幅度属于正常范围但民众敏感度持续升高','加价叙事与生活成本上升焦虑相叠加，容易形成负面情绪共振','建议港铁加强对低收入通勤族的票价优惠说明，体现企业社会责任','关注LIHKG论坛是否出现组织性抵制行动，提前做好应急预案'],public:[{text:'认为加价增加通勤负担，希望港铁提升服务质量以配合加价',pct:44},{text:'支持港铁优先改善服务而非单纯加价',pct:31},{text:'担忧加价趋势长期积累对基层市民影响',pct:16},{text:'认为调价幅度合理，属于正常运营成本调整',pct:9}]},
+{reads:'612.5万',discuss:'218.4万',heat:'9.8万',maxHeat:'14.2万',rank:2,maxRank:1,duration:'32.1h',time:'2026.05.17 16:00',src:'高登',ai:'香港特区政府公布《基本法》第23条立法公众咨询结果，参与咨询的意见书超过8.5万份，支持立法与持保留意见的比例分别为约67%与33%。咨询结果公布后在高登、LIHKG等本地论坛引发大量讨论，整体而言讨论较为理性，聚焦于具体条款内容及实施细节。',trendX:['16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30'],trendHeat:[2.8,5.6,9.8,14.2,13.5,12.1,11.0,10.3,9.8,9.2],trendRank:[7,4,2,1,1,2,2,2,2,2],nodes:[{node:'首次上榜',rank:7,heat:'2.8万',time:'05-17 16:00'},{node:'榜单峰值',rank:1,heat:'14.2万',time:'05-17 17:30'},{node:'掉落榜单',rank:35,heat:'2.1万',time:'05-17 23:00'},{node:'再次上榜',rank:2,heat:'9.8万',time:'05-18 09:00'}],expert:['第23条立法咨询结果是香港政治生态的重要风向标，具有高度敏感性','咨询结果公布后讨论理性化程度高于预期，反映社会逐步适应政治新常态','建议继续加强公众教育，尤其针对商界与专业人士群体进行精准沟通','境外媒体对此议题的报道可能存在偏差，需密切追踪并准备反应机制'],public:[{text:'表示理解立法必要性，关注具体实施细节与对日常生活的影响',pct:38},{text:'支持立法并认为有助于香港长期稳定',pct:34},{text:'希望政府提供更多透明信息消除市民疑虑',pct:18},{text:'对立法内容仍有疑问，需要更多公众教育',pct:10}]},
+{reads:'489.1万',discuss:'185.6万',heat:'8.3万',maxHeat:'11.4万',rank:3,maxRank:2,duration:'24.7h',time:'2026.05.18 07:15',src:'香港01',ai:'新冠变异株JN.1在香港社区感染个案持续增加，卫生署呼吁市民特别是长者及慢性病患者尽快接种最新版本疫苗。香港01及多家本地媒体均刊发相关报道，公众对疫情发展走向表现出明显关注，但整体未出现恐慌情绪。',trendX:['07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30'],trendHeat:[1.9,4.2,8.3,11.4,10.8,9.9,9.1,8.6,8.3,7.9],trendRank:[10,5,3,2,2,3,3,3,3,3],nodes:[{node:'首次上榜',rank:10,heat:'1.9万',time:'05-18 07:00'},{node:'榜单峰值',rank:2,heat:'11.4万',time:'05-18 08:30'},{node:'当前状态',rank:3,heat:'8.3万',time:'05-18 11:30'}],expert:['JN.1变异株感染个案增加属于可预期的季节性波动，无需引发社会恐慌','疫苗接种率的提升是应对新变异株最有效的手段，建议加强接种便利措施','医疗系统如出现压力需及时公开说明，防止信息不对称引发恐慌','高危群体保护信息应以清晰易懂的方式广泛传播'],public:[{text:'关注疫情发展，已预约接种最新疫苗',pct:39},{text:'希望政府提供更清晰的疫苗保护效果数据',pct:33},{text:'对目前医疗系统应对能力持信心态度',pct:17},{text:'担忧长者及慢性病患者的防护需要更多支持',pct:11}]},
+{reads:'398.4万',discuss:'142.1万',heat:'7.2万',maxHeat:'9.8万',rank:4,maxRank:3,duration:'20.3h',time:'2026.05.17 14:00',src:'雅虎香港',ai:'香港迪士尼乐园"魔雪奇缘"主题新园区正式盛大开幕，吸引大批游客体验全新设施。开幕日门票早已售罄，社交媒体大量打卡内容引发关注，旅游业界对带动消费的预期积极，整体话题以正面情绪为主，是香港旅游经济复苏的重要正向舆情。',trendX:['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'],trendHeat:[1.8,3.9,7.2,9.8,9.1,8.4,7.8,7.4,7.2,6.8],trendRank:[12,6,4,3,4,4,4,4,4,4],nodes:[{node:'首次上榜',rank:12,heat:'1.8万',time:'05-17 14:00'},{node:'榜单峰值',rank:3,heat:'9.8万',time:'05-17 15:30'},{node:'当前状态',rank:4,heat:'7.2万',time:'05-17 18:30'}],expert:['迪士尼新园区开幕是香港旅游业复苏的标志性事件','社交媒体打卡内容的自发传播具有高效的免费宣传价值','建议旅游局借机推广相关配套旅游产品，扩大带动效应','此类活动类话题热度可持续至开幕后一至两周'],public:[{text:'对新园区开幕感到兴奋，已计划前往体验',pct:48},{text:'认为新园区有助于带动香港旅游业复苏',pct:30},{text:'关注票价和预约系统是否足够便利',pct:14},{text:'期待更多高质量旅游设施吸引访港游客',pct:8}]},
+{reads:'342.7万',discuss:'118.3万',heat:'6.1万',maxHeat:'8.4万',rank:5,maxRank:4,duration:'18.9h',time:'2026.05.18 06:30',src:'香港01',ai:'香港本季流感踏入高峰期，多间公立医院内科病房使用率超过105%，部分急诊室候诊时间延长至8小时以上。卫生署建议市民避免不必要的急诊室就诊。话题引发市民对公营医疗系统压力的担忧，讨论集中于医疗资源分配和基层医疗建设问题。',trendX:['06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30'],trendHeat:[1.5,3.2,6.1,8.4,7.9,7.3,6.8,6.4,6.1,5.8],trendRank:[14,7,5,4,5,5,5,5,5,5],nodes:[{node:'首次上榜',rank:14,heat:'1.5万',time:'05-18 06:00'},{node:'榜单峰值',rank:4,heat:'8.4万',time:'05-18 07:30'},{node:'当前状态',rank:5,heat:'6.1万',time:'05-18 10:30'}],expert:['公立医院病房超载是香港医疗体系的结构性问题，每到流感季节必然引发舆情','建议卫生署加强基层家庭医生转介机制的宣传，缓解急诊压力','市民对医疗资源分配的讨论属于建设性议题，可引导为政策改善建议','流感高峰期一般持续4-6周，舆情将持续到高峰结束'],public:[{text:'担忧流感高峰期公立医院应接不暇，影响就医体验',pct:42},{text:'支持政府加大基层医疗投入，分流急诊压力',pct:33},{text:'考虑接种流感疫苗并减少前往人群密集场所',pct:17},{text:'认为长期医疗规划需要从根本上解决资源不足问题',pct:8}]},
+{reads:'287.3万',discuss:'96.4万',heat:'5.3万',maxHeat:'7.1万',rank:6,maxRank:5,duration:'16.2h',time:'2026.05.17 20:00',src:'LIHKG',ai:'LIHKG论坛热议伊朗某小学遭到空袭事件，相关新闻帖子获得大量回复和关注，讨论以国际局势分析和人道主义立场为主。管局亦就事件作公开表态。话题在香港本地论坛持续发酵，是典型的国际突发事件引发本地讨论的舆情模式。',trendX:['20:00','20:30','21:00','21:30','22:00','22:30','23:00','23:30','00:00','00:30'],trendHeat:[1.2,2.8,5.3,7.1,6.8,6.2,5.7,5.4,5.3,4.9],trendRank:[16,9,6,5,6,6,6,6,6,6],nodes:[{node:'首次上榜',rank:16,heat:'1.2万',time:'05-17 20:00'},{node:'榜单峰值',rank:5,heat:'7.1万',time:'05-17 21:30'},{node:'当前状态',rank:6,heat:'5.3万',time:'05-18 00:30'}],expert:['国际冲突事件在香港本地论坛的讨论通常以人道主义立场为主导','LIHKG用户群体对国际事务的关注度和表达意愿较强','建议关注讨论是否出现与香港本地政治议题的不当关联','此类国际事件话题通常在2-3天内随新闻周期更替自然消退'],public:[{text:'对平民伤亡表示强烈人道主义关切，希望冲突早日停止',pct:55},{text:'关注事件的国际外交背景和后续发展',pct:27},{text:'认为媒体应客观报道，避免选择性叙事',pct:12},{text:'对国际局势的复杂性持理性分析态度',pct:6}]},
+{reads:'234.8万',discuss:'78.2万',heat:'4.4万',maxHeat:'6.0万',rank:7,maxRank:6,duration:'14.1h',time:'2026.05.18 08:00',src:'高登',ai:'教育局宣布跨境学童全面恢复正常面授课堂，不再设置特殊防疫安排，跨境学童可以与本地学生享受同等的学习环境。相关消息受到跨境学童家长群体的广泛欢迎，教育界对恢复正常教学秩序表示支持，整体舆情正向积极。',trendX:['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30'],trendHeat:[1.1,2.4,4.4,6.0,5.6,5.1,4.8,4.5,4.4,4.1],trendRank:[18,10,7,6,7,7,7,7,7,7],nodes:[{node:'首次上榜',rank:18,heat:'1.1万',time:'05-18 08:00'},{node:'榜单峰值',rank:6,heat:'6.0万',time:'05-18 09:30'},{node:'当前状态',rank:7,heat:'4.4万',time:'05-18 12:30'}],expert:['跨境学童面授恢复是两地融合的积极信号，舆情正向','跨境学童家长群体是该议题的核心受众，需关注其实际需求反馈','建议相关部门提供清晰的操作指引，减少家长的信息焦虑','此类政策类正向舆情可配合推出配套宣传扩大正面效应'],public:[{text:'跨境学童家长对全面恢复面授课堂表示欢迎',pct:51},{text:'希望当局持续关注跨境学童的心理适应与学习需求',pct:28},{text:'认为恢复正常教学是两地关系正常化的积极体现',pct:14},{text:'关注通关安排是否能与教学日程保持顺畅配合',pct:7}]},
+{reads:'189.6万',discuss:'61.4万',heat:'3.7万',maxHeat:'5.1万',rank:8,maxRank:7,duration:'12.8h',time:'2026.05.17 15:30',src:'香港01',ai:'香港驻外经贸办发布声明，指其针对境外媒体对香港的不实报道采取了多项积极沟通行动，包括发表澄清信函、接受媒体访问及参与国际论坛等。相关新闻受到部分本地媒体关注，引发对香港国际形象管理策略的讨论，整体舆情中性偏正向。',trendX:['15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30'],trendHeat:[0.9,2.0,3.7,5.1,4.8,4.4,4.0,3.8,3.7,3.5],trendRank:[20,12,8,7,8,8,8,8,8,8],nodes:[{node:'首次上榜',rank:20,heat:'0.9万',time:'05-17 15:00'},{node:'榜单峰值',rank:7,heat:'5.1万',time:'05-17 16:30'},{node:'当前状态',rank:8,heat:'3.7万',time:'05-17 19:30'}],expert:['香港国际形象管理是长期舆论工作任务，需系统化策略支持','境外不实报道的澄清工作需持续推进，单次声明效果有限','建议加强与国际专业媒体的日常联络，建立长期信任关系','经贸办的积极行动可作为正面案例进行宣传'],public:[{text:'支持积极回应境外不实报道，维护香港形象',pct:46},{text:'希望沟通成效有更透明的公众汇报机制',pct:30},{text:'认为实质行动比声明更能改变国际舆论',pct:15},{text:'关注这些沟通行动的长期效果评估',pct:9}]},
+{reads:'156.3万',discuss:'48.7万',heat:'3.1万',maxHeat:'4.3万',rank:9,maxRank:8,duration:'11.4h',time:'2026.05.17 10:00',src:'香港01',ai:'香港特区政府公布2026-27年度财政预算摘要，重点包括调整印花税、推出中小企业资助计划及增加医疗卫生开支等措施。预算摘要公布后在本地媒体及网络平台引发广泛讨论，整体评价较为正面，但亦有声音关注结构性赤字问题及长期财政可持续性。',trendX:['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],trendHeat:[0.8,1.7,3.1,4.3,4.0,3.6,3.3,3.2,3.1,2.9],trendRank:[22,14,9,8,9,9,9,9,9,9],nodes:[{node:'首次上榜',rank:22,heat:'0.8万',time:'05-17 10:00'},{node:'榜单峰值',rank:8,heat:'4.3万',time:'05-17 11:30'},{node:'当前状态',rank:9,heat:'3.1万',time:'05-17 14:30'}],expert:['财政预算讨论是香港每年固定的政治经济议题','商界对印花税调整的关注度高，建议重点跟踪商界反应','中小企业资助计划的具体落实将是后续舆情焦点','建议财政司定期发布预算执行情况，维持公众知情权'],public:[{text:'关注财政预算对自身生活和业务的影响',pct:43},{text:'认为需要加强医疗和教育的长期投入',pct:31},{text:'担忧结构性赤字对香港长期财政稳健性的影响',pct:17},{text:'支持积极的财政政策以刺激经济增长',pct:9}]},
+{reads:'128.4万',discuss:'38.9万',heat:'2.6万',maxHeat:'3.6万',rank:10,maxRank:9,duration:'10.2h',time:'2026.05.17 14:30',src:'LIHKG',ai:'立法会开始审议《网络安全条例》草案，涵盖关键基础设施保护、网络事故汇报机制及行业合规要求等内容。相关话题在LIHKG引发讨论，科技和商界人士关注条例对行业运营的影响，讨论以理性分析为主，整体舆情中性。',trendX:['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'],trendHeat:[0.6,1.5,2.6,3.6,3.4,3.1,2.8,2.7,2.6,2.4],trendRank:[24,15,10,9,10,10,10,10,10,10],nodes:[{node:'首次上榜',rank:24,heat:'0.6万',time:'05-17 14:00'},{node:'榜单峰值',rank:9,heat:'3.6万',time:'05-17 15:30'},{node:'当前状态',rank:10,heat:'2.6万',time:'05-17 18:30'}],expert:['网络安全立法是国际趋势，香港跟进具有正当性','商界最关心的是合规成本和执法标准的合理性','建议立法局在审议过程中充分征求科技业界意见','条例细则的厘清对消除商界疑虑至关重要'],public:[{text:'支持加强网络安全立法，保护关键基础设施',pct:44},{text:'关注条例对中小企合规成本的影响',pct:32},{text:'希望执法标准清晰透明，避免过度监管',pct:16},{text:'认为平衡安全与效率是立法的核心挑战',pct:8}]},
+{reads:'104.7万',discuss:'30.8万',heat:'2.1万',maxHeat:'2.9万',rank:11,maxRank:10,duration:'8.9h',time:'2026.05.17 09:00',src:'高登',ai:'港交所发布新一轮市场改革方案，包括优化上市制度、引入新型市场参与者类别及升级交易技术基础设施。相关消息受到金融业界关注，整体评价以积极为主，业界期待改革能提升香港资本市场的国际竞争力。',trendX:['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30'],trendHeat:[0.5,1.1,2.1,2.9,2.7,2.5,2.3,2.2,2.1,1.9],trendRank:[26,17,11,10,11,11,11,11,11,11],nodes:[{node:'首次上榜',rank:26,heat:'0.5万',time:'05-17 09:00'},{node:'榜单峰值',rank:10,heat:'2.9万',time:'05-17 10:30'},{node:'当前状态',rank:11,heat:'2.1万',time:'05-17 13:30'}],expert:['港交所改革对维护香港国际金融中心地位具有重要意义','改革方案的细节执行是金融业界后续持续关注焦点','建议监管机构积极开展市场沟通，答复业界疑虑','相关改革举措可与国家金融开放大方向叙事有机结合'],public:[{text:'支持港交所改革以提升香港资本市场竞争力',pct:49},{text:'希望改革能真正吸引更多优质企业来港上市',pct:28},{text:'关注改革对中小投资者的影响和保护机制',pct:15},{text:'期待改革落地后看到市场活力切实提升',pct:8}]},
+{reads:'87.2万',discuss:'24.6万',heat:'1.7万',maxHeat:'2.3万',rank:12,maxRank:11,duration:'7.6h',time:'2026.05.18 09:45',src:'雅虎香港',ai:'香港统计处发布最新就业数字，本港失业率升至4.2%，为近两年新高。相关数据受到媒体广泛报道，舆论对就业市场走势表现出明显关注，讨论集中于经济复苏力度、特定行业裁员趋势及青年就业问题。整体情绪中性偏负面，需要官方及时发布解读。',trendX:['09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00'],trendHeat:[0.4,0.9,1.7,2.3,2.2,2.0,1.8,1.7,1.6,1.5],trendRank:[28,18,12,11,12,12,12,12,12,12],nodes:[{node:'首次上榜',rank:28,heat:'0.4万',time:'05-18 09:30'},{node:'榜单峰值',rank:11,heat:'2.3万',time:'05-18 11:00'},{node:'当前状态',rank:12,heat:'1.7万',time:'05-18 14:00'}],expert:['失业率上升是敏感经济指标，需要官方权威解读来引导舆论','青年就业问题是香港长期社会痛点，需重点关注相关讨论','建议劳工及福利局及时发布就业支援措施信息','失业率数据的上升趋势如持续，将成为重要的持续舆情风险'],public:[{text:'担忧就业市场走软对生计的影响，关注政府支援措施',pct:46},{text:'认为经济结构性问题需要系统性解决方案',pct:30},{text:'青年就业困难问题需要更有针对性的政策支持',pct:16},{text:'对政府应对失业率上升的能力持观望态度',pct:8}]},
+{reads:'71.4万',discuss:'19.3万',heat:'1.4万',maxHeat:'1.9万',rank:13,maxRank:12,duration:'6.4h',time:'2026.05.17 11:00',src:'雅虎香港',ai:'香港国际机场公布最新客运量数据，显示客运量已恢复至疫情前2019年水平的逾95%，全面复苏指日可待。航空业界对前景普遍乐观，相关新闻在本地媒体及旅游业界引发积极反应，话题以正向为主，是香港经济复苏的有力佐证。',trendX:['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'],trendHeat:[0.3,0.8,1.4,1.9,1.8,1.6,1.5,1.4,1.3,1.2],trendRank:[30,20,13,12,13,13,13,13,13,13],nodes:[{node:'首次上榜',rank:30,heat:'0.3万',time:'05-17 11:00'},{node:'榜单峰值',rank:12,heat:'1.9万',time:'05-17 12:30'},{node:'当前状态',rank:13,heat:'1.4万',time:'05-17 15:30'}],expert:['机场客运量恢复至疫前95%是香港经济复苏的里程碑数据','此数据可作为香港旅游业全面回暖的有力证据','建议结合旅游消费增长数据一起宣传，强化正面叙事','航空业的全面复苏将带动酒店、零售等相关行业的持续回暖'],public:[{text:'对香港航空市场强劲恢复感到振奋，看好旅游业前景',pct:53},{text:'期待机场设施和航班频次进一步提升服务质量',pct:26},{text:'认为航空数据是香港国际城市地位恢复的重要指标',pct:14},{text:'关注机场扩建计划的推进能否跟上客流增长步伐',pct:7}]},
+{reads:'58.6万',discuss:'15.4万',heat:'1.2万',maxHeat:'1.6万',rank:14,maxRank:13,duration:'5.8h',time:'2026.05.18 07:00',src:'高登',ai:'香港天文台发布预报，指本港五月初或有热带气旋在南海形成并影响香港，预警级别仍在观察阶段。相关消息在高登、LIHKG引发市民关注，讨论以实用防台准备信息为主，整体无恐慌情绪，是典型的季节性天气警示舆情。',trendX:['07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30'],trendHeat:[0.3,0.7,1.2,1.6,1.5,1.4,1.3,1.2,1.1,1.0],trendRank:[32,22,14,13,14,14,14,14,14,14],nodes:[{node:'首次上榜',rank:32,heat:'0.3万',time:'05-18 07:00'},{node:'榜单峰值',rank:13,heat:'1.6万',time:'05-18 08:30'},{node:'当前状态',rank:14,heat:'1.2万',time:'05-18 11:30'}],expert:['热带气旋预警属于季节性常规天气舆情，市民关注度高但恐慌程度低','天文台的预报信息是权威信息源，建议引导公众以天文台官方为准','建议社区组织同步发布防台实用信息，提升市民应急准备意识','热带气旋话题热度将随天气变化实时波动，需做好动态监测'],public:[{text:'关注热带气旋发展动态，提前做好防台准备',pct:48},{text:'提醒家人和邻居关注天文台最新预报',pct:32},{text:'认为香港现有防台预警机制完善，对政府应对有信心',pct:13},{text:'关注热带气旋是否影响本周的工作和出行计划',pct:7}]},
+{reads:'47.8万',discuss:'12.3万',heat:'1.0万',maxHeat:'1.3万',rank:15,maxRank:14,duration:'5.1h',time:'2026.05.17 16:30',src:'LIHKG',ai:'廉政公署宣布成功侦破一宗涉及400万港元的商业行贿案件，共拘捕多名相关人员。相关消息在LIHKG引发讨论，网友对廉署执法工作表示支持，整体以正面评价为主。此类反腐新闻是廉署公信力建设的重要信息出口，具有良好的社会示范效应。',trendX:['16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30'],trendHeat:[0.2,0.6,1.0,1.3,1.2,1.1,1.0,0.9,0.9,0.8],trendRank:[34,24,15,14,15,15,15,15,15,15],nodes:[{node:'首次上榜',rank:34,heat:'0.2万',time:'05-17 16:00'},{node:'榜单峰值',rank:14,heat:'1.3万',time:'05-17 17:30'},{node:'当前状态',rank:15,heat:'1.0万',time:'05-17 20:30'}],expert:['廉署执法行动是香港法治形象的重要支柱','成功侦破行贿案件可以强化公众对廉洁营商环境的信心','建议廉署持续发布执法成效数据，透过透明度提升公信力','可适当扩大相关新闻的传播，彰显香港廉洁制度优势'],public:[{text:'支持廉署积极执法，维护香港廉洁形象',pct:62},{text:'认为严厉打击商业腐败有助于维护公平营商环境',pct:24},{text:'希望廉署进一步加强预防廉洁教育',pct:9},{text:'对廉署执法成效持续保持信心',pct:5}]},
+{reads:'38.4万',discuss:'9.6万',heat:'0.8万',maxHeat:'1.1万',rank:16,maxRank:15,duration:'4.6h',time:'2026.05.17 13:00',src:'香港01',ai:'国家发展改革委与粤港澳大湾区建设领导小组联合宣布，新增两项重大基建项目，包括连接香港与珠三角的新型智慧交通走廊及深港科创园区扩建项目。相关消息受到香港媒体关注，各界对大湾区发展机遇表示期待，整体舆情正向积极。',trendX:['13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'],trendHeat:[0.2,0.5,0.8,1.1,1.0,0.9,0.9,0.8,0.8,0.7],trendRank:[36,26,16,15,16,16,16,16,16,16],nodes:[{node:'首次上榜',rank:36,heat:'0.2万',time:'05-17 13:00'},{node:'榜单峰值',rank:15,heat:'1.1万',time:'05-17 14:30'},{node:'当前状态',rank:16,heat:'0.8万',time:'05-17 17:30'}],expert:['大湾区重大基建项目是香港融入国家发展大局的重要载体','智慧交通走廊项目将强化深港两地的人才和产业流通','建议媒体重点报道项目对香港科创产业的长远机遇','大湾区议题宜从区域经济协作角度进行深度解读'],public:[{text:'期待大湾区新基建项目带来更多就业和发展机会',pct:47},{text:'认为深港科创合作深化有助于香港拓展经济空间',pct:33},{text:'希望香港年轻人更积极把握大湾区发展红利',pct:13},{text:'关注项目在融资、规划和环境评估方面的进展',pct:7}]},
+{reads:'30.1万',discuss:'7.4万',heat:'0.7万',maxHeat:'0.9万',rank:17,maxRank:16,duration:'4.0h',time:'2026.05.18 10:30',src:'雅虎香港',ai:'QS世界大学排名最新版本公布，香港大学排名跌出全球前25，至第27位，是近年来的较低排名。相关消息在本地教育界及媒体引发关注，讨论集中于排名下滑原因、科研实力及对国际生源吸引的影响。整体情绪以关切为主。',trendX:['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'],trendHeat:[0.2,0.4,0.7,0.9,0.9,0.8,0.7,0.7,0.6,0.6],trendRank:[38,28,17,16,17,17,17,17,17,17],nodes:[{node:'首次上榜',rank:38,heat:'0.2万',time:'05-18 10:00'},{node:'榜单峰值',rank:16,heat:'0.9万',time:'05-18 11:30'},{node:'当前状态',rank:17,heat:'0.7万',time:'05-18 14:30'}],expert:['大学排名下滑会引发教育界和政界的高度关注','建议港大就排名下滑公开回应，说明改善计划','高校排名是国际学术声誉的重要指标，对吸引优质师生影响深远','可结合其他高校排名表现一起分析，避免单一事件被过度解读'],public:[{text:'对港大排名下滑感到担忧，希望校方制定明确提升策略',pct:44},{text:'认为排名只是参考，更关注教研质量和毕业生就业表现',pct:33},{text:'希望政府增加对本港高校的科研资金投入',pct:16},{text:'认为维持顶级大学排名有助于香港国际城市形象',pct:7}]},
+{reads:'23.8万',discuss:'5.8万',heat:'0.6万',maxHeat:'0.8万',rank:18,maxRank:17,duration:'3.5h',time:'2026.05.17 11:30',src:'高登',ai:'发展局宣布北部都会区发展规划新一期公众咨询正式展开，聚焦河套科技园扩展、新田科技城基础设施及配套社区规划等议题。相关新闻引发新界北部居民和地产业界关注，讨论以发展机遇与社区影响评估为主，整体情绪中性偏正向。',trendX:['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'],trendHeat:[0.1,0.3,0.6,0.8,0.7,0.7,0.6,0.6,0.5,0.5],trendRank:[40,30,18,17,18,18,18,18,18,18],nodes:[{node:'首次上榜',rank:40,heat:'0.1万',time:'05-17 11:00'},{node:'榜单峰值',rank:17,heat:'0.8万',time:'05-17 12:30'},{node:'当前状态',rank:18,heat:'0.6万',time:'05-17 15:30'}],expert:['北部都会区发展是香港中长期规划的核心议题','公众咨询阶段是收集民意、优化规划的重要机会','建议发展局积极聆听地区居民对社区配套和环保影响的关切','北都发展与大湾区融合叙事结合，可提升项目的宏观正面形象'],public:[{text:'支持北都发展，期待带来更多住屋供应和就业机会',pct:45},{text:'关注发展对现有居民社区和生活环境的影响',pct:32},{text:'希望科技城规划优先考虑配套社区生活设施',pct:16},{text:'对北都长远发展愿景持乐观期待态度',pct:7}]},
+{reads:'18.6万',discuss:'4.4万',heat:'0.5万',maxHeat:'0.7万',rank:19,maxRank:18,duration:'3.1h',time:'2026.05.17 14:00',src:'香港01',ai:'香港政务司司长率团访问深圳，就深港两地在科创、金融、人才流通等领域的合作进行实质性洽谈。访问期间举行多场工作会议，并参观深圳科技园区。相关新闻受到媒体报道，整体以积极描述两地合作深化为主，舆情正向稳定。',trendX:['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'],trendHeat:[0.1,0.3,0.5,0.7,0.6,0.6,0.5,0.5,0.4,0.4],trendRank:[42,32,19,18,19,19,19,19,19,19],nodes:[{node:'首次上榜',rank:42,heat:'0.1万',time:'05-17 14:00'},{node:'榜单峰值',rank:18,heat:'0.7万',time:'05-17 15:30'},{node:'当前状态',rank:19,heat:'0.5万',time:'05-17 18:30'}],expert:['高层互访是深港合作深化的重要政治信号','访问成果的后续落实公告将是舆情关注焦点','建议通过媒体详细报道合作项目细节，增加公众对成果的直观感受','此类外访新闻可与大湾区发展大局叙事有机结合'],public:[{text:'欢迎两地高层互访，期待深港合作具体成果落地',pct:49},{text:'希望合作项目真正惠及香港市民和本地企业',pct:30},{text:'关注两地在人才流通和专业认证方面的合作进展',pct:14},{text:'对深港合作的长远前景持乐观态度',pct:7}]},
+{reads:'14.2万',discuss:'3.3万',heat:'0.4万',maxHeat:'0.6万',rank:20,maxRank:19,duration:'2.7h',time:'2026.05.18 09:00',src:'雅虎香港',ai:'外汇市场数据显示，人民币兑港元汇率创下年内新高，反映人民币走强趋势持续。相关消息受到金融媒体和投资者关注，讨论以汇率走势分析和对跨境业务的影响为主。整体为专业性较强的财经舆情，普通市民关注度一般。',trendX:['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30'],trendHeat:[0.1,0.2,0.4,0.6,0.5,0.5,0.4,0.4,0.4,0.3],trendRank:[45,34,20,19,20,20,20,20,20,20],nodes:[{node:'首次上榜',rank:45,heat:'0.1万',time:'05-18 09:00'},{node:'榜单峰值',rank:19,heat:'0.6万',time:'05-18 10:30'},{node:'当前状态',rank:20,heat:'0.4万',time:'05-18 13:30'}],expert:['人民币升值趋势是香港金融市场的重要背景因素','汇率走强有助于吸引内地资金流入香港市场','跨境企业和旅游业者对汇率变动的敏感度较高','建议相关媒体提供专业但易懂的汇率分析内容'],public:[{text:'关注人民币升值对跨境业务和日常消费的影响',pct:42},{text:'认为人民币走强反映中国经济基本面持续向好',pct:33},{text:'关注汇率变动对赴内地消费和旅游的影响',pct:17},{text:'对人民币国际化的长期发展趋势持积极态度',pct:8}]}
+]};
+
+/* ══ HOT LIST DETAIL MODAL LOGIC ══ */
+let _hlmTrendChart=null;
+function openHotDetail(key,idx){
+  const list=key==='cn'?D.hotCn:D.hotHk;
+  const h=list[idx];
+  const d=hlDetails[key][idx];
+  if(!h||!d)return;
+  const platNames={wb:'微博',dy:'抖音',bd:'百度',lk:'LIHKG',hkgd:'高登',hk01:'香港01',yh:'雅虎HK',gg:'Google'};
+  const srcName=d.src||(h.logos&&h.logos.length?platNames[h.logos[0]]:'全渠道');
+  document.getElementById('hlmTitle').textContent=h.t;
+  document.getElementById('hlmTime').textContent=d.time;
+  document.getElementById('hlmSrc').textContent=srcName;
+  document.getElementById('hlmReads').textContent=d.reads;
+  document.getElementById('hlmDiscuss').textContent=d.discuss;
+  document.getElementById('hlmHeat').textContent=d.heat;
+  document.getElementById('hlmMaxHeat').textContent=d.maxHeat;
+  document.getElementById('hlmRank').textContent='No.'+d.rank;
+  document.getElementById('hlmMaxRank').textContent='No.'+d.maxRank;
+  document.getElementById('hlmDuration').textContent=d.duration;
+  document.getElementById('hlmAiText').textContent=d.ai;
+  const nc=n=>{if(n==='榜单峰值')return 'peak';if(n==='掉落榜单')return 'drop';if(n==='再次上榜')return 'back';return '';};
+  document.getElementById('hlmNodes').innerHTML=d.nodes.map(n=>`<tr><td><span class="hlm-node-badge ${nc(n.node)}">${n.node}</span></td><td style="font-weight:700;color:#f0ab30">${n.rank}</td><td style="color:#5b9fff;font-weight:700">${n.heat}</td><td style="color:rgba(160,200,255,0.6)">${n.time}</td></tr>`).join('');
+  const SL={positive:'正面',neutral:'中立',negative:'负面'};
+  const PBC={positive:'#12a87a',neutral:'#f0ab30',negative:'#e04040'};
+  const HEN_CN=['张明远（传播学研究院）','李慧敏（新媒体实验室）','王君国（风险评估中心）','陈思远（智库分析师）'];
+  const HEN_HK=['陈志远（媒体研究院）','吴晓雯（舆情分析中心）','黎志强（智库顾问）','梁思敏（传播学研究院）'];
+  const enames=key==='cn'?HEN_CN:HEN_HK;
+  const es=t=>/正向|正面|积极|良好|认同|宣传|里程碑|振奋|有效|有力|示范|支柱|宣传/.test(t)?'positive':/风险|负面|情绪化|恐慌|争议|误读|敏感|需密切|应急|抵制|发酵|压力/.test(t)?'negative':'neutral';
+  const ps=t=>/支持|欢迎|振奋|安心|开心|自豪|感谢|有助|有力/.test(t)?'positive':/担忧|担心|批评|质疑|疑虑/.test(t)?'negative':'neutral';
+  document.getElementById('hlmExpert').innerHTML=d.expert.map((s,i)=>{const nm=enames[i]||enames[0];const st=es(s);return `<div class="hlm-op-item"><div class="hlm-op-num">${i+1}</div><div style="flex:1;min-width:0"><div class="hlm-expert-header"><span class="hlm-expert-name">${nm}</span><span class="evm-sentiment-tag ${st}">${SL[st]}</span></div><div class="hlm-op-text">${s}</div></div></div>`;}).join('');
+  document.getElementById('hlmPublic').innerHTML=d.public.map((s,i)=>{const st=ps(s.text);return `<div class="hlm-pub-item"><div class="hlm-pub-text"><div class="hlm-op-num">${i+1}</div><div style="flex:1">${s.text}</div><span class="evm-sentiment-tag ${st}">${SL[st]}</span></div><div class="hlm-pub-bar-row"><div class="hlm-pub-bar-bg"><div class="hlm-pub-bar" style="width:${s.pct}%;background:${PBC[st]}"></div></div><span class="hlm-pub-pct">${s.pct}%</span></div></div>`;}).join('');
+  document.getElementById('hlModal').style.display='flex';
+  if(_hlmTrendChart){_hlmTrendChart.dispose();}
+  _hlmTrendChart=echarts.init(document.getElementById('hlmTrendChart'),null,{renderer:'canvas'});
+  _hlmTrendChart.setOption({backgroundColor:'transparent',legend:{top:4,right:8,itemWidth:12,itemHeight:4,textStyle:{color:'rgba(160,200,255,0.7)',fontSize:10}},tooltip:{trigger:'axis',backgroundColor:'rgba(5,14,28,0.92)',borderColor:'rgba(43,97,240,0.3)',textStyle:{color:'#dce8ff',fontSize:10}},grid:{top:28,bottom:22,left:36,right:14},xAxis:{type:'category',data:d.trendX,axisLine:{lineStyle:{color:'rgba(80,140,255,0.2)'}},axisTick:{show:false},axisLabel:{color:'rgba(120,170,255,0.5)',fontSize:8}},yAxis:[{type:'value',name:'热度',nameTextStyle:{color:'rgba(120,170,255,0.4)',fontSize:8},splitLine:{lineStyle:{color:'rgba(80,140,255,0.1)'}},axisLabel:{color:'rgba(120,170,255,0.5)',fontSize:8}},{type:'value',name:'排名',nameTextStyle:{color:'rgba(120,170,255,0.4)',fontSize:8},inverse:true,splitLine:{show:false},axisLabel:{color:'rgba(120,170,255,0.5)',fontSize:8},min:1}],series:[{name:'热度',type:'line',data:d.trendHeat,smooth:true,yAxisIndex:0,lineStyle:{color:'#e04040',width:2},areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(224,64,64,0.3)'},{offset:1,color:'rgba(224,64,64,0.02)'}]}},symbol:'circle',symbolSize:5,itemStyle:{color:'#e04040'}},{name:'排名',type:'line',data:d.trendRank,smooth:true,yAxisIndex:1,lineStyle:{color:'#2b61f0',width:2},symbol:'circle',symbolSize:5,itemStyle:{color:'#2b61f0'}}]});
+}
+function closeHotModal(evt){
+  if(evt&&evt.target!==document.getElementById('hlModal'))return;
+  document.getElementById('hlModal').style.display='none';
+}
+</script>
+<!-- ══ EVENT DETAIL MODAL ══ -->
+<div id="evModal" class="evm-overlay" style="display:none" onclick="closeEvModal(event)">
+  <div class="evm-panel" onclick="event.stopPropagation()">
+    <div class="evm-deco tl"></div><div class="evm-deco tr"></div>
+    <div class="evm-deco bl"></div><div class="evm-deco br"></div>
+    <div class="evm-header">
+      <div class="evm-header-line"></div>
+      <span class="evm-header-title">事 件 详 情</span>
+      <div class="evm-header-line r"></div>
+      <button class="evm-close" onclick="closeEvModal()">✕</button>
+    </div>
+    <div class="evm-ev-title" id="evmEvTitle"></div>
+    <div class="evm-stats-row">
+      <span>信息总量：<b id="evmVol">--</b></span>
+      <span>近一小时信息量：<b id="evmRecent">--</b></span>
+    </div>
+    <div class="evm-ai-box">
+      <span class="evm-ai-badge">AI</span>
+      <div class="evm-ai-text" id="evmAiText"></div>
+    </div>
+    <div class="evm-body">
+      <div class="evm-col">
+        <div class="evm-sec">数据分布</div>
+        <div class="evm-dist-row">
+          <div id="evmDistChart" style="width:160px;height:160px;flex-shrink:0"></div>
+          <div id="evmPlatList" class="evm-dist-legend"></div>
+        </div>
+        <div class="evm-sec">热度走势</div>
+        <div id="evmTrendChart" style="width:100%;height:140px"></div>
+        <div id="evmPeakTopics" class="evm-peak-topics"></div>
+      </div>
+      <div class="evm-col">
+        <div class="evm-sec">事件脉络</div>
+        <div id="evmTimeline"></div>
+      </div>
+      <div class="evm-col">
+        <div class="evm-sec">专家观点</div>
+        <div id="evmExpert"></div>
+        <div class="evm-sec">网民观点</div>
+        <div id="evmPublic"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOT LIST DETAIL MODAL ══ -->
+<div id="hlModal" class="hlm-overlay" style="display:none" onclick="closeHotModal(event)">
+  <div class="hlm-panel" onclick="event.stopPropagation()">
+    <div class="hlm-deco tl"></div><div class="hlm-deco tr"></div>
+    <div class="hlm-deco bl"></div><div class="hlm-deco br"></div>
+    <div class="hlm-header">
+      <div class="hlm-header-line"></div>
+      <span class="hlm-header-title">榜 单 详 情</span>
+      <div class="hlm-header-line r"></div>
+      <button class="hlm-close" onclick="document.getElementById('hlModal').style.display='none'">&#x2715;</button>
+    </div>
+    <div class="hlm-topic-row">
+      <div class="hlm-topic-title" id="hlmTitle"></div>
+      <div class="hlm-topic-meta"><span>上榜时间：<b id="hlmTime"></b></span><span style="margin-left:6px">来源：<span class="hlm-src-badge" id="hlmSrc"></span></span></div>
+    </div>
+    <div class="hlm-ai-box">
+      <span class="hlm-ai-badge">AI</span>
+      <div class="hlm-ai-text" id="hlmAiText"></div>
+    </div>
+    <div class="hlm-body">
+      <div class="hlm-left">
+        <div class="hlm-sec">数据概览</div>
+        <div class="hlm-stats-grid">
+          <div class="hlm-stat-card"><div class="hlm-stat-label">话题阅读量</div><div class="hlm-stat-value sm" id="hlmReads">--</div></div>
+          <div class="hlm-stat-card"><div class="hlm-stat-label">讨论量</div><div class="hlm-stat-value sm" id="hlmDiscuss">--</div></div>
+          <div class="hlm-stat-card"><div class="hlm-stat-label">最新热度</div><div class="hlm-stat-value" id="hlmHeat">--</div></div>
+          <div class="hlm-stat-card"><div class="hlm-stat-label">历史最高热度</div><div class="hlm-stat-value" id="hlmMaxHeat">--</div></div>
+        </div>
+        <div class="hlm-stats-grid2">
+          <div class="hlm-stat-card"><div class="hlm-stat-label">当前排名</div><div class="hlm-stat-value rank" id="hlmRank">--</div></div>
+          <div class="hlm-stat-card"><div class="hlm-stat-label">历史最高排名</div><div class="hlm-stat-value rank" id="hlmMaxRank">--</div></div>
+          <div class="hlm-stat-card"><div class="hlm-stat-label">在榜时长</div><div class="hlm-stat-value sm" id="hlmDuration">--</div></div>
+        </div>
+        <div class="hlm-sec">热点趋势</div>
+        <div class="hlm-chart-box" id="hlmTrendChart"></div>
+        <div class="hlm-sec" style="margin-top:12px">上榜节点</div>
+        <table class="hlm-table"><thead><tr><th>节点</th><th>排名</th><th>热度</th><th>时间</th></tr></thead><tbody id="hlmNodes"></tbody></table>
+      </div>
+      <div class="hlm-right">
+        <div class="hlm-sec">专家观点</div>
+        <div id="hlmExpert"></div>
+        <div class="hlm-sec">网民观点</div>
+        <div id="hlmPublic"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

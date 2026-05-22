@@ -395,15 +395,24 @@
   ph.style.cursor = 'default';
 
   /* ════════════════════════════ OPEN / CLOSE ════════════════════════════ */
+  /* 点击遮罩关闭面板 */
+  const overlay = document.createElement('div');
+  overlay.id = 'ai-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;right:400px;z-index:9998;display:none;cursor:default;';
+  overlay.addEventListener('click', function () { closePanel(); });
+  document.body.appendChild(overlay);
+
   function openPanel() {
     if (S.open) return;
     S.open = true;
     positionPanel();
     panel.classList.add('ai-open');
+    overlay.style.display = 'block';
   }
   function closePanel() {
     S.open = false;
     panel.classList.remove('ai-open');
+    overlay.style.display = 'none';
   }
   function togglePanel() {
     S.open ? closePanel() : openPanel();
@@ -665,5 +674,7 @@
   window.aiAssistantOpenWithData = function (dataArray) {
     window.dispatchEvent(new CustomEvent('ai:open-with-data', { detail: dataArray || [] }));
   };
+  window.aiAssistantToggle = togglePanel;
+  window.aiAssistantOpen  = openPanel;
 
 })();

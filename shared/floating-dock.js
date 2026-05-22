@@ -229,7 +229,14 @@
       return;
     }
     new MutationObserver(function () {
-      wrap.style.right = panel.classList.contains('ai-open') ? '404px' : '0';
+      if (panel.classList.contains('ai-open')) {
+        // AI 面板打开时自动收起 Dock，贴回最右侧
+        wrap.classList.add('dock-collapsed');
+        localStorage.setItem('dockCollapsed', '1');
+        wrap.style.right = '0';
+      } else {
+        wrap.style.right = '0';
+      }
     }).observe(panel, { attributes: true, attributeFilter: ['class'] });
   }
 
@@ -261,8 +268,12 @@
     localStorage.setItem('dockCollapsed', '0');
   }
   function _dockAiClick() {
-    var ball = document.getElementById('ai-ball');
-    if (ball) ball.click();
+    if (typeof window.aiAssistantToggle === 'function') {
+      window.aiAssistantToggle();
+    } else {
+      var ball = document.getElementById('ai-ball');
+      if (ball) ball.click();
+    }
   }
   window.dockCollapse = _dockCollapse;
   window.dockExpand   = _dockExpand;

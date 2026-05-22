@@ -346,7 +346,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .tree-node.lv-2{padding-left:24px;font-size:12px}
 .tree-node.lv-3{padding-left:38px;font-size:12px;color:#6b7c95}
 .tree-node .tn-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tree-node .tn-count{font-size:11px;font-weight:700;color:#fff;background:#e04040;border-radius:999px;padding:1px 6px;min-width:18px;text-align:center}
+.tree-node .tn-count{font-size:10px;font-weight:600;color:#9eb0c6;background:rgba(122,145,184,0.12);border-radius:999px;padding:0px 5px;min-width:16px;text-align:center}
 .tree-node .tn-count.zero{background:rgba(122,145,184,0.2);color:#9eb0c6}
 .tree-node .tn-toggle{width:12px;height:12px;color:#9eb0c6;flex:0 0 12px;display:grid;place-items:center;font-size:9px}
 .tree-group-title{font-size:11px;color:#9eb0c6;font-weight:700;padding:10px 8px 4px;letter-spacing:0.05em}
@@ -375,163 +375,42 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .drawer-placeholder .pl-tag{display:inline-block;padding:2px 10px;border-radius:999px;background:rgba(196,125,16,0.1);color:#c47d10;font-size:11px;font-weight:700}
 .drawer-ft{padding:12px 20px;border-top:1px solid rgba(122,145,184,0.12);display:flex;justify-content:flex-end;gap:8px}
 
-/* tab-panel for overview - override default flex */
-.eyq-body .tab-panel{display:none}
-.eyq-body .tab-panel.active{display:block}
-
-/* ===== 企业舆情 专用样式 ===== */
-.eyq-toolbar{display:flex;align-items:center;background:#fff;border-radius:10px 10px 0 0;padding:0 20px;border-bottom:1px solid rgba(122,145,184,0.12)}
-.eyq-toolbar .main-tabs{flex:0 0 auto;border-bottom:none;padding:0;border-radius:0;background:transparent}
-.eyq-toolbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding:8px 0}
-.btn-alert-set{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(43,97,240,0.25);background:rgba(43,97,240,0.06);color:var(--primary,#2b61f0);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
-.btn-alert-set:hover{background:rgba(43,97,240,0.14);border-color:rgba(43,97,240,0.4)}
-
-/* 集团总览 */
-.ov-wrap{padding:16px 20px 32px;background:#fff;border-radius:0 0 10px 10px;border:1px solid rgba(122,145,184,0.1);border-top:none;box-shadow:0 1px 4px rgba(26,44,82,0.06);min-height:calc(100vh - 200px)}
-.ov-greet{font-size:14px;color:#6b7c95;margin-bottom:12px}
-.ov-greet strong{color:#1e2d45;font-weight:700}
-.ov-greet .grp-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;background:rgba(43,97,240,0.08);color:var(--primary,#2b61f0);font-size:12px;font-weight:700;margin-left:6px}
-
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-.stat-card{position:relative;background:#fff;border:1px solid rgba(122,145,184,0.14);border-radius:12px;padding:18px 20px 16px;box-shadow:0 1px 6px rgba(26,44,82,0.05);overflow:hidden;display:flex;flex-direction:column;gap:6px}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
-.stat-card.c-blue::before{background:linear-gradient(90deg,#2b61f0,#7ab0ff)}
-.stat-card.c-red::before{background:linear-gradient(90deg,#e04040,#f87171)}
-.stat-card.c-orange::before{background:linear-gradient(90deg,#c47d10,#f0a430)}
-.stat-card.c-green::before{background:linear-gradient(90deg,#12a87a,#3dcba4)}
-.stat-card .sc-label{font-size:12px;color:#6b7c95;font-weight:600;display:flex;align-items:center;gap:6px}
-.stat-card .sc-value{font-size:28px;font-weight:800;color:#1e2d45;line-height:1.1}
-.stat-card .sc-value small{font-size:13px;font-weight:600;color:#6b7c95;margin-left:3px}
-.stat-card .sc-trend{font-size:11px;color:#9eb0c6;display:flex;align-items:center;gap:4px}
-.stat-card .sc-trend.up{color:#e04040}
-.stat-card .sc-trend.down{color:#12a87a}
-.sc-spark{margin-top:4px}
-.sc-mini-bars{display:flex;gap:4px;margin-top:6px}
-.sc-mini-bar{flex:1;height:18px;border-radius:3px}
-.sc-mini-bar.lv-h{background:#e04040}
-.sc-mini-bar.lv-m{background:#c47d10}
-.sc-mini-bar.lv-l{background:#f0c75a}
-.sc-mini-bar-label{font-size:10px;color:#9eb0c6;text-align:center;margin-top:2px;flex:1}
-.sc-media-row{display:flex;align-items:center;gap:-6px;margin-top:4px}
-.sc-media-avatar{width:22px;height:22px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;margin-left:-6px}
-.sc-media-avatar:first-child{margin-left:0}
-
-/* 双栏面板 */
-.ov-two-col{display:grid;grid-template-columns:1.15fr 1fr;gap:14px}
-.ov-panel{background:#fff;border:1px solid rgba(122,145,184,0.12);border-radius:12px;box-shadow:0 1px 6px rgba(26,44,82,0.04);overflow:hidden;display:flex;flex-direction:column;margin-bottom:14px}
-.ov-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(122,145,184,0.08)}
-.ov-panel-title{font-size:13px;font-weight:800;color:#1e2d45;display:flex;align-items:center;gap:6px}
-.ov-panel-more{font-size:12px;color:var(--primary,#2b61f0);font-weight:600;cursor:pointer}
-.ov-panel-more:hover{text-decoration:underline}
-.ov-panel-bd{padding:14px 16px}
-.ov-panel-tools{display:flex;gap:6px}
-.ov-tool-chip{padding:3px 10px;border-radius:6px;font-size:11px;color:#6b7c95;background:transparent;border:1px solid rgba(122,145,184,0.18);cursor:pointer}
-.ov-tool-chip.active{background:rgba(43,97,240,0.08);color:var(--primary,#2b61f0);border-color:rgba(43,97,240,0.25);font-weight:700}
-
-/* 趋势 SVG */
-.trend-svg{width:100%;height:220px;display:block}
-
-/* 热力矩阵 */
-.heat-grid{display:grid;grid-template-columns:120px repeat(7,1fr);gap:4px;font-size:11px}
-.heat-cell-h{padding:4px 6px;color:#9eb0c6;text-align:center;font-weight:600}
-.heat-cell-row{padding:6px 8px;color:#1e2d45;font-weight:600;display:flex;align-items:center}
-.heat-cell{height:28px;border-radius:4px;display:grid;place-items:center;font-weight:700;color:#fff;cursor:pointer;font-size:11px}
-.heat-cell:hover{outline:2px solid #2b61f0}
-
-/* 渠道环形图 */
-.donut-row{display:flex;align-items:center;gap:18px}
-.donut-svg{width:140px;height:140px;flex:0 0 140px}
-.donut-legend{flex:1;display:flex;flex-direction:column;gap:7px;font-size:12px}
-.donut-legend-item{display:flex;align-items:center;gap:8px}
-.donut-legend-dot{width:9px;height:9px;border-radius:2px;flex:0 0 9px}
-.donut-legend-name{flex:1;color:#3a4560}
-.donut-legend-val{color:#1e2d45;font-weight:700}
-
-/* 预警时间线 */
-.alert-line{display:flex;flex-direction:column}
-.alert-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(122,145,184,0.06);cursor:pointer}
-.alert-row:last-child{border-bottom:none}
-.alert-row:hover{background:rgba(43,97,240,0.02)}
-.alert-tag{padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;flex:0 0 auto;margin-top:2px}
-.alert-tag.lv-high{background:rgba(224,64,64,0.1);color:#e04040}
-.alert-tag.lv-med{background:rgba(196,125,16,0.1);color:#c47d10}
-.alert-tag.lv-low{background:rgba(43,97,240,0.1);color:#2b61f0}
-.alert-body{flex:1;min-width:0}
-.alert-title{font-size:13px;color:#1e2d45;font-weight:600;margin-bottom:3px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.alert-meta{font-size:11px;color:#9eb0c6;display:flex;gap:10px}
-.alert-meta .ent{color:var(--primary,#2b61f0);font-weight:600}
-
-/* TOP10 信息 */
-.top-list{display:flex;flex-direction:column}
-.top-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(122,145,184,0.06);cursor:pointer}
-.top-item:last-child{border-bottom:none}
-.top-rank{font-size:13px;font-weight:800;color:#c0ccdc;width:18px;flex:0 0 18px;padding-top:1px;text-align:center}
-.top-rank.t{color:#e04040}
-.top-body{flex:1;min-width:0}
-.top-title{font-size:13px;color:#1e2d45;font-weight:500;margin-bottom:3px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.top-title:hover{color:var(--primary,#2b61f0)}
-.top-meta{font-size:11px;color:#9eb0c6;display:flex;gap:8px;align-items:center}
-.top-senti{padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700}
-.top-senti.neg{background:rgba(224,64,64,0.1);color:#e04040}
-.top-senti.pos{background:rgba(18,168,122,0.1);color:#12a87a}
-.top-senti.neu{background:rgba(122,145,184,0.12);color:#6b7c95}
-.top-spread{color:#e04040;font-weight:700}
-
-/* 高管/品牌声誉榜 */
-.rank-list{display:flex;flex-direction:column}
-.rank-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(122,145,184,0.06)}
-.rank-row:last-child{border-bottom:none}
-.rank-idx{font-size:12px;font-weight:800;color:#c0ccdc;width:18px;flex:0 0 18px;text-align:center}
-.rank-idx.t{color:var(--primary,#2b61f0)}
-.rank-name{flex:1;font-size:13px;color:#1e2d45;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rank-tag{padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;background:rgba(122,145,184,0.1);color:#6b7c95}
-.rank-tag.t-person{background:rgba(43,97,240,0.08);color:#2b61f0}
-.rank-tag.t-brand{background:rgba(124,58,237,0.08);color:#7c3aed}
-.rank-bar{flex:0 0 90px;height:6px;background:rgba(122,145,184,0.1);border-radius:999px;overflow:hidden;position:relative}
-.rank-bar-fill{height:100%;background:linear-gradient(90deg,#7ab0ff,#2b61f0);border-radius:999px}
-.rank-score{font-size:13px;font-weight:800;color:#1e2d45;width:36px;flex:0 0 36px;text-align:right}
-.rank-trend{font-size:11px;width:42px;flex:0 0 42px;text-align:right}
-.rank-trend.up{color:#12a87a}
-.rank-trend.down{color:#e04040}
-
-/* 主体矩阵：实体树 */
-.tree-search{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid rgba(122,145,184,0.18);background:#fff;margin-bottom:10px}
-.tree-search input{border:none;outline:none;flex:1;font-size:12px;color:#1e2d45}
-.entity-tree{display:flex;flex-direction:column;gap:1px}
-.tree-node{position:relative;display:flex;align-items:center;gap:6px;padding:6px 8px 6px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:#1e2d45;transition:background .12s}
-.tree-node:hover{background:rgba(43,97,240,0.05)}
-.tree-node.active{background:rgba(43,97,240,0.1);color:var(--primary,#2b61f0);font-weight:700}
-.tree-node.lv-2{padding-left:24px;font-size:12px}
-.tree-node.lv-3{padding-left:38px;font-size:12px;color:#6b7c95}
-.tree-node .tn-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tree-node .tn-count{font-size:11px;font-weight:700;color:#fff;background:#e04040;border-radius:999px;padding:1px 6px;min-width:18px;text-align:center}
-.tree-node .tn-count.zero{background:rgba(122,145,184,0.2);color:#9eb0c6}
-.tree-node .tn-toggle{width:12px;height:12px;color:#9eb0c6;flex:0 0 12px;display:grid;place-items:center;font-size:9px}
-.tree-group-title{font-size:11px;color:#9eb0c6;font-weight:700;padding:10px 8px 4px;letter-spacing:0.05em}
-
-/* 主体面包屑 */
-.subj-breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:#6b7c95;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(122,145,184,0.08)}
-.subj-breadcrumb .bc-current{color:#1e2d45;font-weight:700;font-size:13px}
-.subj-breadcrumb .bc-sep{color:#c0ccdc}
-
-/* 预警设置抽屉 */
-.drawer-mask{position:fixed;inset:0;background:rgba(26,44,82,0.36);z-index:9999;display:none;justify-content:flex-end}
-.drawer-mask.show{display:flex}
-.drawer{width:420px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(26,44,82,0.18);display:flex;flex-direction:column;animation:slideIn .18s ease}
-@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
-.drawer-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(122,145,184,0.12)}
-.drawer-hd h3{margin:0;font-size:15px;font-weight:800;color:#1e2d45}
-.drawer-close{width:28px;height:28px;border-radius:6px;border:none;background:transparent;color:#6b7c95;cursor:pointer;font-size:20px;line-height:1}
-.drawer-close:hover{background:rgba(122,145,184,0.1)}
-.drawer-bd{flex:1;overflow-y:auto;padding:24px 20px}
-.drawer-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:12px;color:#6b7c95}
-.drawer-placeholder .pl-ico{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,rgba(43,97,240,0.1),rgba(122,90,255,0.1));display:grid;place-items:center;color:var(--primary,#2b61f0)}
-.drawer-placeholder h4{margin:0;font-size:15px;color:#1e2d45;font-weight:800}
-.drawer-placeholder p{margin:0;font-size:12px;color:#6b7c95;line-height:1.7;max-width:280px}
-.drawer-placeholder .pl-list{margin:6px 0 0;text-align:left;font-size:12px;color:#3a4560;line-height:1.9;background:#f5f7fb;border-radius:10px;padding:12px 16px;align-self:stretch}
-.drawer-placeholder .pl-list li{margin:0 0 2px}
-.drawer-placeholder .pl-tag{display:inline-block;padding:2px 10px;border-radius:999px;background:rgba(196,125,16,0.1);color:#c47d10;font-size:11px;font-weight:700}
-.drawer-ft{padding:12px 20px;border-top:1px solid rgba(122,145,184,0.12);display:flex;justify-content:flex-end;gap:8px}
+/* 竞对舆情 增量样式 */
+.sc-trend.down{color:#e04040}
+.cmp-mini-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#4b5b75}
+.cmp-mini-name{flex:0 0 56px;color:#6b7c95}
+.cmp-mini-bar{flex:1;height:6px;background:rgba(122,145,184,0.14);border-radius:3px;overflow:hidden;display:block;position:relative}
+.cmp-mini-bar > span{display:block;height:100%;border-radius:3px}
+.cmp-mini-val{flex:0 0 36px;text-align:right;font-weight:700;color:#1e2d45;font-size:11px}
+.cmp-grid{display:flex;flex-direction:column;gap:4px;padding:4px 0}
+.cmp-row{display:grid;grid-template-columns:1.3fr 1.6fr 0.9fr 1.4fr 0.9fr;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:12px;color:#4b5b75;background:rgba(122,145,184,0.04)}
+.cmp-row.cmp-head{background:transparent;font-size:11px;color:#9eb0c6;font-weight:700;padding:4px 12px}
+.cmp-row.own{background:rgba(43,97,240,0.06);border:1px solid rgba(43,97,240,0.18)}
+.cmp-row.cmp{background:rgba(122,145,184,0.06)}
+.cmp-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.cmp-c1{font-weight:700;color:#1e2d45}
+.cmp-own-tag{display:inline-block;margin-left:6px;padding:0 6px;border-radius:4px;background:rgba(43,97,240,0.12);color:#2b61f0;font-size:10px;font-weight:700}
+.cmp-c2,.cmp-c4{display:flex;align-items:center;gap:8px}
+.cmp-bar{flex:1;height:6px;background:rgba(122,145,184,0.14);border-radius:3px;overflow:hidden;display:block}
+.cmp-bar > span{display:block;height:100%;border-radius:3px}
+.cmp-num{flex:0 0 44px;text-align:right;color:#1e2d45;font-weight:700}
+.cmp-trend{font-weight:700;color:#9eb0c6;text-align:right}
+.cmp-th-trend{text-align:right}
+.cmp-c4{padding-left:40px}
+.cmp-trend .up{color:#12a87a}
+.cmp-trend .down{color:#e04040}
+.top-ent-tag{display:inline-block;margin-right:6px;padding:0 6px;border-radius:4px;font-size:10px;font-weight:800;vertical-align:1px}
+.top-ent-tag.own{background:rgba(43,97,240,0.12);color:#2b61f0}
+.top-ent-tag.cmp{background:rgba(224,64,64,0.12);color:#e04040}
+.scope-badge{display:inline-block;margin-right:8px;padding:1px 8px;border-radius:4px;font-size:10px;font-weight:800;vertical-align:1px}
+.scope-badge.own{background:rgba(43,97,240,0.1);color:#2b61f0;border:1px solid rgba(43,97,240,0.22)}
+.scope-badge.cmp{background:rgba(224,64,64,0.1);color:#e04040;border:1px solid rgba(224,64,64,0.22)}
+.feed-item.fi-cmp{border-left:3px solid #e04040}
+.tree-node.lv-1.cmp{margin-top:6px;border-top:1px dashed rgba(122,145,184,0.2);padding-top:8px;color:#e04040}
+.tree-node.lv-1.cmp .tn-name{color:#e04040;font-weight:800}
+.tree-node.lv-2.cmp .tn-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#e04040;margin-right:6px;vertical-align:middle}
+.tree-node.lv-2.cmp .tn-name{color:#b03030}
+.grp-tag{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:4px;background:rgba(43,97,240,0.08);color:#2b61f0;font-size:11px;font-weight:700;border:1px solid rgba(43,97,240,0.18)}
 
 /* tab-panel for overview - override default flex */
 .eyq-body .tab-panel{display:none}
@@ -567,8 +446,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       <!-- 顶部Tab + 预警设置 -->
       <div class="eyq-toolbar">
         <div class="main-tabs">
-          <button class="main-tab active" onclick="switchEyqTab(0,this)">集团总览</button>
-          <button class="main-tab" onclick="switchEyqTab(1,this)">主体矩阵</button>
+          <button class="main-tab active" onclick="switchEyqTab(0,this)">舆情态势</button>
+          <button class="main-tab" onclick="switchEyqTab(1,this)">舆情列表</button>
         </div>
         <div class="eyq-toolbar-right">
           <button class="btn-alert-set" onclick="openAlertDrawer()">
@@ -583,14 +462,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <div class="ov-wrap">
 
           <div class="ov-greet">
-            当前数据范围：<strong>中XX集团</strong><span class="grp-tag">所属集团 · 含 8 家子公司</span> · 数据更新于 2026-05-21 09:18
+            当前数据范围：<strong>紫荆集团</strong><span class="grp-tag">所属集团 · 含 8 家子公司</span><span class="grp-tag" style="background:rgba(224,64,64,0.08);color:#e04040;border-color:rgba(224,64,64,0.2)">竞对监测 · 3 家</span> · 数据更新于 2026-05-21 09:18
           </div>
 
           <!-- 4 统计卡 -->
           <div class="stat-row">
             <div class="stat-card c-blue">
-              <div class="sc-label">今日相关信息量</div>
-              <div class="sc-value">3,287<small>条</small></div>
+              <div class="sc-label">今日信息总量</div>
+              <div class="sc-value">328<small>条</small></div>
               <div class="sc-trend up">↑ 12.4% vs 昨日</div>
               <svg class="sc-spark" width="100%" height="32" viewBox="0 0 200 32" preserveAspectRatio="none">
                 <polyline fill="none" stroke="#2b61f0" stroke-width="1.6" points="0,22 25,18 50,20 75,12 100,16 125,10 150,14 175,8 200,12"/>
@@ -599,9 +478,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             </div>
 
             <div class="stat-card c-red">
-              <div class="sc-label">负面信息量</div>
-              <div class="sc-value">214<small>条 · 占比 6.5%</small></div>
-              <div class="sc-trend up">↑ 28 条 vs 昨日</div>
+              <div class="sc-label">集团信息量</div>
+              <div class="sc-value">121<small>条 · 负面23条</small></div>
+              <div class="sc-trend up">↑ 8 条 vs 昨日</div>
               <svg class="sc-spark" width="100%" height="32" viewBox="0 0 200 32" preserveAspectRatio="none">
                 <polyline fill="none" stroke="#e04040" stroke-width="1.6" points="0,24 25,22 50,18 75,20 100,14 125,16 150,12 175,8 200,6"/>
                 <polyline fill="rgba(224,64,64,0.08)" stroke="none" points="0,24 25,22 50,18 75,20 100,14 125,16 150,12 175,8 200,6 200,32 0,32"/>
@@ -609,7 +488,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             </div>
 
             <div class="stat-card c-orange">
-              <div class="sc-label">进行中预警</div>
+              <div class="sc-label">预警</div>
               <div class="sc-value">7<small>条</small></div>
               <div class="sc-trend">高 2 · 中 3 · 低 2</div>
               <div class="sc-mini-bars" style="margin-top:8px">
@@ -620,16 +499,13 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             </div>
 
             <div class="stat-card c-green">
-              <div class="sc-label">重点媒体覆盖</div>
-              <div class="sc-value">23<small>家 · 报道 41 篇</small></div>
-              <div class="sc-trend up">↑ 5 家 vs 上周</div>
-              <div class="sc-media-row" style="margin-top:6px">
-                <div class="sc-media-avatar" style="background:#e04040">人</div>
-                <div class="sc-media-avatar" style="background:#2b61f0">新</div>
-                <div class="sc-media-avatar" style="background:#c47d10">财</div>
-                <div class="sc-media-avatar" style="background:#12a87a">证</div>
-                <div class="sc-media-avatar" style="background:#7c3aed">21</div>
-                <div class="sc-media-avatar" style="background:#9eb0c6">+18</div>
+              <div class="sc-label">竞对信息量</div>
+              <div class="sc-value">48<small>条 · 负面6条</small></div>
+              <div class="sc-trend down">海棠 ↑42% 居首</div>
+              <div class="cmp-mini" style="margin-top:8px;display:flex;flex-direction:column;gap:4px">
+                <div class="cmp-mini-row"><span class="cmp-mini-name">海棠集团</span><span class="cmp-mini-bar"><span style="width:82%;background:#e04040"></span></span><span class="cmp-mini-val">23</span></div>
+                <div class="cmp-mini-row"><span class="cmp-mini-name">木兰集团</span><span class="cmp-mini-bar"><span style="width:54%;background:#f97316"></span></span><span class="cmp-mini-val">15</span></div>
+                <div class="cmp-mini-row"><span class="cmp-mini-name">玉兰集团</span><span class="cmp-mini-bar"><span style="width:34%;background:#c47d10"></span></span><span class="cmp-mini-val">10</span></div>
               </div>
             </div>
           </div>
@@ -637,11 +513,11 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
           <!-- 双栏 -->
           <div class="ov-two-col">
             <!-- 左栏 -->
-            <div>
+            <div style="display:flex;flex-direction:column">
               <!-- 声誉趋势 -->
               <div class="ov-panel">
                 <div class="ov-panel-hd">
-                  <div class="ov-panel-title">📈 声誉趋势（近 30 天）</div>
+                  <div class="ov-panel-title">📈 舆情趋势（近 30 天）</div>
                   <div class="ov-panel-tools">
                     <span class="ov-tool-chip">7天</span>
                     <span class="ov-tool-chip active">30天</span>
@@ -658,39 +534,54 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
               </div>
 
-              <!-- 主体声誉热力矩阵 -->
-              <div class="ov-panel">
-                <div class="ov-panel-hd">
-                  <div class="ov-panel-title">🔥 主体声誉热力矩阵</div>
-                  <span class="ov-panel-more">在主体矩阵查看 →</span>
+              <!-- 渠道 + 情感 双卡 -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="ov-panel" style="margin-bottom:14px">
+                  <div class="ov-panel-hd">
+                    <div class="ov-panel-title">🌐 传播渠道占比</div>
+                  </div>
+                  <div class="ov-panel-bd">
+                    <div class="donut-row">
+                      <svg class="donut-svg" viewBox="0 0 120 120" id="donutSvg"></svg>
+                      <div class="donut-legend" id="donutLegend"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="ov-panel-bd">
-                  <div class="heat-grid" id="heatGrid"></div>
-                  <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;font-size:11px;color:#9eb0c6;margin-top:10px">
-                    负面占比：
-                    <span style="display:inline-block;width:18px;height:10px;background:#12a87a;border-radius:2px"></span>低
-                    <span style="display:inline-block;width:18px;height:10px;background:#f0c75a;border-radius:2px"></span>中
-                    <span style="display:inline-block;width:18px;height:10px;background:#e04040;border-radius:2px"></span>高
+                <div class="ov-panel" style="margin-bottom:14px">
+                  <div class="ov-panel-hd">
+                    <div class="ov-panel-title">💬 情感占比</div>
+                  </div>
+                  <div class="ov-panel-bd">
+                    <div class="donut-row">
+                      <svg class="donut-svg" viewBox="0 0 120 120" id="sentiDonut"></svg>
+                      <div class="donut-legend" id="sentiLegend"></div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- 渠道环形 -->
-              <div class="ov-panel">
+              <!-- 竞对舆情对标 -->
+              <div class="ov-panel" style="flex:1;margin-bottom:0">
                 <div class="ov-panel-hd">
-                  <div class="ov-panel-title">🌐 传播渠道占比</div>
+                  <div class="ov-panel-title">⚔️ 竞对舆情对标</div>
+                  <div class="ov-panel-tools">
+                    <span class="ov-tool-chip active">今日</span>
+                    <span class="ov-tool-chip">近7天</span>
+                    <span class="ov-tool-chip">近30天</span>
+                  </div>
                 </div>
                 <div class="ov-panel-bd">
-                  <div class="donut-row">
-                    <svg class="donut-svg" viewBox="0 0 120 120" id="donutSvg"></svg>
-                    <div class="donut-legend" id="donutLegend"></div>
+                  <div class="cmp-grid" id="cmpGrid"></div>
+                  <div style="display:flex;justify-content:flex-end;gap:14px;font-size:11px;color:#9eb0c6;margin-top:8px">
+                    <span><span style="display:inline-block;width:10px;height:10px;background:#2b61f0;border-radius:2px;vertical-align:middle;margin-right:4px"></span>本企业 · 紫荆集团</span>
+                    <span><span style="display:inline-block;width:10px;height:10px;background:#9eb0c6;border-radius:2px;vertical-align:middle;margin-right:4px"></span>竞对均值</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- 右栏 -->
-            <div>
+            <div style="display:flex;flex-direction:column">
               <!-- 预警动态 -->
               <div class="ov-panel">
                 <div class="ov-panel-hd">
@@ -703,7 +594,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               </div>
 
               <!-- 重点信息TOP10 -->
-              <div class="ov-panel">
+              <div class="ov-panel" style="flex:1;margin-bottom:0;display:flex;flex-direction:column">
                 <div class="ov-panel-hd">
                   <div class="ov-panel-title">🎯 重点信息 TOP 10</div>
                   <div class="ov-panel-tools">
@@ -713,21 +604,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
                 <div class="ov-panel-bd" style="padding:6px 16px 12px">
                   <div class="top-list" id="topList"></div>
-                </div>
-              </div>
-
-              <!-- 高管/品牌声誉榜 -->
-              <div class="ov-panel">
-                <div class="ov-panel-hd">
-                  <div class="ov-panel-title">👤 高管 / 品牌声誉榜</div>
-                  <div class="ov-panel-tools">
-                    <span class="ov-tool-chip active">全部</span>
-                    <span class="ov-tool-chip">高管</span>
-                    <span class="ov-tool-chip">品牌</span>
-                  </div>
-                </div>
-                <div class="ov-panel-bd" style="padding:6px 16px 12px">
-                  <div class="rank-list" id="rankList"></div>
                 </div>
               </div>
             </div>
@@ -742,15 +618,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
           <!-- 左侧实体树 -->
           <aside class="left-panel" style="overflow-y:auto;max-height:calc(100vh - 180px)">
             <div class="lp-header">
-              <span class="lp-title">主体树</span>
+              <span class="lp-title">舆情主体</span>
               <div class="lp-actions">
                 <button class="lp-btn" title="搜索"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M19 19L15.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-                <button class="lp-btn" title="刷新">↻</button>
               </div>
-            </div>
-            <div class="tree-search">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="#9aa8bc" stroke-width="1.8"/><path d="M19 19L15.5 15.5" stroke="#9aa8bc" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <input placeholder="搜索主体">
             </div>
 
             <div class="entity-tree" id="entityTree"></div>
@@ -761,10 +632,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <!-- 面包屑：当前主体 -->
             <div class="subj-breadcrumb" id="subjBreadcrumb">
               <span>当前主体：</span>
-              <span class="bc-current">中XX集团</span>
+              <span class="bc-current">紫荆集团</span>
               <span class="bc-sep">·</span>
-              <span>含全部子公司及关联主体</span>
-              <span style="margin-left:auto;font-size:12px;color:#9eb0c6">舆情清单 · 共 <strong id="feedCount" style="color:#1e2d45">3,287</strong> 条</span>
+              <span>含全部子公司、关联主体及竞对</span>
+              <span style="margin-left:auto;font-size:12px;color:#9eb0c6">舆情清单 · 共 <strong id="feedCount" style="color:#1e2d45">328</strong> 条</span>
             </div>
 
             <!-- 筛选 -->
@@ -797,13 +668,22 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 <span class="fz-label">归属主体</span>
                 <div class="channel-chips">
                   <span class="cc active">全部</span>
-                  <span class="cc">中XX集团（母公司）</span>
-                  <span class="cc">XX股份</span>
-                  <span class="cc">XX金融</span>
-                  <span class="cc">XX能源</span>
-                  <span class="cc">XX科技</span>
+                  <span class="cc">紫荆集团（母公司）</span>
+                  <span class="cc">紫荆股份</span>
+                  <span class="cc">紫荆金融</span>
+                  <span class="cc">紫荆能源</span>
+                  <span class="cc">紫荆科技</span>
                   <span class="cc">高管</span>
                   <span class="cc">品牌产品</span>
+                </div>
+              </div>
+              <div class="fz-row">
+                <span class="fz-label">竞对监测</span>
+                <div class="channel-chips">
+                  <span class="cc">全部竞对</span>
+                  <span class="cc">海棠集团</span>
+                  <span class="cc">木兰集团</span>
+                  <span class="cc">玉兰集团</span>
                 </div>
               </div>
               <div class="fz-row">
@@ -823,7 +703,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
             <!-- 结果栏 -->
             <div class="result-bar">
-              <span class="result-count">共 3,287 条</span>
+              <span class="result-count">共 376 条（紫荆 328 / 竞对 48）</span>
               <div style="display:flex;align-items:center;gap:8px">
                 <button class="ghost-button">选择当前页</button>
                 <button class="ghost-button">导出全部</button>
@@ -861,38 +741,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
     </section>
   </main>
-
-  <!-- 预警设置 抽屉（占位） -->
-  <div class="drawer-mask" id="alertDrawer" onclick="if(event.target===this)closeAlertDrawer()">
-    <div class="drawer">
-      <div class="drawer-hd">
-        <h3>预警设置</h3>
-        <button class="drawer-close" onclick="closeAlertDrawer()">×</button>
-      </div>
-      <div class="drawer-bd">
-        <div class="drawer-placeholder">
-          <div class="pl-ico">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="pl-tag">功能建设中</span>
-          <h4>自定义企业舆情预警规则</h4>
-          <p>后续将支持以下能力，命中规则的舆情会自动写入「预警中心」并通过站内信、邮件等方式推送给指定分析师。</p>
-          <ul class="pl-list">
-            <li>· 按 <strong>主体</strong>（集团 / 子公司 / 品牌 / 高管）配置规则</li>
-            <li>· 按 <strong>情感倾向</strong> + <strong>阈值</strong>（如 1 小时内负面 ≥ N 条）触发</li>
-            <li>· 按 <strong>传播力</strong>（阅读 / 转发 / 评论）阈值触发</li>
-            <li>· 多接收人、多通道（站内信 / 邮件 / 企业微信）</li>
-            <li>· 命中后自动推送至 <strong>预警中心</strong> 并生成预警单</li>
-          </ul>
-        </div>
-      </div>
-      <div class="drawer-ft">
-        <button class="ghost-button" onclick="closeAlertDrawer()">关闭</button>
-        <button class="btn-qry" disabled style="opacity:.5;cursor:not-allowed">敬请期待</button>
-      </div>
-    </div>
-  </div>
-
 
   <!-- 预警设置 抽屉（占位） -->
   <div class="drawer-mask" id="alertDrawer" onclick="if(event.target===this)closeAlertDrawer()">
@@ -1045,7 +893,7 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
 /* 主体声誉热力矩阵 */
 (function renderHeat(){
   var grid = document.getElementById('heatGrid'); if(!grid) return;
-  var subjs = ['XX股份','XX金融','XX能源','XX科技','XX物流','XX地产','XX文化','集团总部'];
+  var subjs = ['紫荆股份','紫荆金融','紫荆能源','紫荆科技','紫荆物流','紫荆地产','紫荆文化','集团总部'];
   var cols  = ['财务','产品','高管','合规','ESG','服务','舆情综合'];
   var html = '<div class="heat-cell-h"></div>';
   cols.forEach(function(c){ html += '<div class="heat-cell-h">'+c+'</div>'; });
@@ -1101,242 +949,14 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
   }).join('');
 })();
 
-/* 预警动态 */
-(function renderAlerts(){
-  var box = document.getElementById('alertLine'); if(!box) return;
-  var data = [
-    {lv:'high',ent:'XX股份',title:'某产品质量投诉在抖音突增 ↑320%，关联视频已破百万播放',time:'08:42 · 距今 36 分钟'},
-    {lv:'high',ent:'高管 · 张XX',title:'匿名爆料账号针对张XX发布连续 3 篇负面长文',time:'08:15 · 距今 1 小时'},
-    {lv:'med', ent:'XX金融',title:'监管新规解读出现误读，财经媒体连发 5 篇质疑稿',time:'07:30 · 今早'},
-    {lv:'med', ent:'XX能源',title:'子公司年报数据被自媒体片段化解读',time:'昨日 22:14'},
-    {lv:'low', ent:'品牌 · XX-Pro',title:'新品发布后产生若干用户讨论，整体偏中性',time:'昨日 19:08'},
-    {lv:'low', ent:'XX科技',title:'某专利诉讼初步判决在专业论坛被讨论',time:'昨日 16:22'}
-  ];
-  box.innerHTML = data.map(function(d){
-    var lvText={high:'高',med:'中',low:'低'}[d.lv];
-    return '<div class="alert-row"><span class="alert-tag lv-'+d.lv+'">'+lvText+'</span><div class="alert-body"><div class="alert-title">'+d.title+'</div><div class="alert-meta"><span class="ent">'+d.ent+'</span><span>'+d.time+'</span></div></div></div>';
-  }).join('');
-})();
-
-/* 重点信息 TOP 10 */
-(function renderTopList(){
-  var box = document.getElementById('topList'); if(!box) return;
-  var data = [
-    {senti:'neg',title:'XX股份某型号被曝质量问题，相关话题登上微博热搜第 6 位',src:'微博热搜',spread:'12.8w 转发'},
-    {senti:'neg',title:'《XX金融监管解读》引发市场担忧，多家券商发布点评',src:'财联社',spread:'8.6w 阅读'},
-    {senti:'neu',title:'XX集团一季度营收同比增长 8.2%，基本面稳健',src:'新华网',spread:'6.4w 阅读'},
-    {senti:'neg',title:'匿名爆料：XX科技高管疑涉及内部审查',src:'雪球',spread:'5.1w 互动'},
-    {senti:'pos',title:'XX能源子公司海上风电项目并网发电',src:'人民网',spread:'4.8w 阅读'},
-    {senti:'neg',title:'消费者集体投诉 XX-Pro 售后响应慢',src:'黑猫投诉',spread:'3.2w 关注'},
-    {senti:'neu',title:'XX地产以 XX 亿元摘得长三角某地块',src:'21世纪经济报道',spread:'2.6w 阅读'},
-    {senti:'pos',title:'XX文化携手央视推出 ESG 公益项目',src:'央视新闻',spread:'2.1w 转发'},
-    {senti:'neg',title:'部分自媒体质疑 XX 集团关联交易披露不完整',src:'微信公众号',spread:'1.8w 阅读'},
-    {senti:'neu',title:'XX物流升级智能仓储，引发行业讨论',src:'界面新闻',spread:'1.4w 阅读'}
-  ];
-  box.innerHTML = data.map(function(d,i){
-    var st={neg:'负',pos:'正',neu:'中'}[d.senti];
-    return '<div class="top-item"><span class="top-rank '+(i<3?'t':'')+'">'+(i+1)+'</span><div class="top-body"><div class="top-title">'+d.title+'</div><div class="top-meta"><span class="top-senti '+d.senti+'">'+st+'</span><span>'+d.src+'</span><span class="top-spread">'+d.spread+'</span></div></div></div>';
-  }).join('');
-})();
-
-/* 高管/品牌声誉榜 */
-(function renderRank(){
-  var box = document.getElementById('rankList'); if(!box) return;
-  var data = [
-    {name:'XX-Pro',type:'brand',score:88,trend:+2.4},
-    {name:'王XX（董事长）',type:'person',score:84,trend:+0.8},
-    {name:'XX金融',type:'brand',score:79,trend:-1.2},
-    {name:'李XX（副总裁）',type:'person',score:76,trend:+0.0},
-    {name:'XX能源',type:'brand',score:74,trend:+1.6},
-    {name:'XX-One',type:'brand',score:71,trend:-0.6},
-    {name:'张XX（CFO）',type:'person',score:62,trend:-3.4},
-    {name:'XX科技',type:'brand',score:58,trend:-2.1}
-  ];
-  box.innerHTML = data.map(function(d,i){
-    var tag = d.type==='person'?'高管':'品牌';
-    var tagCls = d.type==='person'?'t-person':'t-brand';
-    var tcls = d.trend>0?'up':(d.trend<0?'down':'');
-    var tsign = d.trend>0?'↑':(d.trend<0?'↓':'·');
-    return '<div class="rank-row"><span class="rank-idx '+(i<3?'t':'')+'">'+(i+1)+'</span><span class="rank-name">'+d.name+'</span><span class="rank-tag '+tagCls+'">'+tag+'</span><span class="rank-bar"><span class="rank-bar-fill" style="width:'+d.score+'%"></span></span><span class="rank-score">'+d.score+'</span><span class="rank-trend '+tcls+'">'+tsign+' '+Math.abs(d.trend).toFixed(1)+'</span></div>';
-  }).join('');
-})();
-
-/* 主体树 */
-(function renderTree(){
-  var box = document.getElementById('entityTree'); if(!box) return;
-  var data = [
-    {name:'中XX集团',count:3287,lv:1,active:true},
-    {name:'XX股份',count:1268,lv:2},
-    {name:'品牌 · XX-Pro',count:386,lv:3},
-    {name:'品牌 · XX-One',count:142,lv:3},
-    {name:'高管 · 王XX',count:78,lv:3},
-    {name:'XX金融',count:642,lv:2},
-    {name:'高管 · 李XX',count:54,lv:3},
-    {name:'XX能源',count:418,lv:2},
-    {name:'XX科技',count:312,lv:2},
-    {name:'高管 · 张XX',count:96,lv:3},
-    {name:'XX物流',count:218,lv:2},
-    {name:'XX地产',count:184,lv:2},
-    {name:'XX文化',count:142,lv:2},
-    {name:'集团总部 · 高管',count:103,lv:2}
-  ];
-  box.innerHTML = data.map(function(d){
-    var cnt = d.count===0
-      ? '<span class="tn-count zero">0</span>'
-      : '<span class="tn-count">'+(d.count>999?(Math.floor(d.count/100)/10)+'k':d.count)+'</span>';
-    var arrow = d.lv===1?'▾':(d.lv===2?'▸':'·');
-    return '<div class="tree-node lv-'+d.lv+' '+(d.active?'active':'')+'" onclick="selectEntity(this)" data-name="'+d.name+'"><span class="tn-toggle">'+arrow+'</span><span class="tn-name">'+d.name+'</span>'+cnt+'</div>';
-  }).join('');
-})();
-
-function selectEntity(el){
-  document.querySelectorAll('#entityTree .tree-node').forEach(function(n){n.classList.remove('active');});
-  el.classList.add('active');
-  var name = el.getAttribute('data-name');
-  var bc = document.querySelector('#subjBreadcrumb .bc-current');
-  if(bc) bc.textContent = name;
-}
-
-/* 舆情清单（信息流）数据 */
-(function renderFeedList(){
-  var wrap = document.getElementById('feedListWrap'); if(!wrap) return;
-  var feeds = [
-    {title:'XX股份某型号被曝质量问题，相关话题登上微博热搜第 6 位',abstract:'多名用户反馈使用约 6 个月后出现……官方客服已就投诉发布初步回复，但热度仍在攀升。',time:'2026-05-21 08:42:18',plat:'微博',user:'@财经XX观察',ent:'XX股份 / 品牌 XX-Pro',senti:'neg',tags:['热搜','负面','产品']},
-    {title:'《XX金融监管解读》引发市场担忧，多家券商发布点评',abstract:'解读文章在朋友圈广泛传播，部分内容存在误读，引发投资者关注……',time:'2026-05-21 07:30:42',plat:'微信',user:'XX财经',ent:'XX金融',senti:'neg',tags:['监管','误读']},
-    {title:'XX集团一季度营收同比增长 8.2%，基本面稳健',abstract:'集团发布一季度业绩公告，主营业务收入同比增长 8.2%，归母净利润同比增长 5.6%。',time:'2026-05-21 06:00:00',plat:'网页',user:'新华网',ent:'中XX集团',senti:'neu',tags:['财报','央媒']},
-    {title:'匿名爆料：XX科技高管疑涉及内部审查',abstract:'雪球用户发布长文，称……目前尚未得到 XX 科技官方证实。',time:'2026-05-21 02:14:09',plat:'雪球',user:'匿名_5839',ent:'XX科技 / 高管 张XX',senti:'neg',tags:['匿名','高管','合规']},
-    {title:'XX能源子公司海上风电项目并网发电',abstract:'项目装机容量 X GW，预计年发电量 XX 亿千瓦时，是公司在新能源领域的重要里程碑。',time:'2026-05-20 22:18:51',plat:'人民网',user:'人民网能源',ent:'XX能源',senti:'pos',tags:['ESG','央媒','正面']},
-    {title:'消费者集体投诉 XX-Pro 售后响应慢',abstract:'黑猫投诉相关话题已聚集 312 条投诉……企业回复率为 76%。',time:'2026-05-20 19:42:33',plat:'黑猫投诉',user:'平台聚合',ent:'品牌 XX-Pro',senti:'neg',tags:['投诉','服务']},
-    {title:'XX地产以 XX 亿元摘得长三角某地块',abstract:'本次拿地溢价率约 6.8%……行业人士认为体现公司对核心区域的持续布局。',time:'2026-05-20 17:08:27',plat:'21世纪经济报道',user:'21财经',ent:'XX地产',senti:'neu',tags:['地产','投资']},
-    {title:'XX文化携手央视推出 ESG 公益项目',abstract:'项目将在西部三省开展乡村教育与生态保护宣传……',time:'2026-05-20 12:36:14',plat:'央视新闻',user:'央视新闻',ent:'XX文化',senti:'pos',tags:['ESG','央媒','公益']}
-  ];
-  var sentiText = {neg:'负面',pos:'正面',neu:'中性'};
-  wrap.innerHTML = feeds.map(function(f){
-    var tagHtml = f.tags.map(function(t){return '<span class="senti-tag '+(f.senti)+'">'+t+'</span>';}).join('');
-    return '<div class="feed-item"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-thumb" style="background:linear-gradient(135deg,#dde9ff,#eaf2ff)"></div><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">转事件分析</button><button class="fi-act-btn">加入复盘</button></div></div><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;background:rgba(43,97,240,0.08);color:#2b61f0;font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span>'+tagHtml+'</div></div></div></div>';
-  }).join('');
-})();
-
-/* AI 分析按钮 */
-function openAIForFeed(){
-  var sel = Array.from(document.querySelectorAll('.fi-check:checked'))
-    .map(function(cb){ var t = cb.closest('.fi-head')?.querySelector('.fi-title'); return t ? t.textContent.trim() : ''; })
-    .filter(Boolean);
-  if (!sel.length) sel = Array.from(document.querySelectorAll('.fi-title')).map(function(t){ return t.textContent.trim(); }).slice(0, 6);
-  if(window.aiAssistantOpenWithData) window.aiAssistantOpenWithData(sel);
-}
-
-/* 时间筛选 chip 切换 */
-document.addEventListener('click', function(e){
-  var chip = e.target.closest('.eyq-body .time-chips .tc, .eyq-body .channel-chips .cc');
-  if(!chip) return;
-  var siblings = chip.parentElement.querySelectorAll('.tc, .cc');
-  siblings.forEach(function(c){ c.classList.remove('active'); });
-  chip.classList.add('active');
-});
-document.addEventListener('click', function(e){
-  var chip = e.target.closest('.ov-tool-chip');
-  if(!chip) return;
-  var siblings = chip.parentElement.querySelectorAll('.ov-tool-chip');
-  siblings.forEach(function(c){ c.classList.remove('active'); });
-  chip.classList.add('active');
-});
-</script>
-<script>
-/* ===== 企业舆情 页面脚本 ===== */
-function switchEyqTab(idx, btn){
-  document.querySelectorAll('.eyq-body .main-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  var panels = document.querySelectorAll('.eyq-body .tab-panel');
-  panels.forEach(function(p){p.classList.remove('active');});
-  panels[idx] && panels[idx].classList.add('active');
-}
-function openAlertDrawer(){ document.getElementById('alertDrawer').classList.add('show'); }
-function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.remove('show'); }
-
-/* 趋势图：30天 正/中/负 堆叠面积 */
-(function renderTrendChart(){
-  var svg = document.getElementById('trendSvg');
-  if(!svg) return;
-  var W=600, H=220, P={l:36,r:14,t:14,b:24};
-  var days=30;
-  var pos=[],neu=[],neg=[];
-  var seed=42;
-  function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
-  for(var i=0;i<days;i++){
-    var p = 60 + Math.round(rnd()*40 + Math.sin(i/4)*10);
-    var n = 110 + Math.round(rnd()*30 + Math.cos(i/3)*8);
-    var ng= 12 + Math.round(rnd()*16 + (i>20?rnd()*14:0));
-    pos.push(p); neu.push(n); neg.push(ng);
-  }
-  var maxY = 0;
-  for(var i=0;i<days;i++) maxY = Math.max(maxY, pos[i]+neu[i]+neg[i]);
-  maxY = Math.ceil(maxY/50)*50;
-  var xw=(W-P.l-P.r)/(days-1);
-  function y(v){ return H-P.b - (v/maxY)*(H-P.t-P.b); }
-  function area(arr,base){
-    var top=arr.map(function(v,i){return [P.l+i*xw, y(base[i]+v)];});
-    var bot=arr.map(function(v,i){return [P.l+i*xw, y(base[i])];}).reverse();
-    return 'M'+top.map(function(p){return p.join(',')}).join(' L')+' L'+bot.map(function(p){return p.join(',')}).join(' L')+' Z';
-  }
-  var bot=new Array(days).fill(0);
-  var pPos = area(pos,bot);
-  var bot2 = pos.map(function(v,i){return v+bot[i]});
-  var pNeu = area(neu,bot2);
-  var bot3 = neu.map(function(v,i){return v+bot2[i]});
-  var pNeg = area(neg,bot3);
-  var grid='';
-  for(var g=0;g<=4;g++){
-    var gv = (maxY/4)*g; var gy = y(gv);
-    grid += '<line x1="'+P.l+'" y1="'+gy+'" x2="'+(W-P.r)+'" y2="'+gy+'" stroke="rgba(122,145,184,0.15)" stroke-dasharray="2 3"/>';
-    grid += '<text x="'+(P.l-6)+'" y="'+(gy+3)+'" font-size="10" fill="#9eb0c6" text-anchor="end">'+Math.round(gv)+'</text>';
-  }
-  var xlabels='';
-  [0,7,14,21,29].forEach(function(i){
-    xlabels += '<text x="'+(P.l+i*xw)+'" y="'+(H-6)+'" font-size="10" fill="#9eb0c6" text-anchor="middle">D-'+(29-i)+'</text>';
-  });
-  svg.innerHTML = grid +
-    '<path d="'+pPos+'" fill="rgba(18,168,122,0.55)" stroke="#12a87a" stroke-width="1"/>'+
-    '<path d="'+pNeu+'" fill="rgba(158,176,198,0.55)" stroke="#9eb0c6" stroke-width="1"/>'+
-    '<path d="'+pNeg+'" fill="rgba(224,64,64,0.6)" stroke="#e04040" stroke-width="1"/>'+
-    xlabels;
-})();
-
-/* 主体声誉热力矩阵 */
-(function renderHeat(){
-  var grid = document.getElementById('heatGrid'); if(!grid) return;
-  var subjs = ['XX股份','XX金融','XX能源','XX科技','XX物流','XX地产','XX文化','集团总部'];
-  var cols  = ['财务','产品','高管','合规','ESG','服务','舆情综合'];
-  var html = '<div class="heat-cell-h"></div>';
-  cols.forEach(function(c){ html += '<div class="heat-cell-h">'+c+'</div>'; });
-  var seed=11;
-  function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
-  subjs.forEach(function(s){
-    html += '<div class="heat-cell-row">'+s+'</div>';
-    for(var i=0;i<cols.length;i++){
-      var v = rnd();
-      var color, label;
-      if(v<0.45){ color='#12a87a'; label=Math.round(v*10); }
-      else if(v<0.78){ color='#f0c75a'; label=Math.round(v*10); }
-      else { color='#e04040'; label=Math.round(v*10); }
-      html += '<div class="heat-cell" style="background:'+color+'" title="'+s+' / '+cols[i]+' 负面占比 '+label+'%">'+label+'%</div>';
-    }
-  });
-  grid.innerHTML = html;
-})();
-
-/* 渠道环形 */
-(function renderDonut(){
-  var svg = document.getElementById('donutSvg'); var leg = document.getElementById('donutLegend');
+/* 情感占比环形 */
+(function renderSentiDonut(){
+  var svg = document.getElementById('sentiDonut'); var leg = document.getElementById('sentiLegend');
   if(!svg||!leg) return;
   var data = [
-    {name:'微博',  val:1538, color:'#e04040'},
-    {name:'微信',  val:286,  color:'#12a87a'},
-    {name:'客户端',val:643,  color:'#2b61f0'},
-    {name:'网页',  val:412,  color:'#7c3aed'},
-    {name:'短视频',val:218,  color:'#f97316'},
-    {name:'论坛',  val:146,  color:'#0d9488'},
-    {name:'境外',  val:44,   color:'#9eb0c6'}
+    {name:'正面', val:612,  color:'#12a87a'},
+    {name:'中性', val:2454, color:'#9eb0c6'},
+    {name:'负面', val:221,  color:'#e04040'}
   ];
   var sum=data.reduce(function(s,d){return s+d.val;},0);
   var cx=60,cy=60,r=44,rin=28;
@@ -1352,8 +972,9 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
     paths += '<path d="M'+x1+','+y1+' A'+r+','+r+' 0 '+large+' 1 '+x2+','+y2+' L'+x3+','+y3+' A'+rin+','+rin+' 0 '+large+' 0 '+x4+','+y4+' Z" fill="'+d.color+'"/>';
     ang=a2;
   });
-  paths += '<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="10" fill="#9eb0c6">总信息量</text>';
-  paths += '<text x="'+cx+'" y="'+(cy+14)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#1e2d45">'+sum.toLocaleString()+'</text>';
+  var negPct = (data[2].val/sum*100).toFixed(1);
+  paths += '<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="10" fill="#9eb0c6">负面占比</text>';
+  paths += '<text x="'+cx+'" y="'+(cy+14)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#e04040">'+negPct+'%</text>';
   svg.innerHTML = paths;
   leg.innerHTML = data.map(function(d){
     var pct = (d.val/sum*100).toFixed(1);
@@ -1365,12 +986,12 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
 (function renderAlerts(){
   var box = document.getElementById('alertLine'); if(!box) return;
   var data = [
-    {lv:'high',ent:'XX股份',title:'某产品质量投诉在抖音突增 ↑320%，关联视频已破百万播放',time:'08:42 · 距今 36 分钟'},
-    {lv:'high',ent:'高管 · 张XX',title:'匿名爆料账号针对张XX发布连续 3 篇负面长文',time:'08:15 · 距今 1 小时'},
-    {lv:'med', ent:'XX金融',title:'监管新规解读出现误读，财经媒体连发 5 篇质疑稿',time:'07:30 · 今早'},
-    {lv:'med', ent:'XX能源',title:'子公司年报数据被自媒体片段化解读',time:'昨日 22:14'},
-    {lv:'low', ent:'品牌 · XX-Pro',title:'新品发布后产生若干用户讨论，整体偏中性',time:'昨日 19:08'},
-    {lv:'low', ent:'XX科技',title:'某专利诉讼初步判决在专业论坛被讨论',time:'昨日 16:22'}
+    {lv:'high',ent:'紫荆股份',title:'紫荆Pro 某型号质量投诉在抖音突增 ↑320%，关联视频已破百万播放',time:'08:42 · 距今 36 分钟'},
+    {lv:'high',ent:'竞对 · 海棠集团',title:'海棠集团子公司被曝财务问题，同行屡谈补位机会（高优先）',time:'08:30 · 距今 48 分钟'},
+    {lv:'high',ent:'高管 · 王志远',title:'匿名爆料账号针对王志远发布连续 3 篇负面长文',time:'08:15 · 距今 1 小时'},
+    {lv:'med', ent:'紫荆金融',title:'监管新规解读出现误读，财经媒体连发 5 篇质疑稿',time:'07:30 · 今早'},
+    {lv:'med', ent:'竞对 · 木兰集团',title:'木兰集团发布 ESG 报告，多家媒体跨业对标点名本企业',time:'昨日 22:14'},
+    {lv:'low', ent:'品牌 · 紫荆Pro',title:'新品发布后产生若干用户讨论，整体偏中性',time:'昨日 19:08'}
   ];
   box.innerHTML = data.map(function(d){
     var lvText={high:'高',med:'中',low:'低'}[d.lv];
@@ -1382,20 +1003,23 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
 (function renderTopList(){
   var box = document.getElementById('topList'); if(!box) return;
   var data = [
-    {senti:'neg',title:'XX股份某型号被曝质量问题，相关话题登上微博热搜第 6 位',src:'微博热搜',spread:'12.8w 转发'},
-    {senti:'neg',title:'《XX金融监管解读》引发市场担忧，多家券商发布点评',src:'财联社',spread:'8.6w 阅读'},
-    {senti:'neu',title:'XX集团一季度营收同比增长 8.2%，基本面稳健',src:'新华网',spread:'6.4w 阅读'},
-    {senti:'neg',title:'匿名爆料：XX科技高管疑涉及内部审查',src:'雪球',spread:'5.1w 互动'},
-    {senti:'pos',title:'XX能源子公司海上风电项目并网发电',src:'人民网',spread:'4.8w 阅读'},
-    {senti:'neg',title:'消费者集体投诉 XX-Pro 售后响应慢',src:'黑猫投诉',spread:'3.2w 关注'},
-    {senti:'neu',title:'XX地产以 XX 亿元摘得长三角某地块',src:'21世纪经济报道',spread:'2.6w 阅读'},
-    {senti:'pos',title:'XX文化携手央视推出 ESG 公益项目',src:'央视新闻',spread:'2.1w 转发'},
-    {senti:'neg',title:'部分自媒体质疑 XX 集团关联交易披露不完整',src:'微信公众号',spread:'1.8w 阅读'},
-    {senti:'neu',title:'XX物流升级智能仓储，引发行业讨论',src:'界面新闻',spread:'1.4w 阅读'}
+    {senti:'neg',ent:'own',title:'紫荆股份 紫荆Pro 某型号被曝质量问题，话题登上微博热搜第 6 位',src:'微博热搜',spread:'12.8w 转发'},
+    {senti:'neg',ent:'own',title:'《紫荆金融监管解读》引发市场担忧，多家券商发布点评',src:'财联社',spread:'8.6w 阅读'},
+    {senti:'neg',ent:'cmp',title:'海棠集团子公司被曝财务问题，同业受波及报道能见度提升',src:'财新网',spread:'7.4w 阅读'},
+    {senti:'neu',ent:'own',title:'紫荆集团一季度营收同比增长 8.2%，基本面稳健',src:'新华网',spread:'6.4w 阅读'},
+    {senti:'neg',ent:'own',title:'匿名爆料：紫荆科技高管疑涉及内部审查',src:'雪球',spread:'5.1w 互动'},
+    {senti:'pos',ent:'own',title:'紫荆能源子公司海上风电项目并网发电',src:'人民网',spread:'4.8w 阅读'},
+    {senti:'neu',ent:'cmp',title:'木兰集团发布 ESG 报告，多家媒体跨业对标点名行业',src:'21世纪经济报道',spread:'3.6w 阅读'},
+    {senti:'neg',ent:'own',title:'消费者集体投诉 紫荆Pro 售后响应慢',src:'黑猫投诉',spread:'3.2w 关注'},
+    {senti:'neu',ent:'own',title:'紫荆地产以 XX 亿元摘得长三角某地块',src:'21世纪经济报道',spread:'2.6w 阅读'},
+    {senti:'pos',ent:'own',title:'紫荆文化携手央视推出 ESG 公益项目',src:'央视新闻',spread:'2.1w 转发'}
   ];
   box.innerHTML = data.map(function(d,i){
     var st={neg:'负',pos:'正',neu:'中'}[d.senti];
-    return '<div class="top-item"><span class="top-rank '+(i<3?'t':'')+'">'+(i+1)+'</span><div class="top-body"><div class="top-title">'+d.title+'</div><div class="top-meta"><span class="top-senti '+d.senti+'">'+st+'</span><span>'+d.src+'</span><span class="top-spread">'+d.spread+'</span></div></div></div>';
+    var et = d.ent==='cmp'
+      ? '<span class="top-ent-tag cmp" title="竞对舆情">竞</span>'
+      : '<span class="top-ent-tag own" title="本企业舆情">本</span>';
+    return '<div class="top-item"><span class="top-rank '+(i<3?'t':'')+'">'+(i+1)+'</span><div class="top-body"><div class="top-title">'+et+d.title+'</div><div class="top-meta"><span class="top-senti '+d.senti+'">'+st+'</span><span>'+d.src+'</span><span class="top-spread">'+d.spread+'</span></div></div></div>';
   }).join('');
 })();
 
@@ -1403,14 +1027,14 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
 (function renderRank(){
   var box = document.getElementById('rankList'); if(!box) return;
   var data = [
-    {name:'XX-Pro',type:'brand',score:88,trend:+2.4},
-    {name:'王XX（董事长）',type:'person',score:84,trend:+0.8},
-    {name:'XX金融',type:'brand',score:79,trend:-1.2},
-    {name:'李XX（副总裁）',type:'person',score:76,trend:+0.0},
-    {name:'XX能源',type:'brand',score:74,trend:+1.6},
-    {name:'XX-One',type:'brand',score:71,trend:-0.6},
-    {name:'张XX（CFO）',type:'person',score:62,trend:-3.4},
-    {name:'XX科技',type:'brand',score:58,trend:-2.1}
+    {name:'紫荆Pro',type:'brand',score:88,trend:+2.4},
+    {name:'王志远（董事长）',type:'person',score:84,trend:+0.8},
+    {name:'紫荆金融',type:'brand',score:79,trend:-1.2},
+    {name:'李慕白（副总裁）',type:'person',score:76,trend:+0.0},
+    {name:'紫荆能源',type:'brand',score:74,trend:+1.6},
+    {name:'紫荆One',type:'brand',score:71,trend:-0.6},
+    {name:'张鸿宇（CFO）',type:'person',score:62,trend:-3.4},
+    {name:'紫荆科技',type:'brand',score:58,trend:-2.1}
   ];
   box.innerHTML = data.map(function(d,i){
     var tag = d.type==='person'?'高管':'品牌';
@@ -1425,28 +1049,74 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
 (function renderTree(){
   var box = document.getElementById('entityTree'); if(!box) return;
   var data = [
-    {name:'中XX集团',count:3287,lv:1,active:true},
-    {name:'XX股份',count:1268,lv:2},
-    {name:'品牌 · XX-Pro',count:386,lv:3},
-    {name:'品牌 · XX-One',count:142,lv:3},
-    {name:'高管 · 王XX',count:78,lv:3},
-    {name:'XX金融',count:642,lv:2},
-    {name:'高管 · 李XX',count:54,lv:3},
-    {name:'XX能源',count:418,lv:2},
-    {name:'XX科技',count:312,lv:2},
-    {name:'高管 · 张XX',count:96,lv:3},
-    {name:'XX物流',count:218,lv:2},
-    {name:'XX地产',count:184,lv:2},
-    {name:'XX文化',count:142,lv:2},
-    {name:'集团总部 · 高管',count:103,lv:2}
+    {name:'紫荆集团',count:328,lv:1,active:true},
+    {name:'紫荆股份',count:126,lv:2},
+    {name:'品牌 · 紫荆Pro',count:38,lv:3},
+    {name:'品牌 · 紫荆One',count:14,lv:3},
+    {name:'高管 · 王志远',count:7,lv:3},
+    {name:'紫荆金融',count:64,lv:2},
+    {name:'高管 · 李慕白',count:5,lv:3},
+    {name:'紫荆能源',count:41,lv:2},
+    {name:'紫荆科技',count:31,lv:2},
+    {name:'高管 · 张鸿宇',count:9,lv:3},
+    {name:'紫荆物流',count:21,lv:2},
+    {name:'紫荆地产',count:18,lv:2},
+    {name:'紫荆文化',count:14,lv:2},
+    {name:'集团总部 · 高管',count:10,lv:2},
+    {name:'竞对监测',count:48,lv:1,cmp:true},
+    {name:'海棠集团',count:23,lv:2,cmp:true},
+    {name:'木兰集团',count:15,lv:2,cmp:true},
+    {name:'玉兰集团',count:10,lv:2,cmp:true}
   ];
   box.innerHTML = data.map(function(d){
     var cnt = d.count===0
       ? '<span class="tn-count zero">0</span>'
       : '<span class="tn-count">'+(d.count>999?(Math.floor(d.count/100)/10)+'k':d.count)+'</span>';
     var arrow = d.lv===1?'▾':(d.lv===2?'▸':'·');
-    return '<div class="tree-node lv-'+d.lv+' '+(d.active?'active':'')+'" onclick="selectEntity(this)" data-name="'+d.name+'"><span class="tn-toggle">'+arrow+'</span><span class="tn-name">'+d.name+'</span>'+cnt+'</div>';
+    var extraCls = d.cmp ? ' cmp' : '';
+    return '<div class="tree-node lv-'+d.lv+extraCls+' '+(d.active?'active':'')+'" onclick="selectEntity(this)" data-name="'+d.name+'"><span class="tn-toggle">'+arrow+'</span><span class="tn-name">'+d.name+'</span>'+cnt+'</div>';
   }).join('');
+})();
+
+/* 竞对舆情对标 */
+(function renderCmpGrid(){
+  var box = document.getElementById('cmpGrid'); if(!box) return;
+  // own = 紫荆集团；cmp = 竞对
+  // volTrend = 信息量环比(%)；negTrend = 负面量环比(%)
+  var rows = [
+    {name:'紫荆集团', own:true,  vol:3287, neg:214, volTrend:+5.2,  negTrend:+12.4},
+    {name:'海棠集团', own:false, vol:2814, neg:236, volTrend:-2.1,  negTrend:+42.0},
+    {name:'木兰集团', own:false, vol:1962, neg:154, volTrend:+8.6,  negTrend:-3.5},
+    {name:'玉兰集团', own:false, vol:1146, neg:97,  volTrend:-6.4,  negTrend:+1.8}
+  ];
+  var maxVol = Math.max.apply(null, rows.map(function(r){return r.vol;}));
+  var maxNeg = Math.max.apply(null, rows.map(function(r){return r.neg;}));
+  function trendHtml(v, negativeIsBad){
+    // negativeIsBad=true → 升=红(坏)，降=绿(好)；false → 升=绿(好)，降=红(坏)
+    var cls = v>0 ? (negativeIsBad?'down':'up') : (v<0 ? (negativeIsBad?'up':'down') : '');
+    var sign = v>0?'↑':(v<0?'↓':'·');
+    return '<span class="'+cls+'">'+sign+' '+Math.abs(v).toFixed(1)+'%</span>';
+  }
+  var head = '<div class="cmp-row cmp-head">'
+    + '<span class="cmp-c1">主体</span>'
+    + '<span class="cmp-c2">信息量</span>'
+    + '<span class="cmp-c3 cmp-th-trend">信息趋势</span>'
+    + '<span class="cmp-c4">负面量</span>'
+    + '<span class="cmp-c5 cmp-th-trend">负面趋势</span>'
+    + '</div>';
+  var body = rows.map(function(r){
+    var cls = r.own ? 'own' : 'cmp';
+    var volPct = Math.round(r.vol/maxVol*100);
+    var negPct = Math.round(r.neg/maxNeg*100);
+    return '<div class="cmp-row '+cls+'">'
+      + '<span class="cmp-c1"><span class="cmp-dot" style="background:'+(r.own?'#2b61f0':'#9eb0c6')+'"></span>'+r.name+(r.own?'<span class="cmp-own-tag">本</span>':'')+'</span>'
+      + '<span class="cmp-c2"><span class="cmp-bar"><span style="width:'+volPct+'%;background:'+(r.own?'#2b61f0':'#cdd6e5')+'"></span></span><span class="cmp-num">'+r.vol.toLocaleString()+'</span></span>'
+      + '<span class="cmp-c3 cmp-trend">'+trendHtml(r.volTrend, false)+'</span>'
+      + '<span class="cmp-c4"><span class="cmp-bar"><span style="width:'+negPct+'%;background:#e04040"></span></span><span class="cmp-num">'+r.neg+'</span></span>'
+      + '<span class="cmp-c5 cmp-trend">'+trendHtml(r.negTrend, true)+'</span>'
+      + '</div>';
+  }).join('');
+  box.innerHTML = head + body;
 })();
 
 function selectEntity(el){
@@ -1461,19 +1131,26 @@ function selectEntity(el){
 (function renderFeedList(){
   var wrap = document.getElementById('feedListWrap'); if(!wrap) return;
   var feeds = [
-    {title:'XX股份某型号被曝质量问题，相关话题登上微博热搜第 6 位',abstract:'多名用户反馈使用约 6 个月后出现……官方客服已就投诉发布初步回复，但热度仍在攀升。',time:'2026-05-21 08:42:18',plat:'微博',user:'@财经XX观察',ent:'XX股份 / 品牌 XX-Pro',senti:'neg',tags:['热搜','负面','产品']},
-    {title:'《XX金融监管解读》引发市场担忧，多家券商发布点评',abstract:'解读文章在朋友圈广泛传播，部分内容存在误读，引发投资者关注……',time:'2026-05-21 07:30:42',plat:'微信',user:'XX财经',ent:'XX金融',senti:'neg',tags:['监管','误读']},
-    {title:'XX集团一季度营收同比增长 8.2%，基本面稳健',abstract:'集团发布一季度业绩公告，主营业务收入同比增长 8.2%，归母净利润同比增长 5.6%。',time:'2026-05-21 06:00:00',plat:'网页',user:'新华网',ent:'中XX集团',senti:'neu',tags:['财报','央媒']},
-    {title:'匿名爆料：XX科技高管疑涉及内部审查',abstract:'雪球用户发布长文，称……目前尚未得到 XX 科技官方证实。',time:'2026-05-21 02:14:09',plat:'雪球',user:'匿名_5839',ent:'XX科技 / 高管 张XX',senti:'neg',tags:['匿名','高管','合规']},
-    {title:'XX能源子公司海上风电项目并网发电',abstract:'项目装机容量 X GW，预计年发电量 XX 亿千瓦时，是公司在新能源领域的重要里程碑。',time:'2026-05-20 22:18:51',plat:'人民网',user:'人民网能源',ent:'XX能源',senti:'pos',tags:['ESG','央媒','正面']},
-    {title:'消费者集体投诉 XX-Pro 售后响应慢',abstract:'黑猫投诉相关话题已聚集 312 条投诉……企业回复率为 76%。',time:'2026-05-20 19:42:33',plat:'黑猫投诉',user:'平台聚合',ent:'品牌 XX-Pro',senti:'neg',tags:['投诉','服务']},
-    {title:'XX地产以 XX 亿元摘得长三角某地块',abstract:'本次拿地溢价率约 6.8%……行业人士认为体现公司对核心区域的持续布局。',time:'2026-05-20 17:08:27',plat:'21世纪经济报道',user:'21财经',ent:'XX地产',senti:'neu',tags:['地产','投资']},
-    {title:'XX文化携手央视推出 ESG 公益项目',abstract:'项目将在西部三省开展乡村教育与生态保护宣传……',time:'2026-05-20 12:36:14',plat:'央视新闻',user:'央视新闻',ent:'XX文化',senti:'pos',tags:['ESG','央媒','公益']}
+    {scope:'own',title:'紫荆股份 紫荆Pro 某型号被曝质量问题，话题登上微博热搜第 6 位',abstract:'多名用户反馈使用约 6 个月后出现……紫荆官方客服已就投诉发布初步回复，但热度仍在攀升。',time:'2026-05-21 08:42:18',plat:'微博',user:'@财经紫荆观察',ent:'紫荆股份 / 品牌 紫荆Pro',senti:'neg',tags:['热搜','负面','产品']},
+    {scope:'own',title:'《紫荆金融监管解读》引发市场担忧，多家券商发布点评',abstract:'解读文章在朋友圈广泛传播，部分内容存在误读，引发投资者关注……',time:'2026-05-21 07:30:42',plat:'微信',user:'紫荆财经',ent:'紫荆金融',senti:'neg',tags:['监管','误读']},
+    {scope:'cmp',title:'竞对｜海棠集团子公司被曝财务问题，监管已介入核查',abstract:'多家财经媒体跟进报道，分析师认为同业（含本集团）将受关注；建议同步排查并准备 Q&A。',time:'2026-05-21 07:08:11',plat:'财新网',user:'财新调查',ent:'竞对 · 海棠集团',senti:'neg',tags:['竞对','合规','机会']},
+    {scope:'own',title:'紫荆集团一季度营收同比增长 8.2%，基本面稳健',abstract:'集团发布一季度业绩公告，主营业务收入同比增长 8.2%，归母净利润同比增长 5.6%。',time:'2026-05-21 06:00:00',plat:'网页',user:'新华网',ent:'紫荆集团',senti:'neu',tags:['财报','央媒']},
+    {scope:'own',title:'匿名爆料：紫荆科技高管疑涉及内部审查',abstract:'雪球用户发布长文，称……目前尚未得到紫荆科技官方证实。',time:'2026-05-21 02:14:09',plat:'雪球',user:'匿名_5839',ent:'紫荆科技 / 高管 张鸿宇',senti:'neg',tags:['匿名','高管','合规']},
+    {scope:'cmp',title:'竞对｜木兰集团发布 2026 ESG 报告，碳排强度同比降 12%',abstract:'报告内容被多家媒体跨业对标，建议关注与本集团 ESG 披露口径的差异点。',time:'2026-05-20 23:20:46',plat:'21世纪经济报道',user:'21财经',ent:'竞对 · 木兰集团',senti:'neu',tags:['竞对','ESG','对标']},
+    {scope:'own',title:'紫荆能源子公司海上风电项目并网发电',abstract:'项目装机容量 X GW，预计年发电量 XX 亿千瓦时，是公司在新能源领域的重要里程碑。',time:'2026-05-20 22:18:51',plat:'人民网',user:'人民网能源',ent:'紫荆能源',senti:'pos',tags:['ESG','央媒','正面']},
+    {scope:'own',title:'消费者集体投诉 紫荆Pro 售后响应慢',abstract:'黑猫投诉相关话题已聚集 312 条投诉……紫荆企业回复率为 76%。',time:'2026-05-20 19:42:33',plat:'黑猫投诉',user:'平台聚合',ent:'品牌 紫荆Pro',senti:'neg',tags:['投诉','服务']},
+    {scope:'cmp',title:'竞对｜玉兰集团新品发布，主打"对标 紫荆Pro"',abstract:'发布会强调对标本集团旗舰产品，多家测评号开始横评，社媒讨论中提及紫荆 1.8w 次。',time:'2026-05-20 18:30:00',plat:'微博',user:'@数码玉兰',ent:'竞对 · 玉兰集团',senti:'neg',tags:['竞对','产品','对标']},
+    {scope:'own',title:'紫荆地产以 XX 亿元摘得长三角某地块',abstract:'本次拿地溢价率约 6.8%……行业人士认为体现公司对核心区域的持续布局。',time:'2026-05-20 17:08:27',plat:'21世纪经济报道',user:'21财经',ent:'紫荆地产',senti:'neu',tags:['地产','投资']},
+    {scope:'own',title:'紫荆文化携手央视推出 ESG 公益项目',abstract:'项目将在西部三省开展乡村教育与生态保护宣传……',time:'2026-05-20 12:36:14',plat:'央视新闻',user:'央视新闻',ent:'紫荆文化',senti:'pos',tags:['ESG','央媒','公益']}
   ];
   var sentiText = {neg:'负面',pos:'正面',neu:'中性'};
   wrap.innerHTML = feeds.map(function(f){
     var tagHtml = f.tags.map(function(t){return '<span class="senti-tag '+(f.senti)+'">'+t+'</span>';}).join('');
-    return '<div class="feed-item"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-thumb" style="background:linear-gradient(135deg,#dde9ff,#eaf2ff)"></div><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">转事件分析</button><button class="fi-act-btn">加入复盘</button></div></div><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;background:rgba(43,97,240,0.08);color:#2b61f0;font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span>'+tagHtml+'</div></div></div></div>';
+    var scopeBadge = f.scope==='cmp'
+      ? '<span class="scope-badge cmp" title="竞对舆情">竞对</span>'
+      : '<span class="scope-badge own" title="本企业舆情">本企业</span>';
+    var entBg = f.scope==='cmp' ? 'background:rgba(224,64,64,0.08);color:#e04040' : 'background:rgba(43,97,240,0.08);color:#2b61f0';
+    return '<div class="feed-item '+(f.scope==='cmp'?'fi-cmp':'')+'"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-thumb" style="background:linear-gradient(135deg,'+(f.scope==='cmp'?'#ffe1e1,#ffeaea':'#dde9ff,#eaf2ff')+')"></div><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+scopeBadge+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">收藏</button><button class="fi-act-btn">加入线索池</button></div></div><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;'+entBg+';font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span></div></div></div></div>';
   }).join('');
 })();
 

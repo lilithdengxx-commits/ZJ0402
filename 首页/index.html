@@ -197,7 +197,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .rhi-status.done{color:#12a87a}.rhi-status.gen{color:#c47d10}
 .rhi-dot{width:6px;height:6px;border-radius:50%;flex:0 0 6px}.rhi-status.done .rhi-dot{background:#12a87a}.rhi-status.gen .rhi-dot{background:#c47d10}
 /* Stat Board (single card) */
-.stat-board{background:#fff;border-radius:12px;border:1px solid rgba(122,145,184,0.12);box-shadow:0 1px 6px rgba(26,44,82,0.05);display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:16px;overflow:hidden}
+.stat-board{background:#fff;border-radius:12px;border:1px solid rgba(122,145,184,0.12);box-shadow:0 1px 6px rgba(26,44,82,0.05);display:grid;grid-template-columns:repeat(5,1fr);margin-bottom:16px;overflow:hidden}
 .sb-card{padding:16px 20px;display:flex;align-items:center;gap:14px;position:relative}
 .sb-card+.sb-card::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:rgba(122,145,184,0.18)}
 
@@ -208,6 +208,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .sb-purple .sb-icon{background:rgba(124,58,237,0.1);color:#7c3aed}
 .sb-red .sb-icon{background:rgba(224,64,64,0.1);color:#e04040}
 .sb-teal .sb-icon{background:rgba(13,148,136,0.1);color:#0d9488}
+.sb-green .sb-icon{background:rgba(22,163,74,0.1);color:#16a34a}
 .sb-body{min-width:0;flex:1}
 .sb-label{font-size:12px;color:#6b7c95;font-weight:500;margin-bottom:4px;white-space:nowrap}
 .sb-value{font-size:22px;font-weight:800;color:#1e2d45;line-height:1.1;white-space:nowrap}
@@ -229,7 +230,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .cev-list{display:flex;flex-direction:column;overflow-y:auto;max-height:218px}
 .cev-list::-webkit-scrollbar{width:3px}
 .cev-list::-webkit-scrollbar-thumb{background:rgba(122,145,184,0.2);border-radius:999px}
-.cev-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(122,145,184,0.07);cursor:pointer}
+.cev-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid rgba(122,145,184,0.07);cursor:pointer;border-radius:6px}
+.cev-item.today{background:rgba(43,97,240,0.07);border-bottom-color:transparent}
 .cev-item:last-child{border-bottom:none}
 .cev-item:hover .cev-title{color:var(--primary,#2b61f0)}
 .cev-date{flex-shrink:0;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap;line-height:1.6;min-width:32px;text-align:center}
@@ -403,14 +405,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <div class="sb-trend up">↑ 较昨日 +12.3%</div>
           </div>
         </div>
-        <div class="sb-card sb-purple">
+        <div class="sb-card sb-green">
           <div class="sb-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" stroke="currentColor" stroke-width="1.7"/><path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4z" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
           <div class="sb-body">
-            <div class="sb-label">集团舆情</div>
-            <div class="sb-value">3,241</div>
-            <div class="sb-trend down">↑ 较昨日 +18.6%</div>
+            <div class="sb-label">港澳动态舆情</div>
+            <div class="sb-value">8,163</div>
+            <div class="sb-trend up">↑ 较昨日 +5.2%</div>
           </div>
         </div>
         <div class="sb-card sb-teal">
@@ -418,9 +420,19 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
           <div class="sb-body">
-            <div class="sb-label">关注领域舆情</div>
+            <div class="sb-label">重点关注舆情</div>
             <div class="sb-value">43,812</div>
             <div class="sb-trend up">↑ 较昨日 +8.7%</div>
+          </div>
+        </div>
+        <div class="sb-card sb-purple">
+          <div class="sb-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="sb-body">
+            <div class="sb-label">企业舆情</div>
+            <div class="sb-value">3,241</div>
+            <div class="sb-trend down">↑ 较昨日 +18.6%</div>
           </div>
         </div>
         <div class="sb-card sb-red">
@@ -437,9 +449,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
       <div class="analysis-cards">
 
-        <!-- 关注领域分布 Donut -->
+        <!-- 港澳动态分布 Donut -->
         <div class="a-card">
-          <div class="a-card-hd"><span class="a-card-title">领域分布</span></div>
+          <div class="a-card-hd"><span class="a-card-title">港澳动态分布</span></div>
           <div class="a-card-body" style="display:flex;align-items:center;justify-content:center;padding:10px 8px">
             <svg id="donut-svg" width="220" height="200" viewBox="0 0 220 200"></svg>
           </div>
@@ -453,8 +465,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               热点事件
             </span>
             <div class="df-row">
-              <button class="df-btn active" onclick="switchDf(this)">内地</button>
-              <button class="df-btn" onclick="switchDf(this)">香港</button>
+              <button class="df-btn active" onclick="switchDf(this)">全部</button>
+              <button class="df-btn" onclick="switchDf(this)">企业</button>
             </div>
           </div>
           <div class="a-card-body" style="padding-top:6px;padding-bottom:6px">
@@ -473,8 +485,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <span class="a-card-title">舆情趋势</span>
             <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;font-size:10.5px;color:#6b7c95">
               <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#3b7ef8;border-radius:2px"></span>舆情总量</span>
-              <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#7c3aed;border-radius:2px"></span>集团舆情</span>
-              <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#06b6d4;border-radius:2px"></span>关注领域舆情</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#16a34a;border-radius:2px"></span>港澳动态舆情</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#06b6d4;border-radius:2px"></span>重点关注舆情</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#7c3aed;border-radius:2px"></span>企业舆情</span>
               <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:14px;height:2px;background:#f97316;border-radius:2px"></span>预警触发次数</span>
             </div>
           </div>
@@ -550,7 +563,8 @@ function toggleGroup(el){
     var diff = Math.round((dMs - todayMs) / 86400000);
     var label = diff === 0 ? '今日' : diff === 1 ? '明日' : ev.date.slice(5).replace('-','/');
     var cls = diff === 0 ? 'd-today' : 'd-soon';
-    html += '<div class="cev-item"><span class="cev-date '+cls+'">'+label+'</span><span class="cev-title">'+ev.title+'</span></div>';
+    var rowCls = diff === 0 ? ' today' : '';
+    html += '<div class="cev-item'+rowCls+'"><span class="cev-date '+cls+'">'+label+'</span><span class="cev-title">'+ev.title+'</span></div>';
   });
   list.innerHTML = html;
 })();
@@ -599,7 +613,7 @@ function toggleGroup(el){
   svg.innerHTML = html;
 })();
 
-// Trend Line Chart (four lines: 全部舆情 + 集团舆情 + 关注领域 + 方案监测)
+// Trend Line Chart (five lines: 全部舆情 + 港澳动态舆情 + 重点关注舆情 + 企业舆情 + 预警触发次数)
 (function renderTrend(){
   var canvas = document.getElementById('trend-canvas');
   if(!canvas || !canvas.getContext) return;
@@ -612,7 +626,8 @@ function toggleGroup(el){
   var cW=W-pL-pR, cH=H-pT-pB;
   // 25 data points: 14:00 05-11 → 14:00 05-12 (hourly)
   var vals1 = [175,152,168,145,122,192,240,208,178,162,184,170,154,138,120,106,98,118,138,158,175,196,190,182,168]; // 全部舆情
-  var vals2 = [38,32,42,30,24,46,64,54,40,36,48,44,32,28,22,18,16,26,34,44,50,56,52,46,42];                       // 集团舆情
+  var valsG = [62,55,60,50,44,72,90,78,65,60,68,62,56,50,44,38,36,44,52,60,68,76,74,70,64];                       // 港澳动态舆情
+  var vals2 = [38,32,42,30,24,46,64,54,40,36,48,44,32,28,22,18,16,26,34,44,50,56,52,46,42];                       // 企业舆情
   var vals3 = [55,48,52,44,38,60,80,65,54,50,58,52,48,42,38,32,30,36,42,48,55,62,60,58,52];                       // 关注领域
   var vals4 = [28,24,30,22,18,32,45,38,28,26,34,30,22,20,16,14,12,18,24,30,35,38,36,32,30];                       // 方案监测
   var maxV=260, minV=0;
@@ -648,6 +663,7 @@ function toggleGroup(el){
     ctx.fillStyle=grad; ctx.fill();
   }
   drawFill(vals1,'rgba(59,126,248,0.08)','rgba(59,126,248,0)');
+  drawFill(valsG,'rgba(22,163,74,0.08)','rgba(22,163,74,0)');
   drawFill(vals2,'rgba(124,58,237,0.08)','rgba(124,58,237,0)');
   drawFill(vals3,'rgba(6,182,212,0.08)','rgba(6,182,212,0)');
   drawFill(vals4,'rgba(249,115,22,0.08)','rgba(249,115,22,0)');
@@ -660,7 +676,8 @@ function toggleGroup(el){
     ctx.stroke();
   }
   drawLine(vals1,'#3b7ef8',2.2);   // 全部舆情 — blue
-  drawLine(vals2,'#7c3aed',1.8);   // 集团舆情 — purple
+  drawLine(valsG,'#16a34a',1.8);   // 港澳动态舆情 — green
+  drawLine(vals2,'#7c3aed',1.8);   // 企业舆情 — purple
   drawLine(vals3,'#06b6d4',1.8);   // 关注领域 — teal
   drawLine(vals4,'#f97316',1.8);   // 方案监测 — orange
 

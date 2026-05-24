@@ -487,17 +487,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               </svg>
             </div>
 
-            <div class="stat-card c-orange">
-              <div class="sc-label">预警</div>
-              <div class="sc-value">7<small>条</small></div>
-              <div class="sc-trend">高 2 · 中 3 · 低 2</div>
-              <div class="sc-mini-bars" style="margin-top:8px">
-                <div class="sc-mini-bar lv-h" style="flex:2" title="高 2"></div>
-                <div class="sc-mini-bar lv-m" style="flex:3" title="中 3"></div>
-                <div class="sc-mini-bar lv-l" style="flex:2" title="低 2"></div>
-              </div>
-            </div>
-
             <div class="stat-card c-green">
               <div class="sc-label">竞对信息量</div>
               <div class="sc-value">48<small>条 · 负面6条</small></div>
@@ -506,6 +495,17 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 <div class="cmp-mini-row"><span class="cmp-mini-name">海棠集团</span><span class="cmp-mini-bar"><span style="width:82%;background:#e04040"></span></span><span class="cmp-mini-val">23</span></div>
                 <div class="cmp-mini-row"><span class="cmp-mini-name">木兰集团</span><span class="cmp-mini-bar"><span style="width:54%;background:#f97316"></span></span><span class="cmp-mini-val">15</span></div>
                 <div class="cmp-mini-row"><span class="cmp-mini-name">玉兰集团</span><span class="cmp-mini-bar"><span style="width:34%;background:#c47d10"></span></span><span class="cmp-mini-val">10</span></div>
+              </div>
+            </div>
+
+            <div class="stat-card c-orange">
+              <div class="sc-label">预警</div>
+              <div class="sc-value">7<small>条</small></div>
+              <div class="sc-trend">高 2 · 中 3 · 低 2</div>
+              <div class="sc-mini-bars" style="margin-top:8px">
+                <div class="sc-mini-bar lv-h" style="flex:2" title="高 2"></div>
+                <div class="sc-mini-bar lv-m" style="flex:3" title="中 3"></div>
+                <div class="sc-mini-bar lv-l" style="flex:2" title="低 2"></div>
               </div>
             </div>
           </div>
@@ -633,9 +633,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             <div class="subj-breadcrumb" id="subjBreadcrumb">
               <span>当前主体：</span>
               <span class="bc-current">紫荆集团</span>
-              <span class="bc-sep">·</span>
-              <span>含全部子公司、关联主体及竞对</span>
-              <span style="margin-left:auto;font-size:12px;color:#9eb0c6">舆情清单 · 共 <strong id="feedCount" style="color:#1e2d45">328</strong> 条</span>
             </div>
 
             <!-- 筛选 -->
@@ -665,28 +662,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
               </div>
               <div class="fz-row">
-                <span class="fz-label">归属主体</span>
-                <div class="channel-chips">
-                  <span class="cc active">全部</span>
-                  <span class="cc">紫荆集团（母公司）</span>
-                  <span class="cc">紫荆股份</span>
-                  <span class="cc">紫荆金融</span>
-                  <span class="cc">紫荆能源</span>
-                  <span class="cc">紫荆科技</span>
-                  <span class="cc">高管</span>
-                  <span class="cc">品牌产品</span>
-                </div>
-              </div>
-              <div class="fz-row">
-                <span class="fz-label">竞对监测</span>
-                <div class="channel-chips">
-                  <span class="cc">全部竞对</span>
-                  <span class="cc">海棠集团</span>
-                  <span class="cc">木兰集团</span>
-                  <span class="cc">玉兰集团</span>
-                </div>
-              </div>
-              <div class="fz-row">
                 <span class="fz-label">信息匹配</span>
                 <div class="fz-selects">
                   <select class="fz-select"><option>情感倾向</option><option>正面</option><option>中性</option><option>负面</option></select>
@@ -703,7 +678,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
             <!-- 结果栏 -->
             <div class="result-bar">
-              <span class="result-count">共 376 条（紫荆 328 / 竞对 48）</span>
+              <span class="result-count">共 328 条</span>
               <div style="display:flex;align-items:center;gap:8px">
                 <button class="ghost-button">选择当前页</button>
                 <button class="ghost-button">导出全部</button>

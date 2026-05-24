@@ -395,6 +395,10 @@ button { cursor:pointer; font-family:var(--font); }
 .alert-scroll { flex:1; overflow:hidden; padding:2px 11px 8px; position:relative; }
 .alert-scroll:hover .alert-auto { animation-play-state:paused; }
 .alert-auto { animation:scroll-up 28s linear infinite; }
+.obj-scroll { overflow:hidden; padding:2px 0 4px; position:relative; }
+.obj-scroll:hover .obj-auto { animation-play-state:paused; }
+.obj-auto { animation:scroll-up 22s linear infinite; }
+.obj-list { display:flex; flex-direction:column; }
 .alert-list { display:flex; flex-direction:column; gap:5px; }
 .alert-item {
   display:flex; align-items:flex-start; gap:7px;
@@ -520,10 +524,11 @@ button { cursor:pointer; font-family:var(--font); }
 ══════════════════════════════════════════ */
 .info-stats-bar { flex-shrink:0; background:rgba(3,10,22,0.6); border-bottom:1px solid var(--border); }
 .isb-main { display:flex; align-items:center; padding:7px 10px 7px 20px; gap:10px; min-height:82px; }
-.isb-left { flex:0 0 158px; }
+.isb-left { flex:0 0 350px; }
 .isb-tot-lbl { font-size:10px; color:var(--text-3); margin-bottom:2px; }
 .isb-tot-num { font-size:19px; font-weight:800; color:#6aadff; letter-spacing:.02em; font-variant-numeric:tabular-nums; line-height:1; margin-bottom:5px; }
-.isb-sub-row { display:flex; align-items:center; gap:5px; margin-bottom:2px; flex-wrap:nowrap; }
+.isb-sub-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px 10px; margin-top:2px; }
+.isb-sub-row { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; }
 .isb-sub-name { font-size:10px; color:var(--text-3); white-space:nowrap; }
 .isb-sub-val  { font-size:11px; font-weight:700; color:var(--text-2); font-variant-numeric:tabular-nums; }
 .isb-chg { font-size:9px; font-weight:700; }
@@ -858,7 +863,7 @@ button { cursor:pointer; font-family:var(--font); }
         <div class="panel-title">舆情概览</div>
       </div>
       <div class="overview-summary">
-        当前舆情处于<em>关注级别</em>。涉港信息在微博、境外媒体渠道波动明显，<strong>紫荆杂志社</strong>话题声量持续攀升，负面占比38%。近24小时监测<strong>38,521</strong>条信息，2项高风险预警需重点处置。
+        涉港信息在微博、境外媒体渠道波动明显，<strong>紫荆杂志社</strong>话题声量持续攀升，负面占比38%。近24小时监测<strong>38,521</strong>条信息，2项高风险预警需重点处置。
       </div>
       <div class="trend-wrap" style="flex:1;min-height:0;padding:2px 8px 2px">
         <canvas id="trendCanvas"></canvas>
@@ -873,9 +878,14 @@ button { cursor:pointer; font-family:var(--font); }
     <!-- ② 关注领域动态 -->
     <div class="panel" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
       <div class="panel-hd">
-        <div class="panel-title">关注领域动态</div>
+        <div class="panel-title">港澳动态</div>
       </div>
-      <div class="obj-list" id="objList" style="overflow-y:auto;flex:1"></div>
+      <div class="obj-scroll" style="flex:1;min-height:0">
+        <div class="obj-auto" id="objAuto">
+          <div class="obj-list" id="objList"></div>
+          <div class="obj-list" id="objListDup"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ③ 预警实况 -->
@@ -910,8 +920,12 @@ button { cursor:pointer; font-family:var(--font); }
           <div class="isb-left">
             <div class="isb-tot-lbl">舆情总量</div>
             <div class="isb-tot-num">248,368,290</div>
-            <div class="isb-sub-row"><span class="isb-sub-name">香港舆情总量</span>&nbsp;<span class="isb-sub-val">978,290</span>&nbsp;<span class="isb-chg up">▲ 5%</span></div>
-            <div class="isb-sub-row"><span class="isb-sub-name">内地舆情总量</span>&nbsp;<span class="isb-sub-val">8,362</span>&nbsp;<span class="isb-chg down">▼ 5%</span></div>
+            <div class="isb-sub-grid">
+              <div class="isb-sub-row"><span class="isb-sub-name">香港舆情总量</span>&nbsp;<span class="isb-sub-val">978,290</span>&nbsp;<span class="isb-chg up">▲ 5%</span></div>
+              <div class="isb-sub-row"><span class="isb-sub-name">内地舆情总量</span>&nbsp;<span class="isb-sub-val">8,362</span>&nbsp;<span class="isb-chg down">▼ 5%</span></div>
+              <div class="isb-sub-row"><span class="isb-sub-name">企业舆情总量</span>&nbsp;<span class="isb-sub-val">42,815</span>&nbsp;<span class="isb-chg up">▲ 12%</span></div>
+              <div class="isb-sub-row"><span class="isb-sub-name">竞对舆情总量</span>&nbsp;<span class="isb-sub-val">17,634</span>&nbsp;<span class="isb-chg up">▲ 3%</span></div>
+            </div>
           </div>
           <div class="isb-divider"></div>
           <div class="isb-donut-area">
@@ -948,7 +962,11 @@ button { cursor:pointer; font-family:var(--font); }
     <!-- ⑥ 重点事件 -->
     <div class="panel" style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
       <div class="panel-hd">
-        <div class="panel-title">重点事件</div>
+        <div class="panel-title">热点事件</div>
+        <div class="tab-m">
+          <button class="tab-m-btn active" onclick="switchEv(this,'all')">全部</button>
+          <button class="tab-m-btn" onclick="switchEv(this,'ent')">企业</button>
+        </div>
       </div>
       <div class="ev-list" id="evList" style="overflow-y:auto;flex:1;padding-bottom:8px"></div>
     </div>
@@ -1057,9 +1075,9 @@ const D = {
     { lv:'med',  title:'【中风险】关键词小时声量超预警阈值',           time:'12分钟前',src:'全渠道' },
     { lv:'med',  title:'【中风险】重点关注账号发布涉集团内容',         time:'18分钟前',src:'微信' },
     { lv:'med',  title:'【中风险】港媒议题热度持续超基线20%',         time:'25分钟前',src:'新闻媒体' },
-    { lv:'low',  title:'竞品媒体品牌声量出现明显波动',               time:'31分钟前',src:'微博' },
-    { lv:'low',  title:'周期性行业报告发布引爆相关舆论',             time:'44分钟前',src:'论坛' },
-    { lv:'low',  title:'监测词命中率较昨日上升超10%',               time:'58分钟前',src:'全渠道' },
+    { lv:'low',  title:'【低风险】竞品媒体品牌声量出现明显波动',               time:'31分钟前',src:'微博' },
+    { lv:'low',  title:'【低风险】周期性行业报告发布引爆相关舆论',             time:'44分钟前',src:'论坛' },
+    { lv:'low',  title:'【低风险】监测词命中率较昨日上升超10%',               time:'58分钟前',src:'全渠道' },
   ],
   donut: [
     { label:'热点议题综合', v:28, c:'#2b61f0' },
@@ -1127,7 +1145,7 @@ setInterval(tick, 1000); tick();
    RENDER: OBJECTS
 ══════════════════════════════════════════ */
 function renderObjs(){
-  document.getElementById('objList').innerHTML = D.domainItems.map(d=>`
+  const html = D.domainItems.map(d=>`
     <div class="domain-item" onclick="go('../监测预警/港澳动态/index.html')">
       <span class="domain-tag">${d.domain}</span>
       <div class="domain-content">
@@ -1138,6 +1156,8 @@ function renderObjs(){
       </div>
     </div>
   `).join('');
+  document.getElementById('objList').innerHTML = html;
+  document.getElementById('objListDup').innerHTML = html;
 }
 
 /* ══════════════════════════════════════════
@@ -1158,10 +1178,11 @@ function renderCh(){
 /* ══════════════════════════════════════════
    RENDER: EVENTS
 ══════════════════════════════════════════ */
-function renderEvs(){
-  document.getElementById('evList').innerHTML = D.events.map((e,i)=>`
+function renderEvs(filter){
+  const src = filter==='ent' ? D.events.filter(e=>e.type==='object') : D.events;
+  document.getElementById('evList').innerHTML = src.map((e,i)=>`
     <div class="ev-item lv-${e.lv}" onclick="go('../事件分析/事件管理/index.html')">
-      <div class="ev-title-row" onclick="event.stopPropagation();openEventDetail(${i})" style="cursor:pointer">
+      <div class="ev-title-row" onclick="event.stopPropagation();openEventDetail(${D.events.indexOf(e)})" style="cursor:pointer">
         <span class="ev-region ev-region-${e.region}">${e.region==='hk'?'香港':e.region==='cn'?'内地':'海外'}</span>
         <span class="ev-title">${e.title}</span>
       </div>
@@ -1173,6 +1194,11 @@ function renderEvs(){
       </div>
     </div>
   `).join('');
+}
+function switchEv(btn, filter){
+  btn.closest('.tab-m').querySelectorAll('.tab-m-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEvs(filter);
 }
 
 /* ══════════════════════════════════════════

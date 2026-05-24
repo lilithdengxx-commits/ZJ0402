@@ -194,6 +194,48 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .topbar-sitaware-btn:hover{background:rgba(43,97,240,0.18);border-color:rgba(43,97,240,0.45)}
 .topbar-sitaware-btn svg{flex:0 0 16px}
 
+/* ===== 方案D：二级导航树 ===== */
+.tree-group{margin-bottom:2px}
+.tree-group-hd{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:8px;cursor:pointer;user-select:none;transition:background 0.15s}
+.tree-group-hd:hover{background:rgba(43,97,240,0.05)}
+.tg-chevron{width:12px;height:12px;color:#9aa8bc;transition:transform 0.2s;flex-shrink:0}
+.tree-group.collapsed .tg-chevron{transform:rotate(-90deg)}
+.tree-group.collapsed .tree-group-body{display:none}
+.tg-label{font-size:11px;font-weight:800;color:#68778f;letter-spacing:0.06em;text-transform:uppercase}
+.tg-help{position:relative;width:14px;height:14px;border-radius:50%;background:rgba(122,145,184,0.18);color:#8896ad;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:default;flex-shrink:0;line-height:1}
+.tg-help:hover .tg-help-tip{display:block}
+.tg-help-tip{display:none;position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-12%);width:230px;background:#1a2234;color:#dce3ef;font-size:11px;font-weight:400;padding:8px 11px;border-radius:8px;line-height:1.55;z-index:200;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,0.22);white-space:normal}
+.tg-help-tip::before{content:'';position:absolute;bottom:100%;left:12%;border:5px solid transparent;border-bottom-color:#1a2234}
+.tg-add-btn{width:22px;height:22px;border-radius:6px;border:none;background:transparent;color:#9aa8bc;font-size:16px;cursor:pointer;display:grid;place-items:center;line-height:1;transition:color 0.15s,background 0.15s;flex-shrink:0}
+.tg-add-btn:hover{color:var(--primary);background:rgba(43,97,240,0.08)}
+.ai-badge{display:inline-flex;align-items:center;justify-content:center;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:0.04em;background:linear-gradient(135deg,#2f6bff,#7b5fff);color:#fff;flex-shrink:0}
+.tree-sub-group{margin-bottom:1px}
+.tree-sub-hd{display:flex;align-items:center;gap:5px;padding:5px 8px 5px 14px;border-radius:7px;cursor:pointer;user-select:none;transition:background 0.15s}
+.tree-sub-hd:hover{background:rgba(43,97,240,0.04)}
+.tree-sub-hd:hover .leaf-actions{display:flex}
+.tsg-chevron{width:10px;height:10px;color:#b0bbd0;transition:transform 0.2s;flex-shrink:0}
+.tree-sub-group.collapsed .tsg-chevron{transform:rotate(-90deg)}
+.tree-sub-group.collapsed .tree-sub-body{display:none}
+.tsg-name{font-size:12px;font-weight:700;color:#3a4a60;flex:1}
+.tsg-count{font-size:10px;color:#9aa8bc;font-weight:600;background:rgba(122,145,184,0.1);padding:1px 5px;border-radius:10px}
+.tree-leaf{position:relative;display:flex;align-items:center;gap:5px;padding:5px 8px 5px 26px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all 0.15s;margin-bottom:1px}
+.tree-leaf:hover{background:rgba(43,97,240,0.05);border-color:rgba(43,97,240,0.08)}
+.tree-leaf.active{background:rgba(43,97,240,0.09);border-color:rgba(43,97,240,0.16)}
+.tree-leaf.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:999px;background:var(--primary)}
+.leaf-name{font-size:12px;font-weight:400;color:#2a3448;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tree-leaf.active .leaf-name{color:var(--primary);font-weight:700}
+.leaf-actions{display:none;align-items:center;gap:1px;flex-shrink:0}
+.tree-leaf:hover .leaf-actions{display:flex}
+.leaf-act{padding:2px 5px;border-radius:4px;border:none;background:transparent;color:#9aa8bc;font-size:10px;font-weight:600;cursor:pointer;transition:color 0.15s,background 0.15s;white-space:nowrap}
+.leaf-act:hover{color:var(--primary);background:rgba(43,97,240,0.08)}
+.leaf-act.danger:hover{color:var(--danger);background:rgba(224,64,64,0.08)}
+.tree-leaf[data-type="system"] .leaf-actions{display:none!important}
+.leaf-ai-badge{display:inline-flex;align-items:center;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;background:rgba(122,145,184,0.1);color:#9aa8bc;flex-shrink:0;transition:background 0.15s,color 0.15s}
+.tree-leaf:hover .leaf-ai-badge,.tree-leaf.active .leaf-ai-badge{background:rgba(43,97,240,0.1);color:var(--primary)}
+.sys-rec-notice{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;background:linear-gradient(135deg,rgba(43,97,240,0.05),rgba(123,95,255,0.05));border:1px solid rgba(43,97,240,0.1);margin-bottom:10px;font-size:11px;color:#5a6a82}
+.add-scheme-btn{display:flex;align-items:center;gap:5px;width:100%;padding:5px 10px 5px 26px;border-radius:8px;border:1px dashed rgba(122,145,184,0.25);background:transparent;color:#9aa8bc;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;margin-top:2px}
+.add-scheme-btn:hover{border-color:rgba(43,97,240,0.3);color:var(--primary);background:rgba(43,97,240,0.04)}
+
 
 
 
@@ -258,32 +300,184 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
       <div class="body-wrap">
         <div class="left-panel">
           <div class="lp-header">
-            <span class="lp-title">监测方案</span>
+            <span class="lp-title">监测对象</span>
             <div class="lp-actions">
               <button class="lp-btn" title="搜索"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M19 19L15.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-              <button class="lp-btn" title="新建">＋</button>
             </div>
           </div>
-          <div class="scheme-item active" onclick="selectScheme(this)"><span class="si-name">关键人物</span><button class="si-del">🗑</button></div>
-          <div class="scheme-item" onclick="selectScheme(this)"><span class="si-name">关键部门</span><button class="si-del">🗑</button></div>
-          <div class="scheme-item" onclick="selectScheme(this)"><span class="si-name">特首</span><button class="si-del">🗑</button></div>
-          <div class="scheme-item" onclick="selectScheme(this)"><span class="si-name">三司十五局</span><button class="si-del">🗑</button></div>
-          <div class="scheme-item" onclick="selectScheme(this)"><span class="si-name">敏感账号</span><button class="si-del">🗑</button></div>
+
+          <!-- 系统推荐 -->
+          <div class="tree-group" id="tg-system">
+            <div class="tree-group-hd" onclick="toggleTreeGroup(this)">
+              <svg class="tg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="ai-badge">AI</span>
+              <span class="tg-label">系统推荐</span>
+              <span class="tg-help">?<span class="tg-help-tip">系统根据您的角色与历史关注自动监测以下关键对象舆情，无需配置监测方案</span></span>
+            </div>
+            <div class="tree-group-body">
+
+              <!-- 关键人物 -->
+              <div class="tree-sub-group" id="tsg-person">
+                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
+                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="tsg-name">关键人物</span>
+                  <span class="tsg-count">1,644</span>
+                </div>
+                <div class="tree-sub-body">
+                  <div class="tree-leaf active" data-type="system" data-label="李家超 · 关键人物" onclick="selectLeaf(this)">
+                    <span class="leaf-name">李家超</span>
+                    <span class="leaf-ai-badge">1,013</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
+                    </div>
+                  </div>
+                  <div class="tree-leaf" data-type="system" data-label="郑雁雄 · 关键人物" onclick="selectLeaf(this)">
+                    <span class="leaf-name">郑雁雄</span>
+                    <span class="leaf-ai-badge">384</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
+                    </div>
+                  </div>
+                  <div class="tree-leaf" data-type="system" data-label="夏宝龙 · 关键人物" onclick="selectLeaf(this)">
+                    <span class="leaf-name">夏宝龙</span>
+                    <span class="leaf-ai-badge">247</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 关键部门 -->
+              <div class="tree-sub-group" id="tsg-dept">
+                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
+                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="tsg-name">关键部门</span>
+                  <span class="tsg-count">245</span>
+                </div>
+                <div class="tree-sub-body">
+                  <div class="tree-leaf" data-type="system" data-label="行政会议 · 关键部门" onclick="selectLeaf(this)">
+                    <span class="leaf-name">行政会议</span>
+                    <span class="leaf-ai-badge">156</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
+                    </div>
+                  </div>
+                  <div class="tree-leaf" data-type="system" data-label="三司十五局 · 关键部门" onclick="selectLeaf(this)">
+                    <span class="leaf-name">三司十五局</span>
+                    <span class="leaf-ai-badge">89</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
+                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 我的关注 -->
+          <div class="tree-group" id="tg-mine">
+            <div class="tree-group-hd" onclick="toggleTreeGroup(this)">
+              <svg class="tg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:linear-gradient(135deg,#f97316,#fb923c);flex-shrink:0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="color:#fff"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </span>
+              <span class="tg-label">我的关注</span>
+            </div>
+            <div class="tree-group-body">
+              <div class="tree-leaf" data-type="mine" data-label="敏感账号" onclick="selectLeaf(this)">
+                <span class="leaf-name">敏感账号</span>
+                <span class="leaf-ai-badge">312</span>
+                <div class="leaf-actions">
+                  <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                  <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                </div>
+              </div>
+              <div class="tree-sub-group" id="tsg-fdpm">
+                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
+                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="tsg-name">反对派媒体</span>
+                  <span class="tsg-count">178</span>
+                  <div class="leaf-actions">
+                    <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                    <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                  </div>
+                </div>
+                <div class="tree-sub-body">
+                  <div class="tree-leaf" data-type="mine" data-label="境外社交账号" onclick="selectLeaf(this)">
+                    <span class="leaf-name">境外社交账号</span>
+                    <span class="leaf-ai-badge">88</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                    </div>
+                  </div>
+                  <div class="tree-leaf" data-type="mine" data-label="网络媒体" onclick="selectLeaf(this)">
+                    <span class="leaf-name">网络媒体</span>
+                    <span class="leaf-ai-badge">56</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                    </div>
+                  </div>
+                  <div class="tree-leaf" data-type="mine" data-label="YouTube频道" onclick="selectLeaf(this)">
+                    <span class="leaf-name">YouTube频道</span>
+                    <span class="leaf-ai-badge">34</span>
+                    <div class="leaf-actions">
+                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tree-leaf" data-type="mine" data-label="香港立法会" onclick="selectLeaf(this)">
+                <span class="leaf-name">香港立法会</span>
+                <span class="leaf-ai-badge">534</span>
+                <div class="leaf-actions">
+                  <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                  <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                </div>
+              </div>
+              <div class="tree-leaf" data-type="mine" data-label="涉港境外媒体" onclick="selectLeaf(this)">
+                <span class="leaf-name">涉港境外媒体</span>
+                <span class="leaf-ai-badge">96</span>
+                <div class="leaf-actions">
+                  <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                  <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+                </div>
+              </div>
+              <button class="add-scheme-btn" onclick="addMyScheme()">＋ 新建方案</button>
+            </div>
+          </div>
+
         </div>
 
         <div class="right-panel">
           <!-- 监测方案 Tab 内容 -->
           <div class="tab-panel active" id="mp0">
-            <!-- 二级filter：关键人物 | AI监测报告 toggle -->
-            <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(122,145,184,0.1)">
-              <span style="font-size:13px;font-weight:700;color:#1a2234">关键人物</span>
+            <!-- 右侧面板：节点标题 + 工具栏 -->
+            <div id="rp-header-bar" style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(122,145,184,0.1);flex-wrap:wrap">
+              <span id="rp-ai-badge" class="ai-badge">AI</span>
+              <span id="rp-node-title" style="font-size:13px;font-weight:700;color:#1a2234">李家超 · 关键人物</span>
               <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
                 <span style="font-size:12px;color:#68778f;font-weight:600">AI监测报告</span>
                 <button onclick="this.classList.toggle('on');this.style.background=this.classList.contains('on')?'var(--primary)':'rgba(122,145,184,0.22)'" style="width:38px;height:22px;border-radius:999px;border:none;background:var(--primary);cursor:pointer;position:relative;transition:background 0.2s"><span style="position:absolute;top:3px;left:calc(100% - 19px);width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.12)"></span></button>
               </div>
               <button style="padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">图表分析</button>
-              <button style="padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">预警设置</button>
+              <button id="btn-alert-set" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">预警设置</button>
             </div>
+
             <div class="filter-zone">
               <div class="fz-row">
                 <span class="fz-label">发布时间</span>
@@ -329,13 +523,14 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
                 <button class="fz-more-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="margin-right:4px;vertical-align:-1px"><path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>更多筛选</button>
                 <div class="fz-actions-right">
+                  <button class="btn-save" id="btn-save-filter" style="display:none">保存筛选</button>
                   <button class="btn-qry">查询</button>
                 </div>
               </div>
             </div>
             <!-- 结果栏 -->
             <div class="result-bar">
-              <span class="result-count">共 1,013 条</span>
+              <span class="result-count" id="feed-count">共 1,013 条</span>
               <div style="display:flex;align-items:center;gap:8px">
                 <button class="ghost-button">选择当前页</button>
                 <button class="ghost-button">导出全部</button>
@@ -355,6 +550,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               </div>
             </div>
             <!-- 信息流 -->
+            <div id="feed-list">
             <div class="feed-item">
               <div class="fi-head">
                 <input type="checkbox" class="fi-check">
@@ -365,10 +561,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">转：没有共产党就没有新中国 ‼</div>
@@ -393,10 +588,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">#法眼看两会##代表委员看法院#【全国人大代表黄勇、李世亮、丁海梅谈"AI换脸"——法治为对清洁AI红线 共治守好"脸面安全"】在中国人的传统观念里，"脸面"二字，既是尊严、也是信用。随着人工智能技术的迈步发展，非法合成的风险日益凸显。从肖像侵权到电信诈骗，近年来，涉"…</div>
@@ -420,10 +614,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-meta">
@@ -446,10 +639,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">【#2026逐梦中国#】岁序更替、华章日新，逐梦扬正当时。文旅市场热气腾腾，冰雪健儿神采飞扬，科技创新再攀新高……从人间烟火大国重器，从赛场拼搏到科技探索，每一次向前，都凝聚着你我追梦的力量。全国两会召开在即，这个春天，14亿多人民的心声，汇聚于此。一起转发。</div>
@@ -473,10 +665,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">全国政协委员、清华大学中国经济思想与实践研究院院长李稻葵在今年两会期间表示，当前经济复苏的关键在于扩大内需，尤其要提振居民消费信心。他建议通过税收优惠、社会保障完善等手段，推动居民可支配收入增长与GDP增速基本同步，从根本上改善消费预期。</div>
@@ -500,10 +691,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">微博话题"#直播带货数据注水#"阅读量在6小时内突破3.2亿，多名认证用户发布截图称某头部主播直播间实际成交额与官方公布数据存在数量级差异。目前涉事平台已介入核查，相关视频已被标注"内容存疑"提示。</div>
@@ -527,10 +717,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">【人民日报评论】数字经济蓬勃发展，个人信息安全问题日益凸显。评论指出，平台企业应切实履行数据安全主体责任，监管部门应加大对违规收集、滥用用户数据行为的惩处力度，推动《个人信息保护法》真正落地见效，让广大网民在数字空间安心、放心、舒心。</div>
@@ -555,10 +744,9 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <div class="fi-act-row">
                       <button class="fi-act-btn">查看原文</button>
                       <button class="fi-act-btn">复制</button>
-                      <button class="fi-act-btn warn">预警</button>
                       <button class="fi-act-btn">收藏</button>
-                      <button class="fi-act-btn">加入线索池</button>
-                      <button class="fi-act-btn">加入素材</button>
+                      <button class="fi-act-btn">+线索池</button>
+                      <button class="fi-act-btn">+素材库</button>
                     </div>
                   </div>
                   <div class="fi-abstract">据海关总署最新数据，2026年1-2月我国新能源汽车累计出口超过98万辆，同比增长37.4%，连续14个月保持全球出口量第一。比亚迪、奇瑞、上汽等车企持续扩大海外布局，已在欧洲、东南亚、中东等地区建立本地化制造基地或服务网络。</div>
@@ -573,6 +761,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
               </div>
             </div>
+            </div><!-- /feed-list -->
           </div>
 
           <!-- AI监测报告 Tab 内容 -->
@@ -879,9 +1068,138 @@ function switchMainTab(idx, btn) {
   document.querySelectorAll('.main-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
   document.querySelectorAll('#mp0, #mp1').forEach((p,i) => p.classList.toggle('active', i===idx));
 }
-function selectScheme(el) {
-  el.closest('.left-panel').querySelectorAll('.scheme-item').forEach(s => s.classList.remove('active'));
+var FEED_DATA = {
+  '李家超 · 关键人物': { count: '1,013', items: [
+    { title: '李家超：香港经济转型已取得初步成效，新质生产力布局持续推进', abstract: '行政长官李家超出席香港创新科技产业论坛，强调香港须把握国家"十五五"规划机遇，加快发展人工智能、生物医疗等新兴产业，并透露政府将于下季推出新一轮吸引外资措施。', platform: '微信', date: '2026-05-24 09:12', senti: '正面', sc: 'pos', source: '大公文汇', orig: false },
+    { title: '特首李家超主持抗灾跨部门协调会议，全力支援受灾居民', abstract: '受强台风影响，特首李家超主持紧急跨部门协调会议，要求民政、消防、医管局全力开展救援，并宣布启动紧急事故监察中心。', platform: '微博', date: '2026-05-23 22:35', senti: '中立', sc: 'neutral', source: '香港电台 (粉丝数: 1,240,000)', orig: true },
+    { title: '李家超就《基本法》颁布35周年发表讲话：香港已全面回归正轨', abstract: '', platform: '网页', date: '2026-05-23 10:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '网民批评港府垃圾收费方案仍存漏洞，促李家超正面回应', abstract: '', platform: '微博', date: '2026-05-22 14:20', senti: '负面', sc: 'neg', source: '本土研究社 (粉丝数: 88,000)', orig: true }
+  ]},
+  '郑雁雄 · 关键人物': { count: '384', items: [
+    { title: '中联办主任郑雁雄出席"一国两制"研讨会，强调香港须把握发展机遇', abstract: '中央人民政府驻港联络办公室主任郑雁雄出席由智库主办的研讨会，强调"爱国者治港"方针落实以来，香港社会稳定、经济持续恢复，各界应团结一致推动高质量发展。', platform: '网页', date: '2026-05-23 18:00', senti: '正面', sc: 'pos', source: '文汇报', orig: false },
+    { title: '郑雁雄走访本港多家创科企业，深入了解人才政策落地情况', abstract: '', platform: '微信', date: '2026-05-22 11:30', senti: '正面', sc: 'pos', source: '香港商报', orig: false },
+    { title: '外媒解读郑雁雄讲话：北京持续强化对港政策协调能力', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 03:14', senti: '负面', sc: 'neg', source: 'Reuters HK', orig: true }
+  ]},
+  '夏宝龙 · 关键人物': { count: '247', items: [
+    { title: '夏宝龙：香港要成为国家开拓国际市场的重要平台', abstract: '国务院港澳事务办公室主任夏宝龙在第十五届香港论坛致辞时指出，香港须充分发挥"超级联系人"功能，积极协助国家企业走出去、引进来。', platform: '网页', date: '2026-05-21 15:00', senti: '正面', sc: 'pos', source: '新华社', orig: true },
+    { title: '港澳办就近期香港经济形势发表声明，肯定特区政府施政表现', abstract: '', platform: '微博', date: '2026-05-20 09:30', senti: '正面', sc: 'pos', source: '人民日报香港频道 (粉丝数: 4,200,000)', orig: true },
+    { title: '境外媒体：夏宝龙再提香港"有为政府"论述，引发各方解读', abstract: '', platform: 'Facebook', date: '2026-05-20 01:08', senti: '中立', sc: 'neutral', source: 'SCMP Official', orig: false }
+  ]},
+  '行政会议 · 关键部门': { count: '156', items: [
+    { title: '行政会议通过新一轮"简约公屋"建设计划，预计提供1.2万伙单位', abstract: '行政会议拍板通过新一轮简约公屋方案，将在北部都会区及屯门新增三幅用地，预计可提供约12,000个过渡性房屋单位，目标2027年底首批入伙。', platform: '网页', date: '2026-05-24 11:00', senti: '正面', sc: 'pos', source: '星岛日报', orig: false },
+    { title: '行政会议审议《人工智能监管框架》草案，料下月提交立法会', abstract: '', platform: '微信', date: '2026-05-23 16:45', senti: '中立', sc: 'neutral', source: '香港01', orig: false },
+    { title: '学者质疑行政会议决策透明度不足，促完善咨询机制', abstract: '', platform: '论坛贴吧', date: '2026-05-22 20:10', senti: '负面', sc: 'neg', source: '独立媒体 (粉丝数: 32,000)', orig: true }
+  ]},
+  '三司十五局 · 关键部门': { count: '89', items: [
+    { title: '财政司司长陈茂波：下半年经济形势较预期乐观，通胀压力可控', abstract: '财政司司长陈茂波接受媒体专访时表示，本港下半年GDP增速有望维持在3%以上，全年通胀率预计不超过2.5%。', platform: '微博', date: '2026-05-24 08:22', senti: '正面', sc: 'pos', source: '经济日报 (粉丝数: 780,000)', orig: false },
+    { title: '保安局局长邓炳强：针对网络煽动内容执法力度将持续提升', abstract: '', platform: '网页', date: '2026-05-23 14:55', senti: '中立', sc: 'neutral', source: '明报', orig: false },
+    { title: '创新科技及工业局宣布新一轮"科技券"计划，资助上限提升至40万元', abstract: '', platform: '微信', date: '2026-05-22 10:00', senti: '正面', sc: 'pos', source: '工商日报', orig: true }
+  ]},
+  '敏感账号': { count: '312', items: [
+    { title: '🔥 转：没有共产党就没有新中国 ‼', abstract: '转：没有共产党就没有新中国 ‼', platform: 'X(Twitter)', date: '2026-03-04 18:46', senti: '涉政', sc: 'neg', source: 'zhihui999', orig: true },
+    { title: '某涉港账号大量转发境外媒体涉港负面报道，疑似协同操控', abstract: '监测发现该账号近7日内集中转发超过80篇涉港负面内容，转发节奏高度规律，疑存在有组织的舆论操控行为，已标记预警。', platform: '微博', date: '2026-05-23 03:12', senti: '负面', sc: 'neg', source: '@hk_dissident88 (粉丝数: 120,000)', orig: false },
+    { title: '境外账号发布"香港自由指数"报告，境内外平台大量转发扩散', abstract: '', platform: 'Facebook', date: '2026-05-22 11:40', senti: '负面', sc: 'neg', source: 'HKFreedom_Official', orig: true }
+  ]},
+  '反对派媒体': { count: '178', items: [
+    { title: '《苹果日报》海外版就《维护国家安全条例》发表评论，定性"打压自由"', abstract: '', platform: 'X(Twitter)', date: '2026-05-24 06:30', senti: '负面', sc: 'neg', source: 'Apple Daily Overseas', orig: true },
+    { title: '某境外港媒采访多名前政界人士，声称"香港一国两制已名存实亡"', abstract: '该媒体以"周年回顾"名义发布长篇报道，内容经多个境外社交平台同步扩散，24小时内触及人次超过50万。', platform: 'Facebook', date: '2026-05-23 20:00', senti: '负面', sc: 'neg', source: 'Stand News Overseas', orig: true },
+    { title: '反对派媒体就本港最新民调数据作出片面解读，刻意忽略正面指标', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 15:18', senti: '负面', sc: 'neg', source: 'HKFP (粉丝数: 430,000)', orig: false }
+  ]},
+  '境外社交账号': { count: '88', items: [
+    { title: '境外账号集中转发涉港"镇压"相关内容，疑似有组织协同运营', abstract: '监测发现多个境外社交账号在72小时内同步发布高度相似内容，转发量合计超过12万次，疑似存在协同舆论操控行为。', platform: 'X(Twitter)', date: '2026-05-24 08:10', senti: '负面', sc: 'neg', source: '@hk_voice2026 (粉丝数: 230,000)', orig: true },
+    { title: '涉港境外账号发布"白色恐怖"系列短视频，在Facebook获大量传播', abstract: '', platform: 'Facebook', date: '2026-05-23 14:22', senti: '负面', sc: 'neg', source: 'HKDemocracy_Now', orig: true },
+    { title: '某海外港人账号就保安局执法行动发表评论，引发跨平台扩散', abstract: '', platform: 'Instagram', date: '2026-05-22 19:35', senti: '负面', sc: 'neg', source: 'overseasHKer88', orig: true }
+  ]},
+  '网络媒体': { count: '56', items: [
+    { title: '《立场新闻》存档网站刊登特稿，批评香港司法独立受损', abstract: '', platform: '网页', date: '2026-05-24 05:00', senti: '负面', sc: 'neg', source: 'Stand News Archive', orig: true },
+    { title: 'HKFP报道：本港新闻工作者自我审查情况加剧', abstract: 'HKFP援引多项学术调查数据，报道称本港媒体从业者自我审查比例持续上升，多名受访者表示在报道敏感话题时感到压力。', platform: '网页', date: '2026-05-23 09:45', senti: '负面', sc: 'neg', source: 'HKFP (粉丝数: 430,000)', orig: true },
+    { title: '某境外论坛持续发酵"港警暴力"旧帖，带动新一轮舆情热度', abstract: '', platform: '论坛贴吧', date: '2026-05-22 21:00', senti: '负面', sc: 'neg', source: 'inmediahk.net', orig: false }
+  ]},
+  'YouTube频道': { count: '34', items: [
+    { title: '某YouTube频道发布"香港沦陷五周年"纪录片，播放量超80万', abstract: '该频道发布时长约35分钟的纪录片，内容包含大量断章取义的历史影像及访谈，在海外港人社群中引发广泛讨论，相关话题标签登上YouTube香港热搜。', platform: 'YouTube', date: '2026-05-23 16:00', senti: '负面', sc: 'neg', source: 'HKChronicles (订阅数: 580,000)', orig: true },
+    { title: '反对派媒体YouTube频道发布立法会议员专访，质疑议会功能', abstract: '', platform: 'YouTube', date: '2026-05-22 12:30', senti: '负面', sc: 'neg', source: 'Apple Daily Video', orig: true },
+    { title: '境外港媒YouTube频道就《国安法》三周年发布系列评论视频', abstract: '', platform: 'YouTube', date: '2026-05-21 18:00', senti: '负面', sc: 'neg', source: 'Citizen News Video (订阅数: 120,000)', orig: true }
+  ]},
+  '香港立法会': { count: '534', items: [
+    { title: '立法会通过《人工智能发展条例草案》二读，本港AI监管正式立法', abstract: '香港立法会以54票赞成、0票反对通过二读，条例草案将于下月提交三读。业界普遍欢迎立法为AI应用提供清晰法律框架。', platform: '网页', date: '2026-05-24 17:30', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '立法会内务委员会审议多项民生议案，房屋及医疗政策成焦点', abstract: '', platform: '微信', date: '2026-05-23 12:00', senti: '中立', sc: 'neutral', source: '大公报', orig: false },
+    { title: '立法会议员促政府交代北部都会区发展进度，质疑项目延误', abstract: '多名立法会议员在质询环节追问政府官员，北部都会区多个基建项目进度落后于计划，当局须于下月提交详细时间表。', platform: '微博', date: '2026-05-22 16:55', senti: '负面', sc: 'neg', source: '香港01 (粉丝数: 2,100,000)', orig: false },
+    { title: '立法会通过2026-27年度拨款条例草案，总开支逾8000亿元', abstract: '', platform: '网页', date: '2026-05-21 18:00', senti: '中立', sc: 'neutral', source: '星岛日报', orig: false }
+  ]},
+  '涉港境外媒体': { count: '96', items: [
+    { title: 'BBC：Hong Kong economy shows signs of recovery amid global uncertainty', abstract: '', platform: 'X(Twitter)', date: '2026-05-24 04:10', senti: '中立', sc: 'neutral', source: 'BBC News Asia', orig: true },
+    { title: 'Reuters：Foreign investment in Hong Kong surged 18% in Q1 2026', abstract: '', platform: 'X(Twitter)', date: '2026-05-23 07:22', senti: '正面', sc: 'pos', source: 'Reuters Asia', orig: true },
+    { title: 'NYT：Critics say HK press freedom continues to deteriorate under security laws', abstract: '《纽约时报》刊发长篇报道，采访多名已离港的新闻从业者，声称本港新闻自由环境持续恶化，报道在境外社交媒体引发大量转发。', platform: 'Facebook', date: '2026-05-22 22:00', senti: '负面', sc: 'neg', source: 'NYT World (粉丝数: 12,000,000)', orig: true }
+  ]}
+};
+function renderFeed(label) {
+  var data = FEED_DATA[label];
+  var countEl = document.getElementById('feed-count');
+  if (countEl) countEl.textContent = '共 ' + (data ? data.count : '0') + ' 条';
+  var listEl = document.getElementById('feed-list');
+  if (!listEl) return;
+  if (!data || !data.items.length) {
+    listEl.innerHTML = '<div style="padding:48px 0;text-align:center;color:#9aa8bc;font-size:13px">暂无相关监测数据</div>';
+    return;
+  }
+  listEl.innerHTML = data.items.map(function(item) {
+    var origStyle = item.orig
+      ? 'background:rgba(206,93,87,0.08);color:var(--danger)'
+      : 'background:rgba(25,165,129,0.1);color:var(--success)';
+    return '<div class="feed-item"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-body">'
+      + '<div class="fi-title-row"><div class="fi-title">' + item.title + '</div>'
+      + '<div class="fi-act-row"><button class="fi-act-btn">查看原文</button><button class="fi-act-btn">复制</button>'
+      + '<button class="fi-act-btn">收藏</button>'
+      + '<button class="fi-act-btn">+线索池</button><button class="fi-act-btn">+素材库</button></div></div>'
+      + (item.abstract ? '<div class="fi-abstract">' + item.abstract + '</div>' : '')
+      + '<div class="fi-meta">'
+      + '<span class="senti-tag ' + item.sc + '">' + item.senti + '</span>'
+      + '<span>📅 ' + item.date + '</span>'
+      + '<span class="plat-badge">' + item.platform + '</span>'
+      + '<span>' + item.source + '</span>'
+      + '<span style="padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;' + origStyle + '">'
+      + (item.orig ? '原帖' : '转发') + '</span>'
+      + '</div></div></div></div>';
+  }).join('');
+}
+function selectLeaf(el) {
+  document.querySelectorAll('.tree-leaf').forEach(function(s) { s.classList.remove('active'); });
   el.classList.add('active');
+  var type = el.dataset.type;
+  var label = el.dataset.label || el.querySelector('.leaf-name').textContent;
+  var titleEl = document.getElementById('rp-node-title');
+  if (titleEl) titleEl.textContent = label;
+  var isSystem = type === 'system';
+  var aiBadge = document.getElementById('rp-ai-badge');
+  var btnAlert = document.getElementById('btn-alert-set');
+  var btnSave = document.getElementById('btn-save-filter');
+  if (aiBadge) aiBadge.style.display = isSystem ? '' : 'none';
+  if (btnAlert) btnAlert.style.display = '';
+  if (btnSave) btnSave.style.display = isSystem ? 'none' : '';
+  renderFeed(label);
+}
+function toggleTreeGroup(hd) {
+  hd.closest('.tree-group').classList.toggle('collapsed');
+}
+function toggleSubGroup(hd) {
+  hd.closest('.tree-sub-group').classList.toggle('collapsed');
+}
+function addMyScheme() {
+  var name = prompt('请输入方案名称：');
+  if (!name || !name.trim()) return;
+  var body = document.querySelector('#tg-mine .tree-group-body');
+  var addBtn = body.querySelector('.add-scheme-btn');
+  var leaf = document.createElement('div');
+  leaf.className = 'tree-leaf';
+  leaf.dataset.type = 'mine';
+  leaf.dataset.label = name.trim();
+  leaf.onclick = function() { selectLeaf(this); };
+  leaf.innerHTML = '<span class="leaf-name">' + name.trim() + '</span>'
+    + '<span class="leaf-ai-badge">0</span>'
+    + '<div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">编辑</button>'
+    + '<button class="leaf-act danger" onclick="event.stopPropagation()">删除</button></div>';
+  FEED_DATA[name.trim()] = { count: '0', items: [] };
+  body.insertBefore(leaf, addBtn);
 }
 function switchReportTab(idx, btn) {
   btn.closest('.report-tabs').querySelectorAll('.report-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
@@ -919,6 +1237,14 @@ document.querySelectorAll('.nav-group-title').forEach(title => {
     title.closest('.nav-group').classList.toggle('collapsed');
   });
 });
+// 初始化：渲染默认激活节点的信息流
+(function() {
+  var active = document.querySelector('.tree-leaf.active');
+  if (active) {
+    var label = active.dataset.label || active.querySelector('.leaf-name').textContent;
+    renderFeed(label);
+  }
+})();
 function openAIForFeed() {
   var sel = Array.from(document.querySelectorAll('.fi-check:checked'))
     .map(function(cb){ var t = cb.closest('.fi-head')?.querySelector('.fi-title'); return t ? t.textContent.trim() : ''; })

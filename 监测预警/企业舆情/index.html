@@ -488,7 +488,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             </div>
 
             <div class="stat-card c-green">
-              <div class="sc-label">竞对信息量</div>
+              <div class="sc-label">其他企业信息量</div>
               <div class="sc-value">48<small>条 · 负面6条</small></div>
               <div class="sc-trend down">海棠 ↑42% 居首</div>
               <div class="cmp-mini" style="margin-top:8px;display:flex;flex-direction:column;gap:4px">
@@ -560,10 +560,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 </div>
               </div>
 
-              <!-- 竞对舆情对标 -->
+              <!-- 舆情对标 -->
               <div class="ov-panel" style="flex:1;margin-bottom:0">
                 <div class="ov-panel-hd">
-                  <div class="ov-panel-title">⚔️ 竞对舆情对标</div>
+                  <div class="ov-panel-title">⚔️ 舆情对标</div>
                   <div class="ov-panel-tools">
                     <span class="ov-tool-chip active">今日</span>
                     <span class="ov-tool-chip">近7天</span>
@@ -962,10 +962,10 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
   var box = document.getElementById('alertLine'); if(!box) return;
   var data = [
     {lv:'high',ent:'紫荆股份',title:'紫荆Pro 某型号质量投诉在抖音突增 ↑320%，关联视频已破百万播放',time:'08:42 · 距今 36 分钟'},
-    {lv:'high',ent:'竞对 · 海棠集团',title:'海棠集团子公司被曝财务问题，同行屡谈补位机会（高优先）',time:'08:30 · 距今 48 分钟'},
+    {lv:'high',ent:'其他企业 · 海棠集团',title:'海棠集团子公司被曝财务问题，同行屡谈补位机会（高优先）',time:'08:30 · 距今 48 分钟'},
     {lv:'high',ent:'高管 · 王志远',title:'匿名爆料账号针对王志远发布连续 3 篇负面长文',time:'08:15 · 距今 1 小时'},
     {lv:'med', ent:'紫荆金融',title:'监管新规解读出现误读，财经媒体连发 5 篇质疑稿',time:'07:30 · 今早'},
-    {lv:'med', ent:'竞对 · 木兰集团',title:'木兰集团发布 ESG 报告，多家媒体跨业对标点名本企业',time:'昨日 22:14'},
+    {lv:'med', ent:'其他企业 · 木兰集团',title:'木兰集团发布 ESG 报告，多家媒体跨业对标点名本企业',time:'昨日 22:14'},
     {lv:'low', ent:'品牌 · 紫荆Pro',title:'新品发布后产生若干用户讨论，整体偏中性',time:'昨日 19:08'}
   ];
   box.innerHTML = data.map(function(d){
@@ -1038,7 +1038,7 @@ function closeAlertDrawer(){ document.getElementById('alertDrawer').classList.re
     {name:'紫荆地产',count:18,lv:2},
     {name:'紫荆文化',count:14,lv:2},
     {name:'集团总部 · 高管',count:10,lv:2},
-    {name:'竞对监测',count:48,lv:1,cmp:true},
+    {name:'其他企业',count:48,lv:1,cmp:true},
     {name:'海棠集团',count:23,lv:2,cmp:true},
     {name:'木兰集团',count:15,lv:2,cmp:true},
     {name:'玉兰集团',count:10,lv:2,cmp:true}

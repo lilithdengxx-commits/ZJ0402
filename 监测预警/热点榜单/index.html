@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>监测预警 - 热点榜单</title>
 <style>
-:root{--bg:#f0f2f7;--bg-deep:#e5e9f2;--card:rgba(255,255,255,0.84);--card-strong:#ffffff;--line:rgba(122,145,184,0.14);--line-strong:rgba(122,145,184,0.22);--text:#1e2d45;--text-soft:#6b7c95;--text-faint:#9eb0c6;--primary:#2b61f0;--primary-deep:#1a4ed4;--secondary:#7ab0ff;--secondary-soft:rgba(43,97,240,0.1);--success:#12a87a;--danger:#e04040;--warning:#c47d10;--sidebar-bg:#ffffff;--sidebar-width:220px;font-family:"PingFang SC","Lantinghei SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;color-scheme:light}
+:root{--bg:#f0f2f7;--bg-deep:#e5e9f2;--card:rgba(255,255,255,0.84);--card-strong:#ffffff;--line:rgba(122,145,184,0.14);--line-strong:rgba(122,145,184,0.22);--text:#1e2d45;--text-soft:#3d5168;--text-faint:#5c7185;--primary:#2b61f0;--primary-deep:#1a4ed4;--secondary:#7ab0ff;--secondary-soft:rgba(43,97,240,0.1);--success:#12a87a;--danger:#e04040;--warning:#c47d10;--sidebar-bg:#ffffff;--sidebar-width:220px;font-family:"PingFang SC","Lantinghei SC","Source Han Sans SC","Noto Sans SC","Microsoft YaHei UI","微软雅黑",sans-serif;color-scheme:light}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;color:var(--text);background:#eef1f8;min-height:100vh;overflow-x:hidden}
@@ -91,9 +91,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
 /* 平台热榜 */
 .plat-filter-bar{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.plat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .plat-card{border-radius:8px;border:1px solid rgba(122,145,184,0.12);overflow:hidden;background:#fff;box-shadow:0 1px 4px rgba(26,44,82,0.05)}
 .plat-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(122,145,184,0.08);font-size:13px;font-weight:700;color:var(--text);background:#f8fafd}
+.plat-update{margin-left:auto;font-size:11px;color:var(--text-faint);font-weight:400;white-space:nowrap}
 .plat-icon{width:22px;height:22px;border-radius:6px;font-size:12px;display:grid;place-items:center;flex:0 0 22px}
 .total-row{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid rgba(122,145,184,0.06);font-size:13px;cursor:pointer;transition:background 0.12s}
 .total-row:last-child{border-bottom:none}
@@ -115,12 +116,15 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .alert-filters{background:#fff;border-radius:8px;border:1px solid rgba(122,145,184,0.14);padding:16px 18px;box-shadow:0 1px 4px rgba(26,44,82,0.05);margin-bottom:12px}
 .af-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
 .af-row:last-child{margin-bottom:0}
+.af-row.af-row-top{flex-wrap:nowrap}
 .af-label{font-size:13px;font-weight:700;color:var(--text-soft);min-width:56px;flex:0 0 56px}
 .af-input{padding:5px 10px;border-radius:7px;border:1px solid rgba(122,145,184,0.16);background:#f8fafd;color:var(--text);font-size:13px;outline:none;flex:1;min-width:180px}
 .af-chips{display:flex;gap:6px;flex-wrap:wrap}
 .af-chip{padding:4px 10px;border-radius:999px;border:1px solid rgba(122,145,184,0.16);background:#fff;color:var(--text-soft);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s}
 .af-chip.active{background:rgba(43,97,240,0.08);color:var(--primary);border-color:rgba(43,97,240,0.2)}
 .af-chip:hover:not(.active){border-color:rgba(43,97,240,0.2);color:var(--primary)}
+.btn-setting{padding:5px 14px;border-radius:7px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;transition:border-color 0.15s,color 0.15s;white-space:nowrap;flex:0 0 auto}
+.btn-setting:hover{border-color:rgba(43,97,240,0.28);color:var(--primary-deep)}
 .af-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
 .btn-reset{padding:5px 14px;border-radius:7px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:var(--text-soft);font-size:13px;font-weight:700;cursor:pointer;transition:border-color 0.15s,color 0.15s}
 .btn-reset:hover{border-color:rgba(43,97,240,0.25);color:var(--primary)}
@@ -172,8 +176,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .t-heat{font-size:11px;color:#f5502a;font-weight:700;white-space:nowrap}
 .t-dur{font-size:10px;color:var(--text-faint);white-space:nowrap}
 .t-chg{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:2px}
-.t-chg.chg-up{color:#12a87a;background:rgba(18,168,122,0.10)}
-.t-chg.chg-dn{color:#e04040;background:rgba(224,64,64,0.10)}
+.t-chg.chg-up{color:#e04040;background:rgba(224,64,64,0.10)}
+.t-chg.chg-dn{color:#12a87a;background:rgba(18,168,122,0.10)}
 .t-chg.chg-new{color:#2b61f0;background:rgba(43,97,240,0.10)}
 /* ---- 热搜增强 (微博/抖音/百度) ---- */
 .plist-item>div:not(.p-body){flex:1;min-width:0}
@@ -182,8 +186,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .p-heat{font-size:11px;color:#f5502a;font-weight:700;white-space:nowrap}
 .p-dur{font-size:10px;color:var(--text-faint);white-space:nowrap;margin-left:auto}
 .p-chg{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap}
-.p-chg.chg-up{color:#12a87a;background:rgba(18,168,122,0.10)}
-.p-chg.chg-dn{color:#e04040;background:rgba(224,64,64,0.10)}
+.p-chg.chg-up{color:#e04040;background:rgba(224,64,64,0.10)}
+.p-chg.chg-dn{color:#12a87a;background:rgba(18,168,122,0.10)}
 .p-chg.chg-new{color:#2b61f0;background:rgba(43,97,240,0.10)}
 
 
@@ -206,6 +210,18 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .cat-col{}
 .cat-col .cat-head{}
 .cat-col .rank-hdr{}
+/* tp0 平台热榜指定卡片行间距 */
+#tp0 .plat-grid > .plat-card:nth-child(2) .total-row{padding:9px 12px}
+#tp0 .plat-grid > .plat-card:nth-child(n+3):nth-child(-n+8) .plist-item{padding:9px 12px}
+/* tp1 领域热点 增强布局 */
+#tp1 .category-grid{grid-template-columns:repeat(3,1fr)}
+#tp1 .rank-row{grid-template-columns:24px 1fr auto;align-items:center;padding:9px 10px}
+#tp1 .rk-body{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:3px;min-width:0;overflow:hidden}
+#tp1 .rk-t-row{display:contents}
+#tp1 .rk-title{font-size:13px;font-weight:500;color:var(--text);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:0 1 auto;min-width:0;line-height:1.4}
+#tp1 .rk-tag-row{display:contents}
+.rk-anom-btn{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:700;white-space:nowrap;background:rgba(217,119,6,.09);color:#885000;border:1px solid rgba(217,119,6,.22);cursor:pointer;flex-shrink:0;align-self:center;line-height:14px}
+.rk-anom-btn:hover{background:rgba(217,119,6,.18)}
 
 /* ---- 平台 mini-logo pills ---- */
 .plat-pill{display:inline-flex;align-items:center;justify-content:center;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:800;white-space:nowrap;vertical-align:middle;margin-left:4px;line-height:14px;flex-shrink:0}
@@ -394,8 +410,8 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .ea-body .il-action-dot{font-size:14px;color:#c0cdd8;cursor:pointer}
 
 @media(max-width:1400px){.category-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:1080px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.main-area{grid-column:1;grid-row:1;min-height:100vh}.global-topbar{grid-column:1}.category-grid{grid-template-columns:repeat(2,1fr)}.plat-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.category-grid{grid-template-columns:1fr}.plat-grid{grid-template-columns:1fr}.region-bar{flex-direction:column;align-items:flex-start}}
+@media(max-width:1080px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.main-area{grid-column:1;grid-row:1;min-height:100vh}.global-topbar{grid-column:1}.category-grid{grid-template-columns:repeat(2,1fr)}#tp1 .category-grid{grid-template-columns:repeat(2,1fr)}.plat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.category-grid{grid-template-columns:1fr}#tp1 .category-grid{grid-template-columns:1fr}.plat-grid{grid-template-columns:1fr}.region-bar{flex-direction:column;align-items:flex-start}}
 
 .nav-toplevel-link{display:flex;align-items:center;gap:7px;padding:12px 6px 8px;color:#8a9ab8;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;user-select:none;text-decoration:none;transition:color 0.15s;border-radius:6px}
 .nav-toplevel-link:hover{color:#4a5c7a;background:rgba(43,97,240,0.04)}
@@ -433,6 +449,25 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .top-dropdown a:hover{background:rgba(43,97,240,0.06);color:var(--primary,#2b61f0)}
 .top-dropdown a.active{background:rgba(43,97,240,0.09);color:var(--primary,#2b61f0);font-weight:700}
 .topbar-actions{display:flex;align-items:center;gap:8px;padding:0 14px 0 6px;flex-shrink:0;height:56px}
+/* topic-tags */
+.tt{display:inline-flex;align-items:center;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;white-space:nowrap;flex-shrink:0;line-height:16px;margin-left:2px;vertical-align:middle}
+.tt-社会民生{background:rgba(99,102,241,.10);color:#4848b8;border:1px solid rgba(99,102,241,.22)}
+.tt-政务政策{background:rgba(220,38,38,.09);color:#b01a1a;border:1px solid rgba(220,38,38,.20)}
+.tt-国际新闻{background:rgba(8,145,178,.09);color:#056890;border:1px solid rgba(8,145,178,.22)}
+.tt-财经商业{background:rgba(5,150,105,.09);color:#066845;border:1px solid rgba(5,150,105,.22)}
+.tt-医疗卫生{background:rgba(2,132,199,.09);color:#055890;border:1px solid rgba(2,132,199,.22)}
+.tt-教育就业{background:rgba(124,58,237,.09);color:#5018a8;border:1px solid rgba(124,58,237,.22)}
+.tt-旅游出行{background:rgba(217,119,6,.09);color:#885000;border:1px solid rgba(217,119,6,.22)}
+.tt-文化艺术{background:rgba(219,39,119,.09);color:#981058;border:1px solid rgba(219,39,119,.22)}
+.tt-国际{background:rgba(100,116,139,.09);color:#3a4858;border:1px solid rgba(100,116,139,.22)}
+.tt-香港{background:rgba(43,97,240,.09);color:#1535a0;border:1px solid rgba(43,97,240,.22)}
+.tt-大陆{background:rgba(224,64,64,.09);color:#981818;border:1px solid rgba(224,64,64,.22)}
+.tt-澳门{background:rgba(18,168,122,.09);color:#085840;border:1px solid rgba(18,168,122,.22)}
+.tt-离岛区,.tt-中西区,.tt-东区,.tt-南区,.tt-湾仔区,.tt-九龙城区,.tt-观塘区,.tt-深水埗区,.tt-黄大仙区,.tt-油尖旺区,.tt-葵青区,.tt-北区,.tt-西贡区,.tt-沙田区,.tt-大埔区,.tt-荃湾区,.tt-屯门区,.tt-元朗区{background:rgba(43,97,240,.07);color:#0f2888;border:1px solid rgba(43,97,240,.18)}
+#tp0 .t-meta-row:empty,#tp0 .p-meta-row:empty{display:none}
+#tp0 .t-title .tt,#tp0 .p-title .tt{margin-left:4px}
+#tp0 .t-title .plat-pill:first-child,#tp0 .p-title .plat-pill:first-child{margin-left:0}
+#tp0 .t-title-row .t-chg,#tp0 .p-title-row .p-chg{margin-top:0;align-self:flex-start}
 </style>
 </head>
 <body>
@@ -483,145 +518,159 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
         <!-- Tab 1: 平台热榜 -->
         <div class="tab-panel active" id="tp0">
-          <div class="plat-grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="plat-grid" style="grid-template-columns:repeat(3,1fr)">
             <!-- 内地总榜 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#e04040,#c47d10);color:#fff;font-size:10px;font-weight:800">内</span>内地总榜</div>
-              <div class="total-row"><div class="t-num n1">1</div><div class="t-body"><div class="t-title-row"><div class="t-title">十四届全国人大四次会议议程公布<span class="risk-tag total-risk risk-hi">重要</span></div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-new">NEW</span></div></div><div class="t-right"><span class="t-heat">🔥 8.6万</span><span class="t-dur">⏱ 在榜1.2小时</span></div></div>
-              <div class="total-row"><div class="t-num n2">2</div><div class="t-body"><div class="t-title-row"><div class="t-title">代表建议设定3000亿元高速免费额度</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-up">↑3</span></div></div><div class="t-right"><span class="t-heat">🔥 6.8万</span><span class="t-dur">⏱ 在榜0.5小时</span></div></div>
-              <div class="total-row"><div class="t-num n3">3</div><div class="t-body"><div class="t-title-row"><div class="t-title">12306回应乘客在普速铁路上用排插</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-dn">↓1</span></div></div><div class="t-right"><span class="t-heat">🔥 5.4万</span><span class="t-dur">⏱ 在榜2.1小时</span></div></div>
-              <div class="total-row"><div class="t-num">4</div><div class="t-body"><div class="t-title-row"><div class="t-title">2026全国两会为什么格外重要</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-bd">百</span><span class="t-logo t-logo-wb">微</span></span><span class="t-chg chg-up">↑2</span></div></div><div class="t-right"><span class="t-heat">🔥 4.9万</span><span class="t-dur">⏱ 在榜3.0小时</span></div></div>
-              <div class="total-row"><div class="t-num">5</div><div class="t-body"><div class="t-title-row"><div class="t-title">驻日大使馆提醒：防范日本「撞人族」</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-up">↑1</span></div></div><div class="t-right"><span class="t-heat">🔥 4.2万</span><span class="t-dur">⏱ 在榜0.8小时</span></div></div>
-              <div class="total-row"><div class="t-num">6</div><div class="t-body"><div class="t-title-row"><div class="t-title">雷军2026两会议题引发广泛关注</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-dn">↓2</span></div></div><div class="t-right"><span class="t-heat">🔥 3.8万</span><span class="t-dur">⏱ 在榜1.5小时</span></div></div>
-              <div class="total-row"><div class="t-num">7</div><div class="t-body"><div class="t-title-row"><div class="t-title">北京今日迎来今年第一场大雪</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-up">↑1</span></div></div><div class="t-right"><span class="t-heat">🔥 3.1万</span><span class="t-dur">⏱ 在榜4.2小时</span></div></div>
-              <div class="total-row"><div class="t-num">8</div><div class="t-body"><div class="t-title-row"><div class="t-title">山东修高铁站挖出5亿年前化石石海</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-dn">↓1</span></div></div><div class="t-right"><span class="t-heat">🔥 2.7万</span><span class="t-dur">⏱ 在榜2.8小时</span></div></div>
-              <div class="total-row"><div class="t-num">9</div><div class="t-body"><div class="t-title-row"><div class="t-title">政协委员建议高中纳入义务教育</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-new">NEW</span></div></div><div class="t-right"><span class="t-heat">🔥 2.3万</span><span class="t-dur">⏱ 在榜1.0小时</span></div></div>
-              <div class="total-row"><div class="t-num">10</div><div class="t-body"><div class="t-title-row"><div class="t-title">代表委员议建立提案落地落实机制</div></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span></span><span class="t-chg chg-up">↑2</span></div></div><div class="t-right"><span class="t-heat">🔥 1.9万</span><span class="t-dur">⏱ 在榜3.4小时</span></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#e04040,#c47d10);color:#fff;font-size:10px;font-weight:800">内</span>内地总榜<span class="plat-update">更新于 05:26</span></div>
+              <div class="total-row"><div class="t-num n1">1</div><div class="t-body"><div class="t-title-row"><div class="t-title">十四届全国人大四次会议议程公布</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-new">NEW</span></div></div><div class="t-right"><span class="t-heat">🔥 8.6万</span><span class="t-dur">⏱ 在榜1.2小时</span></div></div>
+              <div class="total-row"><div class="t-num n2">2</div><div class="t-body"><div class="t-title-row"><div class="t-title">代表建议设定3000亿元高速免费额度</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-up">↑3</span></div></div><div class="t-right"><span class="t-heat">🔥 6.8万</span><span class="t-dur">⏱ 在榜0.5小时</span></div></div>
+              <div class="total-row"><div class="t-num n3">3</div><div class="t-body"><div class="t-title-row"><div class="t-title">12306回应乘客在普速铁路上用排插</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-dn">↓1</span></div></div><div class="t-right"><span class="t-heat">🔥 5.4万</span><span class="t-dur">⏱ 在榜2.1小时</span></div></div>
+              <div class="total-row"><div class="t-num">4</div><div class="t-body"><div class="t-title-row"><div class="t-title">2026全国两会为什么格外重要</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-bd">百</span><span class="t-logo t-logo-wb">微</span></span><span class="t-chg chg-up">↑2</span></div></div><div class="t-right"><span class="t-heat">🔥 4.9万</span><span class="t-dur">⏱ 在榜3.0小时</span></div></div>
+              <div class="total-row"><div class="t-num">5</div><div class="t-body"><div class="t-title-row"><div class="t-title">驻日大使馆提醒：防范日本「撞人族」</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-up">↑1</span></div></div><div class="t-right"><span class="t-heat">🔥 4.2万</span><span class="t-dur">⏱ 在榜0.8小时</span></div></div>
+              <div class="total-row"><div class="t-num">6</div><div class="t-body"><div class="t-title-row"><div class="t-title">雷军2026两会议题引发广泛关注</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-dn">↓2</span></div></div><div class="t-right"><span class="t-heat">🔥 3.8万</span><span class="t-dur">⏱ 在榜1.5小时</span></div></div>
+              <div class="total-row"><div class="t-num">7</div><div class="t-body"><div class="t-title-row"><div class="t-title">北京今日迎来今年第一场大雪</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-up">↑1</span></div></div><div class="t-right"><span class="t-heat">🔥 3.1万</span><span class="t-dur">⏱ 在榜4.2小时</span></div></div>
+              <div class="total-row"><div class="t-num">8</div><div class="t-body"><div class="t-title-row"><div class="t-title">山东修高铁站挖出5亿年前化石石海</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-dy">抖</span></span><span class="t-chg chg-dn">↓1</span></div></div><div class="t-right"><span class="t-heat">🔥 2.7万</span><span class="t-dur">⏱ 在榜2.8小时</span></div></div>
+              <div class="total-row"><div class="t-num">9</div><div class="t-body"><div class="t-title-row"><div class="t-title">政协委员建议高中纳入义务教育</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span><span class="t-logo t-logo-bd">百</span></span><span class="t-chg chg-new">NEW</span></div></div><div class="t-right"><span class="t-heat">🔥 2.3万</span><span class="t-dur">⏱ 在榜1.0小时</span></div></div>
+              <div class="total-row"><div class="t-num">10</div><div class="t-body"><div class="t-title-row"><div class="t-title">代表委员议建立提案落地落实机制</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span></div><div class="t-meta-row"><span class="t-logos"><span class="t-logo t-logo-wb">微</span></span><span class="t-chg chg-up">↑2</span></div></div><div class="t-right"><span class="t-heat">🔥 1.9万</span><span class="t-dur">⏱ 在榜3.4小时</span></div></div>
             </div>
             <!-- 香港总榜 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#2b61f0,#1890ff);color:#fff;font-size:10px;font-weight:800">港</span>香港总榜</div>
-              <div class="total-row"><div class="t-num n1">1</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-lk">LK</span>港铁票价调整方案今日正式公布</div></div></div>
-              <div class="total-row"><div class="t-num n2">2</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-hkgd">高登</span>《基本法》第23条立法公众咨询结果出炉<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="total-row"><div class="t-num n3">3</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-hk01">01</span>新冠变异株JN.1感染个案增加 呼吁接种疫苗<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="total-row"><div class="t-num">4</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-yh">Y!</span>香港迪士尼「魔雪奇缘」新园区盛大开幕</div></div></div>
-              <div class="total-row"><div class="t-num">5</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-gg">G</span>季节性流感踏入高峰期公立医院病房爆满<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="total-row"><div class="t-num">6</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-lk">LK</span>LIHKG热议：伊朗小学遭轰炸管局公开<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="total-row"><div class="t-num">7</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-hkgd">高登</span>跨境学童全面恢复面授课堂</div></div></div>
-              <div class="total-row"><div class="t-num">8</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-hk01">01</span>驻外经贸办积极斡纠对香港不实报道</div></div></div>
-              <div class="total-row"><div class="t-num">9</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-yh">Y!</span>DSE中学文凭试今日放榜 多名状元出炉</div></div></div>
-              <div class="total-row"><div class="t-num">10</div><div class="t-tw"><div class="t-title"><span class="plat-pill pp-gg">G</span>巴塞尔艺术展(Art Basel)香港展会盛大开幕</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#2b61f0,#1890ff);color:#fff;font-size:10px;font-weight:800">港</span>香港热榜<span class="plat-update">更新于 05:18</span></div>
+              <div class="total-row"><div class="t-num n1">1</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-lk">LK</span>港铁票价调整方案今日正式公布</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-up">↑2</span></div></div></div>
+              <div class="total-row"><div class="t-num n2">2</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-hkgd">高登</span>《基本法》第23条立法公众咨询结果出炉</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-new">NEW</span></div></div></div>
+              <div class="total-row"><div class="t-num n3">3</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-hk01">01</span>新冠变异株JN.1感染个案增加 呼吁接种疫苗</div><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-up">↑1</span></div></div></div>
+              <div class="total-row"><div class="t-num">4</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-yh">Y!</span>香港迪士尼「魔雪奇缘」新园区盛大开幕</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-离岛区">离岛区</span></div><div class="t-meta-row"><span class="t-chg chg-dn">↓1</span></div></div></div>
+              <div class="total-row"><div class="t-num">5</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-gg">G</span>季节性流感踏入高峰期公立医院病房爆满</div><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-up">↑3</span></div></div></div>
+              <div class="total-row"><div class="t-num">6</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-lk">LK</span>LIHKG热议：伊朗小学遭轰炸管局公开</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="t-meta-row"><span class="t-chg chg-dn">↓2</span></div></div></div>
+              <div class="total-row"><div class="t-num">7</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-hkgd">高登</span>跨境学童全面恢复面授课堂</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-up">↑1</span></div></div></div>
+              <div class="total-row"><div class="t-num">8</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-hk01">01</span>驻外经贸办积极斡纠对香港不实报道</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-new">NEW</span></div></div></div>
+              <div class="total-row"><div class="t-num">9</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-yh">Y!</span>DSE中学文凭试今日放榜 多名状元出炉</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-dn">↓1</span></div></div></div>
+              <div class="total-row"><div class="t-num">10</div><div class="t-body"><div class="t-title-row"><div class="t-title"><span class="plat-pill pp-gg">G</span>巴塞尔艺术展(Art Basel)香港展会盛大开幕</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-香港">香港</span></div><div class="t-meta-row"><span class="t-chg chg-up">↑2</span></div></div></div>
+            </div>
+            <!-- 香港异见榜 -->
+            <div class="plat-card">
+              <div class="plat-head"><span class="plat-icon" style="background:linear-gradient(135deg,#6d0025,#b71c1c);color:#fff;font-size:10px;font-weight:800">异</span>香港异见榜<span class="plat-update">更新于 05:05</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">《苹果日报》数字复刊计划曝光 拟于海外正式发布</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑5</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">多国政府联署谴责香港新闻自由持续恶化</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">前立法会议员被捕 国际特赦组织发紧急声明</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">流亡民主派联合发表声明 呼吁国际制裁官员</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">美国国会通过决议要求追责《国安法》执行者</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">英国法院裁定延长香港异见人士庇护权</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">驻港外国记者协会报告：新闻自由急剧倒退</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">海外港人就《基本法》廿三条立法发起请愿活动</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">国际人权组织揭发在囚民主派人士遭虐待指控</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">流亡港人在英国筹办「香港之声」论坛引关注</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
             </div>
             <!-- LIHKG -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#ffd700;color:#333;font-size:10px;font-weight:800">LK</span>LIHKG 连登</div>
-              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">伊朗小学遭轰炸逾百死 当局公开美军戡界行动<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">大家辜负 低物感但早d退休</div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">由天道酬勤，到FIRE movement，再到及时行乐</div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div><div class="p-title">本港新能源车注册数量持续攀升</div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div><div class="p-title">全港跑步比赛2026年度赛程公布</div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div><div class="p-title">政府就最低工资水平展开新一轮咨询</div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div><div class="p-title">电费调整计划引发市民广泛讨论</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#ffd700;color:#333;font-size:10px;font-weight:800">LK</span>LIHKG 连登<span class="plat-update">更新于 05:22</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">伊朗小学遭轰炸逾百死 当局公开美军戡界行动</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">大家辜负 低物感但早d退休</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">由天道酬勤，到FIRE movement，再到及时行乐</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">本港新能源车注册数量持续攀升</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">全港跑步比赛2026年度赛程公布</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">政府就最低工资水平展开新一轮咨询</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">电费调整计划引发市民广泛讨论</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
             </div>
             <!-- 香港高登 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#1890ff;color:#fff;font-size:10px;font-weight:800">高</span>香港高登</div>
-              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">美国比人升左希莫德旺大事重点斩行人理？</div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">2026年3月 足球女将 Season 2（2）</div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">【美国实】疑幽暗人FIVE GUYS好吃好吃?</div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">成日都做盘算日经结有同理行人理？T</div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div><div class="p-title">本港失业率维持低位 就业市场稳定</div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div><div class="p-title">港大研究：本港青年置业意愿持续下降</div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div><div class="p-title">新界东北发展区首批居民开始迁入</div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div><div class="p-title">政府拟扩大夜间经济措施至更多地区</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#1890ff;color:#fff;font-size:10px;font-weight:800">高</span>香港高登<span class="plat-update">更新于 05:15</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">美国比人升左希莫德旺大事重点斩行人理？</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">2026年3月 足球女将 Season 2（2）</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">【美国实】疑幽暗人FIVE GUYS好吃好吃?</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">成日都做盘算日经结有同理行人理？T</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">本港失业率维持低位 就业市场稳定</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">港大研究：本港青年置业意愿持续下降</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">新界东北发展区首批居民开始迁入</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-北区">北区</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">政府拟扩大夜间经济措施至更多地区</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
             </div>
             <!-- 香港01 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#003087;color:#fff;font-size:9px;font-weight:800">01</span>香港01</div>
-              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月宣告关停</div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">中西局势脱缰 油价受压升学指数迎20亿增长</div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">油债｜跨境审查加码浪组引发借贷争议</div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">紫菊蓝｜美军引以为傲的技术优势如何引发深层震动</div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">国泰航空：向员工放假相当于每人逾11星期薪金补偿</div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">DSE英文口试：两次应考均闯关的同学分享心得</div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div><div class="p-title">渔护署指今年候鸟迁徙数量创新高</div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div><div class="p-title">葵涌货柜码头自动化改造进入新阶段</div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div><div class="p-title">食物安全中心发现进口食品含违禁添加剂</div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div><div class="p-title">港府宣布延长防疫隔离政策检讨期限</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#003087;color:#fff;font-size:9px;font-weight:800">01</span>香港01<span class="plat-update">更新于 05:10</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月宣告关停</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-油尖旺区">油尖旺区</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">中西局势脱缰 油价受压升学指数迎20亿增长</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">油债｜跨境审查加码浪组引发借贷争议</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">紫菊蓝｜美军引以为傲的技术优势如何引发深层震动</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">国泰航空：向员工放假相当于每人逾11星期薪金补偿</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">DSE英文口试：两次应考均闯关的同学分享心得</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">渔护署指今年候鸟迁徙数量创新高</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">葵涌货柜码头自动化改造进入新阶段</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-葵青区">葵青区</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">食物安全中心发现进口食品含违禁添加剂</div><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">港府宣布延长防疫隔离政策检讨期限</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
             </div>
             <!-- 雅虎新闻 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#7b0099;color:#fff;font-size:10px;font-weight:800">Y!</span>雅虎新闻</div>
-              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">能源搭棚翻 泛滥副成灾</div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">两投行传人 退出竞赛关于IPO</div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">中东黑火暗温 道指涨479回款</div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">各地填充始 建OpenClaw产业</div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div><div class="p-title">港元兑美元触及弱方兑换保证水平</div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div><div class="p-title">零售商呼吁政府推出更多消费刺激措施</div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div><div class="p-title">本港首季GDP增速超预期经济学家上调预测</div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div><div class="p-title">港股通南向资金连续五日净买入</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#7b0099;color:#fff;font-size:10px;font-weight:800">Y!</span>雅虎新闻<span class="plat-update">更新于 05:08</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">能源搭棚翻 泛滥副成灾</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">两投行传人 退出竞赛关于IPO</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">中东黑火暗温 道指涨479回款</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">各地填充始 建OpenClaw产业</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">港元兑美元触及弱方兑换保证水平</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">零售商呼吁政府推出更多消费刺激措施</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">本港首季GDP增速超预期经济学家上调预测</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">港股通南向资金连续五日净买入</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
             </div>
             <!-- Google趋势 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="font-size:14px">G</span>Google趋势</div>
-              <div class="plist-item"><span class="p-num">1</span><div><div class="p-title">伊朗小学遭轰炸逾百死 当局公开美军戡界行动<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div><div class="p-title">大家辜负 低物感但早d退休</div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div><div class="p-title">由天道酬勤，到FIRE movement，再到及时行乐</div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div><div class="p-title">Hong Kong election results spark global debate<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div><div class="p-title">DeepSeek AI 超越 ChatGPT 成为全球搜索热词</div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div><div class="p-title">Taiwan Strait tensions escalate amid military drills<span class="risk-tag risk-hi">重要</span></div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div><div class="p-title">中国内地春节旅游人次创历史新高</div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="font-size:14px">G</span>Google趋势<span class="plat-update">更新于 05:30</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">伊朗小学遭轰炸逾百死 当局公开美军戡界行动</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">荣枯死亡 nba 有缘友拾83分超越Kobe</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">大家辜负 低物感但早d退休</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">由天道酬勤，到FIRE movement，再到及时行乐</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">Hong Kong election results spark global debate</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">DeepSeek AI 超越 ChatGPT 成为全球搜索热词</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">Taiwan Strait tensions escalate amid military drills</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">中国内地春节旅游人次创历史新高</div><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-大陆">大陆</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span></div></div></div>
             </div>
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#e6162d;color:#fff;font-size:12px">微</span>微博热搜</div>
-              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">美国比人升左希莫德旺大事点重斩行人理？</div><span class="p-tr-heat">🔥 5.2万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.3小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">2026年3月 足球女将 Season 2（2）</div><span class="p-tr-heat">🔥 4.1万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜1.5小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div><span class="p-tr-heat">🔥 3.7万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.2小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div><span class="p-tr-heat">🔥 3.2万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜0.9小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div><span class="p-tr-heat">🔥 2.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜1.8小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div><span class="p-tr-heat">🔥 2.5万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span><span class="p-dur">⏱ 在榜3.1小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">两会代表热议逃离身份证实名制问题<span class="risk-tag risk-hi">重要</span></div><span class="p-tr-heat">🔥 2.2万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.6小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">雷军2026两会建议引局关注</div><span class="p-tr-heat">🔥 1.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.4小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">山东修高鐵站挖出5亿年前化石百岚</div><span class="p-tr-heat">🔥 1.6万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜4.0小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">政協委员建议高中纳入义务教育</div><span class="p-tr-heat">🔥 1.3万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓3</span><span class="p-dur">⏱ 在榜1.2小时</span></div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#e6162d;color:#fff;font-size:12px">微</span>微博热搜<span class="plat-update">更新于 05:24</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">美国比人升左希莫德旺大事点重斩行人理？</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 5.2万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.3小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">2026年3月 足球女将 Season 2（2）</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 4.1万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜1.5小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">泻桥直播正式做香港人 下月全港香港身份证</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 3.7万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.2小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">MacBook Neo开箱评测｜厚实外型＋A18 Pro芯片</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 3.2万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜0.9小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">热制ion9 能够到指境 建造大家起返来拍</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 2.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜1.8小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">刘美：看着谷爱凌的人「很虚伪」</div><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 2.5万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span><span class="p-dur">⏱ 在榜3.1小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">两会代表热议逃离身份证实名制问题</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 2.2万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.6小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">雷军2026两会建议引局关注</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.4小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">山东修高鐵站挖出5亿年前化石百岚</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.6万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜4.0小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">政協委员建议高中纳入义务教育</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.3万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓3</span><span class="p-dur">⏱ 在榜1.2小时</span></div></div></div>
             </div>
             <!-- 抖音热搜 -->
             <div class="plat-card">
-              <div class="plat-head"><span class="plat-icon" style="background:#000;color:#fff;font-size:12px">🎵</span>抖音热搜</div>
-              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月宣告关停</div><span class="p-tr-heat">🔥 6.3万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.5小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">中西局势脱缰 油价受压升学指数迎20亿增长</div><span class="p-tr-heat">🔥 5.1万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜1.2小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">油价｜跨境审查加码 大浪引发迪拜理财争议</div><span class="p-tr-heat">🔥 4.4万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.0小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">紫菊蓝｜美军引以为傲的技术优势如何引发深层震动</div><span class="p-tr-heat">🔥 3.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜0.7小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">国泰航空：向员工放假相当于每人逾11星期薪金补偿</div><span class="p-tr-heat">🔥 3.2万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.5小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">DSE英文口试：两次应考均闯关的同学分享心得</div><span class="p-tr-heat">🔥 2.7万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜1.9小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">两会代表热议提案如何落地实施</div><span class="p-tr-heat">🔥 2.3万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.4小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">香港教育改革动态：新课程标准将长</div><span class="p-tr-heat">🔥 1.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜2.8小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">DeepSeek 底底是什么？香港年轻人炸了</div><span class="p-tr-heat">🔥 1.5万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span><span class="p-dur">⏱ 在榜1.3小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">香港达人分享日本生活体验引关注</div><span class="p-tr-heat">🔥 1.1万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.7小时</span></div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#000;color:#fff;font-size:12px">🎵</span>抖音热搜<span class="plat-update">更新于 05:20</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">尖沙咀人气烘焙店GUILT FREE开业两月宣告关停</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-油尖旺区">油尖旺区</span><span class="p-tr-heat">🔥 6.3万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.5小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">中西局势脱缰 油价受压升学指数迎20亿增长</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 5.1万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜1.2小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">油价｜跨境审查加码 大浪引发迪拜理财争议</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 4.4万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜2.0小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">紫菊蓝｜美军引以为傲的技术优势如何引发深层震动</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 3.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜0.7小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">国泰航空：向员工放假相当于每人逾11星期薪金补偿</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 3.2万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.5小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">DSE英文口试：两次应考均闯关的同学分享心得</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 2.7万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜1.9小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">两会代表热议提案如何落地实施</div><span class="tt tt-政务政策">政务政策</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 2.3万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.4小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">香港教育改革动态：新课程标准将长</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 1.9万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜2.8小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">DeepSeek 底底是什么？香港年轻人炸了</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 1.5万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑3</span><span class="p-dur">⏱ 在榜1.3小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">香港达人分享日本生活体验引关注</div><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 1.1万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.7小时</span></div></div></div>
             </div>
             <!-- 百度热搜 -->
             <div class="plat-card" style="grid-column:span 1">
-              <div class="plat-head"><span class="plat-icon" style="background:#2932e1;color:#fff;font-size:10px;font-weight:800">百</span>百度热搜</div>
-              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">能源搭棚翻 泛滥副成灾</div><span class="p-tr-heat">🔥 7.2万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜2.1小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div><span class="p-tr-heat">🔥 5.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜0.8小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div><span class="p-tr-heat">🔥 4.6万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜1.5小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">两投行传人 退出竞赛关于IPO</div><span class="p-tr-heat">🔥 3.4万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜3.2小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">中东黑火暗温 道指涨479回款</div><span class="p-tr-heat">🔥 2.9万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.6小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">各地填充始 建OpenClaw产业</div><span class="p-tr-heat">🔥 2.1万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜4.1小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">北京地铁新线年底开通首班车时间调整</div><span class="p-tr-heat">🔥 1.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜2.3小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">国产新能源汽车出口首次突破百万辆</div><span class="p-tr-heat">🔥 1.4万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.6小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">教育部通知：今年高考报名人数创历史新高</div><span class="p-tr-heat">🔥 1.1万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜1.7小时</span></div></div></div>
-              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">春季踏青出行指南：十大热门景区推荐</div><span class="p-tr-heat">🔥 0.9万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜4.8小时</span></div></div></div>
+              <div class="plat-head"><span class="plat-icon" style="background:#2932e1;color:#fff;font-size:10px;font-weight:800">百</span>百度热搜<span class="plat-update">更新于 05:16</span></div>
+              <div class="plist-item"><span class="p-num">1</span><div class="p-body"><div class="p-title-row"><div class="p-title">能源搭棚翻 泛滥副成灾</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 7.2万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜2.1小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">2</span><div class="p-body"><div class="p-title-row"><div class="p-title">「套匙程」激震 副副刷副旁边据撞推客</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-香港">香港</span><span class="p-tr-heat">🔥 5.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜0.8小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">3</span><div class="p-body"><div class="p-title-row"><div class="p-title">AI聪明狂潮 大模型股爱炒热点</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 4.6万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜1.5小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">4</span><div class="p-body"><div class="p-title-row"><div class="p-title">两投行传人 退出竞赛关于IPO</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 3.4万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜3.2小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">5</span><div class="p-body"><div class="p-title-row"><div class="p-title">中东黑火暗温 道指涨479回款</div><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 2.9万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜0.6小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">6</span><div class="p-body"><div class="p-title-row"><div class="p-title">各地填充始 建OpenClaw产业</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-国际">国际</span><span class="p-tr-heat">🔥 2.1万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓2</span><span class="p-dur">⏱ 在榜4.1小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">7</span><div class="p-body"><div class="p-title-row"><div class="p-title">北京地铁新线年底开通首班车时间调整</div><span class="tt tt-社会民生">社会民生</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.8万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑1</span><span class="p-dur">⏱ 在榜2.3小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">8</span><div class="p-body"><div class="p-title-row"><div class="p-title">国产新能源汽车出口首次突破百万辆</div><span class="tt tt-财经商业">财经商业</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.4万</span></div><div class="p-meta-row"><span class="p-chg chg-dn">↓1</span><span class="p-dur">⏱ 在榜3.6小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">9</span><div class="p-body"><div class="p-title-row"><div class="p-title">教育部通知：今年高考报名人数创历史新高</div><span class="tt tt-教育就业">教育就业</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 1.1万</span></div><div class="p-meta-row"><span class="p-chg chg-new">NEW</span><span class="p-dur">⏱ 在榜1.7小时</span></div></div></div>
+              <div class="plist-item"><span class="p-num">10</span><div class="p-body"><div class="p-title-row"><div class="p-title">春季踏青出行指南：十大热门景区推荐</div><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-大陆">大陆</span><span class="p-tr-heat">🔥 0.9万</span></div><div class="p-meta-row"><span class="p-chg chg-up">↑2</span><span class="p-dur">⏱ 在榜4.8小时</span></div></div></div>
             </div>
           </div>
         </div>
@@ -638,126 +687,118 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               <button class="region-tab" onclick="switchRegion(this)">海外国际</button>
             </div>
           </div>
-          <div class="category-grid">
+                    <div class="category-grid">
             <!-- 社会民生 -->
             <div class="cat-col">
               <div class="cat-head">社会民生</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>港铁票价调整方案今日正式公布</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>垃圾收费计划推迟实施引热议</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>强台风路径近五名专考虑发八号风球</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-yh">Y!</span>副廉署监管营制新规生效首月情况</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>消费券第三期派发规则本地零售</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>公立医院急症室等候时间超8小时</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>跨境学童全面恢复面授课堂</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>招人才计划获批超十万份申请</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>输港无人机监测引数万市民关注<span class="risk-tag risk-hi">重要</span></div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-yh">Y!</span>连日暴雨多区出现严重水浸及山泥倾泻</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">港铁票价调整方案今日正式公布</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">垃圾收费计划推迟实施引热议</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-观塘区">观塘区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">强台风路径近五名专考虑发八号风球</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-离岛区">离岛区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-yh">Y!</span><span class="rk-title">副廉署监管营制新规生效首月情况</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">消费券第三期派发规则本地零售</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">公立医院急症室等候时间超8小时</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-九龙城区">九龙城区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">跨境学童全面恢复面授课堂</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-北区">北区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">招人才计划获批超十万份申请</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">输港无人机监测引数万市民关注</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-yh">Y!</span><span class="rk-title">连日暴雨多区出现严重水浸及山泥倾泻</span></div><div class="rk-tag-row"><span class="tt tt-社会民生">社会民生</span><span class="tt tt-元朗区">元朗区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 政务政策 -->
             <div class="cat-col">
               <div class="cat-head">政务政策</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>《基本法》第23条立法公众咨询结果<span class="risk-tag risk-hi">重要</span></div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>施政报告提出多项款助生育新措施</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>核市全面「清样」刺激文投置回升</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>新一届区议会正式履职运作顺畅</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>政府公布第一轮扶贫范围及精准目标</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>在港北部都会区发展新规划出炉</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>扩大医疗券适用范围至大湾区机构</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>引入更多外劳缓解建造及运输业人手短缺</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>打击主要生意重点计划见成效新规划出炉</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>提升公土服务质素新章案提交立法会</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">《基本法》第23条立法公众咨询结果</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">施政报告提出多项款助生育新措施</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">核市全面「清样」刺激文投置回升</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">新一届区议会正式履职运作顺畅</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-深水埗区">深水埗区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">政府公布第一轮扶贫范围及精准目标</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-深水埗区">深水埗区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">在港北部都会区发展新规划出炉</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-北区">北区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">扩大医疗券适用范围至大湾区机构</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-荃湾区">荃湾区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">引入更多外劳缓解建造及运输业人手短缺</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-葵青区">葵青区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">打击主要生意重点计划见成效新规划出炉</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">提升公土服务质素新章案提交立法会</span></div><div class="rk-tag-row"><span class="tt tt-政务政策">政务政策</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 国际新闻 -->
             <div class="cat-col">
               <div class="cat-head">国际新闻</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-yh">Y!</span>特首出访中东多国投资引资留智收录</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>香港与东盟多国深化经贸合作关系</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>国际金融地投资峰会在港湾南举行</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-yh">Y!</span>驻外经贸办积极斡纠对香港不实报道</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>争取尽早加入RCEP落得升级进展</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>多间跨国企业宣布在香港设立亚太区总部</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>国际大型体育赛事陆续回归香港举办</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>香港留守全球最自由经济排名依然领先</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-yh">Y!</span>应对全球气候变化香港承诺碳减排</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-dy">抖</span>本港科研团队参与国际大定探索项目</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-yh">Y!</span><span class="rk-title">特首出访中东多国投资引资留智收录</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">香港与东盟多国深化经贸合作关系</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">国际金融地投资峰会在港湾南举行</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-yh">Y!</span><span class="rk-title">驻外经贸办积极斡纠对香港不实报道</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">争取尽早加入RCEP落得升级进展</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-国际">国际</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">多间跨国企业宣布在香港设立亚太区总部</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">国际大型体育赛事陆续回归香港举办</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">香港留守全球最自由经济排名依然领先</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-yh">Y!</span><span class="rk-title">应对全球气候变化香港承诺碳减排</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-南区">南区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-dy">抖</span><span class="rk-title">本港科研团队参与国际大定探索项目</span></div><div class="rk-tag-row"><span class="tt tt-国际新闻">国际新闻</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 财经商业 -->
             <div class="cat-col">
               <div class="cat-head">财经商业</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>恒生指数上两万点关口成交额破千亿</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>港交所吸引天气平台纳斯达克新规年内数实</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>多家内地龙头科技企业计划年内赴港上市</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>本港零售业消售额涨逾三个月业界呼吁支援</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>虚拟房产交易平台发展制度正式生效</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>财贷预算案财十年度录得千亿万亏</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-dy">抖</span>银行业高息吸港元定期存款数量超越5厘</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>本港楼价指数创七年新低交投惨淡活跃<span class="risk-tag risk-hi">重要</span></div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>旅游业复之双方动核心区酒店入住率升至九成</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>积金局公布强积金最新前报表现录得正增长</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">恒生指数上两万点关口成交额破千亿</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">港交所吸引天气平台纳斯达克新规年内数实</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">多家内地龙头科技企业计划年内赴港上市</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">本港零售业消售额涨逾三个月业界呼吁支援</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">虚拟房产交易平台发展制度正式生效</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">财贷预算案财十年度录得千亿万亏</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-dy">抖</span><span class="rk-title">银行业高息吸港元定期存款数量超越5厘</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">本港楼价指数创七年新低交投惨淡活跃</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">旅游业复之双方动核心区酒店入住率升至九成</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">积金局公布强积金最新前报表现录得正增长</span></div><div class="rk-tag-row"><span class="tt tt-财经商业">财经商业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 医疗卫生 -->
             <div class="cat-col">
               <div class="cat-head">医疗卫生</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>季节性流感踏入高峰期公立医院病房爆满</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>新冠变异株JN.1感染个案增加呼吁接种疫苗<span class="risk-tag risk-hi">重要</span></div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>医管局推展手机APP预约专科门诊新边框</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>控烟政策建议进一步扩大无烟范围覆盖</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>引入本地培训医生计划旨在扩大更多教授</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>香港每间中医诊预约超前半年分定制的服务</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>长者医疗券增设配备共用带有安软手柄覆盖</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>精神健康关注组呼吁增加社区及学校支援</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>卫生署首席批于关注50岁以上市民接种疫苗</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>学童脊骨健康筛查计划发现不良姿势普遍</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">季节性流感踏入高峰期公立医院病房爆满</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-九龙城区">九龙城区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">新冠变异株JN.1感染个案增加呼吁接种疫苗</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-黄大仙区">黄大仙区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">医管局推展手机APP预约专科门诊新边框</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-葵青区">葵青区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">控烟政策建议进一步扩大无烟范围覆盖</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">引入本地培训医生计划旨在扩大更多教授</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">香港每间中医诊预约超前半年分定制的服务</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-深水埗区">深水埗区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">长者医疗券增设配备共用带有安软手柄覆盖</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-观塘区">观塘区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">精神健康关注组呼吁增加社区及学校支援</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">卫生署首席批于关注50岁以上市民接种疫苗</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-东区">东区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">学童脊骨健康筛查计划发现不良姿势普遍</span></div><div class="rk-tag-row"><span class="tt tt-医疗卫生">医疗卫生</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 教育就业 -->
             <div class="cat-col">
               <div class="cat-head">教育就业</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>DSE中学文凭试今日放榜逾生多名状元</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>八大院校本年生相额逐步提升至四成</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>适龄学童人口下降多间中小学面临缩班</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>本港最新失业率维持2.9%低水平全民就业</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>教师失业求助新接受教育局强化学校运作正常</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>全面推行小学科科学科研课程模板提及改引</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>大学生社交实习及交流计划接受报名及反应热烈</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>职专教育获政府注资以提升社会认受性</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>建造业及运输业输入劳工计划旨扩征前数野</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>人力资源调查报告届毕业生就职薪酬升达2.5万</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">DSE中学文凭试今日放榜逾生多名状元</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">八大院校本年生相额逐步提升至四成</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">适龄学童人口下降多间中小学面临缩班</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-北区">北区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">本港最新失业率维持2.9%低水平全民就业</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-观塘区">观塘区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">教师失业求助新接受教育局强化学校运作正常</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">全面推行小学科科学科研课程模板提及改引</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-葵青区">葵青区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">大学生社交实习及交流计划接受报名及反应热烈</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-沙田区">沙田区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">职专教育获政府注资以提升社会认受性</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-荃湾区">荃湾区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">建造业及运输业输入劳工计划旨扩征前数野</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-葵青区">葵青区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">人力资源调查报告届毕业生就职薪酬升达2.5万</span></div><div class="rk-tag-row"><span class="tt tt-教育就业">教育就业</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 旅游出行 -->
             <div class="cat-col">
               <div class="cat-head">旅游出行</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>「港车北上」计划预约名额持续增一签难求</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>西九文化区M+博翻館全年入场人次打破记录</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>香港迪士尼乐园「魔雪奇缘」新园区盛大开幕</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>旅发局公布本港旅游新周报数据增长目标</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>高铁香港段全线开通再掀国际旅客热潮</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>内地访客团队游持续增加酒店入住率攀升</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-dy">抖</span>机场第三跑道扩建如期完工整体容量提升</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>大屿山南景区生态旅游路线正式对外开放</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>邮轮码头扩建工程完竣大型邮轮纷纷停靠</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>港府推出多项旅游基金资助扶持本地文旅业</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">「港车北上」计划预约名额持续增一签难求</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-元朗区">元朗区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">西九文化区M+博翻館全年入场人次打破记录</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">香港迪士尼乐园「魔雪奇缘」新园区盛大开幕</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-离岛区">离岛区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">旅发局公布本港旅游新周报数据增长目标</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">高铁香港段全线开通再掀国际旅客热潮</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">内地访客团队游持续增加酒店入住率攀升</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-dy">抖</span><span class="rk-title">机场第三跑道扩建如期完工整体容量提升</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-离岛区">离岛区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">大屿山南景区生态旅游路线正式对外开放</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-离岛区">离岛区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">邮轮码头扩建工程完竣大型邮轮纷纷停靠</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-九龙城区">九龙城区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">港府推出多项旅游基金资助扶持本地文旅业</span></div><div class="rk-tag-row"><span class="tt tt-旅游出行">旅游出行</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
             <!-- 文化艺术 -->
             <div class="cat-col">
               <div class="cat-head">文化艺术</div>
-              <div class="rank-hdr"><span>排名</span><span>标题</span></div>
-              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>巴塞尔艺术展(Art Basel)香港展会盛大开幕</div></div>
-              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>香港国际电影节公布开幕电影及多部全球首映</div></div>
-              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>康文署举办大型「金庸百年诞辰纪念」特展</div></div>
-              <div class="rank-row"><div class="rk-n">4</div><div class="rk-t"><span class="plat-pill pp-hkgd">高登</span>本地创作音乐剧荣获亚太区最佳制作殊荣</div></div>
-              <div class="rank-row"><div class="rk-n">5</div><div class="rk-t"><span class="plat-pill pp-dy">抖</span>香港故宫文化博物馆推出全新特别展览</div></div>
-              <div class="rank-row"><div class="rk-n">6</div><div class="rk-t"><span class="plat-pill pp-wb">微</span>大型漫画文化节吸引十万人次入场参与</div></div>
-              <div class="rank-row"><div class="rk-n">7</div><div class="rk-t"><span class="plat-pill pp-lk">LK</span>本地流行歌手登上全球音乐榜单打破纪录</div></div>
-              <div class="rank-row"><div class="rk-n">8</div><div class="rk-t"><span class="plat-pill pp-bd">百</span>政府拨款支持本地艺团创作及海外巡演</div></div>
-              <div class="rank-row"><div class="rk-n">9</div><div class="rk-t"><span class="plat-pill pp-gg">G</span>数字艺术平台NFT交易港元突破千万</div></div>
-              <div class="rank-row"><div class="rk-n">10</div><div class="rk-t"><span class="plat-pill pp-hk01">01</span>非遗项目粤剧再获国际文化组织高度肯定</div></div>
+              <div class="rank-row"><div class="rk-n r1">1</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">巴塞尔艺术展(Art Basel)香港展会盛大开幕</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-up">↑2</span></div>
+              <div class="rank-row"><div class="rk-n r2">2</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">香港国际电影节公布开幕电影及多部全球首映</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n r3">3</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">康文署举办大型「金庸百年诞辰纪念」特展</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">4</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hkgd">高登</span><span class="rk-title">本地创作音乐剧荣获亚太区最佳制作殊荣</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">5</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-dy">抖</span><span class="rk-title">香港故宫文化博物馆推出全新特别展览</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑3</span></div>
+              <div class="rank-row"><div class="rk-n">6</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-wb">微</span><span class="rk-title">大型漫画文化节吸引十万人次入场参与</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-湾仔区">湾仔区</span></div></div><span class="p-chg chg-dn">↓2</span></div>
+              <div class="rank-row"><div class="rk-n">7</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-lk">LK</span><span class="rk-title">本地流行歌手登上全球音乐榜单打破纪录</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-观塘区">观塘区</span></div></div><span class="p-chg chg-up">↑1</span></div>
+              <div class="rank-row"><div class="rk-n">8</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-bd">百</span><span class="rk-title">政府拨款支持本地艺团创作及海外巡演</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-new">NEW</span></div>
+              <div class="rank-row"><div class="rk-n">9</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-gg">G</span><span class="rk-title">数字艺术平台NFT交易港元突破千万</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-中西区">中西区</span></div></div><span class="p-chg chg-dn">↓1</span></div>
+              <div class="rank-row"><div class="rk-n">10</div><div class="rk-body"><div class="rk-t-row"><span class="plat-pill pp-hk01">01</span><span class="rk-title">非遗项目粤剧再获国际文化组织高度肯定</span></div><div class="rk-tag-row"><span class="tt tt-文化艺术">文化艺术</span><span class="tt tt-油尖旺区">油尖旺区</span></div></div><span class="p-chg chg-up">↑2</span></div>
             </div>
           </div>
         </div>
@@ -765,9 +806,10 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
         <!-- Tab 3: 热榜预警 -->
         <div class="tab-panel" id="tp2">
           <div class="alert-filters">
-            <div class="af-row">
+            <div class="af-row af-row-top">
               <span class="af-label">关键词</span>
               <input class="af-input" type="text" placeholder="请输入搜索关键词">
+              <button class="btn-setting">预警设置</button>
             </div>
             <div class="af-row">
               <span class="af-label">预警时间</span>
@@ -1041,6 +1083,56 @@ function drawHdChart(){
   ctx.fillStyle='#f5502a'; ctx.fillRect(padL+80,4,18,3); ctx.fillStyle='#5a6a82'; ctx.fillText('排名',padL+102,10);
 }
 
+function relocateTopicTagsAndChg() {
+  var scope = document.getElementById('tp0');
+  if (!scope || scope.dataset.topicLayoutAdjusted === 'true') return;
+
+  scope.querySelectorAll('.total-row').forEach(function(row) {
+    var titleRow = row.querySelector('.t-title-row');
+    var title = titleRow && titleRow.querySelector('.t-title');
+    var metaRow = row.querySelector('.t-meta-row');
+    if (!titleRow || !title || !metaRow) return;
+
+    Array.prototype.slice.call(titleRow.children).forEach(function(node) {
+      if (node.classList && node.classList.contains('tt')) {
+        title.appendChild(node);
+      }
+    });
+
+    var chg = metaRow.querySelector('.t-chg');
+    if (chg) {
+      titleRow.appendChild(chg);
+    }
+  });
+
+  scope.querySelectorAll('.plist-item').forEach(function(row) {
+    var titleRow = row.querySelector('.p-title-row');
+    var title = titleRow && titleRow.querySelector('.p-title');
+    var metaRow = row.querySelector('.p-meta-row');
+    if (!titleRow || !title || !metaRow) return;
+
+    Array.prototype.slice.call(titleRow.children).forEach(function(node) {
+      if (node.classList && node.classList.contains('tt')) {
+        title.appendChild(node);
+      }
+    });
+
+    var chg = metaRow.querySelector('.p-chg');
+    var heat = titleRow.querySelector('.p-tr-heat');
+    if (chg) {
+      if (heat) {
+        titleRow.insertBefore(chg, heat);
+      } else {
+        titleRow.appendChild(chg);
+      }
+    }
+  });
+
+  scope.dataset.topicLayoutAdjusted = 'true';
+}
+
+relocateTopicTagsAndChg();
+
 // attach click handler to all list items and total rows
 (function attachDetailHandlers(){
   var NODES_SAMPLE = [
@@ -1055,7 +1147,9 @@ function drawHdChart(){
     var el = this;
     var titleEl = el.querySelector('.t-title,.p-title,.rk-t');
     if(!titleEl) return;
-    var rawText = titleEl.childNodes[0] ? titleEl.childNodes[0].textContent.trim() : titleEl.textContent.trim();
+    var titleClone = titleEl.cloneNode(true);
+    titleClone.querySelectorAll('.plat-pill,.tt').forEach(function(node){ node.remove(); });
+    var rawText = titleClone.textContent.trim();
     // get platform label
     var pill = el.querySelector('.plat-pill');
     var platLabel = pill ? pill.textContent.trim() : '微';

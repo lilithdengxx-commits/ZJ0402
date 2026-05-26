@@ -116,13 +116,13 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 .fi-head{padding:12px 14px 8px 18px;display:flex;align-items:flex-start;gap:10px}
 .feed-item.fi-has-image .fi-head{padding:12px 14px 12px 18px}
 .feed-item.fi-has-image .fi-body{display:flex;flex-direction:column;min-width:0;flex:1}
-.feed-item.fi-has-image .fi-media-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:start;margin-top:10px}
-.feed-item.fi-has-image .fi-thumb{width:120px;height:84px;flex:0 0 120px}
+.feed-item.fi-has-image .fi-media-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:start;margin-top:8px}
+.feed-item.fi-has-image .fi-thumb{width: 120px;px;height: 84px;px;flex:0 0 128px}
 .feed-item.fi-has-image .fi-image-copy{min-width:0}
 .feed-item.fi-has-image .fi-abstract{margin-bottom:8px}
 .feed-item.fi-has-image .fi-meta{gap:8px}
 .fi-check{width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(122,145,184,0.3);cursor:pointer;flex:0 0 16px;margin-top:2px;accent-color:var(--primary)}
-.fi-thumb{width:80px;height:56px;border-radius:8px;object-fit:cover;flex:0 0 80px;background:linear-gradient(135deg,#dce8ff,#eaf2ff)}
+.fi-thumb{display:block;width:80px;height:56px;border-radius:8px;object-fit:cover;flex:0 0 80px;background:#eaf1ff;border:1px solid rgba(122,145,184,0.08)}
 .fi-body{flex:1;min-width:0}
 .fi-title{font-size:15px;font-weight:700;color:#1a2234;margin-bottom:6px;cursor:pointer;line-height:1.4}
 .fi-title:hover{color:var(--primary)}
@@ -1133,17 +1133,17 @@ function selectEntity(el){
 (function renderFeedList(){
   var wrap = document.getElementById('feedListWrap'); if(!wrap) return;
   var feeds = [
-    {scope:'own',hasImage:true,title:'某型号被曝质量问题，话题登上微博热搜第 6 位',abstract:'多名用户反馈使用约 6 个月后出现……紫荆官方客服已就投诉发布初步回复，但热度仍在攀升。',time:'2026-05-21 08:42:18',plat:'微博',user:'@财经紫荆观察',ent:'紫荆股份 / 品牌 紫荆Pro',senti:'neg',tags:['热搜','负面','产品']},
-    {scope:'own',hasImage:true,title:'《紫荆金融监管解读》引发市场担忧，多家券商发布点评',abstract:'解读文章在朋友圈广泛传播，部分内容存在误读，引发投资者关注……',time:'2026-05-21 07:30:42',plat:'微信',user:'紫荆财经',ent:'紫荆金融',senti:'neg',tags:['监管','误读']},
-    {scope:'cmp',hasImage:true,title:'海棠集团子公司被曝财务问题，监管已介入核查',abstract:'多家财经媒体跟进报道，分析师认为同业（含本集团）将受关注；建议同步排查并准备 Q&A。',time:'2026-05-21 07:08:11',plat:'财新网',user:'财新调查',ent:'竞对 · 海棠集团',senti:'neg',tags:['竞对','合规','机会']},
-    {scope:'own',hasImage:true,title:'紫荆集团一季度营收同比增长 8.2%，基本面稳健',abstract:'集团发布一季度业绩公告，主营业务收入同比增长 8.2%，归母净利润同比增长 5.6%。',time:'2026-05-21 06:00:00',plat:'网页',user:'新华网',ent:'紫荆集团',senti:'neu',tags:['财报','央媒']},
-    {scope:'own',hasImage:true,title:'匿名爆料：紫荆科技高管疑涉及内部审查',abstract:'雪球用户发布长文，称……目前尚未得到紫荆科技官方证实。',time:'2026-05-21 02:14:09',plat:'雪球',user:'匿名_5839',ent:'紫荆科技 / 高管 张鸿宇',senti:'neg',tags:['匿名','高管','合规']},
-    {scope:'cmp',hasImage:true,title:'木兰集团发布 2026 ESG 报告，碳排强度同比降 12%',abstract:'报告内容被多家媒体跨业对标，建议关注与本集团 ESG 披露口径的差异点。',time:'2026-05-20 23:20:46',plat:'21世纪经济报道',user:'21财经',ent:'竞对 · 木兰集团',senti:'neu',tags:['竞对','ESG','对标']},
-    {scope:'own',hasImage:true,title:'紫荆能源子公司海上风电项目并网发电',abstract:'项目装机容量 X GW，预计年发电量 XX 亿千瓦时，是公司在新能源领域的重要里程碑。',time:'2026-05-20 22:18:51',plat:'人民网',user:'人民网能源',ent:'紫荆能源',senti:'pos',tags:['ESG','央媒','正面']},
-    {scope:'own',hasImage:true,title:'消费者集体投诉 紫荆Pro 售后响应慢',abstract:'黑猫投诉相关话题已聚集 312 条投诉……紫荆企业回复率为 76%。',time:'2026-05-20 19:42:33',plat:'黑猫投诉',user:'平台聚合',ent:'品牌 紫荆Pro',senti:'neg',tags:['投诉','服务']},
-    {scope:'cmp',hasImage:true,title:'玉兰集团新品发布，主打"对标 紫荆Pro"',abstract:'发布会强调对标本集团旗舰产品，多家测评号开始横评，社媒讨论中提及紫荆 1.8w 次。',time:'2026-05-20 18:30:00',plat:'微博',user:'@数码玉兰',ent:'竞对 · 玉兰集团',senti:'neg',tags:['竞对','产品','对标']},
-    {scope:'own',hasImage:true,title:'紫荆地产以 XX 亿元摘得长三角某地块',abstract:'本次拿地溢价率约 6.8%……行业人士认为体现公司对核心区域的持续布局。',time:'2026-05-20 17:08:27',plat:'21世纪经济报道',user:'21财经',ent:'紫荆地产',senti:'neu',tags:['地产','投资']},
-    {scope:'own',hasImage:true,title:'紫荆文化携手央视推出 ESG 公益项目',abstract:'项目将在西部三省开展乡村教育与生态保护宣传……',time:'2026-05-20 12:36:14',plat:'央视新闻',user:'央视新闻',ent:'紫荆文化',senti:'pos',tags:['ESG','央媒','公益']}
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-01/192/136',title:'某型号被曝质量问题，话题登上微博热搜第 6 位',abstract:'多名用户反馈使用约 6 个月后出现……紫荆官方客服已就投诉发布初步回复，但热度仍在攀升。',time:'2026-05-21 08:42:18',plat:'微博',user:'@财经紫荆观察',ent:'紫荆股份 / 品牌 紫荆Pro',senti:'neg',tags:['热搜','负面','产品']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-02/192/136',title:'《紫荆金融监管解读》引发市场担忧，多家券商发布点评',abstract:'解读文章在朋友圈广泛传播，部分内容存在误读，引发投资者关注……',time:'2026-05-21 07:30:42',plat:'微信',user:'紫荆财经',ent:'紫荆金融',senti:'neg',tags:['监管','误读']},
+    {scope:'cmp',hasImage:true,image:'https://picsum.photos/seed/zj-feed-03/192/136',title:'海棠集团子公司被曝财务问题，监管已介入核查',abstract:'多家财经媒体跟进报道，分析师认为同业（含本集团）将受关注；建议同步排查并准备 Q&A。',time:'2026-05-21 07:08:11',plat:'财新网',user:'财新调查',ent:'竞对 · 海棠集团',senti:'neg',tags:['竞对','合规','机会']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-04/192/136',title:'紫荆集团一季度营收同比增长 8.2%，基本面稳健',abstract:'集团发布一季度业绩公告，主营业务收入同比增长 8.2%，归母净利润同比增长 5.6%。',time:'2026-05-21 06:00:00',plat:'网页',user:'新华网',ent:'紫荆集团',senti:'neu',tags:['财报','央媒']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-05/192/136',title:'匿名爆料：紫荆科技高管疑涉及内部审查',abstract:'雪球用户发布长文，称……目前尚未得到紫荆科技官方证实。',time:'2026-05-21 02:14:09',plat:'雪球',user:'匿名_5839',ent:'紫荆科技 / 高管 张鸿宇',senti:'neg',tags:['匿名','高管','合规']},
+    {scope:'cmp',hasImage:true,image:'https://picsum.photos/seed/zj-feed-06/192/136',title:'木兰集团发布 2026 ESG 报告，碳排强度同比降 12%',abstract:'报告内容被多家媒体跨业对标，建议关注与本集团 ESG 披露口径的差异点。',time:'2026-05-20 23:20:46',plat:'21世纪经济报道',user:'21财经',ent:'竞对 · 木兰集团',senti:'neu',tags:['竞对','ESG','对标']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-07/192/136',title:'紫荆能源子公司海上风电项目并网发电',abstract:'项目装机容量 X GW，预计年发电量 XX 亿千瓦时，是公司在新能源领域的重要里程碑。',time:'2026-05-20 22:18:51',plat:'人民网',user:'人民网能源',ent:'紫荆能源',senti:'pos',tags:['ESG','央媒','正面']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-08/192/136',title:'消费者集体投诉 紫荆Pro 售后响应慢',abstract:'黑猫投诉相关话题已聚集 312 条投诉……紫荆企业回复率为 76%。',time:'2026-05-20 19:42:33',plat:'黑猫投诉',user:'平台聚合',ent:'品牌 紫荆Pro',senti:'neg',tags:['投诉','服务']},
+    {scope:'cmp',hasImage:true,image:'https://picsum.photos/seed/zj-feed-09/192/136',title:'玉兰集团新品发布，主打"对标 紫荆Pro"',abstract:'发布会强调对标本集团旗舰产品，多家测评号开始横评，社媒讨论中提及紫荆 1.8w 次。',time:'2026-05-20 18:30:00',plat:'微博',user:'@数码玉兰',ent:'竞对 · 玉兰集团',senti:'neg',tags:['竞对','产品','对标']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-10/192/136',title:'紫荆地产以 XX 亿元摘得长三角某地块',abstract:'本次拿地溢价率约 6.8%……行业人士认为体现公司对核心区域的持续布局。',time:'2026-05-20 17:08:27',plat:'21世纪经济报道',user:'21财经',ent:'紫荆地产',senti:'neu',tags:['地产','投资']},
+    {scope:'own',hasImage:true,image:'https://picsum.photos/seed/zj-feed-11/192/136',title:'紫荆文化携手央视推出 ESG 公益项目',abstract:'项目将在西部三省开展乡村教育与生态保护宣传……',time:'2026-05-20 12:36:14',plat:'央视新闻',user:'央视新闻',ent:'紫荆文化',senti:'pos',tags:['ESG','央媒','公益']}
   ];
   var sentiText = {neg:'负面',pos:'正面',neu:'中性'};
   wrap.innerHTML = feeds.map(function(f){
@@ -1153,10 +1153,13 @@ function selectEntity(el){
       : '<span class="scope-badge own" title="本企业舆情">本企业</span>';
     var entBg = f.scope==='cmp' ? 'background:rgba(224,64,64,0.08);color:#e04040' : 'background:rgba(43,97,240,0.08);color:#2b61f0';
     var baseCls = 'feed-item '+(f.scope==='cmp'?'fi-cmp':'')+(f.hasImage?' fi-has-image':'');
+    var thumbNode = f.image
+      ? '<img class="fi-thumb" src="'+f.image+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
+      : '<div class="fi-thumb" style="background:linear-gradient(135deg,'+(f.scope==='cmp'?'#ffe1e1,#ffeaea':'#dde9ff,#eaf2ff')+')"></div>';
     if(f.hasImage){
-      return '<div class="'+baseCls+'"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+scopeBadge+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">收藏</button><button class="fi-act-btn">加入线索池</button></div></div><div class="fi-media-row"><div class="fi-thumb" style="background:linear-gradient(135deg,'+(f.scope==='cmp'?'#ffe1e1,#ffeaea':'#dde9ff,#eaf2ff')+')"></div><div class="fi-image-copy"><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;'+entBg+';font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span></div></div></div></div></div></div>';
+      return '<div class="'+baseCls+'"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+scopeBadge+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">收藏</button><button class="fi-act-btn">加入线索池</button></div></div><div class="fi-media-row">'+thumbNode+'<div class="fi-image-copy"><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;'+entBg+';font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span></div></div></div></div></div></div>';
     }
-    return '<div class="'+baseCls+'"><div class="fi-head"><input type="checkbox" class="fi-check"><div class="fi-thumb" style="background:linear-gradient(135deg,'+(f.scope==='cmp'?'#ffe1e1,#ffeaea':'#dde9ff,#eaf2ff')+')"></div><div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+scopeBadge+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">收藏</button><button class="fi-act-btn">加入线索池</button></div></div><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;'+entBg+';font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span></div></div></div></div>';
+    return '<div class="'+baseCls+'"><div class="fi-head"><input type="checkbox" class="fi-check">'+thumbNode+'<div class="fi-body"><div class="fi-title-row"><div class="fi-title">'+scopeBadge+f.title+'</div><div class="fi-act-row"><button class="fi-act-btn">查看详情</button><button class="fi-act-btn">收藏</button><button class="fi-act-btn">加入线索池</button></div></div><div class="fi-abstract">'+f.abstract+'</div><div class="fi-meta"><span>📅 '+f.time+'</span><span class="plat-badge">'+f.plat+'</span><span>👤 '+f.user+'</span><span style="padding:1px 6px;border-radius:4px;'+entBg+';font-weight:600;font-size:10px">'+f.ent+'</span><span class="senti-tag '+f.senti+'">'+sentiText[f.senti]+'</span></div></div></div></div>';
   }).join('');
 })();
 

@@ -241,6 +241,85 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
 
 
 
+/* ===== 子视图 Segment + 总览样式 ===== */
+.view-seg{display:inline-flex;gap:2px;padding:3px;background:#f1f4fa;border-radius:10px;margin-bottom:14px;align-self:flex-start}
+.vs-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border:none;background:transparent;color:#68778f;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.vs-btn:hover:not(.active){color:var(--primary);background:rgba(43,97,240,0.04)}
+.vs-btn.active{background:#fff;color:var(--primary);box-shadow:0 2px 6px rgba(26,44,82,0.08);font-weight:700}
+.view-panel{display:none;flex-direction:column;flex:1;min-width:0}
+.view-panel.active{display:flex}
+.lp-content{display:none}
+.lp-content.active{display:block}
+.tree-leaf-all{background:linear-gradient(135deg,rgba(43,97,240,0.06),rgba(43,97,240,0.02));border:1px solid rgba(43,97,240,0.18);margin-bottom:6px}
+.tree-leaf-all.active{background:linear-gradient(135deg,#2f6bff,#4e88ff);border-color:#2f6bff}
+.tree-leaf-all.active .leaf-name,.tree-leaf-all.active .leaf-ai-badge{color:#fff !important}
+.tree-leaf-all .leaf-name{font-weight:800;color:#2f6bff}
+.tree-leaf-all .leaf-ai-badge{background:rgba(43,97,240,0.12);color:#2f6bff;font-weight:800}
+.vs-btn[data-view="overview"].vs-hidden{display:none}
+
+/* 总览 KPI */
+.ov-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.ov-section-title{font-size:14px;font-weight:800;color:#1a2234;display:flex;align-items:center;gap:8px}
+.ov-section-title::before{content:'';width:3px;height:14px;background:var(--primary);border-radius:2px}
+.ov-time-chips{display:flex;gap:6px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi-card{background:linear-gradient(135deg,#f5f8ff,#eef2fd);border:1px solid rgba(47,107,255,0.08);border-radius:12px;padding:14px 16px}
+.kpi-label{font-size:11px;color:#68778f;font-weight:600;margin-bottom:6px}
+.kpi-value{font-size:24px;font-weight:800;color:#1a2234;line-height:1.1;letter-spacing:-0.5px}
+.kpi-value.pos{color:#12a87a}
+.kpi-value.neg{color:#e04040}
+.kpi-trend{font-size:11px;font-weight:600;margin-top:4px}
+.kpi-trend.up{color:#12a87a}
+.kpi-trend.down{color:#e04040}
+
+/* 总览图表卡 */
+.ov-charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.ov-chart-card{background:#fff;border:1px solid rgba(122,145,184,0.12);border-radius:12px;padding:14px 16px}
+.ov-chart-title{font-size:13px;font-weight:700;color:#1a2234;margin-bottom:10px}
+.ov-trend-svg{width:100%;height:120px}
+.ov-bar-row{display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:6px}
+.ov-bar-label{width:64px;color:#68778f;font-weight:600;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-bar-track{flex:1;height:8px;border-radius:999px;background:#eef2f8;overflow:hidden}
+.ov-bar-fill{height:100%;border-radius:999px;background:var(--accent-gradient)}
+.ov-bar-val{font-size:11px;font-weight:700;color:var(--primary);min-width:36px;text-align:right}
+
+/* 对象排名 */
+.ov-rank-card{background:#fff;border:1px solid rgba(122,145,184,0.12);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.ov-rank-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(122,145,184,0.12)}
+.ov-rank-row:last-child{border-bottom:none}
+.ov-rank-no{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:#9aa8bc;flex-shrink:0}
+.ov-rank-no.top1{background:linear-gradient(135deg,#ff9800,#f57c00)}
+.ov-rank-no.top2{background:linear-gradient(135deg,#90a4ae,#607d8b)}
+.ov-rank-no.top3{background:linear-gradient(135deg,#bf8b56,#8d6e3a)}
+.ov-rank-name{font-size:13px;font-weight:700;color:#1a2234;min-width:80px;flex-shrink:0}
+.ov-rank-track{flex:1;height:10px;border-radius:999px;background:#eef2f8;overflow:hidden;min-width:80px}
+.ov-rank-fill{height:100%;border-radius:999px;background:var(--accent-gradient)}
+.ov-rank-num{font-size:13px;font-weight:800;color:var(--primary);width:60px;text-align:right;flex-shrink:0}
+.ov-rank-senti{display:flex;gap:4px;flex-shrink:0}
+.ov-rank-senti span{padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.ov-rank-view{padding:4px 12px;border-radius:6px;border:1px solid rgba(43,97,240,0.2);background:rgba(43,97,240,0.05);color:var(--primary);font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+.ov-rank-view:hover{background:rgba(43,97,240,0.12)}
+
+/* AI摘要轻量版 */
+.ov-ai-box{background:linear-gradient(135deg,rgba(47,107,255,0.05),rgba(158,199,255,0.08));border:1px solid rgba(47,107,255,0.12);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.ov-ai-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ov-ai-title{font-size:13px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:6px}
+.ov-ai-link{font-size:12px;color:var(--primary);font-weight:700;cursor:pointer;border:none;background:transparent}
+.ov-ai-link:hover{text-decoration:underline}
+.ov-ai-text{font-size:12px;color:#3a4560;line-height:1.6;margin-bottom:8px}
+.ov-ai-kws{display:flex;gap:5px;flex-wrap:wrap}
+.ov-ai-kw{padding:2px 9px;border-radius:999px;background:rgba(47,107,255,0.1);color:var(--primary);font-size:11px;font-weight:600;border:1px solid rgba(47,107,255,0.15)}
+
+/* 热点 Top5 */
+.ov-hot-card{background:#fff;border:1px solid rgba(122,145,184,0.12);border-radius:12px;padding:14px 16px}
+.ov-hot-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(122,145,184,0.12);cursor:pointer;transition:background 0.15s}
+.ov-hot-item:last-child{border-bottom:none}
+.ov-hot-item:hover{background:rgba(47,107,255,0.03)}
+.ov-hot-no{width:18px;font-size:12px;font-weight:800;color:var(--primary);text-align:center;flex-shrink:0;line-height:1.5}
+.ov-hot-body{flex:1;min-width:0}
+.ov-hot-title{font-size:13px;color:#1a2234;font-weight:600;line-height:1.5;margin-bottom:4px}
+.ov-hot-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:#9aa8bc;flex-wrap:wrap}
+.ov-hot-meta .plat-badge{padding:1px 6px;border-radius:4px;background:rgba(47,107,255,0.08);color:var(--primary);font-weight:600;font-size:10px}
 
 /* @@TOP-NAV-OVERRIDE@@ */
 .app-shell{display:flex!important;flex-direction:column!important;min-height:100vh!important}
@@ -292,189 +371,393 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
     <section class="page">
       <!-- 主Tab -->
       <div class="main-tabs">
-        <button class="main-tab active" onclick="switchMainTab(0,this)">监测方案</button>
-        <button class="main-tab" onclick="switchMainTab(1,this)">AI监测报告</button>
+        <button class="main-tab active" onclick="switchMainTab('person',this)">关键人物</button>
+        <button class="main-tab" onclick="switchMainTab('dept',this)">关键部门</button>
+        <button class="main-tab" onclick="switchMainTab('mine',this)">我的关注</button>
       </div>
 
       <!-- 监测方案 + 信息流 -->
       <div class="body-wrap">
         <div class="left-panel">
           <div class="lp-header">
-            <span class="lp-title">监测对象</span>
+            <span class="lp-title" id="lp-title">关键人物</span>
             <div class="lp-actions">
               <button class="lp-btn" title="搜索"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M19 19L15.5 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
             </div>
           </div>
 
-          <!-- 系统推荐 -->
-          <div class="tree-group" id="tg-system">
-            <div class="tree-group-hd" onclick="toggleTreeGroup(this)">
-              <svg class="tg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span class="ai-badge">AI</span>
-              <span class="tg-label">系统推荐</span>
-              <span class="tg-help">?<span class="tg-help-tip">系统根据您的角色与历史关注自动监测以下关键对象舆情，无需配置监测方案</span></span>
+          <!-- 关键人 列表 -->
+          <div class="lp-content active" data-lpfor="person">
+            <div class="sys-rec-notice"><span class="ai-badge">AI</span>系统根据用户角色自动监测</div>
+            <div class="tree-leaf tree-leaf-all active" data-type="all" data-cat="person" data-label="全部 · 关键人物" onclick="selectAll(this,'person')">
+              <span class="leaf-name">📊 全部</span>
+              <span class="leaf-ai-badge">3,842</span>
             </div>
-            <div class="tree-group-body">
-
-              <!-- 关键人物 -->
-              <div class="tree-sub-group" id="tsg-person">
-                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
-                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span class="tsg-name">关键人物</span>
-                  <span class="tsg-count">1,644</span>
-                </div>
-                <div class="tree-sub-body">
-                  <div class="tree-leaf active" data-type="system" data-label="李家超 · 关键人物" onclick="selectLeaf(this)">
-                    <span class="leaf-name">李家超</span>
-                    <span class="leaf-ai-badge">1,013</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
-                    </div>
-                  </div>
-                  <div class="tree-leaf" data-type="system" data-label="郑雁雄 · 关键人物" onclick="selectLeaf(this)">
-                    <span class="leaf-name">郑雁雄</span>
-                    <span class="leaf-ai-badge">384</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
-                    </div>
-                  </div>
-                  <div class="tree-leaf" data-type="system" data-label="夏宝龙 · 关键人物" onclick="selectLeaf(this)">
-                    <span class="leaf-name">夏宝龙</span>
-                    <span class="leaf-ai-badge">247</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 关键部门 -->
-              <div class="tree-sub-group" id="tsg-dept">
-                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
-                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span class="tsg-name">关键部门</span>
-                  <span class="tsg-count">245</span>
-                </div>
-                <div class="tree-sub-body">
-                  <div class="tree-leaf" data-type="system" data-label="行政会议 · 关键部门" onclick="selectLeaf(this)">
-                    <span class="leaf-name">政务司</span>
-                    <span class="leaf-ai-badge">156</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
-                    </div>
-                  </div>
-                  <div class="tree-leaf" data-type="system" data-label="三司十五局 · 关键部门" onclick="selectLeaf(this)">
-                    <span class="leaf-name">食环署</span>
-                    <span class="leaf-ai-badge">89</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">置顶</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button>
-                      <button class="leaf-act" onclick="event.stopPropagation()">推荐理由</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="李家超 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">李家超</span><span class="leaf-ai-badge">1,013</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="郑雁雄 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">郑雁雄</span><span class="leaf-ai-badge">384</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="夏宝龙 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">夏宝龙</span><span class="leaf-ai-badge">247</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="陈国基 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">陈国基</span><span class="leaf-ai-badge">428</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="陈茂波 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">陈茂波</span><span class="leaf-ai-badge">512</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="林定国 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">林定国</span><span class="leaf-ai-badge">203</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="邓炳强 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">邓炳强</span><span class="leaf-ai-badge">389</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="卢宠茂 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">卢宠茂</span><span class="leaf-ai-badge">178</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="孙东 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">孙东</span><span class="leaf-ai-badge">241</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="person" data-label="何永贤 · 关键人物" onclick="selectLeaf(this)">
+              <span class="leaf-name">何永贤</span><span class="leaf-ai-badge">147</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
             </div>
           </div>
 
-          <!-- 我的关注 -->
-          <div class="tree-group" id="tg-mine">
-            <div class="tree-group-hd" onclick="toggleTreeGroup(this)">
-              <svg class="tg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:linear-gradient(135deg,#f97316,#fb923c);flex-shrink:0">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="color:#fff"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </span>
-              <span class="tg-label">我的关注</span>
+          <!-- 关键部门 列表 -->
+          <div class="lp-content" data-lpfor="dept">
+            <div class="sys-rec-notice"><span class="ai-badge">AI</span>系统根据用户角色自动监测</div>
+            <div class="tree-leaf tree-leaf-all" data-type="all" data-cat="dept" data-label="全部 · 关键部门" onclick="selectAll(this,'dept')">
+              <span class="leaf-name">📊 全部</span>
+              <span class="leaf-ai-badge">2,156</span>
             </div>
-            <div class="tree-group-body">
-              <div class="tree-leaf" data-type="mine" data-label="敏感账号" onclick="selectLeaf(this)">
-                <span class="leaf-name">敏感账号</span>
-                <span class="leaf-ai-badge">312</span>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="行政会议 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">行政会议</span><span class="leaf-ai-badge">156</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="立法会 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">立法会</span><span class="leaf-ai-badge">534</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="政务司 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">政务司</span><span class="leaf-ai-badge">214</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="财政司 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">财政司</span><span class="leaf-ai-badge">328</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="律政司 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">律政司</span><span class="leaf-ai-badge">142</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="保安局 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">保安局</span><span class="leaf-ai-badge">287</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="创新科技及工业局 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">创新科技及工业局</span><span class="leaf-ai-badge">196</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="房屋局 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">房屋局</span><span class="leaf-ai-badge">168</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="食物环境卫生署 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">食物环境卫生署</span><span class="leaf-ai-badge">89</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+            <div class="tree-leaf" data-type="system" data-cat="dept" data-label="医务卫生局 · 关键部门" onclick="selectLeaf(this)">
+              <span class="leaf-name">医务卫生局</span><span class="leaf-ai-badge">112</span>
+              <div class="leaf-actions"><button class="leaf-act" onclick="event.stopPropagation()">置顶</button><button class="leaf-act" onclick="event.stopPropagation()">取消订阅</button></div>
+            </div>
+          </div>
+
+          <!-- 我的关注 列表 -->
+          <div class="lp-content" data-lpfor="mine">
+            <div class="tree-leaf" data-type="mine" data-label="敏感账号" onclick="selectLeaf(this)">
+              <span class="leaf-name">敏感账号</span>
+              <span class="leaf-ai-badge">312</span>
+              <div class="leaf-actions">
+                <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+              </div>
+            </div>
+            <div class="tree-sub-group" id="tsg-fdpm">
+              <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
+                <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="tsg-name">反对派媒体</span>
+                <span class="tsg-count">178</span>
                 <div class="leaf-actions">
                   <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
                   <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
                 </div>
               </div>
-              <div class="tree-sub-group" id="tsg-fdpm">
-                <div class="tree-sub-hd" onclick="toggleSubGroup(this)">
-                  <svg class="tsg-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span class="tsg-name">反对派媒体</span>
-                  <span class="tsg-count">178</span>
+              <div class="tree-sub-body">
+                <div class="tree-leaf" data-type="mine" data-label="境外社交账号" onclick="selectLeaf(this)">
+                  <span class="leaf-name">境外社交账号</span>
+                  <span class="leaf-ai-badge">88</span>
                   <div class="leaf-actions">
                     <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
                     <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
                   </div>
                 </div>
-                <div class="tree-sub-body">
-                  <div class="tree-leaf" data-type="mine" data-label="境外社交账号" onclick="selectLeaf(this)">
-                    <span class="leaf-name">境外社交账号</span>
-                    <span class="leaf-ai-badge">88</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
-                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
-                    </div>
+                <div class="tree-leaf" data-type="mine" data-label="网络媒体" onclick="selectLeaf(this)">
+                  <span class="leaf-name">网络媒体</span>
+                  <span class="leaf-ai-badge">56</span>
+                  <div class="leaf-actions">
+                    <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                    <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
                   </div>
-                  <div class="tree-leaf" data-type="mine" data-label="网络媒体" onclick="selectLeaf(this)">
-                    <span class="leaf-name">网络媒体</span>
-                    <span class="leaf-ai-badge">56</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
-                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
-                    </div>
-                  </div>
-                  <div class="tree-leaf" data-type="mine" data-label="YouTube频道" onclick="selectLeaf(this)">
-                    <span class="leaf-name">YouTube频道</span>
-                    <span class="leaf-ai-badge">34</span>
-                    <div class="leaf-actions">
-                      <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
-                      <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
-                    </div>
+                </div>
+                <div class="tree-leaf" data-type="mine" data-label="YouTube频道" onclick="selectLeaf(this)">
+                  <span class="leaf-name">YouTube频道</span>
+                  <span class="leaf-ai-badge">34</span>
+                  <div class="leaf-actions">
+                    <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                    <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
                   </div>
                 </div>
               </div>
-              <div class="tree-leaf" data-type="mine" data-label="香港立法会" onclick="selectLeaf(this)">
-                <span class="leaf-name">香港立法会</span>
-                <span class="leaf-ai-badge">534</span>
-                <div class="leaf-actions">
-                  <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
-                  <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
-                </div>
-              </div>
-              <div class="tree-leaf" data-type="mine" data-label="涉港境外媒体" onclick="selectLeaf(this)">
-                <span class="leaf-name">涉港境外媒体</span>
-                <span class="leaf-ai-badge">96</span>
-                <div class="leaf-actions">
-                  <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
-                  <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
-                </div>
-              </div>
-              <button class="add-scheme-btn" onclick="addMyScheme()">＋ 新建方案</button>
             </div>
+            <div class="tree-leaf" data-type="mine" data-label="涉港境外媒体" onclick="selectLeaf(this)">
+              <span class="leaf-name">涉港境外媒体</span>
+              <span class="leaf-ai-badge">96</span>
+              <div class="leaf-actions">
+                <button class="leaf-act" onclick="event.stopPropagation()">编辑</button>
+                <button class="leaf-act danger" onclick="event.stopPropagation()">删除</button>
+              </div>
+            </div>
+            <button class="add-scheme-btn" onclick="addMyScheme()">＋ 新建方案</button>
           </div>
 
         </div>
 
         <div class="right-panel">
+          <!-- 子视图 Segment（仅 person/dept tab 显示） -->
+          <div class="view-seg" id="viewSeg">
+            <button class="vs-btn active" data-view="overview" onclick="switchView('overview')">📊 总览</button>
+            <button class="vs-btn" data-view="feed" onclick="switchView('feed')">📰 舆情列表</button>
+            <button class="vs-btn" data-view="report" onclick="switchView('report')">✦ AI监测报告</button>
+          </div>
+
+          <!-- 总览视图 -->
+          <div class="view-panel active" id="view-overview">
+            <div class="ov-section-head">
+              <div class="ov-section-title" id="ov-title">全部关键人物 · 整体概况</div>
+              <div class="ov-time-chips time-chips">
+                <span class="tc">今天</span>
+                <span class="tc">近24小时</span>
+                <span class="tc active">近7天</span>
+                <span class="tc">近30天</span>
+                <span class="tc">自定义</span>
+              </div>
+            </div>
+
+            <!-- KPI 4格 -->
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-label">总声量</div>
+                <div class="kpi-value" id="kpi-volume">1,644</div>
+                <div class="kpi-trend up">↑ +12.4% vs 上周</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">正面占比</div>
+                <div class="kpi-value pos" id="kpi-pos">68%</div>
+                <div class="kpi-trend up">↑ +3.1%</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">负面占比</div>
+                <div class="kpi-value neg" id="kpi-neg">14%</div>
+                <div class="kpi-trend down">↓ -2.0%</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-label">预警条数</div>
+                <div class="kpi-value" id="kpi-alert">7</div>
+                <div class="kpi-trend up" style="color:#c47d10">⚠ 较昨日新增 2</div>
+              </div>
+            </div>
+
+            <!-- AI 摘要轻量版 -->
+            <div class="ov-ai-box">
+              <div class="ov-ai-head">
+                <div class="ov-ai-title">✦ AI 总结</div>
+                <button class="ov-ai-link" onclick="switchView('report')">查看完整报告 →</button>
+              </div>
+              <div class="ov-ai-text" id="ov-ai-text">近7日监测到关键人物相关声量共 1,644 条，正面情绪主导（68%）。核心议题围绕香港经济转型、中央对港支持及高质量发展，行政长官与中联办主任的公开讲话获主流媒体广泛转发；同时本土民生政策（垃圾收费、北部都会区进度）成为质疑焦点，已触发 7 条预警。</div>
+              <div class="ov-ai-kws">
+                <span class="ov-ai-kw">#经济转型</span>
+                <span class="ov-ai-kw">#中央支持</span>
+                <span class="ov-ai-kw">#高质量发展</span>
+                <span class="ov-ai-kw">#垃圾收费</span>
+                <span class="ov-ai-kw">#北部都会区</span>
+              </div>
+            </div>
+
+            <!-- 双图卡 -->
+            <div class="ov-charts">
+              <div class="ov-chart-card">
+                <div class="ov-chart-title">声量趋势（近7天，多对象对比）</div>
+                <svg class="ov-trend-svg" viewBox="0 0 320 120" preserveAspectRatio="none">
+                  <g stroke="#eef2f8" stroke-width="1">
+                    <line x1="0" y1="20" x2="320" y2="20"/>
+                    <line x1="0" y1="50" x2="320" y2="50"/>
+                    <line x1="0" y1="80" x2="320" y2="80"/>
+                  </g>
+                  <polyline points="10,60 55,40 100,52 145,28 190,38 235,22 280,30" fill="none" stroke="#2f6bff" stroke-width="2"/>
+                  <polyline points="10,90 55,75 100,82 145,65 190,72 235,58 280,68" fill="none" stroke="#7ab0ff" stroke-width="2"/>
+                  <polyline points="10,100 55,95 100,90 145,85 190,88 235,80 280,78" fill="none" stroke="#b5d3ff" stroke-width="2"/>
+                  <g font-size="9" fill="#9aa8bc">
+                    <text x="10" y="115">5-18</text>
+                    <text x="100" y="115">5-20</text>
+                    <text x="190" y="115">5-22</text>
+                    <text x="270" y="115">5-24</text>
+                  </g>
+                </svg>
+                <div style="display:flex;gap:14px;margin-top:6px;font-size:11px;color:#68778f">
+                  <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:2px;background:#2f6bff;display:inline-block"></span>李家超</span>
+                  <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:2px;background:#7ab0ff;display:inline-block"></span>郑雁雄</span>
+                  <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:2px;background:#b5d3ff;display:inline-block"></span>夏宝龙</span>
+                </div>
+              </div>
+              <div class="ov-chart-card">
+                <div class="ov-chart-title">媒体渠道分布</div>
+                <div class="ov-bar-row"><span class="ov-bar-label">微博</span><div class="ov-bar-track"><div class="ov-bar-fill" style="width:78%"></div></div><span class="ov-bar-val">724</span></div>
+                <div class="ov-bar-row"><span class="ov-bar-label">微信</span><div class="ov-bar-track"><div class="ov-bar-fill" style="width:60%"></div></div><span class="ov-bar-val">412</span></div>
+                <div class="ov-bar-row"><span class="ov-bar-label">网页</span><div class="ov-bar-track"><div class="ov-bar-fill" style="width:42%"></div></div><span class="ov-bar-val">258</span></div>
+                <div class="ov-bar-row"><span class="ov-bar-label">境外媒体</span><div class="ov-bar-track"><div class="ov-bar-fill" style="width:28%"></div></div><span class="ov-bar-val">168</span></div>
+                <div class="ov-bar-row"><span class="ov-bar-label">论坛贴吧</span><div class="ov-bar-track"><div class="ov-bar-fill" style="width:14%"></div></div><span class="ov-bar-val">82</span></div>
+              </div>
+            </div>
+
+            <!-- 各对象声量排名 + 热点 Top5（同排） -->
+            <div style="display:flex;gap:16px;align-items:flex-start">
+              <div class="ov-rank-card" style="flex:1;min-width:0;margin-bottom:0">
+                <div class="ov-chart-title" id="ov-rank-title" style="margin-bottom:10px">各关键人物声量排名</div>
+                <div id="ov-rank-list">
+                  <div class="ov-rank-row">
+                    <span class="ov-rank-no top1">1</span>
+                    <span class="ov-rank-name">李家超</span>
+                    <div class="ov-rank-track"><div class="ov-rank-fill" style="width:100%"></div></div>
+                    <span class="ov-rank-num">1,013</span>
+                    <div class="ov-rank-senti">
+                      <span style="background:rgba(25,165,129,0.1);color:#12a87a">正 64%</span>
+                      <span style="background:rgba(186,134,44,0.1);color:#9c6e00">中 24%</span>
+                      <span style="background:rgba(206,93,87,0.1);color:#e04040">负 12%</span>
+                    </div>
+                    <button class="ov-rank-view" onclick="jumpToFeed('李家超 · 关键人物')">查看 →</button>
+                  </div>
+                  <div class="ov-rank-row">
+                    <span class="ov-rank-no top2">2</span>
+                    <span class="ov-rank-name">陈茂波</span>
+                    <div class="ov-rank-track"><div class="ov-rank-fill" style="width:51%"></div></div>
+                    <span class="ov-rank-num">512</span>
+                    <div class="ov-rank-senti">
+                      <span style="background:rgba(25,165,129,0.1);color:#12a87a">正 72%</span>
+                      <span style="background:rgba(186,134,44,0.1);color:#9c6e00">中 18%</span>
+                      <span style="background:rgba(206,93,87,0.1);color:#e04040">负 10%</span>
+                    </div>
+                    <button class="ov-rank-view" onclick="jumpToFeed('陈茂波 · 关键人物')">查看 →</button>
+                  </div>
+                  <div class="ov-rank-row">
+                    <span class="ov-rank-no top3">3</span>
+                    <span class="ov-rank-name">陈国基</span>
+                    <div class="ov-rank-track"><div class="ov-rank-fill" style="width:42%"></div></div>
+                    <span class="ov-rank-num">428</span>
+                    <div class="ov-rank-senti">
+                      <span style="background:rgba(25,165,129,0.1);color:#12a87a">正 68%</span>
+                      <span style="background:rgba(186,134,44,0.1);color:#9c6e00">中 22%</span>
+                      <span style="background:rgba(206,93,87,0.1);color:#e04040">负 10%</span>
+                    </div>
+                    <button class="ov-rank-view" onclick="jumpToFeed('陈国基 · 关键人物')">查看 →</button>
+                  </div>
+                  <div class="ov-rank-row">
+                    <span class="ov-rank-no">4</span>
+                    <span class="ov-rank-name">邓炳强</span>
+                    <div class="ov-rank-track"><div class="ov-rank-fill" style="width:38%"></div></div>
+                    <span class="ov-rank-num">389</span>
+                    <div class="ov-rank-senti">
+                      <span style="background:rgba(25,165,129,0.1);color:#12a87a">正 65%</span>
+                      <span style="background:rgba(186,134,44,0.1);color:#9c6e00">中 22%</span>
+                      <span style="background:rgba(206,93,87,0.1);color:#e04040">负 13%</span>
+                    </div>
+                    <button class="ov-rank-view" onclick="jumpToFeed('邓炳强 · 关键人物')">查看 →</button>
+                  </div>
+                  <div class="ov-rank-row">
+                    <span class="ov-rank-no">5</span>
+                    <span class="ov-rank-name">郑雁雄</span>
+                    <div class="ov-rank-track"><div class="ov-rank-fill" style="width:38%"></div></div>
+                    <span class="ov-rank-num">384</span>
+                    <div class="ov-rank-senti">
+                      <span style="background:rgba(25,165,129,0.1);color:#12a87a">正 71%</span>
+                      <span style="background:rgba(186,134,44,0.1);color:#9c6e00">中 21%</span>
+                      <span style="background:rgba(206,93,87,0.1);color:#e04040">负 8%</span>
+                    </div>
+                    <button class="ov-rank-view" onclick="jumpToFeed('郑雁雄 · 关键人物')">查看 →</button>
+                  </div>
+                </div>
+              </div>
+              <div class="ov-hot-card" style="flex:1;min-width:0">
+                <div class="ov-chart-title" style="margin-bottom:8px">热点内容 Top 5（按热度排序）</div>
+                <div class="ov-hot-item" onclick="switchView('feed')">
+                  <span class="ov-hot-no">1</span>
+                  <div class="ov-hot-body">
+                    <div class="ov-hot-title">李家超：香港经济转型已取得初步成效，新质生产力布局持续推进</div>
+                    <div class="ov-hot-meta"><span class="senti-tag pos">正面</span><span>📅 2026-05-24</span><span class="plat-badge">微信</span><span>大公文汇</span><span>🔥 热度 9,820</span></div>
+                  </div>
+                </div>
+                <div class="ov-hot-item" onclick="switchView('feed')">
+                  <span class="ov-hot-no">2</span>
+                  <div class="ov-hot-body">
+                    <div class="ov-hot-title">夏宝龙：香港要成为国家开拓国际市场的重要平台</div>
+                    <div class="ov-hot-meta"><span class="senti-tag pos">正面</span><span>📅 2026-05-21</span><span class="plat-badge">网页</span><span>新华社</span><span>🔥 热度 7,512</span></div>
+                  </div>
+                </div>
+                <div class="ov-hot-item" onclick="switchView('feed')">
+                  <span class="ov-hot-no">3</span>
+                  <div class="ov-hot-body">
+                    <div class="ov-hot-title">特首李家超主持抗灾跨部门协调会议，全力支援受灾居民</div>
+                    <div class="ov-hot-meta"><span class="senti-tag neutral">中立</span><span>📅 2026-05-23</span><span class="plat-badge">微博</span><span>香港电台</span><span>🔥 热度 6,248</span></div>
+                  </div>
+                </div>
+                <div class="ov-hot-item" onclick="switchView('feed')">
+                  <span class="ov-hot-no">4</span>
+                  <div class="ov-hot-body">
+                    <div class="ov-hot-title">中联办主任郑雁雄出席"一国两制"研讨会，强调香港须把握发展机遇</div>
+                    <div class="ov-hot-meta"><span class="senti-tag pos">正面</span><span>📅 2026-05-23</span><span class="plat-badge">网页</span><span>文汇报</span><span>🔥 热度 5,107</span></div>
+                  </div>
+                </div>
+                <div class="ov-hot-item" onclick="switchView('feed')">
+                  <span class="ov-hot-no">5</span>
+                  <div class="ov-hot-body">
+                    <div class="ov-hot-title">网民批评港府垃圾收费方案仍存漏洞，促李家超正面回应</div>
+                    <div class="ov-hot-meta"><span class="senti-tag neg">负面</span><span>📅 2026-05-22</span><span class="plat-badge">微博</span><span>本土研究社</span><span>🔥 热度 4,386</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 舆情列表视图（原监测方案信息流） -->
+          <div class="view-panel" id="view-feed">
           <!-- 监测方案 Tab 内容 -->
           <div class="tab-panel active" id="mp0">
             <!-- 右侧面板：节点标题 + 工具栏 -->
             <div id="rp-header-bar" style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(122,145,184,0.1);flex-wrap:wrap">
               <span id="rp-ai-badge" class="ai-badge">AI</span>
               <span id="rp-node-title" style="font-size:13px;font-weight:700;color:#1a2234">李家超 · 关键人物</span>
-              <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
-                <span style="font-size:12px;color:#68778f;font-weight:600">AI监测报告</span>
-                <button onclick="this.classList.toggle('on');this.style.background=this.classList.contains('on')?'var(--primary)':'rgba(122,145,184,0.22)'" style="width:38px;height:22px;border-radius:999px;border:none;background:var(--primary);cursor:pointer;position:relative;transition:background 0.2s"><span style="position:absolute;top:3px;left:calc(100% - 19px);width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.12)"></span></button>
-              </div>
-              <button style="padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">图表分析</button>
+              <button style="margin-left:auto;padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">图表分析</button>
               <button id="btn-alert-set" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(122,145,184,0.2);background:#fff;color:#68778f;font-size:12px;font-weight:600;cursor:pointer">预警设置</button>
             </div>
 
@@ -518,7 +801,6 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                 <div class="fz-selects">
                   <select class="fz-select"><option>数据类型</option></select>
                   <select class="fz-select"><option>情感倾向</option></select>
-                  <select class="fz-select"><option>主题分类</option><span style="font-size:9px;background:#f5502a;color:#fff;border-radius:2px;padding:0 3px">NEW</span></select>
                   <select class="fz-select"><option>阅读状态</option></select>
                 </div>
                 <button class="fz-more-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="margin-right:4px;vertical-align:-1px"><path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>更多筛选</button>
@@ -573,7 +855,7 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
                     <span class="plat-badge">X(Twitter)</span>
                     <span>👤 zhihui999</span>
                     <span class="senti-tag neg">重点账号</span>
-                    <span class="senti-tag neg">涉政</span>
+                    <span class="senti-tag neg">负面</span>
                     <span class="senti-tag neg">严重</span>
                   </div>
                 </div>
@@ -763,9 +1045,12 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
             </div>
             </div><!-- /feed-list -->
           </div>
+          </div><!-- /view-feed -->
 
+          <!-- AI监测报告视图（独立入口） -->
+          <div class="view-panel" id="view-report">
           <!-- AI监测报告 Tab 内容 -->
-          <div class="tab-panel" id="mp1">
+          <div class="tab-panel active" id="mp1">
             <div class="report-layout" style="display:grid;grid-template-columns:260px 1fr;gap:0;height:100%">
               <!-- 左：报告列表 -->
               <div class="report-left" style="border-right:1px solid rgba(122,145,184,0.1);padding:16px 14px">
@@ -1058,78 +1343,381 @@ a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}input,se
               </div><!-- end report-right -->
             </div>
           </div>
+          </div><!-- /view-report -->
         </div>
       </div>
     </section>
   </main>
 </div>
 <script>
-function switchMainTab(idx, btn) {
-  document.querySelectorAll('.main-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  document.querySelectorAll('#mp0, #mp1').forEach((p,i) => p.classList.toggle('active', i===idx));
+var CUR_TAB = 'person';
+function switchMainTab(tab, btn) {
+  document.querySelectorAll('.main-tab').forEach(function(t){ t.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.lp-content').forEach(function(c){
+    c.classList.toggle('active', c.dataset.lpfor === tab);
+  });
+  var titles = { person: '关键人物', dept: '关键部门', mine: '我的关注' };
+  var lpTitleEl = document.getElementById('lp-title');
+  if (lpTitleEl) lpTitleEl.textContent = titles[tab] || '';
+  CUR_TAB = tab;
+  var seg = document.getElementById('viewSeg');
+  // 清理所有叶子 active
+  document.querySelectorAll('.tree-leaf').forEach(function(s){ s.classList.remove('active'); });
+  if (tab === 'mine') {
+    if (seg) seg.style.display = 'none';
+    // mine tab 默认选中第一个叶子，进入 feed
+    var firstLeaf = document.querySelector('.lp-content.active .tree-leaf');
+    if (firstLeaf) selectLeaf(firstLeaf);
+  } else {
+    if (seg) seg.style.display = '';
+    // person/dept tab 默认选中 全部
+    var allLeaf = document.querySelector('.lp-content.active .tree-leaf-all');
+    if (allLeaf) selectAll(allLeaf, tab);
+  }
+}
+function switchView(view) {
+  document.querySelectorAll('.view-panel').forEach(function(p){
+    p.classList.toggle('active', p.id === 'view-' + view);
+  });
+  document.querySelectorAll('.vs-btn').forEach(function(b){
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+}
+function jumpToFeed(label) {
+  // 在当前 tab 的左侧树中查找匹配 label 的节点
+  var leaves = document.querySelectorAll('.lp-content.active .tree-leaf');
+  for (var i = 0; i < leaves.length; i++) {
+    if (leaves[i].dataset.label === label) {
+      selectLeaf(leaves[i]);
+      break;
+    }
+  }
+  switchView('feed');
+}
+function updateOverview(tab) {
+  var titleEl = document.getElementById('ov-title');
+  var rankTitleEl = document.getElementById('ov-rank-title');
+  if (tab === 'person') {
+    if (titleEl) titleEl.textContent = '全部关键人物 · 整体概况';
+    if (rankTitleEl) rankTitleEl.textContent = '各关键人物声量排名';
+  } else if (tab === 'dept') {
+    if (titleEl) titleEl.textContent = '全部关键部门 · 整体概况';
+    if (rankTitleEl) rankTitleEl.textContent = '各关键部门声量排名';
+  }
 }
 var FEED_DATA = {
   '李家超 · 关键人物': { count: '1,013', items: [
     { title: '李家超：香港经济转型已取得初步成效，新质生产力布局持续推进', abstract: '行政长官李家超出席香港创新科技产业论坛，强调香港须把握国家"十五五"规划机遇，加快发展人工智能、生物医疗等新兴产业，并透露政府将于下季推出新一轮吸引外资措施。', platform: '微信', date: '2026-05-24 09:12', senti: '正面', sc: 'pos', source: '大公文汇', orig: false },
     { title: '特首李家超主持抗灾跨部门协调会议，全力支援受灾居民', abstract: '受强台风影响，特首李家超主持紧急跨部门协调会议，要求民政、消防、医管局全力开展救援，并宣布启动紧急事故监察中心。', platform: '微博', date: '2026-05-23 22:35', senti: '中立', sc: 'neutral', source: '香港电台 (粉丝数: 1,240,000)', orig: true },
     { title: '李家超就《基本法》颁布35周年发表讲话：香港已全面回归正轨', abstract: '', platform: '网页', date: '2026-05-23 10:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
-    { title: '网民批评港府垃圾收费方案仍存漏洞，促李家超正面回应', abstract: '', platform: '微博', date: '2026-05-22 14:20', senti: '负面', sc: 'neg', source: '本土研究社 (粉丝数: 88,000)', orig: true }
+    { title: '网民批评港府垃圾收费方案仍存漏洞，促李家超正面回应', abstract: '', platform: '微博', date: '2026-05-22 14:20', senti: '负面', sc: 'neg', source: '本土研究社 (粉丝数: 88,000)', orig: true },
+    { title: '李家超会见东盟代表团：港深化区域合作迈出关键一步', abstract: '行政长官李家超在礼宾府会见东盟工商界代表团，双方就大湾区与东盟经贸合作、跨境支付、人才流动等议题深入交流。', platform: '网页', date: '2026-05-22 11:00', senti: '正面', sc: 'pos', source: '文汇报', orig: false },
+    { title: '李家超出席青年发展高峰会：政府将推出"青年创业基金2.0"', abstract: '', platform: '微信', date: '2026-05-21 16:30', senti: '正面', sc: 'pos', source: '香港商报', orig: true },
+    { title: '李家超施政报告民调结果发布：满意度回升至62%', abstract: '香港研究协会最新民调显示，市民对特首李家超施政满意度由半年前的55%回升至62%，房屋、医疗与就业政策获正面评价。', platform: '网页', date: '2026-05-21 09:00', senti: '正面', sc: 'pos', source: '星岛日报', orig: false },
+    { title: '李家超亲自督导北部都会区进度，要求提速增效', abstract: '', platform: '微博', date: '2026-05-20 15:45', senti: '中立', sc: 'neutral', source: '香港01 (粉丝数: 2,100,000)', orig: false },
+    { title: '部分网民质疑李家超出访行程过密，关注本地民生议题进度', abstract: '', platform: '论坛贴吧', date: '2026-05-20 21:18', senti: '负面', sc: 'neg', source: '高登论坛', orig: true },
+    { title: '李家超致函立法会：尽快通过《人工智能监管条例》草案', abstract: '', platform: '网页', date: '2026-05-19 14:00', senti: '中立', sc: 'neutral', source: '明报', orig: false }
   ]},
   '郑雁雄 · 关键人物': { count: '384', items: [
     { title: '中联办主任郑雁雄出席"一国两制"研讨会，强调香港须把握发展机遇', abstract: '中央人民政府驻港联络办公室主任郑雁雄出席由智库主办的研讨会，强调"爱国者治港"方针落实以来，香港社会稳定、经济持续恢复，各界应团结一致推动高质量发展。', platform: '网页', date: '2026-05-23 18:00', senti: '正面', sc: 'pos', source: '文汇报', orig: false },
     { title: '郑雁雄走访本港多家创科企业，深入了解人才政策落地情况', abstract: '', platform: '微信', date: '2026-05-22 11:30', senti: '正面', sc: 'pos', source: '香港商报', orig: false },
-    { title: '外媒解读郑雁雄讲话：北京持续强化对港政策协调能力', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 03:14', senti: '负面', sc: 'neg', source: 'Reuters HK', orig: true }
+    { title: '外媒解读郑雁雄讲话：北京持续强化对港政策协调能力', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 03:14', senti: '负面', sc: 'neg', source: 'Reuters HK', orig: true },
+    { title: '郑雁雄会见全国政协港区委员，谈"十五五"规划部署', abstract: '', platform: '网页', date: '2026-05-21 17:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '中联办举行新春茶话会，郑雁雄发表致辞回顾2025年港事工作', abstract: '', platform: '微信', date: '2026-05-20 10:00', senti: '正面', sc: 'pos', source: '紫荆杂志', orig: false },
+    { title: '郑雁雄出席粤港澳大湾区青年论坛并致辞', abstract: '中联办主任郑雁雄在大湾区青年论坛致辞时表示，三地青年应携手把握国家发展机遇，加快融入国家发展大局。', platform: '网页', date: '2026-05-19 15:30', senti: '正面', sc: 'pos', source: '中国新闻社', orig: true },
+    { title: '郑雁雄就国安法执行情况接受官媒专访', abstract: '', platform: '微博', date: '2026-05-18 09:00', senti: '正面', sc: 'pos', source: '人民日报香港频道', orig: false },
+    { title: '境外媒体炒作郑雁雄出访行程，引发部分舆论关注', abstract: '', platform: 'Facebook', date: '2026-05-17 22:10', senti: '负面', sc: 'neg', source: 'HKFP', orig: true },
+    { title: '郑雁雄与本港高校校长座谈，关注国际化人才培养', abstract: '', platform: '网页', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '香港教育局', orig: true },
+    { title: '中联办网站刊发郑雁雄署名文章：聚共识、谋发展、惠民生', abstract: '', platform: '网页', date: '2026-05-16 10:00', senti: '正面', sc: 'pos', source: '中联办官网', orig: true }
   ]},
   '夏宝龙 · 关键人物': { count: '247', items: [
     { title: '夏宝龙：香港要成为国家开拓国际市场的重要平台', abstract: '国务院港澳事务办公室主任夏宝龙在第十五届香港论坛致辞时指出，香港须充分发挥"超级联系人"功能，积极协助国家企业走出去、引进来。', platform: '网页', date: '2026-05-21 15:00', senti: '正面', sc: 'pos', source: '新华社', orig: true },
     { title: '港澳办就近期香港经济形势发表声明，肯定特区政府施政表现', abstract: '', platform: '微博', date: '2026-05-20 09:30', senti: '正面', sc: 'pos', source: '人民日报香港频道 (粉丝数: 4,200,000)', orig: true },
-    { title: '境外媒体：夏宝龙再提香港"有为政府"论述，引发各方解读', abstract: '', platform: 'Facebook', date: '2026-05-20 01:08', senti: '中立', sc: 'neutral', source: 'SCMP Official', orig: false }
+    { title: '境外媒体：夏宝龙再提香港"有为政府"论述，引发各方解读', abstract: '', platform: 'Facebook', date: '2026-05-20 01:08', senti: '中立', sc: 'neutral', source: 'SCMP Official', orig: false },
+    { title: '夏宝龙会见港澳代表团：希望两地共同贡献国家发展', abstract: '', platform: '网页', date: '2026-05-19 11:00', senti: '正面', sc: 'pos', source: '中央电视台', orig: true },
+    { title: '港澳办召开内部工作会议，部署2026下半年涉港工作', abstract: '', platform: '微信', date: '2026-05-18 16:00', senti: '正面', sc: 'pos', source: '紫荆杂志', orig: false },
+    { title: '夏宝龙就香港落实《维护国家安全条例》表态', abstract: '夏宝龙出席座谈会时高度评价香港落实《维护国家安全条例》成效，认为社会环境更加安宁有序。', platform: '网页', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '境外评论员就夏宝龙最新讲话发布分析视频', abstract: '', platform: 'YouTube', date: '2026-05-16 20:00', senti: '负面', sc: 'neg', source: 'HKChronicles', orig: true },
+    { title: '夏宝龙强调："爱国者治港"是"一国两制"基石', abstract: '', platform: '网页', date: '2026-05-15 09:00', senti: '正面', sc: 'pos', source: '新华社', orig: true },
+    { title: '夏宝龙在京会见香港青年代表团', abstract: '', platform: '微博', date: '2026-05-14 16:30', senti: '正面', sc: 'pos', source: '香港中通社', orig: false },
+    { title: '港澳办网站更新夏宝龙近期活动专题页面', abstract: '', platform: '网页', date: '2026-05-13 11:00', senti: '中立', sc: 'neutral', source: '港澳办官网', orig: true }
+  ]},
+  '陈国基 · 关键人物': { count: '428', items: [
+    { title: '政务司司长陈国基：政府全力推动"组合拳"改善劳工短缺', abstract: '政务司司长陈国基在记者会上宣布，政府将推出新一轮输入劳工配额扩展计划，重点支援建造业、安老业及饮食业。', platform: '网页', date: '2026-05-24 14:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '陈国基主持跨部门会议，部署夏季防灾减灾工作', abstract: '', platform: '微信', date: '2026-05-23 10:30', senti: '正面', sc: 'pos', source: '大公报', orig: false },
+    { title: '陈国基谈"明日大屿"项目最新进展：将适时调整建造方案', abstract: '', platform: '微博', date: '2026-05-22 16:00', senti: '中立', sc: 'neutral', source: '香港01', orig: false },
+    { title: '部分网民对陈国基输入劳工计划提出质疑', abstract: '', platform: '论坛贴吧', date: '2026-05-22 20:00', senti: '负面', sc: 'neg', source: '高登论坛', orig: true },
+    { title: '陈国基出席青年企业家高峰会并致辞', abstract: '', platform: '网页', date: '2026-05-21 11:00', senti: '正面', sc: 'pos', source: '工商日报', orig: true },
+    { title: '陈国基会见联合国驻港代表，介绍香港人权保障情况', abstract: '', platform: '网页', date: '2026-05-20 15:00', senti: '正面', sc: 'pos', source: '文汇报', orig: false },
+    { title: '陈国基督导各部门加快推进"简约公屋"建设', abstract: '', platform: '微信', date: '2026-05-19 09:30', senti: '正面', sc: 'pos', source: '星岛日报', orig: false },
+    { title: '陈国基谈香港抗击诈骗：呼吁市民提高警觉', abstract: '政务司司长陈国基出席反诈骗启动礼时呼吁市民提高警觉，并宣布警方将启动新一轮"守网者"行动。', platform: '微博', date: '2026-05-18 14:00', senti: '正面', sc: 'pos', source: '香港警察 (粉丝数: 980,000)', orig: true },
+    { title: '陈国基出席政府架构改组听证会，回应议员质询', abstract: '', platform: '网页', date: '2026-05-17 16:00', senti: '中立', sc: 'neutral', source: '明报', orig: false },
+    { title: '陈国基率团访京汇报特区政府最新工作进展', abstract: '', platform: '网页', date: '2026-05-16 10:00', senti: '正面', sc: 'pos', source: '中国新闻社', orig: true }
+  ]},
+  '陈茂波 · 关键人物': { count: '512', items: [
+    { title: '财政司司长陈茂波：下半年经济形势较预期乐观，通胀压力可控', abstract: '财政司司长陈茂波接受媒体专访时表示，本港下半年GDP增速有望维持在3%以上，全年通胀率预计不超过2.5%。', platform: '微博', date: '2026-05-24 08:22', senti: '正面', sc: 'pos', source: '经济日报 (粉丝数: 780,000)', orig: false },
+    { title: '陈茂波出席亚洲金融论坛，强调香港国际金融中心地位稳固', abstract: '', platform: '网页', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '大公文汇', orig: true },
+    { title: '陈茂波公布新一轮支持中小企业措施，涉资逾80亿', abstract: '', platform: '微信', date: '2026-05-22 14:30', senti: '正面', sc: 'pos', source: '香港商报', orig: false },
+    { title: '部分议员批评陈茂波财政预算保守，未充分回应基层诉求', abstract: '', platform: '微博', date: '2026-05-21 19:00', senti: '负面', sc: 'neg', source: '议员办事处', orig: true },
+    { title: '陈茂波撰文：财政整合不影响民生开支基本盘', abstract: '财政司司长陈茂波在司长随笔中表示，财政整合方案不会削弱医疗、教育、社福等核心民生开支。', platform: '网页', date: '2026-05-21 09:00', senti: '正面', sc: 'pos', source: '财政司司长办公室', orig: true },
+    { title: '陈茂波会见美资银行高层，介绍香港最新经济政策', abstract: '', platform: '网页', date: '2026-05-20 16:00', senti: '正面', sc: 'pos', source: '香港商报', orig: false },
+    { title: '陈茂波出席金管局活动，谈数字港元试点进展', abstract: '', platform: '微博', date: '2026-05-19 10:00', senti: '中立', sc: 'neutral', source: '香港金管局', orig: true },
+    { title: '境外评级机构维持香港主权评级AA+，陈茂波表示欢迎', abstract: '', platform: '网页', date: '2026-05-18 17:30', senti: '正面', sc: 'pos', source: '路透社', orig: false },
+    { title: '陈茂波谈本港楼市：政府将密切观察并适时回应', abstract: '', platform: '微信', date: '2026-05-17 11:00', senti: '中立', sc: 'neutral', source: '星岛日报', orig: false },
+    { title: '陈茂波出席粤港澳金融合作峰会并发表主旨演讲', abstract: '', platform: '网页', date: '2026-05-16 14:00', senti: '正面', sc: 'pos', source: '人民日报', orig: true }
+  ]},
+  '林定国 · 关键人物': { count: '203', items: [
+    { title: '律政司司长林定国：香港法治环境优势持续巩固', abstract: '律政司司长林定国出席国际法律论坛时强调，香港普通法制度运作良好，国际仲裁中心地位获各方肯定。', platform: '网页', date: '2026-05-24 10:00', senti: '正面', sc: 'pos', source: '律政司', orig: true },
+    { title: '林定国出访新加坡，深化两地法律服务合作', abstract: '', platform: '微博', date: '2026-05-23 09:00', senti: '正面', sc: 'pos', source: '大公报', orig: false },
+    { title: '林定国回应外媒"司法独立倒退"质疑：以事实驳斥不实指控', abstract: '', platform: '网页', date: '2026-05-22 18:00', senti: '中立', sc: 'neutral', source: '文汇报', orig: true },
+    { title: '林定国主持法律周开幕礼，宣布多项推广普通法措施', abstract: '', platform: '微信', date: '2026-05-21 11:00', senti: '正面', sc: 'pos', source: '香港律师会', orig: false },
+    { title: '部分海外律师团体就香港法治评论引发讨论', abstract: '', platform: 'X(Twitter)', date: '2026-05-20 20:00', senti: '负面', sc: 'neg', source: 'Foreign Lawyers Alliance', orig: true },
+    { title: '林定国出席调解周活动，推介香港调解服务', abstract: '', platform: '网页', date: '2026-05-19 14:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '林定国会见英国大律师公会代表团', abstract: '律政司司长林定国会见到访的英国大律师公会代表团，双方就两地法律专业交流深入交换意见。', platform: '微信', date: '2026-05-18 15:00', senti: '正面', sc: 'pos', source: '律政司', orig: false },
+    { title: '林定国发表署名文章谈《维护国家安全条例》立法成果', abstract: '', platform: '网页', date: '2026-05-17 10:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '律政司宣布扩大法律援助计划覆盖范围', abstract: '', platform: '网页', date: '2026-05-16 11:30', senti: '正面', sc: 'pos', source: '律政司', orig: true },
+    { title: '林定国出席法律教育研讨会，鼓励青年投身法律业', abstract: '', platform: '微博', date: '2026-05-15 16:00', senti: '正面', sc: 'pos', source: '香港大学法律学院', orig: false }
+  ]},
+  '邓炳强 · 关键人物': { count: '389', items: [
+    { title: '保安局局长邓炳强：针对网络煽动内容执法力度将持续提升', abstract: '', platform: '网页', date: '2026-05-23 14:55', senti: '中立', sc: 'neutral', source: '明报', orig: false },
+    { title: '邓炳强宣布警方瓦解大型电讯诈骗集团，涉案逾2亿元', abstract: '保安局局长邓炳强联同警务处长召开记者会，宣布警方成功瓦解一个跨境电讯诈骗集团，拘捕86人，涉案金额逾2亿港元。', platform: '微信', date: '2026-05-24 11:00', senti: '正面', sc: 'pos', source: '香港警察', orig: true },
+    { title: '邓炳强出席国家安全教育日活动并致辞', abstract: '', platform: '网页', date: '2026-05-22 10:00', senti: '正面', sc: 'pos', source: '大公文汇', orig: true },
+    { title: '邓炳强谈反恐部署：本港整体安全形势稳定', abstract: '', platform: '微博', date: '2026-05-21 15:30', senti: '正面', sc: 'pos', source: '香港电台', orig: false },
+    { title: '境外媒体批评邓炳强执法言论，引发争议', abstract: '', platform: 'X(Twitter)', date: '2026-05-20 22:00', senti: '负面', sc: 'neg', source: 'HKFP', orig: true },
+    { title: '邓炳强检阅入境处毕业典礼，强调队伍专业素养', abstract: '', platform: '网页', date: '2026-05-19 11:00', senti: '正面', sc: 'pos', source: '入境事务处', orig: true },
+    { title: '邓炳强会见内地公安部代表团，深化粤港执法合作', abstract: '', platform: '微信', date: '2026-05-18 16:00', senti: '正面', sc: 'pos', source: '保安局', orig: false },
+    { title: '保安局公布最新反恐演习成果，邓炳强表示满意', abstract: '', platform: '网页', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '星岛日报', orig: true },
+    { title: '邓炳强呼吁市民举报可疑活动，警方将严肃跟进', abstract: '', platform: '微博', date: '2026-05-16 10:30', senti: '中立', sc: 'neutral', source: '香港警察 (粉丝数: 980,000)', orig: false },
+    { title: '邓炳强谈消防处架构改革：提升应急响应能力', abstract: '', platform: '网页', date: '2026-05-15 09:00', senti: '正面', sc: 'pos', source: '消防处', orig: true }
+  ]},
+  '卢宠茂 · 关键人物': { count: '178', items: [
+    { title: '医务卫生局局长卢宠茂：基层医疗改革将于年底全面推开', abstract: '医务卫生局局长卢宠茂表示，基层医疗改革第二阶段将于2026年底全面推开，地区康健中心服务范围将进一步扩大。', platform: '网页', date: '2026-05-24 11:30', senti: '正面', sc: 'pos', source: '医务卫生局', orig: true },
+    { title: '卢宠茂宣布新一轮公私营协作计划，缓解公院轮候压力', abstract: '', platform: '微信', date: '2026-05-23 14:00', senti: '正面', sc: 'pos', source: '医院管理局', orig: false },
+    { title: '卢宠茂出席医护人员表彰大会，肯定前线贡献', abstract: '', platform: '网页', date: '2026-05-22 15:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '部分市民投诉公院轮候时间过长，卢宠茂回应将持续改善', abstract: '', platform: '微博', date: '2026-05-21 18:00', senti: '负面', sc: 'neg', source: '香港01', orig: false },
+    { title: '卢宠茂会见世卫组织代表，介绍香港健康政策', abstract: '', platform: '网页', date: '2026-05-20 11:00', senti: '正面', sc: 'pos', source: '世卫组织', orig: true },
+    { title: '卢宠茂谈控烟政策：将逐步收紧加热烟规管', abstract: '', platform: '微信', date: '2026-05-19 10:00', senti: '中立', sc: 'neutral', source: '明报', orig: false },
+    { title: '卢宠茂出席中医药发展论坛，宣布支援措施', abstract: '', platform: '网页', date: '2026-05-18 14:00', senti: '正面', sc: 'pos', source: '中医药管理委员会', orig: true },
+    { title: '卢宠茂主持流感疫苗接种启动礼', abstract: '', platform: '微博', date: '2026-05-17 09:30', senti: '正面', sc: 'pos', source: '卫生防护中心', orig: false },
+    { title: '卢宠茂回应医生短缺问题：加快引入海外注册医生', abstract: '医务卫生局局长卢宠茂表示，政府正加快引入海外注册医生，新一批申请已进入审核阶段。', platform: '网页', date: '2026-05-16 15:00', senti: '正面', sc: 'pos', source: '香港医务委员会', orig: true },
+    { title: '卢宠茂宣布新精神健康服务计划，关注青少年心理', abstract: '', platform: '微信', date: '2026-05-15 11:00', senti: '正面', sc: 'pos', source: '医务卫生局', orig: false }
+  ]},
+  '孙东 · 关键人物': { count: '241', items: [
+    { title: '创新科技及工业局宣布新一轮"科技券"计划，资助上限提升至40万元', abstract: '', platform: '微信', date: '2026-05-22 10:00', senti: '正面', sc: 'pos', source: '工商日报', orig: true },
+    { title: '孙东：香港人工智能产业园即将落成，吸引全球科企', abstract: '创新科技及工业局局长孙东出席记者会时宣布，位于科学园的人工智能产业园主体工程将于年内完工，预计吸引超过50家国际科企进驻。', platform: '网页', date: '2026-05-24 14:00', senti: '正面', sc: 'pos', source: '香港科技园', orig: true },
+    { title: '孙东率团访问深圳前海，深化大湾区创科合作', abstract: '', platform: '微博', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '南方都市报', orig: false },
+    { title: '孙东会见英伟达高层，探讨在港设立研发中心', abstract: '', platform: '网页', date: '2026-05-22 16:00', senti: '正面', sc: 'pos', source: '经济日报', orig: true },
+    { title: '部分业界质疑创科产业政策落地速度，孙东回应将加快推进', abstract: '', platform: '论坛贴吧', date: '2026-05-21 20:00', senti: '负面', sc: 'neg', source: '科技论坛', orig: true },
+    { title: '孙东出席智慧城市高峰会并致辞', abstract: '', platform: '网页', date: '2026-05-20 10:30', senti: '正面', sc: 'pos', source: '智慧城市联盟', orig: true },
+    { title: '孙东宣布"InnoHK"研究中心扩容计划', abstract: '', platform: '微信', date: '2026-05-19 14:00', senti: '正面', sc: 'pos', source: '香港创新科技署', orig: false },
+    { title: '孙东谈半导体产业发展：将吸引上下游企业落户', abstract: '', platform: '网页', date: '2026-05-18 11:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '孙东出席青年科创比赛颁奖礼', abstract: '', platform: '微博', date: '2026-05-17 16:00', senti: '正面', sc: 'pos', source: '香港青年协会', orig: false },
+    { title: '孙东会见以色列科创代表团，签订合作备忘录', abstract: '', platform: '网页', date: '2026-05-16 15:00', senti: '正面', sc: 'pos', source: '创新科技及工业局', orig: true }
+  ]},
+  '何永贤 · 关键人物': { count: '147', items: [
+    { title: '房屋局局长何永贤：本年度公屋落成量料达2.5万伙', abstract: '房屋局局长何永贤在立法会房屋事务委员会会议上表示，本年度公屋落成量预计达2.5万伙，超额完成既定目标。', platform: '网页', date: '2026-05-24 15:00', senti: '正面', sc: 'pos', source: '房屋局', orig: true },
+    { title: '何永贤宣布"简约公屋"第三批选址，新增逾8000伙', abstract: '', platform: '微信', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '房屋署', orig: false },
+    { title: '何永贤回应居屋抽签机制改革讨论', abstract: '', platform: '微博', date: '2026-05-22 17:00', senti: '中立', sc: 'neutral', source: '香港01', orig: false },
+    { title: '何永贤主持私人发展商联席会议，谈合作建屋方案', abstract: '', platform: '网页', date: '2026-05-21 14:00', senti: '正面', sc: 'pos', source: '星岛日报', orig: true },
+    { title: '部分轮候公屋市民投诉编配延迟，房屋局承诺改善', abstract: '', platform: '论坛贴吧', date: '2026-05-20 21:00', senti: '负面', sc: 'neg', source: '高登论坛', orig: true },
+    { title: '何永贤出席"好房屋好生活"论坛并致辞', abstract: '', platform: '微信', date: '2026-05-19 10:30', senti: '正面', sc: 'pos', source: '房屋局', orig: false },
+    { title: '何永贤谈过渡性房屋评估：成效优于预期', abstract: '', platform: '网页', date: '2026-05-18 11:00', senti: '正面', sc: 'pos', source: '大公报', orig: true },
+    { title: '何永贤宣布租金援助计划延长一年', abstract: '房屋局局长何永贤宣布，疫情期间推出的租金援助计划将再延长一年，以支援经济困难家庭。', platform: '微博', date: '2026-05-17 15:00', senti: '正面', sc: 'pos', source: '房屋署', orig: true },
+    { title: '何永贤出席公屋落成启用礼，逾千户迁入新居', abstract: '', platform: '网页', date: '2026-05-16 10:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '何永贤会见建造业代表，讨论加快建屋进度方案', abstract: '', platform: '微信', date: '2026-05-15 14:00', senti: '正面', sc: 'pos', source: '建造业议会', orig: false }
   ]},
   '行政会议 · 关键部门': { count: '156', items: [
     { title: '行政会议通过新一轮"简约公屋"建设计划，预计提供1.2万伙单位', abstract: '行政会议拍板通过新一轮简约公屋方案，将在北部都会区及屯门新增三幅用地，预计可提供约12,000个过渡性房屋单位，目标2027年底首批入伙。', platform: '网页', date: '2026-05-24 11:00', senti: '正面', sc: 'pos', source: '星岛日报', orig: false },
     { title: '行政会议审议《人工智能监管框架》草案，料下月提交立法会', abstract: '', platform: '微信', date: '2026-05-23 16:45', senti: '中立', sc: 'neutral', source: '香港01', orig: false },
-    { title: '学者质疑行政会议决策透明度不足，促完善咨询机制', abstract: '', platform: '论坛贴吧', date: '2026-05-22 20:10', senti: '负面', sc: 'neg', source: '独立媒体 (粉丝数: 32,000)', orig: true }
+    { title: '学者质疑行政会议决策透明度不足，促完善咨询机制', abstract: '', platform: '论坛贴吧', date: '2026-05-22 20:10', senti: '负面', sc: 'neg', source: '独立媒体 (粉丝数: 32,000)', orig: true },
+    { title: '行政会议通过"中央补贴公共交通票价计划"延续方案', abstract: '', platform: '网页', date: '2026-05-21 15:00', senti: '正面', sc: 'pos', source: '运输署', orig: true },
+    { title: '行政会议讨论智慧灯柱第二期部署', abstract: '', platform: '微信', date: '2026-05-20 11:00', senti: '中立', sc: 'neutral', source: '大公报', orig: false },
+    { title: '行政会议通过新一年度公务员加薪建议', abstract: '行政会议通过2026/27年度公务员薪酬调整方案，高、中、低层公务员分别加薪3.2%、3.5%、3.8%。', platform: '微博', date: '2026-05-19 17:00', senti: '中立', sc: 'neutral', source: '香港政府新闻处', orig: true },
+    { title: '行政会议批准多项城市规划修订草案', abstract: '', platform: '网页', date: '2026-05-18 14:00', senti: '正面', sc: 'pos', source: '规划署', orig: true },
+    { title: '行政会议召集人叶刘淑仪出席传媒午宴谈施政方向', abstract: '', platform: '微信', date: '2026-05-17 12:30', senti: '正面', sc: 'pos', source: '明报', orig: false },
+    { title: '行政会议通过《电动车普及化路线图》更新版', abstract: '', platform: '网页', date: '2026-05-16 11:00', senti: '正面', sc: 'pos', source: '环境保护署', orig: true },
+    { title: '行政会议研究新一轮基础建设融资方案', abstract: '', platform: '网页', date: '2026-05-15 10:00', senti: '中立', sc: 'neutral', source: '财政司司长办公室', orig: true }
   ]},
-  '三司十五局 · 关键部门': { count: '89', items: [
-    { title: '财政司司长陈茂波：下半年经济形势较预期乐观，通胀压力可控', abstract: '财政司司长陈茂波接受媒体专访时表示，本港下半年GDP增速有望维持在3%以上，全年通胀率预计不超过2.5%。', platform: '微博', date: '2026-05-24 08:22', senti: '正面', sc: 'pos', source: '经济日报 (粉丝数: 780,000)', orig: false },
-    { title: '保安局局长邓炳强：针对网络煽动内容执法力度将持续提升', abstract: '', platform: '网页', date: '2026-05-23 14:55', senti: '中立', sc: 'neutral', source: '明报', orig: false },
-    { title: '创新科技及工业局宣布新一轮"科技券"计划，资助上限提升至40万元', abstract: '', platform: '微信', date: '2026-05-22 10:00', senti: '正面', sc: 'pos', source: '工商日报', orig: true }
+  '立法会 · 关键部门': { count: '534', items: [
+    { title: '立法会通过《人工智能发展条例草案》二读，本港AI监管正式立法', abstract: '香港立法会以54票赞成、0票反对通过二读，条例草案将于下月提交三读。业界普遍欢迎立法为AI应用提供清晰法律框架。', platform: '网页', date: '2026-05-24 17:30', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '立法会内务委员会审议多项民生议案，房屋及医疗政策成焦点', abstract: '', platform: '微信', date: '2026-05-23 12:00', senti: '中立', sc: 'neutral', source: '大公报', orig: false },
+    { title: '立法会议员促政府交代北部都会区发展进度，质疑项目延误', abstract: '多名立法会议员在质询环节追问政府官员，北部都会区多个基建项目进度落后于计划，当局须于下月提交详细时间表。', platform: '微博', date: '2026-05-22 16:55', senti: '负面', sc: 'neg', source: '香港01 (粉丝数: 2,100,000)', orig: false },
+    { title: '立法会通过2026-27年度拨款条例草案，总开支逾8000亿元', abstract: '', platform: '网页', date: '2026-05-21 18:00', senti: '中立', sc: 'neutral', source: '星岛日报', orig: false },
+    { title: '立法会主席梁君彦主持议员宣誓仪式', abstract: '', platform: '网页', date: '2026-05-20 10:00', senti: '正面', sc: 'pos', source: '立法会秘书处', orig: true },
+    { title: '立法会就财政预算案展开三读辩论，多项修订获通过', abstract: '', platform: '微信', date: '2026-05-19 14:00', senti: '中立', sc: 'neutral', source: '文汇报', orig: false },
+    { title: '立法会议员就北部都会区收地补偿提出建议', abstract: '', platform: '微博', date: '2026-05-18 11:00', senti: '中立', sc: 'neutral', source: '香港电台', orig: false },
+    { title: '立法会研究改革议事规则，提升审议效率', abstract: '', platform: '网页', date: '2026-05-17 16:00', senti: '正面', sc: 'pos', source: '立法会秘书处', orig: true },
+    { title: '立法会经济发展事务委员会讨论"留学香港"品牌策略', abstract: '', platform: '微信', date: '2026-05-16 10:00', senti: '正面', sc: 'pos', source: '教育局', orig: false },
+    { title: '立法会议员就出生率下降问题质询政府对策', abstract: '多位立法会议员在福利事务委员会会议上就香港出生率持续下降提出质询，要求政府提交综合应对方案。', platform: '网页', date: '2026-05-15 14:00', senti: '负面', sc: 'neg', source: '明报', orig: true }
+  ]},
+  '政务司 · 关键部门': { count: '214', items: [
+    { title: '政务司公布最新地区咨询架构改革方案', abstract: '政务司今日公布地区咨询架构改革方案，将增设18区"地区关爱队"协调办公室，强化基层治理。', platform: '网页', date: '2026-05-24 12:00', senti: '正面', sc: 'pos', source: '政务司', orig: true },
+    { title: '政务司推出"地区为本"治理新平台', abstract: '', platform: '微信', date: '2026-05-23 10:30', senti: '正面', sc: 'pos', source: '大公报', orig: false },
+    { title: '政务司就跨境基础设施联通发布最新进展报告', abstract: '', platform: '网页', date: '2026-05-22 14:00', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
+    { title: '政务司召开会议部署各部门绩效考核工作', abstract: '', platform: '微博', date: '2026-05-21 16:00', senti: '中立', sc: 'neutral', source: '星岛日报', orig: false },
+    { title: '部分意见认为政务司架构改革步伐过慢', abstract: '', platform: '论坛贴吧', date: '2026-05-20 21:00', senti: '负面', sc: 'neg', source: '香港讨论区', orig: true },
+    { title: '政务司宣布扩大"惠民生 添幸福"行动计划', abstract: '', platform: '网页', date: '2026-05-19 11:00', senti: '正面', sc: 'pos', source: '政务司', orig: true },
+    { title: '政务司联合多部门启动"夏日防灾减灾"行动', abstract: '', platform: '微信', date: '2026-05-18 09:30', senti: '正面', sc: 'pos', source: '保安局', orig: false },
+    { title: '政务司主持公务员培训交流活动', abstract: '', platform: '网页', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '公务员事务局', orig: true },
+    { title: '政务司发布2026年区议会工作督导报告', abstract: '', platform: '网页', date: '2026-05-16 10:00', senti: '中立', sc: 'neutral', source: '民政事务总署', orig: true },
+    { title: '政务司就"组合拳"应对人口老化召开记者会', abstract: '政务司召开记者会，介绍"组合拳"应对人口老化的具体措施，包括跨部门服务联动、社区照顾资源整合等。', platform: '微博', date: '2026-05-15 15:00', senti: '正面', sc: 'pos', source: '文汇报', orig: true }
+  ]},
+  '财政司 · 关键部门': { count: '328', items: [
+    { title: '财政司发布2026年第一季度经济数据：GDP同比增长3.4%', abstract: '财政司今日发布2026年第一季度本港经济数据，GDP同比增长3.4%，其中出口、零售及金融服务业表现强劲。', platform: '网页', date: '2026-05-24 16:00', senti: '正面', sc: 'pos', source: '财政司', orig: true },
+    { title: '财政司公布新一轮中小企融资担保计划', abstract: '', platform: '微信', date: '2026-05-23 11:30', senti: '正面', sc: 'pos', source: '香港商报', orig: false },
+    { title: '财政司就政府债券发行计划发表声明', abstract: '', platform: '网页', date: '2026-05-22 10:00', senti: '中立', sc: 'neutral', source: '金管局', orig: true },
+    { title: '财政司推出"理财通2.0"扩展方案', abstract: '', platform: '微博', date: '2026-05-21 14:00', senti: '正面', sc: 'pos', source: '经济日报', orig: false },
+    { title: '部分议员就财政赤字趋势提出质询', abstract: '', platform: '微博', date: '2026-05-20 17:00', senti: '负面', sc: 'neg', source: '立法会', orig: true },
+    { title: '财政司联合金管局推动跨境理财通业务扩容', abstract: '', platform: '网页', date: '2026-05-19 11:00', senti: '正面', sc: 'pos', source: '金管局', orig: true },
+    { title: '财政司发布支援初创企业最新成绩单', abstract: '', platform: '微信', date: '2026-05-18 14:00', senti: '正面', sc: 'pos', source: '投资推广署', orig: false },
+    { title: '财政司就国际信用评级机构最新报告作出回应', abstract: '', platform: '网页', date: '2026-05-17 17:00', senti: '正面', sc: 'pos', source: '财政司', orig: true },
+    { title: '财政司公布外汇基金最新季度投资回报', abstract: '财政司公布外汇基金2026年第一季度投资回报为正1.8%，主要受惠于股市及债市表现。', platform: '微博', date: '2026-05-16 16:00', senti: '正面', sc: 'pos', source: '金管局', orig: true },
+    { title: '财政司支持举办"香港金融科技周2026"', abstract: '', platform: '网页', date: '2026-05-15 10:00', senti: '正面', sc: 'pos', source: '财政司', orig: true }
+  ]},
+  '律政司 · 关键部门': { count: '142', items: [
+    { title: '律政司发表《2026年法治指数》报告，香港排名继续位居前列', abstract: '律政司今日发表《2026年法治指数》报告，香港在多项关键指标继续保持亚洲领先位置，国际仲裁中心地位获肯定。', platform: '网页', date: '2026-05-24 14:00', senti: '正面', sc: 'pos', source: '律政司', orig: true },
+    { title: '律政司公布新一年度法律周活动安排', abstract: '', platform: '微信', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '香港律师会', orig: false },
+    { title: '律政司就跨境争议解决推出新机制', abstract: '', platform: '网页', date: '2026-05-22 10:30', senti: '正面', sc: 'pos', source: '调解委员会', orig: true },
+    { title: '律政司回应外媒对香港司法环境的报道', abstract: '', platform: '网页', date: '2026-05-21 16:00', senti: '中立', sc: 'neutral', source: '律政司', orig: true },
+    { title: '律政司联同法律援助署优化法援申请流程', abstract: '', platform: '微博', date: '2026-05-20 14:00', senti: '正面', sc: 'pos', source: '法律援助署', orig: false },
+    { title: '律政司公布2025年检控统计数据', abstract: '', platform: '网页', date: '2026-05-19 11:00', senti: '中立', sc: 'neutral', source: '律政司', orig: true },
+    { title: '律政司主持普通法研讨会，邀全球学者参与', abstract: '', platform: '微信', date: '2026-05-18 15:00', senti: '正面', sc: 'pos', source: '律政司', orig: false },
+    { title: '律政司就调解服务覆盖范围进行公众咨询', abstract: '', platform: '网页', date: '2026-05-17 10:00', senti: '正面', sc: 'pos', source: '香港律师会', orig: true },
+    { title: '部分海外法律团体对律政司声明发表评论', abstract: '', platform: 'X(Twitter)', date: '2026-05-16 20:00', senti: '负面', sc: 'neg', source: 'Lawyers Without Borders', orig: true },
+    { title: '律政司启动青年法律人才培训计划', abstract: '律政司启动新一轮青年法律人才培训计划，重点培育跨境法律服务、国际仲裁等领域人才。', platform: '网页', date: '2026-05-15 14:00', senti: '正面', sc: 'pos', source: '律政司', orig: true }
+  ]},
+  '保安局 · 关键部门': { count: '287', items: [
+    { title: '保安局公布2026年首季治安数据：罪案率同比下降4.2%', abstract: '保安局公布2026年首季本港治安数据，整体罪案率同比下降4.2%，其中暴力罪案下降8.6%。', platform: '网页', date: '2026-05-24 15:00', senti: '正面', sc: 'pos', source: '保安局', orig: true },
+    { title: '保安局牵头瓦解跨境诈骗网络，逾百人被捕', abstract: '', platform: '微信', date: '2026-05-23 14:00', senti: '正面', sc: 'pos', source: '香港警察', orig: false },
+    { title: '保安局公布反恐演习成果，演练贴近实战', abstract: '', platform: '网页', date: '2026-05-22 11:00', senti: '正面', sc: 'pos', source: '反恐特勤队', orig: true },
+    { title: '保安局加强海上执法行动，打击非法越境', abstract: '', platform: '微博', date: '2026-05-21 16:00', senti: '正面', sc: 'pos', source: '水警总区', orig: false },
+    { title: '部分网民质疑保安局执法尺度，引发讨论', abstract: '', platform: '论坛贴吧', date: '2026-05-20 22:00', senti: '负面', sc: 'neg', source: '高登论坛', orig: true },
+    { title: '保安局召开记者会回应近期热点案件', abstract: '', platform: '网页', date: '2026-05-19 11:30', senti: '中立', sc: 'neutral', source: '明报', orig: false },
+    { title: '保安局公布"守网者"行动新一轮成果', abstract: '', platform: '微信', date: '2026-05-18 15:00', senti: '正面', sc: 'pos', source: '网络安全及科技罪案调查科', orig: false },
+    { title: '保安局深化与内地公安部合作，签订联合执法备忘录', abstract: '', platform: '网页', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '保安局', orig: true },
+    { title: '保安局检阅警察学院毕业生，肯定专业训练成果', abstract: '', platform: '微博', date: '2026-05-16 10:00', senti: '正面', sc: 'pos', source: '香港警察', orig: true },
+    { title: '保安局向国际刑警组织通报最新执法行动', abstract: '保安局向国际刑警组织通报本港针对跨国洗钱集团的最新执法行动成果，获多国警务部门认可。', platform: '网页', date: '2026-05-15 17:00', senti: '正面', sc: 'pos', source: 'Interpol', orig: true }
+  ]},
+  '创新科技及工业局 · 关键部门': { count: '196', items: [
+    { title: '创科局公布"产业引进资助计划"新一批受惠企业名单', abstract: '创新科技及工业局今日公布"产业引进资助计划"新一批受惠企业名单，涉及人工智能、生物医药、半导体三大领域。', platform: '网页', date: '2026-05-24 14:30', senti: '正面', sc: 'pos', source: '创新科技及工业局', orig: true },
+    { title: '创科局公布科学园扩容计划进展', abstract: '', platform: '微信', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '香港科技园', orig: false },
+    { title: '创科局深化与内地科技部合作，共建研发中心', abstract: '', platform: '网页', date: '2026-05-22 10:00', senti: '正面', sc: 'pos', source: '科技部', orig: true },
+    { title: '创科局支援初创企业出海，推出新一轮配套', abstract: '', platform: '微博', date: '2026-05-21 14:00', senti: '正面', sc: 'pos', source: '香港数码港', orig: false },
+    { title: '创科局举办青年创新大赛颁奖礼', abstract: '', platform: '微信', date: '2026-05-20 11:00', senti: '正面', sc: 'pos', source: '香港青年协会', orig: false },
+    { title: '创科局回应业界对科技人才输入计划的关切', abstract: '', platform: '网页', date: '2026-05-19 16:00', senti: '中立', sc: 'neutral', source: '入境事务处', orig: true },
+    { title: '部分业界批评创科局资助流程过于繁琐', abstract: '', platform: '论坛贴吧', date: '2026-05-18 21:00', senti: '负面', sc: 'neg', source: '科技论坛', orig: true },
+    { title: '创科局公布数字经济发展白皮书', abstract: '', platform: '网页', date: '2026-05-17 10:00', senti: '正面', sc: 'pos', source: '创新科技及工业局', orig: true },
+    { title: '创科局推出新一轮STEM教育资助计划', abstract: '创新科技及工业局推出新一轮STEM教育资助计划，资助中小学开设人工智能、机器人等课程。', platform: '微博', date: '2026-05-16 15:00', senti: '正面', sc: 'pos', source: '教育局', orig: true },
+    { title: '创科局与欧洲多国签订科技合作备忘录', abstract: '', platform: '网页', date: '2026-05-15 14:00', senti: '正面', sc: 'pos', source: '创新科技及工业局', orig: true }
+  ]},
+  '房屋局 · 关键部门': { count: '168', items: [
+    { title: '房屋局公布5月份公屋编配数据：编配数同比上升12%', abstract: '房屋局今日公布5月份公屋编配数据，新编配单位数同比上升12%，平均轮候时间缩短至5.4年。', platform: '网页', date: '2026-05-24 11:00', senti: '正面', sc: 'pos', source: '房屋署', orig: true },
+    { title: '房屋局公布新一批简约公屋落成时间表', abstract: '', platform: '微信', date: '2026-05-23 10:00', senti: '正面', sc: 'pos', source: '房屋局', orig: false },
+    { title: '房屋局加强公屋租客滥用资源审核工作', abstract: '', platform: '微博', date: '2026-05-22 16:00', senti: '中立', sc: 'neutral', source: '房屋署', orig: false },
+    { title: '房屋局回应居屋抽签机制改革诉求', abstract: '', platform: '网页', date: '2026-05-21 14:00', senti: '中立', sc: 'neutral', source: '香港01', orig: false },
+    { title: '部分公屋住户投诉维修服务延迟', abstract: '', platform: '论坛贴吧', date: '2026-05-20 20:00', senti: '负面', sc: 'neg', source: '高登论坛', orig: true },
+    { title: '房屋局支援青年置业，推出"白居二"优化方案', abstract: '', platform: '微信', date: '2026-05-19 11:00', senti: '正面', sc: 'pos', source: '房委会', orig: false },
+    { title: '房屋局检讨过渡性房屋政策，准备扩容', abstract: '', platform: '网页', date: '2026-05-18 14:00', senti: '正面', sc: 'pos', source: '房屋局', orig: true },
+    { title: '房屋局推出"乐安居"基层维修计划', abstract: '', platform: '微博', date: '2026-05-17 10:00', senti: '正面', sc: 'pos', source: '房屋署', orig: true },
+    { title: '房屋局会见私人发展商，磋商合作建屋方案', abstract: '', platform: '网页', date: '2026-05-16 15:00', senti: '正面', sc: 'pos', source: '房屋局', orig: true },
+    { title: '房屋局公布最新公屋租金调整方案', abstract: '房屋局公布2026年公屋租金调整方案，部分单位获减免，整体租金水平稳定。', platform: '网页', date: '2026-05-15 09:30', senti: '中立', sc: 'neutral', source: '房屋署', orig: true }
+  ]},
+  '食物环境卫生署 · 关键部门': { count: '89', items: [
+    { title: '食环署加强夏季食物卫生执法，检控数升15%', abstract: '食环署宣布加强夏季食物卫生执法行动，5月份食物卫生检控数同比上升15%，主要涉及餐饮场所违规问题。', platform: '网页', date: '2026-05-24 13:00', senti: '中立', sc: 'neutral', source: '食环署', orig: true },
+    { title: '食环署公布最新街市租户名单及租金安排', abstract: '', platform: '微信', date: '2026-05-23 09:30', senti: '中立', sc: 'neutral', source: '食环署', orig: false },
+    { title: '食环署完善垃圾收集服务投诉机制', abstract: '', platform: '微博', date: '2026-05-22 14:00', senti: '正面', sc: 'pos', source: '香港电台', orig: false },
+    { title: '部分区议员反映食环署清洁服务覆盖不均', abstract: '', platform: '论坛贴吧', date: '2026-05-21 21:00', senti: '负面', sc: 'neg', source: '区议员办事处', orig: true },
+    { title: '食环署主办"地区清洁日"活动', abstract: '', platform: '微信', date: '2026-05-20 11:00', senti: '正面', sc: 'pos', source: '食环署', orig: false },
+    { title: '食环署增设公厕智能感应系统', abstract: '', platform: '网页', date: '2026-05-19 14:00', senti: '正面', sc: 'pos', source: '食环署', orig: true },
+    { title: '食环署回应小贩规管检讨结果', abstract: '', platform: '网页', date: '2026-05-18 10:00', senti: '中立', sc: 'neutral', source: '香港政府新闻处', orig: true },
+    { title: '食环署执法行动针对违规摆卖，4月共检控120宗', abstract: '', platform: '微博', date: '2026-05-17 09:00', senti: '中立', sc: 'neutral', source: '食环署', orig: true },
+    { title: '食环署支援"街市更新计划"，10个街市将翻新', abstract: '食环署宣布"街市更新计划"将于年内分阶段翻新10个公众街市，改善设施及环境。', platform: '网页', date: '2026-05-16 15:00', senti: '正面', sc: 'pos', source: '食环署', orig: true },
+    { title: '食环署开展虫鼠防治宣传教育月', abstract: '', platform: '微信', date: '2026-05-15 10:00', senti: '正面', sc: 'pos', source: '食环署', orig: false }
+  ]},
+  '医务卫生局 · 关键部门': { count: '112', items: [
+    { title: '医务卫生局公布"基层医疗蓝图"实施进展报告', abstract: '医务卫生局公布"基层医疗蓝图"实施一周年进展报告，地区康健中心服务人次累计逾100万。', platform: '网页', date: '2026-05-24 14:00', senti: '正面', sc: 'pos', source: '医务卫生局', orig: true },
+    { title: '医卫局公布扩大医生注册计划海外名单', abstract: '', platform: '微信', date: '2026-05-23 11:00', senti: '正面', sc: 'pos', source: '香港医务委员会', orig: false },
+    { title: '医卫局加强夏季流感监测', abstract: '', platform: '微博', date: '2026-05-22 09:30', senti: '中立', sc: 'neutral', source: '卫生防护中心', orig: false },
+    { title: '医卫局回应市民对公院轮候时间的关注', abstract: '', platform: '网页', date: '2026-05-21 16:00', senti: '中立', sc: 'neutral', source: '医院管理局', orig: true },
+    { title: '医卫局支援精神健康服务，推出新一轮拨款', abstract: '', platform: '微信', date: '2026-05-20 11:00', senti: '正面', sc: 'pos', source: '医务卫生局', orig: false },
+    { title: '部分公院员工反映工作压力增加，医卫局承诺改善', abstract: '', platform: '微博', date: '2026-05-19 17:00', senti: '负面', sc: 'neg', source: '医护工会', orig: true },
+    { title: '医卫局推出"健康老龄化行动方案"', abstract: '', platform: '网页', date: '2026-05-18 10:00', senti: '正面', sc: 'pos', source: '医务卫生局', orig: true },
+    { title: '医卫局深化与内地医疗卫生合作', abstract: '', platform: '微信', date: '2026-05-17 14:00', senti: '正面', sc: 'pos', source: '国家卫健委', orig: false },
+    { title: '医卫局支援中医药事业发展，宣布新一轮资助', abstract: '医务卫生局宣布新一轮中医药发展基金资助计划，资助上限提升至500万元。', platform: '网页', date: '2026-05-16 11:00', senti: '正面', sc: 'pos', source: '中医药管理委员会', orig: true },
+    { title: '医卫局召开记者会回应近期食品安全事件', abstract: '', platform: '网页', date: '2026-05-15 16:00', senti: '中立', sc: 'neutral', source: '食物安全中心', orig: true }
   ]},
   '敏感账号': { count: '312', items: [
-    { title: '🔥 转：没有共产党就没有新中国 ‼', abstract: '转：没有共产党就没有新中国 ‼', platform: 'X(Twitter)', date: '2026-03-04 18:46', senti: '涉政', sc: 'neg', source: 'zhihui999', orig: true },
+    { title: '🔥 转：没有共产党就没有新中国 ‼', abstract: '转：没有共产党就没有新中国 ‼', platform: 'X(Twitter)', date: '2026-03-04 18:46', senti: '负面', sc: 'neg', source: 'zhihui999', orig: true },
     { title: '某涉港账号大量转发境外媒体涉港负面报道，疑似协同操控', abstract: '监测发现该账号近7日内集中转发超过80篇涉港负面内容，转发节奏高度规律，疑存在有组织的舆论操控行为，已标记预警。', platform: '微博', date: '2026-05-23 03:12', senti: '负面', sc: 'neg', source: '@hk_dissident88 (粉丝数: 120,000)', orig: false },
-    { title: '境外账号发布"香港自由指数"报告，境内外平台大量转发扩散', abstract: '', platform: 'Facebook', date: '2026-05-22 11:40', senti: '负面', sc: 'neg', source: 'HKFreedom_Official', orig: true }
+    { title: '境外账号发布"香港自由指数"报告，境内外平台大量转发扩散', abstract: '', platform: 'Facebook', date: '2026-05-22 11:40', senti: '负面', sc: 'neg', source: 'HKFreedom_Official', orig: true },
+    { title: '某境外IP账号发布抹黑香港警务文章，已被平台限流', abstract: '', platform: 'X(Twitter)', date: '2026-05-21 22:00', senti: '负面', sc: 'neg', source: '@hk_truth_voice', orig: true },
+    { title: '监测到批量"水军"账号发布相似内容，疑机器人操作', abstract: '系统识别出近48小时内逾2,300个新注册账号发布几乎相同的涉港内容，疑系自动化机器人协同行动。', platform: 'X(Twitter)', date: '2026-05-20 14:00', senti: '负面', sc: 'neg', source: '多账号批量', orig: false },
+    { title: '某境外账号煽动罢工罢市，被多国平台采取行动', abstract: '', platform: 'Facebook', date: '2026-05-19 20:00', senti: '负面', sc: 'neg', source: 'HKStrikeNow', orig: true },
+    { title: '敏感账号发布伪造政府声明，被警方追查', abstract: '', platform: 'Telegram', date: '2026-05-18 16:00', senti: '负面', sc: 'neg', source: 'HKLeaks_TG', orig: true },
+    { title: '某账号借灾情散播谣言，已被警方拘捕', abstract: '', platform: '微博', date: '2026-05-17 09:30', senti: '负面', sc: 'neg', source: '@hk_news_fake', orig: true },
+    { title: '敏感账号尝试组织线上"研讨会"，邀港府离任官员', abstract: '', platform: 'Zoom', date: '2026-05-16 21:00', senti: '负面', sc: 'neg', source: 'HKExile Forum', orig: true },
+    { title: '系统识别到一组新的境外操控账号集群', abstract: '', platform: 'X(Twitter)', date: '2026-05-15 03:00', senti: '负面', sc: 'neg', source: '账号集群分析', orig: false }
   ]},
   '反对派媒体': { count: '178', items: [
     { title: '《苹果日报》海外版就《维护国家安全条例》发表评论，定性"打压自由"', abstract: '', platform: 'X(Twitter)', date: '2026-05-24 06:30', senti: '负面', sc: 'neg', source: 'Apple Daily Overseas', orig: true },
     { title: '某境外港媒采访多名前政界人士，声称"香港一国两制已名存实亡"', abstract: '该媒体以"周年回顾"名义发布长篇报道，内容经多个境外社交平台同步扩散，24小时内触及人次超过50万。', platform: 'Facebook', date: '2026-05-23 20:00', senti: '负面', sc: 'neg', source: 'Stand News Overseas', orig: true },
-    { title: '反对派媒体就本港最新民调数据作出片面解读，刻意忽略正面指标', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 15:18', senti: '负面', sc: 'neg', source: 'HKFP (粉丝数: 430,000)', orig: false }
+    { title: '反对派媒体就本港最新民调数据作出片面解读，刻意忽略正面指标', abstract: '', platform: 'X(Twitter)', date: '2026-05-22 15:18', senti: '负面', sc: 'neg', source: 'HKFP (粉丝数: 430,000)', orig: false },
+    { title: '境外反对派媒体协同发布"国安法五周年"专题报道', abstract: '', platform: '网页', date: '2026-05-21 09:00', senti: '负面', sc: 'neg', source: 'Hong Kong Watch', orig: true },
+    { title: '某反对派媒体发布"港人离散"系列纪录片', abstract: '', platform: 'YouTube', date: '2026-05-20 18:00', senti: '负面', sc: 'neg', source: 'HKDiaspora_Doc', orig: true },
+    { title: '反对派媒体对本港教育改革进行负面报道', abstract: '', platform: 'X(Twitter)', date: '2026-05-19 14:00', senti: '负面', sc: 'neg', source: 'HKFP', orig: true },
+    { title: '某境外港媒发布"经济衰退"分析文章引发讨论', abstract: '', platform: 'Facebook', date: '2026-05-18 11:00', senti: '负面', sc: 'neg', source: 'StandNews Overseas', orig: true },
+    { title: '反对派媒体就立法会改革发表评论文章', abstract: '某反对派媒体就立法会议事规则改革发表评论文章，质疑"民主倒退"，文章在海外港人社群传播。', platform: '网页', date: '2026-05-17 16:00', senti: '负面', sc: 'neg', source: 'Citizen News Archive', orig: true },
+    { title: '反对派媒体协同传播海外抗议活动报道', abstract: '', platform: 'X(Twitter)', date: '2026-05-16 22:00', senti: '负面', sc: 'neg', source: 'HKProtest_Global', orig: true },
+    { title: '反对派媒体发布"前立法会议员现况"专访', abstract: '', platform: 'YouTube', date: '2026-05-15 19:00', senti: '负面', sc: 'neg', source: 'Apple Daily Video', orig: true }
   ]},
   '境外社交账号': { count: '88', items: [
     { title: '境外账号集中转发涉港"镇压"相关内容，疑似有组织协同运营', abstract: '监测发现多个境外社交账号在72小时内同步发布高度相似内容，转发量合计超过12万次，疑似存在协同舆论操控行为。', platform: 'X(Twitter)', date: '2026-05-24 08:10', senti: '负面', sc: 'neg', source: '@hk_voice2026 (粉丝数: 230,000)', orig: true },
     { title: '涉港境外账号发布"白色恐怖"系列短视频，在Facebook获大量传播', abstract: '', platform: 'Facebook', date: '2026-05-23 14:22', senti: '负面', sc: 'neg', source: 'HKDemocracy_Now', orig: true },
-    { title: '某海外港人账号就保安局执法行动发表评论，引发跨平台扩散', abstract: '', platform: 'Instagram', date: '2026-05-22 19:35', senti: '负面', sc: 'neg', source: 'overseasHKer88', orig: true }
+    { title: '某海外港人账号就保安局执法行动发表评论，引发跨平台扩散', abstract: '', platform: 'Instagram', date: '2026-05-22 19:35', senti: '负面', sc: 'neg', source: 'overseasHKer88', orig: true },
+    { title: '境外社交账号发起"国安法五周年"话题挑战', abstract: '', platform: 'X(Twitter)', date: '2026-05-21 11:00', senti: '负面', sc: 'neg', source: '#HKNSL5Years', orig: true },
+    { title: '境外账号转发抹黑香港教育的不实视频', abstract: '', platform: 'Facebook', date: '2026-05-20 20:00', senti: '负面', sc: 'neg', source: 'HKEduWatch', orig: true },
+    { title: '某海外港人账号呼吁抵制港产电影', abstract: '某海外港人账号呼吁抵制港产电影，文章在小型社群中流传，目前未形成主流影响。', platform: 'X(Twitter)', date: '2026-05-19 22:00', senti: '负面', sc: 'neg', source: '@boycott_hk_film', orig: true },
+    { title: '境外账号发布"香港民主退步报告"', abstract: '', platform: 'X(Twitter)', date: '2026-05-18 16:00', senti: '负面', sc: 'neg', source: 'HKDemocracy Report', orig: true },
+    { title: '某海外港人YouTuber直播评论本港时事', abstract: '', platform: 'YouTube', date: '2026-05-17 21:00', senti: '负面', sc: 'neg', source: '海外港人TV', orig: true },
+    { title: '境外账号发布港府官员"私生活"不实指控', abstract: '', platform: 'Instagram', date: '2026-05-16 14:00', senti: '负面', sc: 'neg', source: 'hk_gossip_account', orig: true },
+    { title: '境外账号组织"线上烛光晚会"活动', abstract: '', platform: 'Zoom', date: '2026-05-15 20:00', senti: '负面', sc: 'neg', source: 'HK Memorial Online', orig: true }
   ]},
   '网络媒体': { count: '56', items: [
     { title: '《立场新闻》存档网站刊登特稿，批评香港司法独立受损', abstract: '', platform: '网页', date: '2026-05-24 05:00', senti: '负面', sc: 'neg', source: 'Stand News Archive', orig: true },
     { title: 'HKFP报道：本港新闻工作者自我审查情况加剧', abstract: 'HKFP援引多项学术调查数据，报道称本港媒体从业者自我审查比例持续上升，多名受访者表示在报道敏感话题时感到压力。', platform: '网页', date: '2026-05-23 09:45', senti: '负面', sc: 'neg', source: 'HKFP (粉丝数: 430,000)', orig: true },
-    { title: '某境外论坛持续发酵"港警暴力"旧帖，带动新一轮舆情热度', abstract: '', platform: '论坛贴吧', date: '2026-05-22 21:00', senti: '负面', sc: 'neg', source: 'inmediahk.net', orig: false }
+    { title: '某境外论坛持续发酵"港警暴力"旧帖，带动新一轮舆情热度', abstract: '', platform: '论坛贴吧', date: '2026-05-22 21:00', senti: '负面', sc: 'neg', source: 'inmediahk.net', orig: false },
+    { title: '某网络媒体发布"司法改革"质疑文章', abstract: '', platform: '网页', date: '2026-05-21 14:00', senti: '负面', sc: 'neg', source: 'Citizen News Archive', orig: true },
+    { title: '海外网络媒体专访离港媒体人，引发讨论', abstract: '', platform: 'YouTube', date: '2026-05-20 17:00', senti: '负面', sc: 'neg', source: 'HKMedia_Watch', orig: true },
+    { title: '某网络媒体发布"教科书审查"系列报道', abstract: '某网络媒体发布"教科书审查"系列报道，引述匿名教师消息，文章被多个海外港人社群转发。', platform: '网页', date: '2026-05-19 10:00', senti: '负面', sc: 'neg', source: 'Inmediahk Overseas', orig: true },
+    { title: 'HKFP评论本港选举改革，质疑代表性下降', abstract: '', platform: '网页', date: '2026-05-18 11:00', senti: '负面', sc: 'neg', source: 'HKFP', orig: true },
+    { title: '某境外港媒发布"商界沉默"分析', abstract: '', platform: '网页', date: '2026-05-17 14:00', senti: '负面', sc: 'neg', source: 'HKEcon Watch', orig: true },
+    { title: '网络媒体讨论本港"移民潮"最新数据', abstract: '', platform: '网页', date: '2026-05-16 09:00', senti: '负面', sc: 'neg', source: 'HKMigration News', orig: true },
+    { title: '反对派网络媒体协同发布"民主衰退"专题', abstract: '', platform: '网页', date: '2026-05-15 16:00', senti: '负面', sc: 'neg', source: 'HK Democracy Watch', orig: true }
   ]},
   'YouTube频道': { count: '34', items: [
     { title: '某YouTube频道发布"香港沦陷五周年"纪录片，播放量超80万', abstract: '该频道发布时长约35分钟的纪录片，内容包含大量断章取义的历史影像及访谈，在海外港人社群中引发广泛讨论，相关话题标签登上YouTube香港热搜。', platform: 'YouTube', date: '2026-05-23 16:00', senti: '负面', sc: 'neg', source: 'HKChronicles (订阅数: 580,000)', orig: true },
     { title: '反对派媒体YouTube频道发布立法会议员专访，质疑议会功能', abstract: '', platform: 'YouTube', date: '2026-05-22 12:30', senti: '负面', sc: 'neg', source: 'Apple Daily Video', orig: true },
-    { title: '境外港媒YouTube频道就《国安法》三周年发布系列评论视频', abstract: '', platform: 'YouTube', date: '2026-05-21 18:00', senti: '负面', sc: 'neg', source: 'Citizen News Video (订阅数: 120,000)', orig: true }
-  ]},
-  '香港立法会': { count: '534', items: [
-    { title: '立法会通过《人工智能发展条例草案》二读，本港AI监管正式立法', abstract: '香港立法会以54票赞成、0票反对通过二读，条例草案将于下月提交三读。业界普遍欢迎立法为AI应用提供清晰法律框架。', platform: '网页', date: '2026-05-24 17:30', senti: '正面', sc: 'pos', source: '香港政府新闻处', orig: true },
-    { title: '立法会内务委员会审议多项民生议案，房屋及医疗政策成焦点', abstract: '', platform: '微信', date: '2026-05-23 12:00', senti: '中立', sc: 'neutral', source: '大公报', orig: false },
-    { title: '立法会议员促政府交代北部都会区发展进度，质疑项目延误', abstract: '多名立法会议员在质询环节追问政府官员，北部都会区多个基建项目进度落后于计划，当局须于下月提交详细时间表。', platform: '微博', date: '2026-05-22 16:55', senti: '负面', sc: 'neg', source: '香港01 (粉丝数: 2,100,000)', orig: false },
-    { title: '立法会通过2026-27年度拨款条例草案，总开支逾8000亿元', abstract: '', platform: '网页', date: '2026-05-21 18:00', senti: '中立', sc: 'neutral', source: '星岛日报', orig: false }
+    { title: '境外港媒YouTube频道就《国安法》三周年发布系列评论视频', abstract: '', platform: 'YouTube', date: '2026-05-21 18:00', senti: '负面', sc: 'neg', source: 'Citizen News Video (订阅数: 120,000)', orig: true },
+    { title: '某YouTuber直播评论香港最新选举结果', abstract: '', platform: 'YouTube', date: '2026-05-20 22:00', senti: '负面', sc: 'neg', source: 'HKVote_Live', orig: true },
+    { title: 'YouTube频道发布"商界遇困"系列短片', abstract: '', platform: 'YouTube', date: '2026-05-19 20:00', senti: '负面', sc: 'neg', source: 'HKBiz Watch', orig: true },
+    { title: '某频道访谈海外港人，谈"思乡情结"', abstract: '某海外港人YouTube频道访谈多名移居英美港人，谈"思乡情结"，视频在小型社群中流传。', platform: 'YouTube', date: '2026-05-18 19:00', senti: '负面', sc: 'neg', source: '海外港人故事', orig: true },
+    { title: 'YouTube频道发布"教育自由"质疑视频', abstract: '', platform: 'YouTube', date: '2026-05-17 21:00', senti: '负面', sc: 'neg', source: 'HK Edu Voice', orig: true },
+    { title: '某频道分析香港媒体生态变化', abstract: '', platform: 'YouTube', date: '2026-05-16 18:00', senti: '负面', sc: 'neg', source: 'HK Media Today', orig: true },
+    { title: 'YouTube频道发布"司法独立"系列短片', abstract: '', platform: 'YouTube', date: '2026-05-15 20:00', senti: '负面', sc: 'neg', source: 'HK Law Watch', orig: true },
+    { title: 'YouTube频道讨论"经济衰退"传闻', abstract: '', platform: 'YouTube', date: '2026-05-14 19:00', senti: '负面', sc: 'neg', source: 'HK Econ Voice', orig: true }
   ]},
   '涉港境外媒体': { count: '96', items: [
     { title: 'BBC：Hong Kong economy shows signs of recovery amid global uncertainty', abstract: '', platform: 'X(Twitter)', date: '2026-05-24 04:10', senti: '中立', sc: 'neutral', source: 'BBC News Asia', orig: true },
     { title: 'Reuters：Foreign investment in Hong Kong surged 18% in Q1 2026', abstract: '', platform: 'X(Twitter)', date: '2026-05-23 07:22', senti: '正面', sc: 'pos', source: 'Reuters Asia', orig: true },
-    { title: 'NYT：Critics say HK press freedom continues to deteriorate under security laws', abstract: '《纽约时报》刊发长篇报道，采访多名已离港的新闻从业者，声称本港新闻自由环境持续恶化，报道在境外社交媒体引发大量转发。', platform: 'Facebook', date: '2026-05-22 22:00', senti: '负面', sc: 'neg', source: 'NYT World (粉丝数: 12,000,000)', orig: true }
+    { title: 'NYT：Critics say HK press freedom continues to deteriorate under security laws', abstract: '《纽约时报》刊发长篇报道，采访多名已离港的新闻从业者，声称本港新闻自由环境持续恶化，报道在境外社交媒体引发大量转发。', platform: 'Facebook', date: '2026-05-22 22:00', senti: '负面', sc: 'neg', source: 'NYT World (粉丝数: 12,000,000)', orig: true },
+    { title: 'Financial Times：HK retains key role in global RMB clearing', abstract: '', platform: '网页', date: '2026-05-21 11:00', senti: '正面', sc: 'pos', source: 'Financial Times', orig: true },
+    { title: 'SCMP：Hong Kong launches new initiatives to attract talent from Southeast Asia', abstract: '', platform: '网页', date: '2026-05-20 09:00', senti: '正面', sc: 'pos', source: 'SCMP', orig: true },
+    { title: 'WSJ：Hong Kong faces challenges in property market amid global slowdown', abstract: '', platform: '网页', date: '2026-05-19 14:00', senti: '负面', sc: 'neg', source: 'Wall Street Journal', orig: true },
+    { title: 'Bloomberg：Asia financial hubs in close race, HK remains competitive', abstract: 'Bloomberg发布最新分析报告，比较新加坡、香港、东京等亚洲金融中心，认为香港在多项关键指标上保持竞争力。', platform: '网页', date: '2026-05-18 10:30', senti: '正面', sc: 'pos', source: 'Bloomberg', orig: true },
+    { title: 'Nikkei：HK IPO market revival underway with several Chinese tech giants', abstract: '', platform: '网页', date: '2026-05-17 16:00', senti: '正面', sc: 'pos', source: 'Nikkei Asia', orig: true },
+    { title: 'AP：HK officials reject foreign criticism on judicial system', abstract: '', platform: 'X(Twitter)', date: '2026-05-16 22:00', senti: '中立', sc: 'neutral', source: 'AP News', orig: true },
+    { title: 'CNN：Hong Kong tourism rebounds with surge of mainland visitors', abstract: '', platform: '网页', date: '2026-05-15 09:00', senti: '正面', sc: 'pos', source: 'CNN Travel', orig: true }
   ]}
 };
 function renderFeed(label) {
@@ -1177,6 +1765,46 @@ function selectLeaf(el) {
   if (btnAlert) btnAlert.style.display = '';
   if (btnSave) btnSave.style.display = isSystem ? 'none' : '';
   renderFeed(label);
+  // 点击具体叶子：隐藏整个切换栏（舆情列表/AI监测报告）
+  var seg = document.getElementById('viewSeg');
+  if (seg) seg.style.display = 'none';
+  var ovBtn = document.querySelector('.vs-btn[data-view="overview"]');
+  if (ovBtn) ovBtn.classList.add('vs-hidden');
+  switchView('feed');
+}
+function selectAll(el, tab) {
+  document.querySelectorAll('.tree-leaf').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  var label = el.dataset.label;
+  var titleEl = document.getElementById('rp-node-title');
+  if (titleEl) titleEl.textContent = label;
+  // 显示总览按钮 + 整个切换栏
+  var seg = document.getElementById('viewSeg');
+  if (seg) seg.style.display = '';
+  var ovBtn = document.querySelector('.vs-btn[data-view="overview"]');
+  if (ovBtn) ovBtn.classList.remove('vs-hidden');
+  // 渲染聚合 feed（合并当前 tab 下所有实体的 items）
+  buildAllFeed(tab);
+  renderFeed(label);
+  updateOverview(tab);
+  switchView('overview');
+}
+function buildAllFeed(tab) {
+  var leaves = document.querySelectorAll('.lp-content[data-lpfor="' + tab + '"] .tree-leaf:not(.tree-leaf-all)');
+  var allItems = [];
+  var totalCount = 0;
+  leaves.forEach(function(lf){
+    var lb = lf.dataset.label;
+    if (FEED_DATA[lb]) {
+      allItems = allItems.concat(FEED_DATA[lb].items);
+      var c = parseInt(String(FEED_DATA[lb].count).replace(/,/g,''), 10);
+      if (!isNaN(c)) totalCount += c;
+    }
+  });
+  // 按日期倒序
+  allItems.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  var key = tab === 'person' ? '全部 · 关键人物' : '全部 · 关键部门';
+  FEED_DATA[key] = { count: totalCount.toLocaleString(), items: allItems.slice(0, 10) };
 }
 function toggleTreeGroup(hd) {
   hd.closest('.tree-group').classList.toggle('collapsed');
@@ -1187,7 +1815,8 @@ function toggleSubGroup(hd) {
 function addMyScheme() {
   var name = prompt('请输入方案名称：');
   if (!name || !name.trim()) return;
-  var body = document.querySelector('#tg-mine .tree-group-body');
+  var body = document.querySelector('.lp-content[data-lpfor="mine"]');
+  if (!body) body = document.querySelector('#tg-mine .tree-group-body');
   var addBtn = body.querySelector('.add-scheme-btn');
   var leaf = document.createElement('div');
   leaf.className = 'tree-leaf';
@@ -1237,12 +1866,19 @@ document.querySelectorAll('.nav-group-title').forEach(title => {
     title.closest('.nav-group').classList.toggle('collapsed');
   });
 });
-// 初始化：渲染默认激活节点的信息流
+// 初始化：默认 person tab + 全部 + 总览视图
 (function() {
-  var active = document.querySelector('.tree-leaf.active');
-  if (active) {
-    var label = active.dataset.label || active.querySelector('.leaf-name').textContent;
-    renderFeed(label);
+  var allLeaf = document.querySelector('.lp-content.active .tree-leaf-all');
+  if (allLeaf) {
+    selectAll(allLeaf, 'person');
+  } else {
+    var active = document.querySelector('.lp-content.active .tree-leaf');
+    if (active) {
+      active.classList.add('active');
+      var label = active.dataset.label || active.querySelector('.leaf-name').textContent;
+      renderFeed(label);
+    }
+    updateOverview('person');
   }
 })();
 function openAIForFeed() {

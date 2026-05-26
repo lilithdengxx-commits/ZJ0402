@@ -316,7 +316,7 @@
           <p>通过自然语言对话，为您提供一站式的深度分析服务。我具备以下核心能力：</p>
           <div class="ai-caps">
             <div class="ai-cap" data-preset="帮我梳理一下当前舆情热点事件">
-              <div class="ai-cap-label">专业知识问答</div>
+              <div class="ai-cap-label">社会舆情问答</div>
               <div class="ai-cap-sub">社会事件、热点话题等</div>
             </div>
             <div class="ai-cap" data-preset="请对当前监测数据进行全流程智能分析">
@@ -360,10 +360,8 @@
 
     <!-- 功能模式切换 -->
     <div class="ai-mode-tabs">
-      <button class="ai-mode-tab active">AI分析</button>
-      <button class="ai-mode-tab">信息监测</button>
+      <button class="ai-mode-tab active">AI问答</button>
       <button class="ai-mode-tab">事件分析</button>
-      <button class="ai-mode-tab">智能体编报</button>
     </div>
     <!-- 输入区 -->
     <div class="ai-input-area">
